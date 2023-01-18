@@ -4,3 +4,7 @@ https://marketplace.atlassian.com/apps/6572/tempo-timesheets-time-tracking-repor
 
 ## 기능 명세서 작성 회의
 https://www.notion.so/9b486ee135fd4411a3b36f5a5b6a5894
+
+## 피그마 작업 진행 완료
+
+## 폴더 구조 작업 진행 완료
