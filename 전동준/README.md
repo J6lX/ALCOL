@@ -4,6 +4,8 @@
 
 - https://github.com/JhinJeon/TIL/tree/master/React 에 업로드 중입니다.
 
+# Git 컨벤션(브랜치 관리 및 커밋 규칙)
+
 
 # 프로젝트 개발 규칙(프론트엔드)
 
