@@ -3,9 +3,8 @@ package com.alcol.userservice.dto;
 import lombok.Data;
 
 @Data
-public class SignUpDto
+public class LoginDto
 {
     private String email;
     private String pwd;
-    private String nickname;
 }

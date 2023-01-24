@@ -18,6 +18,5 @@ spring:
           uri: http://localhost:9000/
           predicates:
             - Path=/user-service/**   # 즉, 최종적으로 http://localhost:9000/user-service/** 이라는 요청이 보내짐
-#          filters:
-#            - AddRequestHeader=first-request, first-request-header2     # key, value
-#            - AddResponseHeader=first-response, first-response-header2  # key, value
+          filters:
+            - RemoveRequestHeader=Cookie
