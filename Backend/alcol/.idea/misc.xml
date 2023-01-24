@@ -3,7 +3,13 @@
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/apigateway-service" />
+    <file type="web" url="file://$PROJECT_DIR$/battle-service" />
     <file type="web" url="file://$PROJECT_DIR$/discovery-service" />
+    <file type="web" url="file://$PROJECT_DIR$/log-service" />
+    <file type="web" url="file://$PROJECT_DIR$/match-service" />
+    <file type="web" url="file://$PROJECT_DIR$/problem-service" />
+    <file type="web" url="file://$PROJECT_DIR$/rank-service" />
+    <file type="web" url="file://$PROJECT_DIR$/score-service" />
     <file type="web" url="file://$PROJECT_DIR$/user-service" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK">

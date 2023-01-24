@@ -1,9 +1,9 @@
 server:
-  port: 9000
+  port: 9005
 
 spring:
   application:
-    name: user-service    # eureka 서버에 등록된 Application 이름으로 사용됨
+    name: log-service    # eureka 서버에 등록된 Application 이름으로 사용됨
 
 eureka:
   client:
