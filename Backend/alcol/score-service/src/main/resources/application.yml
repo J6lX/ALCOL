@@ -4,6 +4,15 @@ server:
 spring:
   application:
     name: score-service    # eureka 서버에 등록된 Application 이름으로 사용됨
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
 
 eureka:
   client:
