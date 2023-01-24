@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/alcol.iml" filepath="$PROJECT_DIR$/alcol.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/apigateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/apigateway-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.alcol.apigateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.alcol.apigateway-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.alcol.user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.alcol.user-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service.main.iml" />
+    </modules>
+  </component>
+</project>
