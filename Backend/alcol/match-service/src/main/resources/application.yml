@@ -1,15 +1,9 @@
 server:
-  port: 9000
+  port: 9004
 
 spring:
   application:
-    name: user-service    # eureka 서버에 등록된 Application 이름으로 사용됨
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
-      path: /h2-console
+    name: match-service    # eureka 서버에 등록된 Application 이름으로 사용됨
 
 eureka:
   client:
