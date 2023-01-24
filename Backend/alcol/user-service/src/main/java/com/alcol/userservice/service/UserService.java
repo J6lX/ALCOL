@@ -1,7 +1,7 @@
 package com.alcol.userservice.service;
 
-import com.alcol.userservice.dto.UserDto;
+import com.alcol.userservice.dto.SignUpDto;
 
 public interface UserService {
-    UserDto createUser(UserDto userDto);
+    String createUser(SignUpDto signUpDto);
 }

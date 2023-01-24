@@ -4,8 +4,14 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/alcol.iml" filepath="$PROJECT_DIR$/alcol.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/apigateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/apigateway-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/battle-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/battle-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.alcol.apigateway-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.alcol.apigateway-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.alcol.user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.alcol.user-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/log-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/log-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/match-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/match-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/problem-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/problem-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rank-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/rank-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/score-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/score-service.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/user-service.main.iml" />
     </modules>
   </component>
