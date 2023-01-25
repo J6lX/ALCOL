@@ -19,7 +19,6 @@ import java.util.ArrayList;
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
 {
-
     // 1. 로그인 시도 시 해당 메소드로 가장 먼저 요청이 넘어옴
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
