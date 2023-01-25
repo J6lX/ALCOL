@@ -23,13 +23,13 @@ const items = ["Problem", "Ranking", "Battle"].map((key) => ({
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
     return (
       <Space align="center" wrap>
-        <Avatar size={48} icon={<UserOutlined />} />
+        <Avatar size={44} icon={<UserOutlined />} />
         <p className="text">동준이다</p>
         <p
           href="#"
@@ -46,7 +46,7 @@ function LoginTag(props) {
   } else {
     return (
       <Space align="center">
-        <Button type="primary" className="signUpButton">
+        <Button type="link" className="signUpButton">
           LOGIN
         </Button>
         <p className="text">Signup</p>
@@ -58,7 +58,7 @@ function LoginTag(props) {
 function App() {
   return (
     <Layout>
-      {/* 헤더 */}
+      {/* 헤더(상단 네비게이션 바) */}
       <Header>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
