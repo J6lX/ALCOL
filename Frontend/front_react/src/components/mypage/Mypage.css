@@ -12,70 +12,52 @@
   text-align: center;
 }
 
+/* 설정 버튼 */
+.settingIcon {
+  width: 30px;
+  height: 30px;
+}
+
 /* 사용자 프사 */
 .userImg {
   width: 64px;
   height: 64px;
-  display: flex;
-  float: center;
+  justify-content: center;
   margin: 15px;
-  text-align: center;
   background: rgba(255, 255, 255, 0.3);
   font-family: "oneMobilePOP";
   border-radius: 100%;
 }
 
-/* 기본 텍스트 */
+/* 스트릭 박스 */
+.streakBox {
+  justify-content: center;
+  margin: 30 px;
+  width: 200px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 모드 선택란(모두/스피드전/효율성전) */
+.modeSelector {
+  color: white;
+  padding: 10px;
+}
+
+/* 페이지 기본 텍스트 */
 .text {
   color: white;
+  padding: 5px;
+}
+
+/* 최근 20전 승률 그래프 */
+.winrateCircle {
+  width: 128px;
+  height: 128px;
 }
 
 /* 강조용 텍스트 */
 .textHighlight {
   color: #fde14b;
+  padding: 5px;
 }
-
-/* 이하 더미 데이터 */
-
-/* .navbar {
-    display: flex;
-    position: fixed;
-    background-color: #17181c;
-    justify-content: center;
-    height: 60px;
-    font-size: calc(10px + 2vmin);
-    color: white;
-  } */
-
-/* .logo {
-    display: flex;
-    float: left;
-    width: 140px;
-    height: 34px;
-    margin-left: 50px;
-    margin-top: 16px;
-    margin-right: 15px;
-    margin-bottom: 16px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.3);
-    font-family: "oneMobilePOP";
-  } */
-
-/* .navContent {
-    margin: 5px;
-    color: #e9e9e9;
-  } */
-
-/* .loginButton {
-    align-items: center;
-    margin: 13px;
-  } */
-
-/* .signUpButton {
-    margin-top: 13px;
-    margin-bottom: 13px;
-    margin-left: 5px;
-    margin-right: 50px;
-    align-items: center;
-    color: "#979797";
-  } */
