@@ -116,7 +116,7 @@ function App() {
           <Route path="/modify" exact={true} element={<ModifyPage />} />
 
           {/* 마이페이지(사용자 정보 열람 페이지) */}
-          <Route path="/:username" exact={true} element={<Mypage />} />
+          <Route path="/mypage/:username" exact={true} element={<Mypage />} />
 
           {/* 404 페이지 */}
           <Route path="*" element={<NotFound404 />} />
