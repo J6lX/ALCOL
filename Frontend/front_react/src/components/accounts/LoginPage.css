@@ -1,0 +1,65 @@
+.gradientsquare {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to right bottom, rgb(92, 253, 253), rgb(250, 197, 87));
+    width: 610px;
+    height: 350px;
+    border-radius: 13px;
+}
+
+.whiteletter {
+    color: white;
+}
+
+.loginbackground {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(25, 26, 29);
+    width: 600px;
+    border: 4px solid transparents;
+    border-radius: 10px;
+}
+
+.inputwidth {
+    width: 60%;
+    margin: auto;
+    margin-bottom: 12px;
+}
+
+.middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+};
+
+.fullmiddle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(9, 9, 11);
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.bgimage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    opacity: 0.8;
+}
+
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+}

@@ -1,0 +1,81 @@
+/*  페이지 크기 조절 */
+.pageBody {
+  height: 100vh;
+}
+
+/* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
+.block {
+  background-color: #1d1e22;
+  border: 1px solid #5cfdfd;
+  margin: 10px;
+  border-radius: 10%;
+  text-align: center;
+}
+
+/* 사용자 프사 */
+.userImg {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  float: center;
+  margin: 15px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.3);
+  font-family: "oneMobilePOP";
+  border-radius: 100%;
+}
+
+/* 기본 텍스트 */
+.text {
+  color: white;
+}
+
+/* 강조용 텍스트 */
+.textHighlight {
+  color: #fde14b;
+}
+
+/* 이하 더미 데이터 */
+
+/* .navbar {
+    display: flex;
+    position: fixed;
+    background-color: #17181c;
+    justify-content: center;
+    height: 60px;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  } */
+
+/* .logo {
+    display: flex;
+    float: left;
+    width: 140px;
+    height: 34px;
+    margin-left: 50px;
+    margin-top: 16px;
+    margin-right: 15px;
+    margin-bottom: 16px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    font-family: "oneMobilePOP";
+  } */
+
+/* .navContent {
+    margin: 5px;
+    color: #e9e9e9;
+  } */
+
+/* .loginButton {
+    align-items: center;
+    margin: 13px;
+  } */
+
+/* .signUpButton {
+    margin-top: 13px;
+    margin-bottom: 13px;
+    margin-left: 5px;
+    margin-right: 50px;
+    align-items: center;
+    color: "#979797";
+  } */
