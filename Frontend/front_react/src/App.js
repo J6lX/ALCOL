@@ -7,10 +7,10 @@ import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import "./App.css";
-import profileImg from "./logo.svg";
 import Mypage from "./components/mypage/Mypage";
 // import Mypage from "./components/mypage/Mypage.js";
-import { Breadcrumb, Layout, Menu, Button, theme } from "antd";
+import { Layout, Menu, Button, Row, Col, Space, Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import { render } from "@testing-library/react";
 const { Header, Content, Footer } = Layout;
 
@@ -20,24 +20,17 @@ const items = ["Problem", "Ranking", "Battle"].map((key) => ({
   label: `${key}`,
 }));
 
-// LoginTag === 로그인 상태 체크용 함수
+// LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
-  // isLogin === 로그인 상태 체크
-  // 비로그인 상태의 네비게이션 바를 보려면 isLoggedin의 값을 false로 설정하세요.
-  const isLoggedin = false;
+  // isLoggedIn === 로그인 상태 체크
+  const isLoggedIn = true;
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
-  if (isLoggedin) {
+  if (isLoggedIn) {
     return (
-      <>
-        <img
-          src={profileImg}
-          alt="프사"
-          style={{
-            width: 50,
-            height: 50,
-          }}></img>
-        <p>동준이다</p>
+      <Space align="center" wrap>
+        <Avatar size={48} icon={<UserOutlined />} />
+        <p className="text">동준이다</p>
         <p
           href="#"
           style={{
@@ -45,17 +38,19 @@ function LoginTag(props) {
             fontSize: 15,
             marginRight: "50px",
           }}>
-          로그아웃
+          Logout
         </p>
-      </>
+      </Space>
     );
     // 로그인 정보가 없는 경우 로그인 및 회원가입 버튼 표시
   } else {
     return (
-      <>
-        <Button type="primary">LOGIN</Button>
-        <p>Signup</p>
-      </>
+      <Space align="center">
+        <Button type="primary" className="signUpButton">
+          LOGIN
+        </Button>
+        <p className="text">Signup</p>
+      </Space>
     );
   }
 }
@@ -65,30 +60,39 @@ function App() {
     <Layout>
       {/* 헤더 */}
       <Header>
-        <div className="logo" />
-        {/* 메뉴(Problem, Ranking, Battle) */}
-        <Menu
-          mode="horizontal"
-          defaultOpenKeys={["sub1"]}
-          theme="dark"
-          className="navContent"
-          style={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-          }}
-          items={items}
-        />
-        {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-        <LoginTag />
+        <Row gutter={16} align="top" justify="space-between">
+          {/* 로고 표시 구역 */}
+          <Col sm={6}>
+            <div className="logo" />
+          </Col>
+
+          {/* 메뉴(Problem, Ranking, Battle) */}
+          <Col xs={0} sm={6} md={8} lg={11} xl={12}>
+            <Menu
+              mode="horizontal"
+              defaultOpenKeys={["sub1"]}
+              theme="dark"
+              className="navContent"
+              style={{
+                position: "sticky",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              items={items}
+            />
+          </Col>
+
+          {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
+          <Col flex="auto">
+            <LoginTag />
+          </Col>
+        </Row>
       </Header>
       {/* 본문(임시) */}
       <Content
         style={{
           backgroundColor: "#16171B",
         }}>
-        {/* 본문 자리 임시용 데이터 */}
-        <h1>본문 들어갈 부분(임시)</h1>
         {/* 라우터 태그 목록 */}
         <Routes>
           <Route exact path="/" element={HomePage()} />
@@ -105,9 +109,11 @@ function App() {
       {/* 푸터 */}
       <footer className="footer">
         <h2 className="J6IX">J6IX</h2>
+        <h3 className="textDark">SSAFY 공통 프로젝트</h3>
         <p className="textDark">이용약관</p>
         <p className="textDark">개인정보 처리방침</p>
         <p className="textDark">쿠키 설정</p>
+        <p></p>
       </footer>
     </Layout>
   );
