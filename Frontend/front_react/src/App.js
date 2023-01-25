@@ -11,6 +11,8 @@ import BanPage from "./components/battle/BanPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 // import Mypage from "./components/mypage/Mypage.js";
+import NotFound404 from "./components/NotFound404";
+
 import { Layout, Menu, Button, Row, Col, Space, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { render } from "@testing-library/react";
@@ -116,14 +118,16 @@ function App() {
           <Route path="/ban" element={<BanPage />} />
 
           {/* 회원가입 페이지 */}
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register" exact={true} element={<RegisterPage />} />
 
           {/* 회원정보 수정 페이지 */}
-          <Route path="/modify" element={<ModifyPage />} />
+          <Route path="/modify" exact={true} element={<ModifyPage />} />
 
           {/* 마이페이지(사용자 정보 열람 페이지) */}
           <Route path="/:username" exact={true} element={<Mypage />} />
 
+          {/* 404 페이지 */}
+          <Route path="*" element={<NotFound404 />} />
           {/* <Route exact path="/register" element={RegisterPage()} /> */}
         </Routes>
       </Content>
