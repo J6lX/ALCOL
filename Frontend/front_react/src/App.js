@@ -98,13 +98,23 @@ function App() {
         }}>
         {/* 라우터 태그 목록 */}
         <Routes>
+          {/* 메인 페이지 */}
           <Route exact path="/" element={HomePage()} />
 
+          {/* 로그인 페이지 */}
           <Route exact path="/login" element={LoginPage()} />
+
+          {/* 모드 선택 페이지 */}
           <Route path="/mode" element={<ModeSelectPage />} />
+
+          {/* 회원가입 페이지 */}
           <Route path="/register" element={<RegisterPage />} />
+
+          {/* 회원정보 수정 페이지 */}
           <Route path="/modify" element={<ModifyPage />} />
-          <Route path="/mypage" exact={true} element={<Mypage />}></Route>
+
+          {/* 마이페이지(사용자 정보 열람 페이지) */}
+          <Route path="/:username" exact={true} element={<Mypage />} />
 
           {/* <Route exact path="/register" element={RegisterPage()} /> */}
         </Routes>

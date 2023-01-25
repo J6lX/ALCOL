@@ -3,8 +3,21 @@ import { Button, Row, Col, Space } from "antd";
 import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
+import { useParams } from "react-router-dom";
+
+// 현재 로그인한 사용자 정보
+const userData = {
+  dongjun: {
+    name: "Dongjun", // 이름
+    battleRec: {}, // 전적
+    friends: {}, // 친구 목록
+  },
+};
 
 function Mypage() {
+  const userInfo = useParams();
+  const profile = userData[userInfo.username];
+
   return (
     <div
       className="pageBody"
@@ -37,7 +50,7 @@ function Mypage() {
               <Col>
                 {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                 <img src={tempImg} alt="프사" className="userImg" />
-                <h1>Username</h1>
+                <h1>{profile.name}</h1>
               </Col>
             </Row>
           </Col>
