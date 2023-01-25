@@ -19,16 +19,6 @@ body {
   text-align: center;
 }
 
-/* 네비게이션 바 테마 */
-.navbar {
-  position: fixed;
-  background-color: #17181c;
-  justify-content: center;
-  height: 60px;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 /* 로고 CSS */
 .logo {
   float: left;
@@ -38,12 +28,6 @@ body {
   text-align: center;
   background: rgba(255, 255, 255, 0.3);
   font-family: "oneMobilePOP";
-}
-
-/* 네비게이션 메뉴(연습문제, 랭킹, 배틀) */
-.navContent {
-  margin: 5px;
-  color: #e9e9e9;
 }
 
 /* 로그인 버튼 크기 */
@@ -83,6 +67,7 @@ body {
 
 /* 푸터 테마 */
 .footer {
+  padding: 20px;
   text-align: center;
   background-color: #17181c;
 }

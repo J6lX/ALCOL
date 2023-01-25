@@ -14,7 +14,7 @@ import Mypage from "./components/mypage/Mypage";
 import { Layout, Menu, Button, Row, Col, Space, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { render } from "@testing-library/react";
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 // items === 네비게이션 바에 넣을 항목들
 const items = ["Problem", "Ranking", "Battle"].map((key) => ({
@@ -83,7 +83,7 @@ function App() {
       <Header>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
-          <Col sm={6}>
+          <Col sm={4} justify="center">
             <div className="logo" />
           </Col>
 
@@ -104,7 +104,10 @@ function App() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col flex="auto">
+          <Col
+            style={{
+              justifyContent: "center",
+            }}>
             <LoginTag />
           </Col>
         </Row>
