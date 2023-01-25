@@ -1,5 +1,5 @@
 FROM openjdk:8
-ARG JAR_FILE_PATH=build/libs/jenkinstest-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE_PATH=build/libs/user-service-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE_PATH} app.jar
 EXPOSE 9000
 ENTRYPOINT ["java", "-jar", "/app.jar"]
