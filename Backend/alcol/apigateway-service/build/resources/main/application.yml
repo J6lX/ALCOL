@@ -1,0 +1,20 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:9000/
+          predicates:
+            - Path=/user-service/**   # 즉, 최종적으로 http://localhost:9000/user-service/** 이라는 요청이 보내짐
