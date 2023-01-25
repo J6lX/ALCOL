@@ -55,6 +55,10 @@
     left: 50%;
     transform: translate( -50%, -50% );
     opacity: 0.8;
+    width: 100vw;
+    height: 100vh;
+    background: url(/src/assets/loginbg.jpg);
+    background-size: cover;
 }
 
 .overlay {

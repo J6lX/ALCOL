@@ -1,0 +1,53 @@
+.fullmiddle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    background-color: rgb(9, 9, 11);
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.bgvideo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    opacity: 0.8;
+    width: 100vw;
+    height: 100vh;
+}
+
+.battleStart {
+    position: relative;
+    top: 45%;
+    width: 20%;
+    background-color: #fff0DC;
+}
+
+.NanumSquare {
+    font-family: "NanumSquareNeo";
+    font-weight: 400;
+    size: 32px;
+}
+
+.mainh1 {
+
+    font-family: "PyeongChangPeace";
+    position: relative;
+    top: 35%;
+    width: 30%;
+    text-align: center;
+    background: linear-gradient(180deg, #E51C29 2.4%, #FAC557 29.48%, #FAC557 81.56%, rgba(255, 255, 255, 0.348958) 99.999%, rgba(255, 255, 255, 0) 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+.gradientBox {
+    position: relative;
+    top: 45%;
+    width: 100vw;
+    height: 35%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #14161A 65.17%);
+}

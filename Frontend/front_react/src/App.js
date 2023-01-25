@@ -88,10 +88,10 @@ function App() {
           backgroundColor: "#16171B",
         }}>
         {/* 본문 자리 임시용 데이터 */}
-        <h1>본문 들어갈 부분(임시)</h1>
+        <h1>되나</h1>
         {/* 라우터 태그 목록 */}
         <Routes>
-          <Route exact path="/" element={HomePage()} />
+          <Route exact path="/home" element={HomePage()} />
 
           <Route exact path="/login" element={LoginPage()} />
           <Route path="/mode" element={<ModeSelectPage />} />
