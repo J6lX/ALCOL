@@ -1,0 +1,38 @@
+.battle_user_info_row {
+    position: relative;
+    display: flex;
+}
+
+.battle_user_info_contents {
+    background-color: #fef662;
+    height: 50px;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.battle_mode_box {
+    position: absolute;
+    background-color: white;
+    width: 200px;
+    height: 300px;
+    display: flex;
+    flex: 1;
+    overflow: auto;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.4);
+}
+
+.img_speedMode {
+    background: url(/src/assets/speed_mode_icon.png);
+    width: 120px;
+    height: 120px;
+    margin: auto;
+}
+
+.text_Mode {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
