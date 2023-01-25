@@ -16,18 +16,32 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+// 로그인 플로우
+
+// 1. 로그인 시도 시 시큐리티에서 등록한 필터(AuthenticationFilter)로 요청이 넘어옴
+
+// 2. attemptAuthentication 메소드 실행
+
+// 3. 사용자로부터 넘어온 이메일, 비밀번호를 가지고 토큰을 만들어서
+// AuthenticationManager 가 이 토큰을 db 와 비교하여 인증을 진행
+
+// 4. 이 때, 실질적인 인증은 UserServiceImpl 클래스에 있는 loadUserByUsername 메소드에서 진행
+// 단계 4. 를 위한 밑작업은 2 가지가 필요하다.
+// 4-1. UserService 는 UserDetailsService 를 상속하여 loadUserByUsername 을 구현해야함
+// 4-2. Security 에서 configure 메소드를 통해 UserService 와 비밀번호 암복호화 클래스를 등록해야함
+// 그래야 로그인 요청으로 온 평문 비밀번호와 db 에 저장되어 있는 암호화 비밀번호를 비교할 수 있음
+
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
 {
-    // 1. 로그인 시도 시 해당 메소드로 가장 먼저 요청이 넘어옴
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException
     {
         try {
+
             LoginDto creds = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
-            // 사용자로부터 넘어온 이메일, 비밀번호를 가지고 토큰을 만들어서
-            // AuthenticationManager 가 이 토큰을 db 와 비교하여 인증을 진행해주겠다는 뜻
+
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             creds.getEmail(),
@@ -42,12 +56,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
     // 로그인 성공 시 어떤 처리를 해주고, 어떤 값을 반환해줄지를 설정
     @Override
     protected void successfulAuthentication
-            (
-                    HttpServletRequest request,
-                    HttpServletResponse response,
-                    FilterChain chain,
-                    Authentication authResult
-            )
+    (
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain chain,
+            Authentication authResult
+    )
             throws IOException, ServletException
     {
         log.debug(((User)authResult.getPrincipal()).getUsername());

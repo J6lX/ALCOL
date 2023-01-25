@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService
     {
         UserEntity userEntity = userRepository.findByEmail(username);
 
-        if (userEntity == null) {
+        if (userEntity == null)
+        {
             throw new UsernameNotFoundException(username);
         }
 
