@@ -11,8 +11,8 @@ const MainPage = () => {
         <source src={video} type="video/mp4" />
       </video>
       <div className="mainh1">
-        <h1 style={{ fontSize: "56px" }}>AlCol에서</h1>
-        <h1 style={{ fontSize: "56px" }}>알고리즘 마스터로!</h1>
+        <h1 style={{ fontSize: "3.6vw" }}>AlCol에서</h1>
+        <h1 style={{ fontSize: "3.6vw" }}>알고리즘 마스터로!</h1>
       </div>
       <div
         className="battleStart"
@@ -27,13 +27,13 @@ const MainPage = () => {
           <b>
             <p
               className="NanumSquare"
-              style={{ fontSize: "32px", color: "#E51C29", fontWeight: "bold" }}>
+              style={{ fontSize: "2vw", color: "#E51C29", fontWeight: "bold" }}>
               Battle Start!
             </p>
           </b>
         </Button>
         <Button type="text" block style={{ marginTop: "5px" }}>
-          <p className="NanumSquare" style={{ fontSize: "16px", color: "white" }}>
+          <p className="NanumSquare" style={{ fontSize: "0.3vw", color: "white" }}>
             배틀 방법이 궁금하신가요?
           </p>
         </Button>
@@ -45,16 +45,34 @@ const MainPage = () => {
 
 const SpeedRanking = () => {
   return (
-    <div>
-      <h1 style={{ color: "white" }}>스피드 랭킹 자리</h1>
+    <div className="todaysRanking speedRanking" style={{ border: "3px solid red"}}>
+      <h1 className="PyeongChangPeace" style={{ fontSize: "2.5vw", marginTop: "10px" }}>스피드</h1>
+      <br />
+      <br />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+        <div className="Circle firstUser"></div>
+        <div style={{ width: "40vw", display: "flex", justifyContent: "space-around" }}>
+          <div className="Circle secondUser"></div>
+          <div className="Circle thirdUser"></div>
+        </div>
+      </div>
     </div>
   );
 };
 
 const EfficiencyRanking = () => {
   return (
-    <div>
-      <h1 style={{ color: "white" }}>최적화 랭킹 자리</h1>
+    <div className="todaysRanking efficiencyRanking" style={{ border: "3px solid skyblue"}}>
+      <h1 className="PyeongChangPeace" style={{ fontSize: "2.5vw", marginTop: "10px" }}>최적화</h1>
+      <br />
+      <br />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+        <div className="Circle firstUser"></div>
+        <div style={{ width: "40vw", display: "flex", justifyContent: "space-around" }}>
+          <div className="Circle secondUser"></div>
+          <div className="Circle thirdUser"></div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -87,14 +105,16 @@ const RankingPage = () => {
         style={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-evenly",
           textAlign: "center",
-          width: "80vw",
+          width: "85vw",
           height: "70%",
         }}>
-        <Col span={12}>
+        <Col span={12} style={{ display: "flex", justifyContent: "center" }}>
           <SpeedRanking />
         </Col>
-        <Col span={12}>
+        <Col span={0}></Col>
+        <Col span={12} style={{ display: "flex", justifyContent: "center" }}>
           <EfficiencyRanking />
         </Col>
       </div>

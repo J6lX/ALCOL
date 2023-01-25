@@ -32,8 +32,13 @@
     size: 32px;
 }
 
-.mainh1 {
+.PyeongChangPeace {
+    font-family: "PyeongChangPeace";
+    font-weight: bold;
+    size: 32px;
+}
 
+.mainh1 {
     font-family: "PyeongChangPeace";
     position: relative;
     top: 35%;
@@ -49,5 +54,42 @@
     top: 45%;
     width: 100vw;
     height: 35%;
+    vertical-align: bottom;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #14161A 65.17%);
+}
+
+.todaysRanking {
+    width: 40vw;
+    height: 50vh;
+    border-radius: 10px;
+}
+
+.speedRanking {
+    background: linear-gradient(180deg, #E51C29 0.31%, #FAC557 6.48%, #FCD351 65.94%, rgba(253, 225, 75, 0.27) 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+.efficiencyRanking {
+    background: linear-gradient(180deg, #0359D9 0%, #7AF7F8 6.31%, #5CFDFD 64.37%, rgba(92, 253, 253, 0.09) 100%);
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+.Circle {
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+}
+
+.firstUser {
+    border: 4px solid goldenrod;
+}
+
+.secondUser {
+    border: 4px solid silver;
+}
+
+.thirdUser {
+    border: 4px solid brown;
 }
