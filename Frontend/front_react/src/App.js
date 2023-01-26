@@ -77,14 +77,14 @@ function App() {
       <Header>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
-          <Col sm={6} justify="center">
+          <Col sm={3} justify="center">
             <Link to="/">
               <div className="logo" />
             </Link>
           </Col>
 
           {/* 메뉴(Problem, Ranking, Battle) */}
-          <Col xs={0} md={8} lg={11} xl={12} justify="center" align="middle">
+          <Col xs={0} md={6} lg={11} xl={12} justify="center" align="middle">
             <Link to="/problem" className="textDark menus">
               Problem
             </Link>

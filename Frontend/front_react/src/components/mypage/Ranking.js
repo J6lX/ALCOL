@@ -1,9 +1,10 @@
 import { Button, Row, Col, Space } from "antd";
 import "./Ranking.css";
-
+import rankingHeader from "../../assets/ranking_header.png";
 function Ranking() {
   return (
     <>
+      <img src={rankingHeader} alt="rankingHeader" className="headerImg"></img>
       <Row justify="center">
         <Col className="block" span={16}>
           <h1>랭킹 페이지</h1>
