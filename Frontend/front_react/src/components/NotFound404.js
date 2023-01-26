@@ -1,4 +1,5 @@
 import { Row, Col } from "antd";
+import { Link } from "react-router-dom";
 
 function NotFound404() {
   return (
@@ -6,15 +7,20 @@ function NotFound404() {
       justify="center"
       align="middle"
       style={{
-        height: "200px",
+        height: "500px",
       }}>
-      <Col>
+      <Col align="center">
+        <h1>404 Error</h1>
         <span
           style={{
             color: "white",
           }}>
-          404 오류 : 페이지를 찾을 수 없습니다.
+          페이지를 찾을 수 없습니다.
         </span>
+        <br />
+        <Link to="/">
+          <p>메인 화면으로</p>
+        </Link>
       </Col>
     </Row>
   );

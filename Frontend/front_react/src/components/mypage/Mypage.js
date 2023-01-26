@@ -4,6 +4,7 @@ import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -49,7 +50,9 @@ function Mypage() {
                 {/* 설정 아이콘 표시 블록 */}
                 <Row>
                   <Col md={{ offset: 16 }} lg={{ offset: 20 }}>
-                    <img src={settingIcon} alt="settings" className="settingIcon" />
+                    <Link to="/modify">
+                      <img src={settingIcon} alt="settings" className="settingIcon" />
+                    </Link>
                   </Col>
                 </Row>
 
@@ -143,15 +146,18 @@ function Mypage() {
           justify="center"
           align="middle"
           style={{
-            height: "200px",
+            height: "500px",
           }}>
-          <Col>
+          <Col align="middle">
             <span
               style={{
                 color: "white",
               }}>
               등록되지 않은 사용자입니다.
             </span>
+            <Link to="/">
+              <p>메인 화면으로</p>
+            </Link>
           </Col>
         </Row>
       )}
