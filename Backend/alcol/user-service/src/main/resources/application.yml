@@ -20,3 +20,11 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
+
+logging:
+  level:
+    root: debug
+
+token:
+  expiration_time: 864000000 # 10 days
+  secret: user_token

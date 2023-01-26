@@ -1,8 +1,16 @@
 package com.alcol.userservice.security;
 
 import com.alcol.userservice.dto.LoginDto;
+import com.alcol.userservice.dto.UserDto;
+import com.alcol.userservice.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -14,7 +22,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
+import java.util.Date;
 
 // 로그인 플로우
 
@@ -31,9 +41,26 @@ import java.util.ArrayList;
 // 4-2. Security 에서 configure 메소드를 통해 UserService 와 비밀번호 암복호화 클래스를 등록해야함
 // 그래야 로그인 요청으로 온 평문 비밀번호와 db 에 저장되어 있는 암호화 비밀번호를 비교할 수 있음
 
+// 5. 로그인 성공 시 successfulAuthentication 메소드로 넘어감
+
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
 {
+    private final UserService userService;
+    private final Environment env;
+
+    @Autowired
+    public AuthenticationFilter(
+            UserService userService,
+            Environment env,
+            AuthenticationManager authenticationManager
+    )
+    {
+        this.userService = userService;
+        this.env = env;
+        super.setAuthenticationManager(authenticationManager);
+    }
+
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException
@@ -64,6 +91,20 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
     )
             throws IOException, ServletException
     {
-        log.debug(((User)authResult.getPrincipal()).getUsername());
+        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        String email = ((User)authResult.getPrincipal()).getUsername();
+        UserDto userDetails = userService.getUserDetailByEmail(email);
+
+        String token = Jwts.builder()
+                // 어떤 내용으로 토큰을 만들 것인지
+                .setSubject(userDetails.getUserId())
+                // 토큰 유효기간 설정
+                .setExpiration(new Date(System.currentTimeMillis()
+                        + Long.parseLong(env.getProperty("token.expiration_time"))))
+                .signWith(key, SignatureAlgorithm.HS512)
+                .compact();
+
+        response.addHeader("token", token);
+        response.addHeader("userId", userDetails.getUserId());
     }
 }
