@@ -1,0 +1,16 @@
+$text-default: white;
+$text-dark: #a0a0a0;
+$neon-blue: #61dafb;
+$highlight: #fde14b;
+
+.block {
+  border-color: $neon-blue;
+}
+
+.textDefault {
+  color: $text-default;
+}
+
+.textDark {
+  color: $text-dark;
+}
