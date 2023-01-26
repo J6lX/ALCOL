@@ -64,7 +64,7 @@ function App() {
   return (
     <Layout>
       {/* 헤더 */}
-      <Header>
+      <Header className="navbar">
         <div className="logo" />
         {/* 메뉴(Problem, Ranking, Battle) */}
         <Menu
@@ -92,7 +92,6 @@ function App() {
         {/* 라우터 태그 목록 */}
         <Routes>
           <Route exact path="/" element={HomePage()} />
-
           <Route exact path="/login" element={LoginPage()} />
           <Route path="/mode" element={<ModeSelectPage />} />
           <Route path="/register" element={<RegisterPage />} />
