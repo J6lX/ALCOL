@@ -41,12 +41,7 @@ function Mypage() {
               style={{
                 padding: "5px",
               }}>
-              <Col
-                xs={4}
-                className="text block"
-                style={{
-                  justifyContent: "center",
-                }}>
+              <Col xs={4} className="text block">
                 {/* 설정 아이콘 표시 블록 */}
                 <Row>
                   <Col md={{ offset: 16 }} lg={{ offset: 20 }}>
@@ -109,17 +104,42 @@ function Mypage() {
                 </Row>
               </Col>
             </Row>
-            <Row justify="center">
-              {/* 친구 정보 표시 */}
-              <Col xs={4} className="textHighlight block">
-                <p>친구 정보</p>
-                <p>친구 1</p>
+
+            {/* 친구 정보, 지난 시즌, 전적 표시 */}
+            <Row
+              justify="center"
+              style={{
+                padding: "5px",
+              }}>
+              <Col
+                xs={4}
+                align="middle"
+                style={{
+                  margin: "10px",
+                }}>
+                <Row justify="center">
+                  {/* 친구 정보 표시 */}
+                  <Col xs={24} className="textHighlight miniBlock">
+                    <p>친구 정보</p>
+                    <hr />
+                    <p>친구 1</p>
+                  </Col>
+                </Row>
+
+                <Row>
+                  {/* 지난 시즌 기록 보기 */}
+                  <Col xs={24} className="miniBlock">
+                    <p className="textHighlight">지난 시즌 기록</p>
+                    <hr></hr>
+                    <p className="textHighlight">시즌 기록 없음</p>
+                  </Col>
+                </Row>
               </Col>
 
               {/* 전적 정보 표시 블록 */}
               <Col sm={9} lg={12} className="textHighlight block">
                 {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
-                <Row justify="space-around" className="modeSelector">
+                <Row justify="space-around" className="modeFilter">
                   <Col sm={3} lg={4}>
                     <h4>모두</h4>
                   </Col>

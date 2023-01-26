@@ -3,26 +3,101 @@ $text-dark: #a0a0a0;
 $neon-blue: #61dafb;
 $highlight: #fde14b;
 
+body {
+  font-family: "NanumSquareNeo";
+  height: 100vh;
+}
+
+// 블록 테두리 설정
 .block {
   border-color: $neon-blue;
 }
 
+// 기본 텍스트(흰색)
 .textDefault {
   color: $text-default;
 }
 
+// 다크 모드 텍스트(회색)
 .textDark {
   color: $text-dark;
 }
 
+// 헤더 이미지
 .headerImg {
   width: 100%;
 }
 
-h1 {
+// 토글 버튼
+.select {
+  margin: 10px;
+}
+
+// 이미지 안에 들어갈 제목
+.title {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  font-size: 40px;
+  transform: translate(-50%, -60%);
+}
+
+// 검색 페이지 + 모드 선택 + 랭킹 표시 body
+.bodyblock {
+  position: relative;
+  top: 50%;
+  transform: translate(0%, -30%);
+}
+
+// 모드 선택 및 랭킹 표시 블록
+.modeSelector {
+  position: relative;
+  top: 50%;
+  transform: translate(0%, -50%);
+}
+
+.border {
   color: $text-default;
 }
 
+// 유저 랭킹 정보 표시 창
+.profileBox {
+  float: left;
+  width: 600px;
+  height: 100px;
+  margin: 10px;
+  text-align: center;
+  background: white;
+}
+
+// 큰 제목
+h1 {
+  color: $text-default;
+  position: relative;
+  transform: translate(0%, -40%);
+}
+
+// 중간 제목(랭킹 정보)
 h2 {
   color: $text-default;
+  margin: 10px;
+}
+
+// 작은 제목(모드 선택 버튼)
+h3 {
+  color: $text-default;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+hr {
+  border: 0;
+  width: 100%;
+  height: 0.7px;
+  background: $neon-blue;
+}
+
+p {
+  font-family: "NanumNeoSquare";
+  margin: 5px;
 }
