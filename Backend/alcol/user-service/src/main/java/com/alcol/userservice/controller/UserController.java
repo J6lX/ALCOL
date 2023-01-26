@@ -2,17 +2,16 @@ package com.alcol.userservice.controller;
 
 import com.alcol.userservice.dto.SignUpDto;
 import com.alcol.userservice.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/user-service")
+@Slf4j
 public class UserController
 {
     private final UserService userService;
@@ -21,6 +20,12 @@ public class UserController
     public UserController(UserService userService)
     {
         this.userService = userService;
+    }
+
+    @GetMapping("/hello")
+    public String hello() {
+        log.info("hello 호출 완료!!");
+        return "Hello, this is msa";
     }
 
     @PostMapping("/signUp")
