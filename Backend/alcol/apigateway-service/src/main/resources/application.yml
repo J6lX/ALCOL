@@ -14,10 +14,17 @@ spring:
   cloud:
     gateway:
       routes:
+
         - id: user-service
-          uri: http://localhost:9000/
+          uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/login
           predicates:
-            - Path=/user-service/**   # 즉, 최종적으로 http://localhost:9000/user-service/** 이라는 요청이 보내짐
-#          filters:
-#            - AddRequestHeader=first-request, first-request-header2     # key, value
-#            - AddResponseHeader=first-response, first-response-header2  # key, value
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}  # remove '/user-service'
+
+        - id: user-service
+          uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/user-service/**
+          predicates:
+            - Path=/user-service/**
