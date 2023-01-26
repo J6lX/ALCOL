@@ -84,7 +84,7 @@ function App() {
           </Col>
 
           {/* 메뉴(Problem, Ranking, Battle) */}
-          <Col xs={0} sm={6} md={8} lg={11} xl={12} justify="center" align="middle">
+          <Col xs={0} md={8} lg={11} xl={12} justify="center" align="middle">
             <Link to="/problem" className="textDark menus">
               Problem
             </Link>
@@ -97,10 +97,7 @@ function App() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col
-            style={{
-              justifyContent: "center",
-            }}>
+          <Col justify="center">
             <LoginTag />
           </Col>
         </Row>
