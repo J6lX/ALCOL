@@ -1,7 +1,8 @@
 import React from "react";
 import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
-import { Button, Space, Col } from "antd";
+import GuidePage from "./GuidePage";
+import { Button, Space, Row, Col } from "antd";
 import "./HomePage.css";
 
 const MainPage = () => {
@@ -33,7 +34,7 @@ const MainPage = () => {
           </b>
         </Button>
         <Button type="text" block style={{ marginTop: "5px" }}>
-          <p className="NanumSquare" style={{ fontSize: "0.3vw", color: "white" }}>
+          <p className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
             배틀 방법이 궁금하신가요?
           </p>
         </Button>
@@ -45,13 +46,15 @@ const MainPage = () => {
 
 const SpeedRanking = () => {
   return (
-    <div className="todaysRanking speedRanking" style={{ border: "3px solid red"}}>
-      <h1 className="PyeongChangPeace" style={{ fontSize: "2.5vw", marginTop: "10px" }}>스피드</h1>
+    <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
+      <h1 className="PyeongChangPeace" style={{ fontSize: "2.5vw", marginTop: "10px" }}>
+        스피드
+      </h1>
       <br />
       <br />
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div className="Circle firstUser"></div>
-        <div style={{ width: "40vw", display: "flex", justifyContent: "space-around" }}>
+        <div className="secondthirdLayout">
           <div className="Circle secondUser"></div>
           <div className="Circle thirdUser"></div>
         </div>
@@ -62,13 +65,15 @@ const SpeedRanking = () => {
 
 const EfficiencyRanking = () => {
   return (
-    <div className="todaysRanking efficiencyRanking" style={{ border: "3px solid skyblue"}}>
-      <h1 className="PyeongChangPeace" style={{ fontSize: "2.5vw", marginTop: "10px" }}>최적화</h1>
+    <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
+      <h1 className="PyeongChangPeace" style={{ fontSize: "2.5vw", marginTop: "10px" }}>
+        최적화
+      </h1>
       <br />
       <br />
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div className="Circle firstUser"></div>
-        <div style={{ width: "40vw", display: "flex", justifyContent: "space-around" }}>
+        <div className="secondthirdLayout">
           <div className="Circle secondUser"></div>
           <div className="Circle thirdUser"></div>
         </div>
@@ -108,15 +113,16 @@ const RankingPage = () => {
           justifyContent: "space-evenly",
           textAlign: "center",
           width: "85vw",
-          height: "70%",
         }}>
-        <Col span={12} style={{ display: "flex", justifyContent: "center" }}>
-          <SpeedRanking />
-        </Col>
-        <Col span={0}></Col>
-        <Col span={12} style={{ display: "flex", justifyContent: "center" }}>
-          <EfficiencyRanking />
-        </Col>
+        <Row>
+          <Col lg={11} md={24} xs={24} style={{ display: "flex", justifyContent: "center" }}>
+            <SpeedRanking />
+          </Col>
+          <Col lg={2} md={0} xs={0}></Col>
+          <Col lg={11} md={24} xs={24} style={{ display: "flex", justifyContent: "center" }}>
+            <EfficiencyRanking />
+          </Col>
+        </Row>
       </div>
     </div>
   );
@@ -127,6 +133,7 @@ const HomePage = () => {
     <div>
       <MainPage />
       <RankingPage />
+      <GuidePage />
     </div>
   );
 };
