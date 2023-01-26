@@ -1,0 +1,42 @@
+.matching_background {
+  height: 100vh;
+  background: url(/src/assets/battle_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  overflow-y: scroll;
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.matching_background::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+.battle_user_info_row {
+  position: relative;
+  display: flex;
+}
+
+.battle_user_info_contents {
+  background-color: #fef662;
+  height: 50px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.ban_title {
+  color: white;
+  text-align: center;
+  font-size: 25px;
+}
+
+.ban_info {
+  color: white;
+  text-align: center;
+  font-size: 10px;
+  margin-top: 5px;
+}
