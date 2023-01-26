@@ -37,7 +37,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
         // 모든 요청은 시큐리티에 의해 인증이 요구된다.
         // 하지만 '127.0.0.1' 로 요청된 요구는 그냥 허락한다.
         http.authorizeRequests().antMatchers("/**")
-                .hasIpAddress("i8b303.p.ssafy.io")
+                .hasIpAddress("13.209.10.133")
                 .and()
                 .addFilter(getAuthenticationFilter());
 
