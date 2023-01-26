@@ -71,3 +71,6 @@
   color: #fde14b;
   padding: 5px;
 }
+
+@media (max-length: 500px) {
+}

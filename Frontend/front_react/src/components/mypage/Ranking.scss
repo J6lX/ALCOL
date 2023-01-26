@@ -6,6 +6,7 @@ $highlight: #fde14b;
 body {
   font-family: "NanumSquareNeo";
   height: 100vh;
+  max-width: 100%;
 }
 
 // 블록 테두리 설정
@@ -36,16 +37,24 @@ body {
 // 이미지 안에 들어갈 제목
 .title {
   position: absolute;
-  top: 35%;
+  top: 40%;
   left: 50%;
   font-size: 40px;
-  transform: translate(-50%, -60%);
+  transform: translate(-50%, -50%);
+
+  @media (max-width: 950px) {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    font-size: 15px;
+    transform: translate(-50%, 0%);
+  }
 }
 
 // 검색 페이지 + 모드 선택 + 랭킹 표시 body
 .bodyblock {
   position: relative;
-  top: 50%;
+  top: 30%;
   transform: translate(0%, -30%);
 }
 

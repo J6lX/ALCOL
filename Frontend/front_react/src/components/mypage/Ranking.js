@@ -8,11 +8,17 @@ function Ranking() {
       <div>
         {/* 페이지 제목(이미지 위에 띄우기) */}
         <Row justify="center">
-          <Col align="middle" span={16} className="title">
+          <Col align="middle" xs={0} md={16} className="title">
             <h1>랭킹 페이지</h1>
           </Col>
         </Row>
-        <img src={rankingHeader} alt="rankingHeader" className="headerImg"></img>
+        <img
+          src={rankingHeader}
+          alt="rankingHeader"
+          className="headerImg"
+          style={{
+            maxWidth: "100%",
+          }}></img>
         <Row justify="space-around" className="bodyblock">
           <Col span={16}>
             {/* 검색 상자 */}
