@@ -12,6 +12,15 @@
   text-align: center;
 }
 
+/* 친구 목록, 지난 시즌 조회용 블록 CSS */
+.miniBlock {
+  background-color: #1d1e22;
+  border: 1px solid #5cfdfd;
+  border-radius: 10%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 /* 설정 버튼 */
 .settingIcon {
   width: 20px;
@@ -40,9 +49,9 @@
 }
 
 /* 모드 선택란(모두/스피드전/효율성전) */
-.modeSelector {
+.modeFilter {
   color: white;
-  padding: 10px;
+  margin: 10px;
 }
 
 /* 페이지 기본 텍스트 */
