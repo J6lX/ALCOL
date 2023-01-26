@@ -19,7 +19,7 @@ spring:
         - id: user-service
           uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/login
           predicates:
-            - Path=/user-service/login
+            - Path=/user-service/login # http://localhost:8000/user-service/login
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
