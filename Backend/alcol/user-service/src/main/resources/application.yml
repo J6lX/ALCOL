@@ -27,4 +27,4 @@ logging:
 
 token:
   expiration_time: 864000000 # 10 days
-  secret: user_token
+  secret: dohyung_seoyoung_jusung_aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbcccccccccccccccccdddddddddddddddddd

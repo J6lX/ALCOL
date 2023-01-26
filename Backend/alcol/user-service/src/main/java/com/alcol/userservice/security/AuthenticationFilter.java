@@ -17,10 +17,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.security.Key;
 import java.util.ArrayList;
@@ -91,9 +94,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
     )
             throws IOException, ServletException
     {
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         String email = ((User)authResult.getPrincipal()).getUsername();
         UserDto userDetails = userService.getUserDetailByEmail(email);
+
+        byte[] secretBytes = DatatypeConverter.parseBase64Binary(env.getProperty("token.secret"));
+        Key key = new SecretKeySpec(secretBytes, SignatureAlgorithm.HS512.getJcaName());
 
         String token = Jwts.builder()
                 // 어떤 내용으로 토큰을 만들 것인지
