@@ -36,20 +36,19 @@ body {
   margin: 20px;
 }
 
-/* 로그인 버튼 크기 */
+/* 로그인 버튼 */
 .loginButton {
-  align-items: center;
-  margin: 13px;
+  color: #e51c29;
+  background-color: #fff0dc;
+  margin: 5px;
 }
 
-/* 회원가입 버튼 위치 */
+/* 회원가입 버튼 */
 .signUpButton {
-  margin-top: 13px;
-  margin-bottom: 13px;
-  margin-left: 5px;
-  margin-right: 10px;
-  align-items: center;
-  color: "#979797";
+  color: #a0a0a0;
+  background-color: #17181c;
+  border-color: #17181c;
+  margin: 5px;
 }
 
 .J6IX {
