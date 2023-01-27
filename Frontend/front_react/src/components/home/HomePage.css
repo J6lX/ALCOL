@@ -61,7 +61,7 @@
 .todaysRanking {
     position: relative;
     width: 35vw;
-    height: 50vh;
+    height: 60ch;
     border-radius: 10px;
     margin-top: 80px;
 }
@@ -105,10 +105,11 @@
 @media (max-width: 991px) {
     .secondthirdLayout {
         position: absolute;
-        top: 50%;
-        width: 30vw;
+        top: 40%;
+        width: 200vw;
         display: flex;
         flex-direction: column;
+        justify-content: space-around;
         align-items: center;
     }
 }
