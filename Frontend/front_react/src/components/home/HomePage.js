@@ -84,7 +84,7 @@ const EfficiencyRanking = () => {
 
 const RankingPage = () => {
   return (
-    <div className="fullmiddle" style={{ height: "700px", backgroundColor: "#14161A" }}>
+    <div className="fullmiddle" style={{ height: "100%", backgroundColor: "#14161A" }}>
       <br />
       <br />
       <br />
@@ -124,6 +124,7 @@ const RankingPage = () => {
           </Col>
         </Row>
       </div>
+      <div style={{ width: "100vw", height: "200px", backgroundColor: "#14161A" }}></div>
     </div>
   );
 };
