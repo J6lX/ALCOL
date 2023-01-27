@@ -92,7 +92,6 @@ function App() {
             <LoginTag />
           </Col>
         </Row>
-        >>>>>>> 93aabf1 (FIX: 헤더 오른쪽에 프로필/회원정보가 줄이 바뀌어서 보이는 문제 수정)
       </Header>
       {/* 본문(임시) */}
       <Content
@@ -101,14 +100,29 @@ function App() {
         }}>
         {/* 라우터 태그 목록 */}
         <Routes>
+          {/* 메인 페이지 */}
           <Route exact path="/" element={HomePage()} />
+
+          {/* 로그인 페이지 */}
           <Route exact path="/login" element={LoginPage()} />
+
+          {/* 모드 선택 페이지 */}
           <Route path="/mode" element={<ModeSelectPage />} />
+
+          {/* 매칭 페이지 */}
           <Route path="/match" element={<MatchingPage />} />
+
+          {/* 밴픽 페이지 */}
           <Route path="/ban" element={<BanPage />} />
+
+          {/* 회원가입 페이지 */}
           <Route path="/register" element={<RegisterPage />} />
+
+          {/* 회원정보 수정 페이지 */}
           <Route path="/modify" element={<ModifyPage />} />
-          <Route path="/mypage" exact={true} element={<Mypage />}></Route>
+
+          {/* 마이페이지(사용자 정보 열람 페이지) */}
+          <Route path="/:username" exact={true} element={<Mypage />} />
 
           {/* <Route exact path="/register" element={RegisterPage()} /> */}
         </Routes>
