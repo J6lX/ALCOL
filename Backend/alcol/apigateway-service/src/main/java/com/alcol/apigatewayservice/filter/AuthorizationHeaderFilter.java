@@ -1,11 +1,12 @@
 package com.alcol.apigatewayservice.filter;
 
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -29,12 +30,14 @@ import javax.xml.bind.DatatypeConverter;
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config>
 {
     private final Environment env;
+    private final RouteLocatorBuilder routeLocatorBuilder;
 
     @Autowired
-    public AuthorizationHeaderFilter(Environment env)
+    public AuthorizationHeaderFilter(Environment env, RouteLocatorBuilder routeLocatorBuilder)
     {
         super(AuthorizationHeaderFilter.Config.class);
         this.env = env;
+        this.routeLocatorBuilder = routeLocatorBuilder;
     }
 
     public static class Config
@@ -71,26 +74,29 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     private boolean isJwtValid(String jwt)
     {
-        boolean retVal = true;
-        String sub = null;
+        String userId;
 
         try {
-            sub = Jwts.parser()
+            userId = Jwts.parser()
                     .setSigningKey(DatatypeConverter.parseBase64Binary(env.getProperty("token.secret")))
                     .parseClaimsJws(jwt).getBody().getSubject();
+        } catch (ExpiredJwtException e) {
+            // access 토큰이 만료된 경우
+            // user-service 로 access 토큰, refresh 토큰 전송
+            log.error("expired jwt !!!");
+            return false;
         } catch (Exception e) {
-            retVal = false;
+            // 아예 잘못된 토큰을 보낸 경우
+            // 이 경우는 무조건 다시 로그인하도록 함
+            log.error("invalid jwt !!!");
+            return false;
         }
 
-        if (sub == null || sub.isEmpty())
-        {
-            retVal = false;
-        }
-
-        return retVal;
+        // 정상적인 토큰이므로 인증 완료
+        return true;
     }
 
-    // apigateway 는 사용자 요청에 대한 반환값의 타입으로 Mono, Flux 라는 타입을 사용함
+    // api-gateway 는 사용자 요청에 대한 반환값의 타입으로 Mono, Flux 라는 타입을 사용함
     // Mono : 단일값, Flux : 다중값 -> Spring WebFlux
     private Mono<Void> onError(ServerWebExchange exchange, String error, HttpStatus httpStatus)
     {
