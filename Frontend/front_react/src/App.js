@@ -12,17 +12,12 @@ import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
 import Ranking from "./components/mypage/Ranking";
+import alcol from "../src/assets/alcol_empty_white.png";
 
 import { Layout, Menu, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { render } from "@testing-library/react";
 const { Header, Content } = Layout;
-
-// items === 네비게이션 바에 넣을 항목들
-const items = ["problem", "Ranking", "Battle"].map((key) => ({
-  key,
-  label: `${key}`,
-}));
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
@@ -92,11 +87,11 @@ function App() {
         style={{
           backgroundColor: "#17181c",
         }}>
-        <Row gutter={16} align="top" justify="space-between">
+        <Row gutter={16} justify="space-between">
           {/* 로고 표시 구역 */}
-          <Col sm={6} justify="center">
+          <Col span={4} align="center">
             <Link to="/">
-              <div className="logo" />
+              <img src={alcol} alt="logo" className="logo" />
             </Link>
           </Col>
 
@@ -114,7 +109,7 @@ function App() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col span={4} justify="center">
+          <Col xs={8} lg={4} justify="center">
             <LoginTag />
           </Col>
         </Row>
