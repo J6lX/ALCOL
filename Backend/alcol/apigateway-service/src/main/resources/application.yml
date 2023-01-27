@@ -19,10 +19,19 @@ spring:
         - id: user-service
           uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/login
           predicates:
-            - Path=/user-service/login # http://localhost:8000/user-service/login
+            - Path=/user-service/login # http://{gateway-ip:gateway-port}/user-service/login
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}  # remove '/user-service'
+
+        # logout
+        - id: user-service
+          uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/logout
+          predicates:
+            - Path=/user-service/logout # http://{gateway-ip:gateway-port}/user-service/logout
+            - Method=POST
+          filters:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}  # remove '/user-service'
 
         # signUp
@@ -45,5 +54,5 @@ spring:
             - AuthorizationHeaderFilter
 
 token:
-  expiration_time: 864000000 # 10 days
-  secret: dohyung_seoyoung_jusung_aaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbcccccccccccccccccdddddddddddddddddd
+  expiration_time: 20000 # milliseconds
+  secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
