@@ -1,0 +1,188 @@
+.middle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #14161A;
+    position: relative;
+    width: 100%;
+    height: 800px;
+}
+
+.mode {
+    position: relative;
+    box-shadow: 0px 0px 10px 5px rgba(92, 253, 253, 0.6);
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    margin: 3%;
+    background-color: #5CFDFD;
+}
+
+.mode img {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+    width: 40%;
+}
+
+.mode h1 {
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate( -50%, -50% );
+}
+
+.NanumSquare {
+    font-family: "NanumSquareNeo";
+    font-weight: 400;
+    size: 32px;
+}
+
+.PyeongChangPeace {
+    font-family: "PyeongChangPeace";
+    font-weight: bold;
+    size: 32px;
+}
+
+.right {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.usernameBox {
+    display: flex;
+    align-items: center;
+    background-color: #fac557;
+    position: absolute;
+    width: 40ch;
+    height: 9ch;
+}
+
+.problemBox {
+    position: relative;
+    box-shadow: 0px 0px 10px 5px rgba(92, 253, 253, 0.6);
+    width: 20vw;
+    border-radius: 3px;
+    margin: 20px;
+    background-color: #5CFDFD;
+}
+
+.problemBox:after {
+    display:block;
+    content: "";
+    padding-bottom: 100%;
+}
+
+.problemBox img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    height: 60%;
+    transform: translate( -50%, -50% );
+}
+
+.consoleBox {
+    position: relative;
+    box-shadow: 0px 0px 10px 5px rgba(92, 253, 253, 0.6);
+    width: 70vw;
+    height: 35vw;
+    border-radius: 3px;
+    margin: 20px;
+    background-color: #5CFDFD;
+}
+
+.consoleBox .ver {
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate( -50%, -50% );
+    background-color: #14161A;
+    width: 1.3vw;
+    height: 35vw;
+}
+
+.consoleBox .hor {
+    position: absolute;
+    top: 70%;
+    left: 62.5%;
+    transform: translate( -50%, -50% );
+    background-color: #14161A;
+    width: 53vw;
+    height: 1.3vw;
+}
+
+.grayBackground {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #272B2E;
+    position: relative;
+    width: 100vw;
+    height: 500px;
+}
+
+.rankIconBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #5CFDFD;
+    box-shadow: 0px 0px 10px 3px rgba(92, 253, 253, 0.6);
+    position: relative;
+    width: 7vw;
+    height: 7vw;
+    border-radius: 10px;
+    margin-left: 20px;
+}
+
+.friendBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #5CFDFD;
+    box-shadow: 0px 0px 10px 3px rgba(92, 253, 253, 0.6);
+    position: relative;
+    width: 25vw;
+    height: 8vw;
+    border-radius: 10px;
+    margin: 15px;
+}
+
+.profileCircle:after {
+    display:block;
+    content: "";
+    padding-bottom: 100%;
+}
+
+.profileCircle {
+    width: 80%;
+    border-radius: 50%;
+    margin: 10px;
+    background-color: #14161A;
+}
+
+.profileName {
+    width: 50%;
+    height: 2vw;
+    border-radius: 5px;
+    background-color: #14161A;
+}
+
+.goBattleBtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #5CFDFD;
+    box-shadow: 0px 0px 10px 3px rgba(92, 253, 253, 0.6);
+    position: relative;
+    width: 50ch;
+    height: 10ch;
+    border-radius: 10px;
+    margin: 15px;
+
+}
