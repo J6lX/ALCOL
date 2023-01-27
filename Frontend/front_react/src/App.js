@@ -6,6 +6,8 @@ import LoginPage from "./components/accounts/LoginPage";
 import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
+import MatchingPage from "./components/battle/MatchingPage";
+import BanPage from "./components/battle/BanPage";
 import "./App.css";
 import profileImg from "./logo.svg";
 import Mypage from "./components/mypage/Mypage";
@@ -88,7 +90,11 @@ function App() {
           backgroundColor: "#16171B",
         }}>
         {/* 본문 자리 임시용 데이터 */}
+<<<<<<< HEAD
         <h1>되나</h1>
+=======
+        {/* <h1>본문 들어갈 부분(임시)</h1> */}
+>>>>>>> 0da5199 (FEAT : 매칭 모드)
         {/* 라우터 태그 목록 */}
         <Routes>
 <<<<<<< HEAD
@@ -99,6 +105,8 @@ function App() {
 >>>>>>> ed95fd5 (FEAT : 배틀 모드 nav&footer 숨기기)
           <Route exact path="/login" element={LoginPage()} />
           <Route path="/mode" element={<ModeSelectPage />} />
+          <Route path="/match" element={<MatchingPage />} />
+          <Route path="/ban" element={<BanPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/modify" element={<ModifyPage />} />
           <Route path="/mypage" exact={true} element={<Mypage />}></Route>
