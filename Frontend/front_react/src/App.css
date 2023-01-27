@@ -58,6 +58,7 @@ body {
 /* 밝은 흰색 텍스트 */
 .text {
   color: white;
+  margin: 3px;
 }
 
 /* 노랑 텍스트 */
@@ -68,6 +69,7 @@ body {
 /*  어두운 회색 텍스트 */
 .textDark {
   color: #a0a0a0;
+  margin: 3px;
 }
 
 /* 푸터 테마 */

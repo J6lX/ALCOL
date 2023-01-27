@@ -42,7 +42,7 @@ body {
   .title {
     position: absolute;
     top: 0%;
-    font-size: 40px;
+    font-size: 50px;
     transform: translate(-50%, 200px);
   }
 }
