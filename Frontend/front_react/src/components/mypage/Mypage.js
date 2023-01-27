@@ -41,7 +41,7 @@ function Mypage() {
               style={{
                 padding: "5px",
               }}>
-              <Col xs={4} className="text block">
+              <Col xs={12} md={6} lg={4} className="text block">
                 {/* 설정 아이콘 표시 블록 */}
                 <Row>
                   <Col md={{ offset: 16 }} lg={{ offset: 20 }}>
@@ -62,7 +62,7 @@ function Mypage() {
               </Col>
 
               {/* 스트릭 및 티어 정보 표시 블록*/}
-              <Col sm={8} lg={12} className="textHighlight block">
+              <Col xs={12} md={12} className="textHighlight block">
                 <Row>
                   {/* 스트릭 그래프 표시 블록 */}
                   <Col
