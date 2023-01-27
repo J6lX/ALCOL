@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
@@ -10,8 +10,8 @@ import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
-// import Mypage from "./components/mypage/Mypage.js";
 import NotFound404 from "./components/NotFound404";
+import Ranking from "./components/mypage/Ranking";
 
 import { Layout, Menu, Button, Row, Col, Space, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
@@ -19,7 +19,7 @@ import { render } from "@testing-library/react";
 const { Header, Content } = Layout;
 
 // items === 네비게이션 바에 넣을 항목들
-const items = ["Problem", "Ranking", "Battle"].map((key) => ({
+const items = ["problem", "Ranking", "Battle"].map((key) => ({
   key,
   label: `${key}`,
 }));
@@ -27,20 +27,29 @@ const items = ["Problem", "Ranking", "Battle"].map((key) => ({
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
     return (
-      <Space align="center" wrap>
-        <Avatar size={44} icon={<UserOutlined />} />
-        <p className="text">동준이다</p>
+      <Space
+        align="center"
+        wrap
+        style={{
+          marginRight: "50px",
+          marginBottom: "10px",
+        }}>
+        <Link to="/mypage/tester">
+          <Avatar size={44} icon={<UserOutlined />} />
+        </Link>
+        <Link to="/mypage/tester">
+          <p className="text">TEST</p>
+        </Link>
         <p
           href="#"
           style={{
             color: "#a0a0a0",
             fontSize: 15,
-            marginRight: "50px",
           }}>
           Logout
         </p>
@@ -50,10 +59,14 @@ function LoginTag(props) {
   } else {
     return (
       <Space align="center">
-        <Button type="link" className="signUpButton">
-          LOGIN
-        </Button>
-        <p className="text">Signup</p>
+        <Link to="/login">
+          <Button type="link" className="signUpButton">
+            LOGIN
+          </Button>
+        </Link>
+        <Link to="/register">
+          <p className="text">Signup</p>
+        </Link>
       </Space>
     );
   }
@@ -66,24 +79,23 @@ function App() {
       <Header>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
-          <Col sm={4} justify="center">
-            <div className="logo" />
+          <Col sm={6} justify="center">
+            <Link to="/">
+              <div className="logo" />
+            </Link>
           </Col>
 
           {/* 메뉴(Problem, Ranking, Battle) */}
-          <Col xs={0} sm={6} md={8} lg={11} xl={12}>
-            <Menu
-              mode="horizontal"
-              defaultOpenKeys={["sub1"]}
-              theme="dark"
-              className="navContent"
-              style={{
-                position: "sticky",
-                display: "flex",
-                justifyContent: "center",
-              }}
-              items={items}
-            />
+          <Col xs={0} sm={6} md={8} lg={11} xl={12} justify="center" align="middle">
+            <Link to="/problem" className="textDark menus">
+              Problem
+            </Link>
+            <Link to="/ranking" className="textDark menus">
+              Ranking
+            </Link>
+            <Link to="/battle" className="textDark menus">
+              Battle
+            </Link>
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
@@ -116,6 +128,11 @@ function App() {
 
           {/* 밴픽 페이지 */}
           <Route path="/ban" element={<BanPage />} />
+
+          {/* 문제 페이지(연습모드 진입) */}
+
+          {/* 랭킹 조회 페이지 */}
+          <Route path="/ranking" element={<Ranking />} />
 
           {/* 회원가입 페이지 */}
           <Route path="/register" exact={true} element={<RegisterPage />} />

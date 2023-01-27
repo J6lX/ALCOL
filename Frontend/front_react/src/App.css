@@ -30,6 +30,11 @@ body {
   font-family: "oneMobilePOP";
 }
 
+/* 메뉴 항목 버튼 */
+.menus {
+  margin: 20px;
+}
+
 /* 로그인 버튼 크기 */
 .loginButton {
   align-items: center;

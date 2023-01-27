@@ -139,13 +139,18 @@ function Mypage() {
           </Container>
         </div>
       ) : (
-        <Row justify="center">
+        <Row
+          justify="center"
+          align="middle"
+          style={{
+            height: "200px",
+          }}>
           <Col>
             <span
               style={{
                 color: "white",
               }}>
-              페이지를 찾을 수 없습니다.
+              등록되지 않은 사용자입니다.
             </span>
           </Col>
         </Row>
