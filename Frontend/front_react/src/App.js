@@ -25,13 +25,13 @@ const items = ["Problem", "Ranking", "Battle"].map((key) => ({
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
     return (
       <Space align="center" wrap>
-        <Avatar size={48} icon={<UserOutlined />} />
+        <Avatar size={44} icon={<UserOutlined />} />
         <p className="text">동준이다</p>
         <p
           href="#"
@@ -48,7 +48,7 @@ function LoginTag(props) {
   } else {
     return (
       <Space align="center">
-        <Button type="primary" className="signUpButton">
+        <Button type="link" className="signUpButton">
           LOGIN
         </Button>
         <p className="text">Signup</p>
@@ -60,26 +60,7 @@ function LoginTag(props) {
 function App() {
   return (
     <Layout>
-      {/* 헤더 */}
-<<<<<<< HEAD
-      <Header className="navbar">
-        <div className="logo" />
-        {/* 메뉴(Problem, Ranking, Battle) */}
-        <Menu
-          mode="horizontal"
-          defaultOpenKeys={["sub1"]}
-          theme="dark"
-          className="navContent"
-          style={{
-            position: "relative",
-            display: "flex",
-            justifyContent: "center",
-          }}
-          items={items}
-        />
-        {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-        <LoginTag />
-=======
+      {/* 헤더(상단 네비게이션 바) */}
       <Header>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
@@ -111,18 +92,13 @@ function App() {
             <LoginTag />
           </Col>
         </Row>
->>>>>>> 93aabf1 (FIX: 헤더 오른쪽에 프로필/회원정보가 줄이 바뀌어서 보이는 문제 수정)
+        >>>>>>> 93aabf1 (FIX: 헤더 오른쪽에 프로필/회원정보가 줄이 바뀌어서 보이는 문제 수정)
       </Header>
       {/* 본문(임시) */}
       <Content
         style={{
           backgroundColor: "#16171B",
         }}>
-<<<<<<< HEAD
-        {/* 본문 자리 임시용 데이터 */}
-        {/* <h1>본문 들어갈 부분(임시)</h1> */}
-=======
->>>>>>> 93aabf1 (FIX: 헤더 오른쪽에 프로필/회원정보가 줄이 바뀌어서 보이는 문제 수정)
         {/* 라우터 태그 목록 */}
         <Routes>
           <Route exact path="/" element={HomePage()} />

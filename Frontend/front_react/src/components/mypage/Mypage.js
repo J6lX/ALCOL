@@ -14,22 +14,30 @@ function Mypage() {
       }}>
       {/* Container 태그 내 4개 블록으로 분리 */}
       <Container>
-        {/* 설정 버튼 블록 */}
-        {/* 개인 정보 표시 블록 */}
-        <Row justify="center">
+        <Row
+          justify="center"
+          style={{
+            padding: "5px",
+          }}>
           <Col
             xs={4}
             className="text block"
             style={{
               justifyContent: "center",
             }}>
-            {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
-            <img src={tempImg} alt="프사" className="userImg" />
-            <p>사용자 프로필</p>
+            {/* 설정 아이콘 표시 블록 */}
             <Row>
-              {/* 설정 아이콘 표시 블록 */}
               <Col md={{ offset: 16 }} lg={{ offset: 20 }}>
                 <img src={settingIcon} alt="settings" className="settingIcon" />
+              </Col>
+            </Row>
+
+            {/* 개인 정보 표시 블록 */}
+            <Row justify="center">
+              <Col>
+                {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
+                <img src={tempImg} alt="프사" className="userImg" />
+                <h1>Username</h1>
               </Col>
             </Row>
           </Col>
@@ -68,6 +76,7 @@ function Mypage() {
             <Row>
               <Col
                 span={11}
+                justify="center"
                 style={{
                   margin: "10px",
                 }}>
