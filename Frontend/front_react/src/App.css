@@ -13,53 +13,39 @@
 
 body {
   background-color: #16171b;
+  font-family: "NanumSquareNeo";
 }
 
 .App {
   text-align: center;
 }
 
-/* 네비게이션 바 테마 */
-.navbar {
-  position: fixed;
-  background-color: #17181c;
-  justify-content: center;
-  height: 60px;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 /* 로고 CSS */
 .logo {
-  float: left;
   width: 120px;
-  height: 31px;
+  height: 34px;
   margin: 16px 24px 16px 0;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.3);
-  font-family: "oneMobilePOP";
 }
 
-/* 네비게이션 메뉴(연습문제, 랭킹, 배틀) */
-.navContent {
-  margin: 5px;
-  color: #e9e9e9;
+/* 메뉴 항목 버튼 */
+.menus {
+  margin: 20px;
+  padding: 5px;
 }
 
-/* 로그인 버튼 크기 */
+/* 로그인 버튼 */
 .loginButton {
-  align-items: center;
-  margin: 13px;
+  color: #e51c29;
+  background-color: #fff0dc;
+  margin: 5px;
 }
 
-/* 회원가입 버튼 위치 */
+/* 회원가입 버튼 */
 .signUpButton {
-  margin-top: 13px;
-  margin-bottom: 13px;
-  margin-left: 5px;
-  margin-right: 10px;
-  align-items: center;
-  color: "#979797";
+  color: #a0a0a0;
+  background-color: #17181c;
+  border-color: #17181c;
+  margin: 5px;
 }
 
 .J6IX {
@@ -69,6 +55,7 @@ body {
 /* 밝은 흰색 텍스트 */
 .text {
   color: white;
+  margin: 3px;
 }
 
 /* 노랑 텍스트 */
@@ -79,10 +66,12 @@ body {
 /*  어두운 회색 텍스트 */
 .textDark {
   color: #a0a0a0;
+  margin: 3px;
 }
 
 /* 푸터 테마 */
 .footer {
+  padding: 20px;
   text-align: center;
   background-color: #17181c;
 }
