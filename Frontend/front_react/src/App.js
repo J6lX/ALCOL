@@ -27,7 +27,7 @@ const items = ["problem", "Ranking", "Battle"].map((key) => ({
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크
-  const isLoggedIn = true;
+  const isLoggedIn = false;
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
@@ -36,8 +36,7 @@ function LoginTag(props) {
         align="center"
         wrap
         style={{
-          marginRight: "50px",
-          marginBottom: "10px",
+          height: "64px",
         }}>
         <Link to="/mypage/tester">
           <Avatar size={44} icon={<UserOutlined />} />
@@ -45,29 +44,26 @@ function LoginTag(props) {
         <Link to="/mypage/tester">
           <p className="text">TEST</p>
         </Link>
-        <p
-          href="#"
-          style={{
-            color: "#a0a0a0",
-            fontSize: 15,
-          }}>
-          Logout
-        </p>
+        <Link>
+          <p className="textDark">Logout</p>
+        </Link>
       </Space>
     );
     // 로그인 정보가 없는 경우 로그인 및 회원가입 버튼 표시
   } else {
     return (
-      <Space align="center">
-        <Link to="/login">
-          <Button type="link" className="signUpButton">
-            LOGIN
-          </Button>
-        </Link>
-        <Link to="/register">
-          <p className="text">Signup</p>
-        </Link>
-      </Space>
+      <Row style={{ height: "64px" }}>
+        <Col>
+          <Link to="/login">
+            <Button className="loginButton">LOGIN</Button>
+          </Link>
+        </Col>
+        <Col align="top" style={{ height: "64px" }}>
+          <Link to="/register">
+            <Button className="signUpButton">Signup</Button>
+          </Link>
+        </Col>
+      </Row>
     );
   }
 }
@@ -76,7 +72,10 @@ function App() {
   return (
     <Layout>
       {/* 헤더(상단 네비게이션 바) */}
-      <Header>
+      <Header
+        style={{
+          backgroundColor: "#17181c",
+        }}>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
           <Col sm={3} justify="center">
@@ -99,11 +98,10 @@ function App() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col justify="center">
-            <LoginTag />
-          </Col>
+          <LoginTag />
         </Row>
       </Header>
+      <hr style={{ background: "#e9e9e9" }}></hr>
       {/* 본문(임시) */}
       <Content
         style={{
