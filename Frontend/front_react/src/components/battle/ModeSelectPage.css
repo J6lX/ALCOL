@@ -1,85 +1,94 @@
 .battle_background {
-    height: 100vh;
-    background: url(/src/assets/battle_select_background.png);
-    background-size: cover;
+  height: 100vh;
+  background: url(/src/assets/battle_select_background.png);
+  background-size: cover;
+}
+
+.navbar {
+  display: none;
+  visibility: hidden;
+}
+
+.footer {
+  display: none;
 }
 
 .battle_user_info_row {
-    position: relative;
-    display: flex;
+  position: relative;
+  display: flex;
 }
 
 .battle_user_info_contents {
-    background-color: #fef662;
-    height: 50px;
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+  background-color: #fef662;
+  height: 50px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .battle_mode_row {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .battle_mode_box {
-    background-color: white;
-    width: 200px;
-    height: 300px;
-    display: flex;
-    flex: 1;
-    overflow: auto;
-    flex-direction: column;
-    box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.4);
+  background-color: white;
+  width: 200px;
+  height: 300px;
+  display: flex;
+  flex: 1;
+  overflow: auto;
+  flex-direction: column;
+  box-shadow: 0px 0px 5px 5px rgba(255, 255, 255, 0.4);
 }
 
 .battle_mode_box:hover {
-    filter: drop-shadow(0 0 15px #f7bd63) contrast(3);
-    transform: scale(1.05);
-    border: 3px solid #f7bd63;
+  filter: drop-shadow(0 0 15px #f7bd63) contrast(3);
+  transform: scale(1.05);
+  border: 3px solid #f7bd63;
 }
 
 .battle_mode_row > :not(last-child) > div {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .img_mode {
-    width: 80px;
-    height: 80px;
-    padding: 0;
-    margin: 60px auto 0px;
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  margin: 60px auto 0px;
 }
 
 .text_Mode {
-    text-align: center;
-    font-size: 20px;
-    font-weight: bold;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .battle_info_box {
-    width: 100px;
-    height: 50px;
-    background-color: black;
-    margin: auto;
-    padding-top: 20px;
+  width: 100px;
+  height: 50px;
+  background-color: black;
+  margin: auto;
+  padding-top: 20px;
 }
 
 .battle_avg_time_box {
-    background-color: black;
-    color: white;
-    text-align: center;
-    width: 200px;
-    height: 30px;
-    margin-top: 10px;
-    padding-top: 5px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  width: 200px;
+  height: 30px;
+  margin-top: 10px;
+  padding-top: 5px;
 }
 
 .battle_fixed_text {
-    position: fixed;
-    top: 85%;
-    left: 0;
-    color: white;
-    font-size: 80px;
-    margin-left: 30px;
+  position: fixed;
+  top: 85%;
+  left: 0;
+  color: white;
+  font-size: 80px;
+  margin-left: 30px;
 }

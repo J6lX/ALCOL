@@ -64,7 +64,7 @@ function App() {
   return (
     <Layout>
       {/* 헤더 */}
-      <Header>
+      <Header className="navbar">
         <div className="logo" />
         {/* 메뉴(Problem, Ranking, Battle) */}
         <Menu
@@ -91,8 +91,12 @@ function App() {
         <h1>되나</h1>
         {/* 라우터 태그 목록 */}
         <Routes>
+<<<<<<< HEAD
           <Route exact path="/home" element={HomePage()} />
 
+=======
+          <Route exact path="/" element={HomePage()} />
+>>>>>>> ed95fd5 (FEAT : 배틀 모드 nav&footer 숨기기)
           <Route exact path="/login" element={LoginPage()} />
           <Route path="/mode" element={<ModeSelectPage />} />
           <Route path="/register" element={<RegisterPage />} />
