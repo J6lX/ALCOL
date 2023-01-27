@@ -22,18 +22,15 @@ body {
 
 /* 로고 CSS */
 .logo {
-  float: left;
   width: 120px;
-  height: 31px;
+  height: 34px;
   margin: 16px 24px 16px 0;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.3);
-  font-family: "oneMobilePOP";
 }
 
 /* 메뉴 항목 버튼 */
 .menus {
   margin: 20px;
+  padding: 5px;
 }
 
 /* 로그인 버튼 */

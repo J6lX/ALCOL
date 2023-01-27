@@ -8,7 +8,7 @@
   background-color: #1d1e22;
   border: 1px solid #5cfdfd;
   margin: 10px;
-  border-radius: 10%;
+  border-radius: 5%;
   text-align: center;
 }
 
@@ -16,15 +16,15 @@
 .miniBlock {
   background-color: #1d1e22;
   border: 1px solid #5cfdfd;
-  border-radius: 10%;
+  border-radius: 5%;
   text-align: center;
   margin-bottom: 10px;
 }
 
 /* 설정 버튼 */
 .settingIcon {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
 /* 사용자 프사 */
@@ -42,10 +42,11 @@
 /* 스트릭 박스 */
 .streakBox {
   justify-content: center;
-  margin: 30 px;
-  width: 200px;
+  margin: 5px;
+  width: 80%;
   height: 100px;
   background: rgba(255, 255, 255, 0.3);
+  border-radius: 5%;
 }
 
 /* 모드 선택란(모두/스피드전/효율성전) */
@@ -58,6 +59,11 @@
 .text {
   color: white;
   padding: 5px;
+}
+
+/* 스트릭 박스용 텍스트 */
+.streakText {
+  font-size: 8px;
 }
 
 /* 최근 20전 승률 그래프 */

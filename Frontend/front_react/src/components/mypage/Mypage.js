@@ -36,15 +36,16 @@ function Mypage() {
           }}>
           {/* Container 태그 내 4개 블록으로 분리 */}
           <Container>
+            {/* 사용자 프로필 블록 */}
             <Row
               justify="center"
               style={{
                 padding: "5px",
               }}>
-              <Col xs={12} md={6} lg={4} className="text block">
+              <Col xs={16} md={6} lg={4} className="text block">
                 {/* 설정 아이콘 표시 블록 */}
                 <Row>
-                  <Col md={{ offset: 16 }} lg={{ offset: 20 }}>
+                  <Col md={{ offset: 21 }}>
                     <Link to="/modify">
                       <img src={settingIcon} alt="settings" className="settingIcon" />
                     </Link>
@@ -62,11 +63,11 @@ function Mypage() {
               </Col>
 
               {/* 스트릭 및 티어 정보 표시 블록*/}
-              <Col xs={12} md={12} className="textHighlight block">
+              <Col xs={16} lg={18} className="textHighlight block">
                 <Row>
                   {/* 스트릭 그래프 표시 블록 */}
                   <Col
-                    span={12}
+                    span={13}
                     justify="center"
                     align="middle"
                     style={{
@@ -74,10 +75,22 @@ function Mypage() {
                       paddingBottom: "5px",
                     }}>
                     <div className="streakBox"></div>
+                    {/* 스트릭 정보(텍스트) 표시 블록 */}
+                    <Row justify="center">
+                      <Col span={6} className="streakText">
+                        연속 접속일 : N일
+                      </Col>
+                      <Col span={6} className="streakText">
+                        현재 연승 수 : N승
+                      </Col>
+                      <Col span={8} className="streakText">
+                        이번 시즌 플레이 게임 수 : N경기
+                      </Col>
+                    </Row>
                   </Col>
 
                   {/* 티어 정보 표시 블록 */}
-                  <Col span={12} justify="center" align="middle">
+                  <Col span={11} justify="center" align="middle">
                     <Row justify="center">
                       {/* 스피드전 티어 뱃지 */}
                       <Col>
@@ -90,18 +103,6 @@ function Mypage() {
                     </Row>
                   </Col>
                 </Row>
-
-                {/* 스트릭 정보(텍스트) 표시 블록 */}
-                <Row>
-                  <Col
-                    span={11}
-                    justify="center"
-                    style={{
-                      margin: "10px",
-                    }}>
-                    <p>스트릭 정보 표시</p>
-                  </Col>
-                </Row>
               </Col>
             </Row>
 
@@ -112,7 +113,9 @@ function Mypage() {
                 padding: "5px",
               }}>
               <Col
-                xs={4}
+                xs={16}
+                md={6}
+                lg={4}
                 align="middle"
                 style={{
                   margin: "10px",
@@ -137,16 +140,16 @@ function Mypage() {
               </Col>
 
               {/* 전적 정보 표시 블록 */}
-              <Col sm={9} lg={12} className="textHighlight block">
+              <Col xs={16} lg={18} className="textHighlight block">
                 {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
                 <Row justify="space-around" className="modeFilter">
-                  <Col sm={3} lg={4}>
+                  <Col sm={4} lg={4}>
                     <h4>모두</h4>
                   </Col>
-                  <Col sm={3} lg={4}>
+                  <Col sm={4} lg={4}>
                     <h4>스피드전</h4>
                   </Col>
-                  <Col sm={3} lg={4}>
+                  <Col sm={4} lg={4}>
                     <h4>최적화전</h4>
                   </Col>
                 </Row>
