@@ -23,7 +23,7 @@ function Ranking() {
         <Row justify="space-around" className="bodyblock">
           <Col span={16}>
             {/* 검색 상자 */}
-            <Row xs={{ justify: "center" }} sm={{ justify: "end" }}>
+            <Row justify="end">
               <Col xs={8} lg={5}>
                 <Input
                   placeholder="닉네임으로 검색"

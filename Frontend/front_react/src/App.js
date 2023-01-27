@@ -11,7 +11,7 @@ import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
 import Ranking from "./components/mypage/Ranking";
 
-import { Layout, Menu, Button, Row, Col, Space, Avatar } from "antd";
+import { Layout, Menu, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { render } from "@testing-library/react";
 const { Header, Content } = Layout;
@@ -25,27 +25,43 @@ const items = ["problem", "Ranking", "Battle"].map((key) => ({
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크
-  const isLoggedIn = false;
+  const isLoggedIn = true;
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
     return (
-      <Space
+      <Row
         align="center"
-        wrap
         style={{
           height: "64px",
         }}>
-        <Link to="/mypage/tester">
-          <Avatar size={44} icon={<UserOutlined />} />
-        </Link>
-        <Link to="/mypage/tester">
-          <p className="text">TEST</p>
-        </Link>
-        <Link>
-          <p className="textDark">Logout</p>
-        </Link>
-      </Space>
+        <Col
+          align="center"
+          style={{
+            height: "64px",
+          }}>
+          <Link to="/mypage/tester">
+            <Avatar size={44} icon={<UserOutlined />} />
+          </Link>
+        </Col>
+        <Col
+          justify="center"
+          style={{
+            height: "64px",
+            textAlign: "center",
+          }}>
+          <Link to="/mypage/tester" className="text">
+            TEST
+          </Link>
+        </Col>
+        <Col
+          align="center"
+          style={{
+            height: "64px",
+          }}>
+          <Link className="textDark">Logout</Link>
+        </Col>
+      </Row>
     );
     // 로그인 정보가 없는 경우 로그인 및 회원가입 버튼 표시
   } else {
@@ -76,7 +92,7 @@ function App() {
         }}>
         <Row gutter={16} align="top" justify="space-between">
           {/* 로고 표시 구역 */}
-          <Col sm={3} justify="center">
+          <Col sm={6} justify="center">
             <Link to="/">
               <div className="logo" />
             </Link>
@@ -96,7 +112,9 @@ function App() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <LoginTag />
+          <Col span={4} justify="center">
+            <LoginTag />
+          </Col>
         </Row>
       </Header>
       <hr style={{ background: "#e9e9e9" }}></hr>
