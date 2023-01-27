@@ -36,10 +36,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
 
         // 모든 요청은 시큐리티에 의해 인증이 요구된다.
         // 하지만 '127.0.0.1' 로 요청된 요구는 그냥 허락한다.
-        http.authorizeRequests().antMatchers("/**")
+        http.authorizeRequests()
+                .antMatchers("/error/**").permitAll()
+                .antMatchers("/**")
                 .hasIpAddress("127.0.0.1")
                 .and()
                 .addFilter(getAuthenticationFilter());
+
+        http.logout() // 로그아웃 기능 작동함
+                .logoutUrl("/logout") // 로그아웃 처리 URL, default: /logout, 원칙적으로 post 방식만 지원
+                .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
+                .deleteCookies("JSESSIONID", "remember-me"); // 로그아웃 후 쿠키 삭제
 
         // h2-console 의 프레임 옵션을 사용하지 않음. 즉 h2-console 을 제대로 보기 위함
         http.headers().frameOptions().disable();

@@ -3,10 +3,13 @@ package com.alcol.userservice.controller;
 import com.alcol.userservice.dto.SignUpDto;
 import com.alcol.userservice.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -23,8 +26,10 @@ public class UserController
     }
 
     @GetMapping("/hello")
-    public String hello() {
+    public String hello(HttpServletRequest request) {
         log.info("hello 호출 완료!!");
+        String authorizationHeader = request.getHeaders(HttpHeaders.AUTHORIZATION).nextElement();
+        System.out.println("hello");
         return "Hello, this is msa";
     }
 
