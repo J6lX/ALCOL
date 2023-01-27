@@ -37,17 +37,25 @@ body {
 // 이미지 안에 들어갈 제목
 .title {
   position: absolute;
-  top: 40%;
   left: 50%;
-  font-size: 40px;
-  transform: translate(-50%, -50%);
+  font-size: 30px;
+  transform: translate(-50%, 100px);
 
-  @media (max-width: 950px) {
+  //페이지 크기 별 css 디자인 수정
+  // 작은 크기
+  @media (max-width: 720px) {
     position: absolute;
-    top: 30%;
     left: 50%;
-    font-size: 15px;
-    transform: translate(-50%, 0%);
+    font-size: 20px;
+    transform: translate(-50%, 45px);
+  }
+
+  // 큰 크기
+  @media (min-width: 980px) {
+    position: absolute;
+    top: 0%;
+    font-size: 40px;
+    transform: translate(-50%, 200px);
   }
 }
 
@@ -72,7 +80,7 @@ body {
 // 유저 랭킹 정보 표시 창
 .profileBox {
   float: left;
-  width: 600px;
+  width: 100%;
   height: 100px;
   margin: 10px;
   text-align: center;
