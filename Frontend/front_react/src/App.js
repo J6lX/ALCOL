@@ -114,8 +114,8 @@ function App() {
           </Col>
         </Row>
       </Header>
-      <hr style={{ background: "#e9e9e9" }}></hr>
       {/* 본문(임시) */}
+          <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
       <Content
         style={{
           backgroundColor: "#16171B",
