@@ -9,21 +9,20 @@ import "./HomePage.css";
 const MainPage = () => {
   return (
     <div className="fullmiddle">
-      <video src={video} loop autoPlay muted className="bgvideo" style={{ zIndex: "1" }}>
-        <div className="gradientBox"></div>
-      </video>
+      <video src={video} loop autoPlay muted className="bgvideo" style={{ zIndex: "1" }}></video>
+      <div className="gradientBox" style={{ zIndex: "2" }}></div>
       <div className="mainh1" style={{ zIndex: "2"}}>
         <img src={mainSlogan} alt="slogan" style={{ width: "30vw", marginBottom: "5%" }} />
       </div>
       <div
         className="battleStart"
-        style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "20px", zIndex: "1"  }}>
+        style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "10px", zIndex: "1"  }}>
         <Button
           style={{
             width: "100%",
             height: "100%",
             border: "5px solid #440000",
-            borderRadius: "16px",
+            borderRadius: "7px",
           }}>
           <p
             className="NanumSquare"
@@ -81,7 +80,7 @@ const EfficiencyRanking = () => {
 
 const RankingPage = () => {
   return (
-    <div className="fullmiddle" style={{ height: "100%", backgroundColor: "#14161A" }}>
+    <div className="fullmiddle" style={{ height: "100%", backgroundColor: "#16171B" }}>
       <br />
       <br />
       <br />

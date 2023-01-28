@@ -10,7 +10,7 @@ import "./GuidePage.css";
 
 const Guide1 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={12}>
           <div className="right">
@@ -73,18 +73,18 @@ const Guide1 = () => {
 
 const Guide2 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div className="usernameBox" style={{ left: "0%", top: "0%", justifyContent: "right" }}>
         <h1
           className="NanumSquare"
-          style={{ fontSize: "1.8vw", fontWeight: "bold", color: "#14161A", marginRight: "20px", marginTop: "6%" }}>
+          style={{ fontSize: "1.8vw", fontWeight: "bold", color: "#16171B", marginRight: "20px", marginTop: "6%" }}>
           당신
         </h1>
       </div>
       <div className="usernameBox" style={{ right: "0%", bottom: "0%", justifyContent: "left" }}>
         <h1
           className="NanumSquare"
-          style={{ fontSize: "1.8vw", fontWeight: "bold", color: "#14161A", marginLeft: "20px", marginTop: "6%" }}>
+          style={{ fontSize: "1.8vw", fontWeight: "bold", color: "#16171B", marginLeft: "20px", marginTop: "6%" }}>
           상대방
         </h1>
       </div>
@@ -118,7 +118,7 @@ const Guide2 = () => {
 
 const Guide3 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
         <div className="consoleBox">
           <div className="ver"></div>
@@ -142,7 +142,7 @@ const Guide3 = () => {
 
 const Guide4 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div className="grayBackground">
         <Col span={1}></Col>
         <Col
@@ -247,7 +247,7 @@ const Guide4 = () => {
 
 const Guide5 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={2}></Col>
         <Col
@@ -270,7 +270,7 @@ const Guide5 = () => {
                 style={{
                   fontSize: "1.1vw",
                   fontWeight: "bold",
-                  color: "#14161A",
+                  color: "#16171B",
                   marginTop: "10px",
                 }}>
                 따라잡기까지 30점
@@ -289,7 +289,7 @@ const Guide5 = () => {
                 style={{
                   fontSize: "1.1vw",
                   fontWeight: "bold",
-                  color: "#14161A",
+                  color: "#16171B",
                   marginTop: "10px",
                 }}>
                 당신의 친구들 중 2위입니다
@@ -308,7 +308,7 @@ const Guide5 = () => {
                 style={{
                   fontSize: "1.1vw",
                   fontWeight: "bold",
-                  color: "#14161A",
+                  color: "#16171B",
                   marginTop: "10px",
                 }}>
                 따라잡히기까지 15점
@@ -318,7 +318,7 @@ const Guide5 = () => {
         </Col>
         <Col span={2}></Col>
         <Col
-          span={11}
+          span={9}
           style={{
             display: "flex",
             flexDirection: "column",
@@ -346,7 +346,7 @@ const Guide5 = () => {
 
 const Guide6 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div
         style={{
           display: "flex",
@@ -420,7 +420,7 @@ const Guide6 = () => {
             style={{
               fontSize: "3.5ch",
               fontWeight: "bold",
-              color: "#14161A",
+              color: "#16171B",
               marginBottom: "10px",
               margin: "auto",
             }}>
@@ -437,27 +437,27 @@ const GuidePage = () => {
     <div className="fullmiddle">
       <Guide1 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide2 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide3 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide4 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide5 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide6 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
     </div>
   );
