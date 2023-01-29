@@ -1,8 +1,7 @@
 package com.alcol.userservice.security;
 
 import com.alcol.userservice.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import com.alcol.userservice.util.TokenProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,20 +11,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter
 {
-    private final UserService userService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final Environment env;
+    private UserService userService;
+    private TokenProvider tokenProvider;
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
     public WebSecurity(
             UserService userService,
-            BCryptPasswordEncoder bCryptPasswordEncoder,
-            Environment env
+            TokenProvider tokenProvider,
+            BCryptPasswordEncoder bCryptPasswordEncoder
     )
     {
         this.userService = userService;
+        this.tokenProvider = tokenProvider;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.env = env;
     }
 
     @Override
@@ -43,11 +41,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
                 .and()
                 .addFilter(getAuthenticationFilter());
 
-        http.logout() // 로그아웃 기능 작동함
-                .logoutUrl("/logout") // 로그아웃 처리 URL, default: /logout, 원칙적으로 post 방식만 지원
-                .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
-                .deleteCookies("JSESSIONID", "remember-me"); // 로그아웃 후 쿠키 삭제
-
         // h2-console 의 프레임 옵션을 사용하지 않음. 즉 h2-console 을 제대로 보기 위함
         http.headers().frameOptions().disable();
     }
@@ -56,7 +49,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
     {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(
                 userService,
-                env,
+                tokenProvider,
                 authenticationManager()
         );
         return authenticationFilter;

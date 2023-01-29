@@ -9,4 +9,6 @@ public interface UserService extends UserDetailsService
     String createUser(SignUpDto signUpDto);
 
     UserDto getUserDetailByEmail(String email);
+
+    String getNewAccessToken(String userId);
 }
