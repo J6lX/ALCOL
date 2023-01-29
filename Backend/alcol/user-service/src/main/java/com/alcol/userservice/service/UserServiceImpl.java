@@ -4,9 +4,9 @@ import com.alcol.userservice.dto.SignUpDto;
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.jpa.UserEntity;
 import com.alcol.userservice.jpa.UserRepository;
+import com.alcol.userservice.util.TokenProvider;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,12 +22,17 @@ public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final TokenProvider tokenProvider;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder)
+    public UserServiceImpl(
+            UserRepository userRepository,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            TokenProvider tokenProvider
+    )
     {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
@@ -73,5 +78,11 @@ public class UserServiceImpl implements UserService
         }
 
         return modelMapper.map(userEntity, UserDto.class);
+    }
+
+    @Override
+    public String getNewAccessToken(String userId)
+    {
+        return tokenProvider.createAccessToken(userId);
     }
 }

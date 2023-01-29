@@ -3,12 +3,9 @@ package com.alcol.userservice.security;
 import com.alcol.userservice.dto.LoginDto;
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.service.UserService;
+import com.alcol.userservice.util.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,17 +13,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.security.Key;
 import java.util.ArrayList;
-import java.util.Date;
 
 // 로그인 플로우
 
@@ -49,26 +40,27 @@ import java.util.Date;
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
 {
     private final UserService userService;
-    private final Environment env;
+    private final TokenProvider tokenProvider;
 
-    @Autowired
     public AuthenticationFilter(
             UserService userService,
-            Environment env,
+            TokenProvider tokenProvider,
             AuthenticationManager authenticationManager
     )
     {
         this.userService = userService;
-        this.env = env;
+        this.tokenProvider = tokenProvider;
         super.setAuthenticationManager(authenticationManager);
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+    public Authentication attemptAuthentication (
+                    HttpServletRequest request,
+                    HttpServletResponse response
+    )
             throws AuthenticationException
     {
         try {
-
             LoginDto creds = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
 
             return getAuthenticationManager().authenticate(
@@ -82,33 +74,23 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
         }
     }
 
-    // 로그인 성공 시 어떤 처리를 해주고, 어떤 값을 반환해줄지를 설정
+    // 로그인 성공 시
+    // access token, refresh token 을 생성 후 userId 와 함께 반환
     @Override
-    protected void successfulAuthentication
-    (
+    protected void successfulAuthentication (
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain chain,
             Authentication authResult
     )
-            throws IOException, ServletException
     {
         String email = ((User)authResult.getPrincipal()).getUsername();
         UserDto userDetails = userService.getUserDetailByEmail(email);
+        String accessToken = tokenProvider.createAccessToken(userDetails.getUserId());
+        String refreshToken = tokenProvider.createRefreshToken(userDetails.getUserId());
 
-        byte[] secretBytes = DatatypeConverter.parseBase64Binary(env.getProperty("token.secret"));
-        Key key = new SecretKeySpec(secretBytes, SignatureAlgorithm.HS512.getJcaName());
-
-        String token = Jwts.builder()
-                // 어떤 내용으로 토큰을 만들 것인지
-                .setSubject(userDetails.getUserId())
-                // 토큰 유효기간 설정
-                .setExpiration(new Date(System.currentTimeMillis()
-                        + Long.parseLong(env.getProperty("token.expiration_time"))))
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
-
-        response.addHeader("token", token);
+        response.addHeader("access-token", accessToken);
+        response.addHeader("refresh-token", refreshToken);
         response.addHeader("userId", userDetails.getUserId());
     }
 }

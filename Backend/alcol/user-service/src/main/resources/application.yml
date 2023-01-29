@@ -25,6 +25,10 @@ eureka:
 #  level:
 #    root: debug
 
-token:
-  expiration_time: 20000 # milliseconds
+access-token:
+  expiration_time: 30000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
+
+refresh-token:
+  expiration_time: 1200000 # milliseconds
+  secret: poipoipoipoipoipoipoipoiqweqweqweqwepoipoipoiqweqwepoiqwpeoiqpwoeipqowiepqoiwepoiqwpeiqpweipqwieoqweiqwpeiowi
