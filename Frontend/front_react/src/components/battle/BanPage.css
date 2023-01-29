@@ -42,8 +42,10 @@
 }
 
 .ban_algo_box {
-  height: 250px;
-  background-color: red;
+  height: 300px;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 15px #ff7300, 0 0 15px #ff7300 inset;
+  border: 2px solid #ffffff;
 }
 
 .ban_player_info {
@@ -62,4 +64,47 @@
   left: 50%;
   top: 50%;
   text-align: center;
+}
+
+.ban_hands_left {
+  position: absolute;
+  margin-top: -210px;
+  z-index: 10;
+  animation: ban_hands_left_Ani 2s;
+  animation-fill-mode: forwards; /* 애니메이션이 끝나면 그대로 멈춤 */
+  animation-iteration-count: infinite; /* 반복을 정해줌 infinite:무한번 */
+  animation-direction: alternate; /* 왔다갔다 하게해줌 */
+  animation-delay: 1s; /* 지연시간 */
+  filter: drop-shadow(10px 6px 6px #0c0000); /*그림자*/
+}
+
+@keyframes ban_hands_left_Ani {
+  /*애니메이션 정의:시작점이 기준 */
+  0% {
+    margin-top: -230px;
+  } /* 시작 */
+  100% {
+    margin-top: -190px;
+  } /*종료 */
+}
+
+.ban_hands_right {
+  position: absolute;
+  z-index: 10;
+  animation: ban_hands_right_Ani 2s;
+  animation-fill-mode: forwards; /* 애니메이션이 끝나면 그대로 멈춤 */
+  animation-iteration-count: infinite; /* 반복을 정해줌 infinite:무한번 */
+  animation-direction: alternate; /* 왔다갔다 하게해줌 */
+  animation-delay: 1.5s; /* 지연시간 */
+  filter: drop-shadow(10px 6px 6px #0c0000); /*그림자*/
+}
+
+@keyframes ban_hands_right_Ani {
+  /*애니메이션 정의:시작점이 기준 */
+  0% {
+    margin-top: -370px;
+  } /* 시작 */
+  100% {
+    margin-top: -330px;
+  } /*종료 */
 }
