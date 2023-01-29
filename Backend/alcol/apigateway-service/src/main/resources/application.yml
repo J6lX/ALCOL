@@ -43,7 +43,17 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
 
-        # 그 외의 user-service 에 대한 요청
+        # refresh
+        - id: user-service
+          uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/user-service/refresh
+          predicates:
+            - Path=/user-service/refresh
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RefreshTokenFilter
+
+        # other user-service requests
         - id: user-service
           uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/user-service/**
           predicates:
@@ -51,8 +61,12 @@ spring:
             - Method=GET
           filters:
             - RemoveRequestHeader=Cookie
-            - AuthorizationHeaderFilter
+            - AccessTokenFilter
 
-token:
-  expiration_time: 20000 # milliseconds
+access-token:
+  expiration_time: 30000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
+
+refresh-token:
+  expiration_time: 1200000 # milliseconds
+  secret: poipoipoipoipoipoipoipoiqweqweqweqwepoipoipoiqweqwepoiqwpeoiqpwoeipqowiepqoiwepoiqwpeiqpweipqwieoqweiqwpeiowi
