@@ -18,8 +18,6 @@ import { Layout, Menu, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { render } from "@testing-library/react";
 
-import PracticePage from "./components/battle/PracticePage";
-
 const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
@@ -141,7 +139,6 @@ function App() {
           <Route path="/ban" element={<BanPage />} />
 
           {/* 문제 페이지(연습모드 진입) */}
-          <Route path="/practice" element={<PracticePage />} />
 
           {/* 랭킹 조회 페이지 */}
           <Route path="/ranking" element={<Ranking />} />
