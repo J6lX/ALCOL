@@ -4,9 +4,10 @@ import com.alcol.userservice.dto.SignUpDto;
 import com.alcol.userservice.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+
 public interface UserService extends UserDetailsService
 {
-    String createUser(SignUpDto signUpDto);
+    String createUser(SignUpDto signUpDto) throws Exception;
 
     UserDto getUserDetailByEmail(String email);
 

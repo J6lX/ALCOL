@@ -40,8 +40,12 @@ public class UserController
     @PostMapping("/signUp")
     public ResponseEntity<String> createUser(@RequestBody SignUpDto signUpDto)
     {
-        String userId = userService.createUser(signUpDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+        try {
+            String userId = userService.createUser(signUpDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userId);
+        } catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 아이디 또는 닉네임 입니다.");
+        }
     }
 
     // 새로운 access token 발급 요청

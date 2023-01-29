@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     public String createUser(SignUpDto signUpDto)
+            throws Exception
     {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
