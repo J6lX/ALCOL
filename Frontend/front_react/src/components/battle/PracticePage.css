@@ -63,13 +63,12 @@ body {
   color: white;
 }
 
-.profileBox {
-  float: left;
+/*  연습 문제 목록 */
+.problems {
+  height: 500px;
   width: 100%;
-  height: 100px;
-  margin: 10px;
-  text-align: center;
-  background: white;
+  color: white;
+  text-decoration: solid white;
 }
 
 h1 {
@@ -99,4 +98,4 @@ hr {
 p {
   font-family: "NanumNeoSquare";
   margin: 5px;
-} /*# sourceMappingURL=Ranking.css.map */
+}
