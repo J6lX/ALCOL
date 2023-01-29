@@ -15,10 +15,20 @@ const darkTheme = createTheme({
 
 // 연습 문제 구분 설명
 const problemLabel = [
-  { field: "id", headerName: "문제 번호", width: 90, height: 200 },
-  { field: "name", headerName: "문제 이름", width: 90, height: 200 },
-  { field: "type", headerName: "문제 유형", width: 90, height: 200 },
-  { field: "tier", headerName: "난이도", width: 90, height: 200 },
+  {
+    field: "id",
+    headerName: "문제 번호",
+    width: 160,
+    align: "center",
+  },
+  {
+    field: "name",
+    headerName: "문제 이름",
+    width: 160,
+    align: "center",
+  },
+  { field: "type", headerName: "문제 유형", width: 160, align: "center" },
+  { field: "tier", headerName: "난이도", width: 160, align: "center" },
 ];
 
 // 연습 문제 데이터
@@ -73,7 +83,17 @@ function Ranking() {
           <Row className="block" justify="center" align="center">
             <Col className="problems" span={24}>
               <ThemeProvider theme={darkTheme}>
-                <DataGrid rows={problemData} columns={problemLabel} />
+                <DataGrid
+                  rows={problemData}
+                  columns={problemLabel}
+                  pageSize={10}
+                  disableColumnSelector
+                  disableColumnMenu
+                  disableColumnFilter
+                  style={{
+                    borderRadius: "5%",
+                  }}
+                />
               </ThemeProvider>
             </Col>
           </Row>
