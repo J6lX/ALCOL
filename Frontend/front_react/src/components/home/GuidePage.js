@@ -1,16 +1,17 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import { Row, Col } from "antd";
 import speedIcon from "../../assets/speed_mode_icon.png";
 import performanceIcon from "../../assets/performance_mode_icon.png";
 import banIcon from "../../assets/X.png";
 import rankingsIcon from "../../assets/rankings_black.png";
 import rankingIcon from "../../assets/ranking_black.png";
-// import "./HomePage.css";
 import "./GuidePage.css";
 
 const Guide1 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide1" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={12}>
           <div className="right">
@@ -74,13 +75,21 @@ const Guide1 = () => {
           </div>
         </Col>
       </Row>
+      <ScrollLink
+        className="NanumSquare"
+        to="Guide2"
+        spy={true}
+        smooth={true}
+        style={{ color: "white", marginTop: "13vw" }}>
+        다음
+      </ScrollLink>
     </div>
   );
 };
 
 const Guide2 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide2" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div className="usernameBox" style={{ left: "0%", top: "0%", justifyContent: "right" }}>
         <h1
           className="NanumSquare"
@@ -131,13 +140,21 @@ const Guide2 = () => {
           금지되지 않은 문제 중 하나가 출제돼요
         </h1>
       </div>
+      <ScrollLink
+        className="NanumSquare"
+        to="Guide3"
+        spy={true}
+        smooth={true}
+        style={{ color: "white", marginTop: "5vw" }}>
+        다음
+      </ScrollLink>
     </div>
   );
 };
 
 const Guide3 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", padding: "4%" }}>
       <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
         <div className="consoleBox">
           <div className="ver"></div>
@@ -151,17 +168,25 @@ const Guide3 = () => {
         </h1>
         <h1
           className="NanumSquare right"
-          style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "16vw" }}>
+          style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "5vw" }}>
           같이하면 재미가 두 배
         </h1>
       </div>
+      <ScrollLink
+        className="NanumSquare"
+        to="Guide4"
+        spy={true}
+        smooth={true}
+        style={{ color: "white", marginTop: "1vw" }}>
+        다음
+      </ScrollLink>
     </div>
   );
 };
 
 const Guide4 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div className="grayBackground">
         <Col span={1}></Col>
         <Col
@@ -266,13 +291,21 @@ const Guide4 = () => {
           </div>
         </Col>
       </div>
+      <ScrollLink
+        className="NanumSquare"
+        to="Guide5"
+        spy={true}
+        smooth={true}
+        style={{ color: "white", marginTop: "1vw" }}>
+        다음
+      </ScrollLink>
     </div>
   );
 };
 
 const Guide5 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide5" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={2}></Col>
         <Col
@@ -365,13 +398,21 @@ const Guide5 = () => {
           </h1>
         </Col>
       </Row>
+      <ScrollLink
+        className="NanumSquare"
+        to="Guide6"
+        spy={true}
+        smooth={true}
+        style={{ color: "white", marginTop: "1vw" }}>
+        다음
+      </ScrollLink>
     </div>
   );
 };
 
 const Guide6 = () => {
   return (
-    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide6" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div
         style={{
           display: "flex",
@@ -433,20 +474,30 @@ const Guide6 = () => {
           </Col>
         </Row>
         <br />
-        <div className="goBattleBtn">
-          <p
-            className="NanumSquare"
-            style={{
-              fontSize: "1.8vw",
-              fontWeight: "bold",
-              color: "#16171B",
-              marginBottom: "10px",
-              margin: "auto",
-            }}>
-            배틀 하러 가기
-          </p>
-        </div>
+        <Link to="/mode">
+          <div className="goBattleBtn">
+            <p
+              className="NanumSquare"
+              style={{
+                fontSize: "1.8vw",
+                fontWeight: "bold",
+                color: "#16171B",
+                marginBottom: "10px",
+                margin: "auto",
+              }}>
+              배틀 하러 가기
+            </p>
+          </div>
+        </Link>
       </div>
+      <ScrollLink
+        className="NanumSquare"
+        to="MainPage"
+        spy={true}
+        smooth={true}
+        style={{ color: "white", marginTop: "1vw" }}>
+        맨 위로
+      </ScrollLink>
     </div>
   );
 };
@@ -456,27 +507,27 @@ const GuidePage = () => {
     <div className="fullmiddle">
       <Guide1 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide2 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide3 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide4 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide5 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide6 />
       <div>
-        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
     </div>
   );
