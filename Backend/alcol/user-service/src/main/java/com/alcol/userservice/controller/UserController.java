@@ -49,13 +49,21 @@ public class UserController
     // 회원 가입 요청
     @PostMapping("/signUp")
     public ResponseEntity<String> createUser(@RequestBody SignUpDto signUpDto)
+            throws Exception
     {
-        try {
-            String userId = userService.createUser(signUpDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(userId);
-        } catch(Exception e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("중복된 아이디 또는 닉네임 입니다.");
+        String retVal = userService.createUser(signUpDto);
+
+        if (retVal.equals("DUPLICATE_EMAIL"))
+        {
+            return new ResponseEntity("duplicate email", HttpStatus.CONFLICT);
         }
+
+        if (retVal.equals("DUPLICATE_NICKNAME"))
+        {
+            return new ResponseEntity("duplicate nickname", HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity("signup success", HttpStatus.OK);
     }
 
     // 새로운 access token 발급 요청

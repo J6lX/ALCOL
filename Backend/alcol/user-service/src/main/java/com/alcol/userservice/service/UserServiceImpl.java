@@ -5,6 +5,7 @@ import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.jpa.UserEntity;
 import com.alcol.userservice.jpa.UserRepository;
 import com.alcol.userservice.util.TokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
@@ -36,7 +38,8 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException
     {
         UserEntity userEntity = userRepository.findByEmail(username);
 
@@ -54,14 +57,31 @@ public class UserServiceImpl implements UserService
 
     @Override
     public String createUser(SignUpDto signUpDto)
-            throws Exception
     {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserEntity userEntity = modelMapper.map(signUpDto, UserEntity.class);
+        UserEntity userEntity;
+
+        // 중복 이메일 체크
+        userEntity = userRepository.findByEmail(signUpDto.getEmail());
+        if (userEntity != null)
+        {
+            return "DUPLICATE_EMAIL";
+        }
+
+        // 중복 닉네임 체크
+        userEntity = userRepository.findByNickname(signUpDto.getNickname());
+        if (userEntity != null)
+        {
+            return "DUPLICATE_NICKNAME";
+        }
+
+        userEntity = modelMapper.map(signUpDto, UserEntity.class);
         userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(signUpDto.getPwd()));
         userEntity.setCreatedAt(LocalDateTime.now());
         userEntity.setUserId(UUID.randomUUID().toString());
+
+        // 회원가입 정보 저장
         userRepository.save(userEntity);
         return userEntity.getUserId();
     }
