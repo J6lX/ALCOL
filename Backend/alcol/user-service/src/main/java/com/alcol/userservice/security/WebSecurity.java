@@ -33,11 +33,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
         http.csrf().disable();
 
         // 모든 요청은 시큐리티에 의해 인증이 요구된다.
-        // 하지만 '127.0.0.1' 로 요청된 요구는 그냥 허락한다.
         http.authorizeRequests()
-                .antMatchers("/error/**").permitAll()
-                .antMatchers("/**")
-                .hasIpAddress("127.0.0.1")
+                .antMatchers("/**").permitAll()
+//                .hasIpAddress("127.0.0.1")
                 .and()
                 .addFilter(getAuthenticationFilter());
 
