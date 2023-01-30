@@ -1,6 +1,8 @@
 import React from "react";
 import { Col, Row } from "antd";
 import "./BanPage.css";
+import img_leftHand from "../../assets/leftHand.png";
+import img_rightHand from "../../assets/rightHand.png";
 
 function UserInfo() {
   return (
@@ -27,15 +29,12 @@ function UserInfo() {
   );
 }
 
-function PlayerInfo() {
-  return <div className="ban_player_info">Player1</div>;
-}
-
 function Top() {
   return (
     <Row>
       <Col xs={12} sm={10} md={8} lg={6} xl={6}>
-        <PlayerInfo />
+        <div className="ban_player_info">Player1</div>
+        <img src={img_leftHand} alt="hand" className="ban_hands_left" />
       </Col>
       <Col xs={12} sm={14} md={12} lg={12} xl={12} style={{ marginTop: "50px" }}>
         <div className="ban_title">금지할 문제를 선택해주세요</div>
@@ -64,10 +63,13 @@ function Mid() {
 function Bottom() {
   return (
     <Row style={{ marginTop: "60px" }}>
-      <Col xs={0} sm={0} md={4} lg={7} xl={7}></Col>
-      <Col xs={12} sm={14} md={12} lg={10} xl={10} style={{ marginTop: "100px" }}></Col>
-      <Col xs={12} sm={10} md={8} lg={7} xl={7}>
-        <PlayerInfo />
+      <Col xs={0} sm={0} md={4} lg={6} xl={6}></Col>
+      <Col xs={12} sm={14} md={12} lg={12} xl={12} style={{ marginTop: "100px" }}></Col>
+      <Col xs={12} sm={10} md={8} lg={6} xl={6}>
+        <img src={img_rightHand} alt="hand" className="ban_hands_right" />
+        <div style={{ marginTop: "70px" }} className="ban_player_info">
+          Player1
+        </div>
       </Col>
     </Row>
   );

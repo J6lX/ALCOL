@@ -8,6 +8,7 @@ import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
+import ResultPage from "./components/battle/ResultPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -136,6 +137,9 @@ function App() {
 
           {/* 밴픽 페이지 */}
           <Route path="/ban" element={<BanPage />} />
+
+          {/* 결과 페이지 */}
+          <Route path="/result" element={<ResultPage />} />
 
           {/* 문제 페이지(연습모드 진입) */}
 
