@@ -63,6 +63,7 @@ spring:
             - RemoveRequestHeader=Cookie
             - AccessTokenFilter
 
+
 access-token:
   expiration_time: 30000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
