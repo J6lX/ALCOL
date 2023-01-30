@@ -1,7 +1,10 @@
 package com.alcol.userservice.controller;
 
+import com.alcol.userservice.dto.ResponseDto;
 import com.alcol.userservice.dto.SignUpDto;
+import com.alcol.userservice.error.CustomStatusCode;
 import com.alcol.userservice.service.UserService;
+import com.alcol.userservice.util.ApiUtils;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -16,7 +19,9 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -48,37 +53,50 @@ public class UserController
 
     // 회원 가입 요청
     @PostMapping("/signUp")
-    public ResponseEntity<String> createUser(@RequestBody SignUpDto signUpDto)
+    public ResponseEntity<ResponseDto<?>> createUser(@RequestBody SignUpDto signUpDto)
             throws Exception
     {
         String retVal = userService.createUser(signUpDto);
 
         if (retVal.equals("DUPLICATE_EMAIL"))
         {
-            return new ResponseEntity("duplicate email", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    ApiUtils.error(CustomStatusCode.DUPLICATE_USER_EMAIL)
+            );
         }
 
         if (retVal.equals("DUPLICATE_NICKNAME"))
         {
-            return new ResponseEntity("duplicate nickname", HttpStatus.CONFLICT);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    ApiUtils.error(CustomStatusCode.DUPLICATE_USER_NICKNAME)
+            );
         }
 
-        return new ResponseEntity("signup success", HttpStatus.OK);
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", retVal);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiUtils.success(map, CustomStatusCode.CREATE_USER_SUCCESS)
+        );
     }
 
     // 새로운 access token 발급 요청
     @PostMapping("/refresh")
-    public ResponseEntity<String> createUser(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity<ResponseDto<?>> createUser(HttpServletRequest request, HttpServletResponse response)
     {
         log.info("새로운 access token 을 발급합니다.");
+
         String authorizationHeader = request.getHeaders(HttpHeaders.AUTHORIZATION).nextElement();
         String jwt = authorizationHeader.replace("Bearer", "");
         String userId = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(env.getProperty("refresh-token.secret")))
                 .parseClaimsJws(jwt).getBody().getSubject();
         String newAccessToken = userService.getNewAccessToken(userId);
+
         response.addHeader("new-access-token", newAccessToken);
-        return ResponseEntity.status(HttpStatus.CREATED).body("새로운 access token 이 발급되었습니다.");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiUtils.success(null, CustomStatusCode.CREATE_NEW_ACCESS_TOKEN)
+        );
     }
 
     // RestTemplate 을 통한 서비스 간 호출 테스트

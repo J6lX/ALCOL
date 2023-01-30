@@ -10,7 +10,7 @@ spring:
     username: root
     password: ehgud
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: update
     properties:

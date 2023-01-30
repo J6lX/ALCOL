@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // 로그인 플로우
 
@@ -77,7 +78,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
     // 로그인 성공 시
     // access token, refresh token 을 생성 후 userId 와 함께 반환
     @Override
-    protected void successfulAuthentication (
+    protected void successfulAuthentication
+    (
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain chain,
@@ -89,8 +91,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
         String accessToken = tokenProvider.createAccessToken(userDetails.getUserId());
         String refreshToken = tokenProvider.createRefreshToken(userDetails.getUserId());
 
+        response.addHeader("userId", userDetails.getUserId());
         response.addHeader("access-token", accessToken);
         response.addHeader("refresh-token", refreshToken);
-        response.addHeader("userId", userDetails.getUserId());
     }
 }
