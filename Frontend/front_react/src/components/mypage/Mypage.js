@@ -14,7 +14,7 @@ const userData = {
     friends: {}, // 친구 목록
   },
   tester: {
-    name: "Tester",
+    name: "tester",
     battleRec: {},
     friends: {},
   },
@@ -65,14 +65,14 @@ function Mypage() {
               <Col xs={16} lg={18} className="textHighlight block">
                 <Row>
                   {/* 티어 정보 표시 블록 */}
-                  <Col span={18} justify="center" align="middle">
+                  <Col span={24} justify="center" align="middle">
                     <Row justify="center">
                       {/* 스피드전 티어 뱃지 */}
-                      <Col>
+                      <Col span={6} justify="center">
                         <img src={tempImg} alt="프사" className="userImg"></img>
                       </Col>
                       {/* 최적화전 티어 뱃지 */}
-                      <Col>
+                      <Col span={6} justify="center">
                         <img src={tempImg} alt="프사" className="userImg"></img>
                       </Col>
                     </Row>
@@ -112,8 +112,8 @@ function Mypage() {
                     <p className="textHighlight">시즌 기록 없음</p>
                     <hr />
                     {/* 지난 시즌 이력 조회 링크 */}
-                    <Link to="/season" params={{ username: profile }}>
-                      지난 시즌 조회
+                    <Link to={`/season/${userInfo.username}`}>
+                      <p className="textHighlight">지난 시즌 조회</p>
                     </Link>
                   </Col>
                 </Row>
