@@ -1,5 +1,5 @@
 import Container from "react-bootstrap/Container";
-import { Button, Row, Col, Space, Tooltip } from "antd";
+import { Row, Col } from "antd";
 import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
