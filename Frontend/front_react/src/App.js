@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
@@ -9,6 +9,7 @@ import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import ResultPage from "./components/battle/ResultPage";
+import ResultListPage from "./components/battle/ResultListPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -118,6 +119,7 @@ function App() {
           </Col>
         </Row>
       </Header>
+
       {/* 본문(임시) */}
       <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
       <Content
@@ -125,46 +127,51 @@ function App() {
           backgroundColor: "#16171B",
         }}>
         {/* 라우터 태그 목록 */}
-        <Routes>
-          {/* 메인 페이지 */}
-          <Route exact path="/" element={HomePage()} />
+        <Router>
+          <Switch>
+            {/* 메인 페이지 */}
+            <Route exact path="/" component={HomePage} />
 
-          {/* 로그인 페이지 */}
-          <Route exact path="/login" element={LoginPage()} />
+            {/* 로그인 페이지 */}
+            <Route exact path="/login" component={LoginPage} />
 
-          {/* 모드 선택 페이지 */}
-          <Route path="/mode" element={<ModeSelectPage />} />
+            {/* 모드 선택 페이지 */}
+            <Route path="/mode" component={ModeSelectPage} />
 
-          {/* 매칭 페이지 */}
-          <Route path="/match" element={<MatchingPage />} />
+            {/* 매칭 페이지 */}
+            <Route path="/match" component={MatchingPage} />
 
-          {/* 밴픽 페이지 */}
-          <Route path="/ban" element={<BanPage />} />
+            {/* 밴픽 페이지 */}
+            <Route path="/ban" component={BanPage} />
 
-          {/* 결과 페이지 */}
-          <Route path="/result" element={<ResultPage />} />
+            {/* 결과 페이지 */}
+            <Route path="/result" component={ResultPage} />
 
-          {/* 문제 페이지(연습모드 진입) */}
+            {/* 결과 페이지 */}
+            <Route path="/resultList" component={ResultListPage} />
 
-          {/* 랭킹 조회 페이지 */}
-          <Route path="/ranking" element={<Ranking />} />
+            {/* 문제 페이지(연습모드 진입) */}
 
-          {/* 회원가입 페이지 */}
-          <Route path="/register" exact={true} element={<RegisterPage />} />
+            {/* 랭킹 조회 페이지 */}
+            <Route path="/ranking" component={Ranking} />
 
-          {/* 회원정보 수정 페이지 */}
-          <Route path="/modify" exact={true} element={<ModifyPage />} />
+            {/* 회원가입 페이지 */}
+            <Route path="/register" exact={true} component={RegisterPage} />
 
-          {/* 마이페이지(사용자 정보 열람 페이지) */}
-          <Route path="/mypage/:username" exact={true} element={<Mypage />} />
+            {/* 회원정보 수정 페이지 */}
+            <Route path="/modify" exact={true} component={ModifyPage} />
 
-          {/* 지난 시즌 정보 조회 페이지 */}
-          <Route path="/season/:username" exact={true} element={<LastSeason />} />
+            {/* 마이페이지(사용자 정보 열람 페이지) */}
+            <Route path="/mypage/:username" exact={true} component={Mypage} />
 
-          {/* 404 페이지 */}
-          <Route path="*" element={<NotFound404 />} />
-          {/* <Route exact path="/register" element={RegisterPage()} /> */}
-        </Routes>
+            {/* 지난 시즌 정보 조회 페이지 */}
+            <Route path="/season/:username" exact={true} component={LastSeason} />
+
+            {/* 404 페이지 */}
+            <Route path="*" component={NotFound404} />
+            {/* <Route exact path="/register" element={RegisterPage()} /> */}
+          </Switch>
+        </Router>
       </Content>
       {/* 푸터 */}
       <footer className="footer">
