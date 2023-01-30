@@ -10,6 +10,7 @@ import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
+import SolvingPage from "./components/battle/SolvingPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -93,7 +94,8 @@ function App() {
   if (
     locationNow.pathname === "/match" ||
     locationNow.pathname === "/ban" ||
-    locationNow.pathname === "/mode"
+    locationNow.pathname === "/mode" ||
+    locationNow.pathname === "/solve"
   )
     return (
       <Layout>
@@ -129,6 +131,9 @@ function App() {
 
             {/* 회원정보 수정 페이지 */}
             <Route path="/modify" exact={true} component={ModifyPage} />
+
+            {/* 회원정보 수정 페이지 */}
+            <Route path="/solve" exact={true} component={SolvingPage} />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
             <Route path="/mypage/:username" exact={true} component={Mypage} />
@@ -232,6 +237,9 @@ function App() {
           <Route path="/modify" exact={true} component={ModifyPage} />
           {/* 회원정보 수정 페이지 */}
           <Route path="/modify" exact={true} component={ModifyPage} />
+
+          {/* 문제 푸는 페이지 */}
+          <Route path="/solve" exact={true} component={SolvingPage} />
 
           {/* 마이페이지(사용자 정보 열람 페이지) */}
           <Route path="/mypage/:username" exact={true} component={Mypage} />
