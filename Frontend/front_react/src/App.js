@@ -19,11 +19,8 @@ import alcol from "../src/assets/alcol_empty_white.png";
 
 import { Layout, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-// import { render } from "@testing-library/react";
-<<<<<<< HEAD
+// // import { render } from "@testing-library/react";
 
-=======
->>>>>>> cc15a78b6fb3ecf090d81a5c49f8c28b991c850f
 const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
