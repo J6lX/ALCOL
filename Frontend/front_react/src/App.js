@@ -13,6 +13,8 @@ import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
 import Ranking from "./components/mypage/Ranking";
+import LastSeason from "./components/mypage/LastSeason";
+
 import alcol from "../src/assets/alcol_empty_white.png";
 
 import { Layout, Button, Row, Col, Avatar } from "antd";
@@ -154,6 +156,9 @@ function App() {
 
           {/* 마이페이지(사용자 정보 열람 페이지) */}
           <Route path="/mypage/:username" exact={true} element={<Mypage />} />
+
+          {/* 지난 시즌 정보 조회 페이지 */}
+          <Route path="/season/:username" exact={true} element={<LastSeason />} />
 
           {/* 404 페이지 */}
           <Route path="*" element={<NotFound404 />} />
