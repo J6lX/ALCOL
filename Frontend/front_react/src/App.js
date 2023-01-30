@@ -9,7 +9,7 @@ import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import ResultPage from "./components/battle/ResultPage";
-// import ResultListPage from "./components/battle/ResultListPage";
+import ResultListPage from "./components/battle/ResultListPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -93,8 +93,7 @@ function App() {
   if (
     locationNow.pathname === "/match" ||
     locationNow.pathname === "/ban" ||
-    locationNow.pathname === "/mode" ||
-    locationNow.pathname === "/result"
+    locationNow.pathname === "/mode"
   )
     return (
       <Layout>
@@ -119,9 +118,6 @@ function App() {
 
               {/* 밴픽 페이지 */}
               <Route path="/ban" component={BanPage} />
-
-              {/* 결과 페이지 */}
-              <Route path="/result" component={ResultPage} />
 
               {/* 문제 페이지(연습모드 진입) */}
               <Route path="/practice" component={PracticePage} />
@@ -218,6 +214,9 @@ function App() {
 
             {/* 결과 페이지 */}
             <Route path="/result" component={ResultPage} />
+
+            {/* 결과 페이지 */}
+            <Route path="/resultList" component={ResultListPage} />
 
             {/* 문제 페이지(연습모드 진입) */}
             <Route path="/practice" component={PracticePage} />
