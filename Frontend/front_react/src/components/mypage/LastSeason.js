@@ -1,7 +1,5 @@
-import { Button, Row, Col, Space, Tooltip } from "antd";
+import { Row, Col } from "antd";
 import "./LastSeason.css";
-import settingIcon from "../../assets/setting.png";
-import tempImg from "../../logo.svg";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
