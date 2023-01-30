@@ -1,6 +1,6 @@
 import Container from "react-bootstrap/Container";
 import { Row, Col } from "antd";
-import "./Mypage.css";
+import "./OldMypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams } from "react-router-dom";
@@ -26,6 +26,7 @@ function Mypage() {
 
   return (
     <div>
+      {" "}
       {profile ? (
         <div
           className="pageBody"
@@ -64,8 +65,32 @@ function Mypage() {
               {/* 스트릭 및 티어 정보 표시 블록*/}
               <Col xs={16} lg={18} className="textHighlight block">
                 <Row>
+                  {/* 스트릭 그래프 표시 블록 */}
+                  <Col
+                    span={13}
+                    justify="center"
+                    align="middle"
+                    style={{
+                      paddingTop: "20px",
+                      paddingBottom: "5px",
+                    }}>
+                    <div className="streakBox"></div>
+                    {/* 스트릭 정보(텍스트) 표시 블록 */}
+                    <Row justify="center">
+                      <Col span={6} className="streakText">
+                        연속 접속일 : N일
+                      </Col>
+                      <Col span={6} className="streakText">
+                        현재 연승 수 : N승
+                      </Col>
+                      <Col span={8} className="streakText">
+                        이번 시즌 플레이 게임 수 : N경기
+                      </Col>
+                    </Row>
+                  </Col>
+
                   {/* 티어 정보 표시 블록 */}
-                  <Col span={18} justify="center" align="middle">
+                  <Col span={11} justify="center" align="middle">
                     <Row justify="center">
                       {/* 스피드전 티어 뱃지 */}
                       <Col>
@@ -108,13 +133,8 @@ function Mypage() {
                   {/* 지난 시즌 기록 보기 */}
                   <Col xs={24} className="miniBlock">
                     <p className="textHighlight">지난 시즌 기록</p>
-                    <hr />
+                    <hr></hr>
                     <p className="textHighlight">시즌 기록 없음</p>
-                    <hr />
-                    {/* 지난 시즌 이력 조회 링크 */}
-                    <Link to="/season" params={{ username: profile }}>
-                      지난 시즌 조회
-                    </Link>
                   </Col>
                 </Row>
               </Col>

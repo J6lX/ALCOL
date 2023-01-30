@@ -193,7 +193,7 @@ function App() {
           backgroundColor: "#16171B",
         }}>
         {/* 라우터 태그 목록 */}
-        <Router>
+        <Routes>
           <Switch>
             {/* 메인 페이지 */}
             <Route exact path="/" component={HomePage} />

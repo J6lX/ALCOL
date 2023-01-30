@@ -1,0 +1,82 @@
+/*  페이지 크기 조절 */
+.pageBody {
+  height: 100vh;
+}
+
+/* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
+.block {
+  background-color: #1d1e22;
+  border: 1px solid #5cfdfd;
+  margin: 10px;
+  border-radius: 5%;
+  text-align: center;
+}
+
+/* 친구 목록, 지난 시즌 조회용 블록 CSS */
+.miniBlock {
+  background-color: #1d1e22;
+  border: 1px solid #5cfdfd;
+  border-radius: 5%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* 설정 버튼 */
+.settingIcon {
+  width: 22px;
+  height: 22px;
+}
+
+/* 사용자 프사 */
+.userImg {
+  width: 80px;
+  height: 80px;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+  background: rgba(255, 255, 255, 0.3);
+  font-family: "oneMobilePOP";
+  border-radius: 100%;
+}
+
+/* 스트릭 박스 */
+.streakBox {
+  justify-content: center;
+  margin: 5px;
+  width: 80%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 5%;
+}
+
+/* 모드 선택란(모두/스피드전/효율성전) */
+.modeFilter {
+  color: white;
+  margin: 10px;
+}
+
+/* 페이지 기본 텍스트 */
+.text {
+  color: white;
+  padding: 5px;
+}
+
+/* 스트릭 박스용 텍스트 */
+.streakText {
+  font-size: 8px;
+}
+
+/* 최근 20전 승률 그래프 */
+.winrateCircle {
+  width: 128px;
+  height: 128px;
+}
+
+/* 강조용 텍스트 */
+.textHighlight {
+  color: #fde14b;
+  padding: 5px;
+}
+
+@media (max-length: 500px) {
+}
