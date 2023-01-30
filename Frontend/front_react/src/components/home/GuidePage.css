@@ -87,8 +87,8 @@
 .consoleBox {
     position: relative;
     box-shadow: 0px 0px 10px 5px rgba(92, 253, 253, 0.6);
-    width: 60vw;
-    height: 30vw;
+    width: 50vw;
+    height: 25vw;
     border-radius: 3px;
     margin: 20px;
     background-color: #5CFDFD;
@@ -101,7 +101,7 @@
     transform: translate( -50%, -50% );
     background-color: #14161A;
     width: 1.3vw;
-    height: 30vw;
+    height: 25vw;
 }
 
 .consoleBox .hor {
@@ -110,7 +110,7 @@
     left: 62.5%;
     transform: translate( -50%, -50% );
     background-color: #14161A;
-    width: 45vw;
+    width: 37.5vw;
     height: 1.3vw;
 }
 
