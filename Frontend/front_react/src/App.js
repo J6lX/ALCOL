@@ -98,7 +98,7 @@ function App() {
 
           {/* 메뉴(Problem, Ranking, Battle) */}
           <Col xs={0} md={6} lg={11} xl={12} justify="center" align="middle">
-            <Link to="/problem" className="textDark menus">
+            <Link to="/practice" className="textDark menus">
               Problem
             </Link>
             <Link to="/ranking" className="textDark menus">
