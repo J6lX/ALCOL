@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
-import { Button, Space, Row, Col } from "antd";
+import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 
 const MainPage = () => {
@@ -11,25 +12,28 @@ const MainPage = () => {
     <div className="fullmiddle">
       <video src={video} loop autoPlay muted className="bgvideo" style={{ zIndex: "1" }}></video>
       <div className="gradientBox" style={{ zIndex: "2" }}></div>
-      <div className="mainh1" style={{ zIndex: "2"}}>
+      <div className="mainh1" style={{ zIndex: "2" }}>
         <img src={mainSlogan} alt="slogan" style={{ width: "30vw", marginBottom: "5%" }} />
       </div>
+
       <div
         className="battleStart"
-        style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "10px", zIndex: "1"  }}>
-        <Button
-          style={{
-            width: "100%",
-            height: "100%",
-            border: "5px solid #440000",
-            borderRadius: "7px",
-          }}>
-          <p
-            className="NanumSquare"
-            style={{ fontSize: "1.8vw", color: "#E51C29", fontWeight: "bold", margin: "auto" }}>
-            Battle Start!
-          </p>
-        </Button>
+        style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "1vw", zIndex: "1" }}>
+        <Link to="/mode">
+          <Button
+            style={{
+              width: "100%",
+              height: "100%",
+              border: "5px solid #440000",
+              borderRadius: "0.7vw",
+            }}>
+            <p
+              className="NanumSquare"
+              style={{ fontSize: "1.8vw", color: "#E51C29", fontWeight: "bold", margin: "auto" }}>
+              Battle Start!
+            </p>
+          </Button>
+        </Link>
         <Button type="text" block style={{ marginTop: "5px" }}>
           <p className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
             배틀 방법이 궁금하신가요?
@@ -43,7 +47,9 @@ const MainPage = () => {
 const SpeedRanking = () => {
   return (
     <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
-      <h1 className="PyeongChangPeace textOrangeGradient" style={{ fontSize: "2.5vw", paddingTop: "2ch" }}>
+      <h1
+        className="PyeongChangPeace textOrangeGradient"
+        style={{ fontSize: "2.5vw", paddingTop: "2ch" }}>
         스피드
       </h1>
       <br />
@@ -62,7 +68,9 @@ const SpeedRanking = () => {
 const EfficiencyRanking = () => {
   return (
     <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
-      <h1 className="PyeongChangPeace textSkyblueGradient" style={{ fontSize: "2.5vw", paddingTop: "2ch" }}>
+      <h1
+        className="PyeongChangPeace textSkyblueGradient"
+        style={{ fontSize: "2.5vw", paddingTop: "2ch" }}>
         최적화
       </h1>
       <br />
@@ -94,10 +102,12 @@ const RankingPage = () => {
             textAlign: "center",
             marginLeft: "20px",
           }}>
-          <p className="NanumSquare" style={{  fontSize: "1.5vw", color: "white" }}>
+          <p className="NanumSquare" style={{ fontSize: "1.5vw", color: "white" }}>
             Today's
           </p>
-          <p className="NanumSquare" style={{ fontSize: "3vw", fontWeight: "bold", color: "white"}}>
+          <p
+            className="NanumSquare"
+            style={{ fontSize: "3vw", fontWeight: "bold", color: "white" }}>
             Ranking
           </p>
         </div>
@@ -127,7 +137,7 @@ const RankingPage = () => {
 
 const HomePage = () => {
   return (
-    <div style={{ zIndex: "-2"}}>
+    <div style={{ zIndex: "-2" }}>
       <MainPage />
       <RankingPage />
       <GuidePage />
