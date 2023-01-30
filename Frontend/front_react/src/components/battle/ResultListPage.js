@@ -116,6 +116,38 @@ function ResultInfo({ message }) {
   );
 }
 
+function ResultList() {
+  return (
+    <div style={{ clear: "both", height: "45vh", overflow: "auto" }}>
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
+    </div>
+  );
+}
+
+function ResultButton() {
+  return (
+    <Row justify="space-between" style={{ marginTop: "30px" }}>
+      <Col span={8}></Col>
+      <Col span={3} className="result_button">
+        자세히보기
+      </Col>
+      <Col span={3} className="result_button">
+        다시하기
+      </Col>
+      <Col span={8}></Col>
+    </Row>
+  );
+}
+
 function App() {
   return (
     <div className="result_background">
@@ -136,31 +168,11 @@ function App() {
         </Col>
         <Col sm={10} md={8} xl={12} className="result_list_wrap">
           <ResultPlayerInfo />
-          <div style={{ clear: "both", height: "45vh", overflow: "auto" }}>
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-            <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-          </div>
+          <ResultList />
         </Col>
         <Col sm={10} md={8} xl={2}></Col>
       </Row>
-      <Row justify="space-between" style={{ marginTop: "30px" }}>
-        <Col span={8}></Col>
-        <Col span={3} className="result_button">
-          자세히보기
-        </Col>
-        <Col span={3} className="result_button">
-          다시하기
-        </Col>
-        <Col span={8}></Col>
-      </Row>
+      <ResultButton />
     </div>
   );
 }
