@@ -16,9 +16,9 @@ import LastSeason from "./components/mypage/LastSeason";
 
 import alcol from "../src/assets/alcol_empty_white.png";
 
-import { Layout, Menu, Button, Row, Col, Avatar } from "antd";
+import { Layout, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { render } from "@testing-library/react";
+// import { render } from "@testing-library/react";
 const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
