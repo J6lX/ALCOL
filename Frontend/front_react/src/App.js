@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
@@ -85,6 +85,69 @@ function LoginTag(props) {
 }
 
 function App() {
+  // locationNow === 현재 라우터 URL
+  const locationNow = useLocation();
+
+  // 배틀 페이지에서는 헤더와 푸터 숨기기
+  if (
+    locationNow.pathname === "/match" ||
+    locationNow.pathname === "/ban" ||
+    locationNow.pathname === "/mode" ||
+    locationNow.pathname === "/result"
+  )
+    return (
+      <Layout>
+        <Content
+          style={{
+            backgroundColor: "#16171B",
+          }}>
+          {/* 라우터 태그 목록 */}
+          <Routes>
+            {/* 메인 페이지 */}
+            <Route exact path="/" element={HomePage()} />
+
+            {/* 로그인 페이지 */}
+            <Route exact path="/login" element={LoginPage()} />
+
+            {/* 모드 선택 페이지 */}
+            <Route path="/mode" element={<ModeSelectPage />} />
+
+            {/* 매칭 페이지 */}
+            <Route path="/match" element={<MatchingPage />} />
+
+            {/* 밴픽 페이지 */}
+            <Route path="/ban" element={<BanPage />} />
+
+            {/* 결과 페이지 */}
+            <Route path="/result" element={<ResultPage />} />
+
+            {/* 문제 페이지(연습모드 진입) */}
+            <Route path="/practice" element={<PracticePage />} />
+
+            {/* 랭킹 조회 페이지 */}
+            <Route path="/ranking" element={<Ranking />} />
+
+            {/* 회원가입 페이지 */}
+            <Route path="/register" exact={true} element={<RegisterPage />} />
+
+            {/* 회원정보 수정 페이지 */}
+            <Route path="/modify" exact={true} element={<ModifyPage />} />
+
+            {/* 마이페이지(사용자 정보 열람 페이지) */}
+            <Route path="/mypage/:username" exact={true} element={<Mypage />} />
+
+            {/* 지난 시즌 정보 조회 페이지 */}
+            <Route path="/season/:username" exact={true} element={<LastSeason />} />
+
+            {/* 404 페이지 */}
+            <Route path="*" element={<NotFound404 />} />
+            {/* <Route exact path="/register" element={RegisterPage()} /> */}
+          </Routes>
+        </Content>
+      </Layout>
+    );
+
+  // 그 이외의 경우에는 헤더 표시
   return (
     <Layout>
       {/* 헤더(상단 네비게이션 바) */}
@@ -108,7 +171,7 @@ function App() {
             <Link to="/ranking" className="textDark menus">
               Ranking
             </Link>
-            <Link to="/battle" className="textDark menus">
+            <Link to="/mode" className="textDark menus">
               Battle
             </Link>
           </Col>
