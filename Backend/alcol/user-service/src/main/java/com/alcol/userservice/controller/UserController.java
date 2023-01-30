@@ -78,7 +78,7 @@ public class UserController
     public ResponseEntity<List> restTemplateTestToLogService()
     {
         MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
-        bodyData.add("param", "this is plus data");
+        bodyData.add("param", "this is plus data from user-service");
         String url = "http://localhost:9005/log-service/getLog";
         ResponseEntity<List> logs = restTemplate.postForEntity(
                 url,
