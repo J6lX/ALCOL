@@ -1,10 +1,11 @@
-import { Button, Row, Col, Pagination, Input } from "antd";
+import { Button, Row, Col, Input } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
 // MaterialUI(MUI) 사용: 프레임워크 다운로드 필요
 // npm install @mui/x-data-grid 입력하여 다운로드
-import { DataGrid } from "@mui/x-data-grid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Pagination from "@mui/material/Pagination";
+import { DataGrid } from "@mui/x-data-grid";
 
 // 문제 목록 다크 모드 적용
 const darkTheme = createTheme({
@@ -15,20 +16,10 @@ const darkTheme = createTheme({
 
 // 연습 문제 구분 설명
 const problemLabel = [
-  {
-    field: "id",
-    headerName: "문제 번호",
-    width: 160,
-    align: "center",
-  },
-  {
-    field: "name",
-    headerName: "문제 이름",
-    width: 160,
-    align: "center",
-  },
-  { field: "type", headerName: "문제 유형", width: 160, align: "center" },
-  { field: "tier", headerName: "난이도", width: 160, align: "center" },
+  { field: "id", headerName: "문제 번호", width: 200, align: "center", headerAlign: "center" },
+  { field: "name", headerName: "문제 이름", width: 340, align: "center", headerAlign: "center" },
+  { field: "type", headerName: "문제 유형", width: 220, align: "center", headerAlign: "center" },
+  { field: "tier", headerName: "난이도", width: 190, align: "center", headerAlign: "center" },
 ];
 
 // 연습 문제 데이터
@@ -79,9 +70,9 @@ function Ranking() {
             </Col>
           </Row>
 
-          {/* 연습 문제 목록 블록 */}
+          {/* 연습 문제 목록 블록(페이지네이션 포함) */}
           <Row className="block" justify="center" align="center">
-            <Col className="problems" span={24}>
+            <Col className="problems" span={24} justify="center">
               <ThemeProvider theme={darkTheme}>
                 <DataGrid
                   rows={problemData}
@@ -90,26 +81,22 @@ function Ranking() {
                   disableColumnSelector
                   disableColumnMenu
                   disableColumnFilter
+                  autoHeight
+                  hideFooter={true}
                   style={{
                     borderRadius: "5%",
                   }}
                 />
+                {/* 페이지네이션 */}
+                <Pagination
+                  count={10}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    margin: "5px",
+                  }}
+                />
               </ThemeProvider>
-            </Col>
-          </Row>
-
-          {/* 페이지네이션 표시 */}
-          <Row justify="center">
-            <Col align="center">
-              <Pagination
-                defaultCurrent={1}
-                total={50}
-                responsive="true"
-                theme="dark"
-                style={{
-                  padding: "10px",
-                }}
-              />
             </Col>
           </Row>
         </Col>

@@ -14,6 +14,7 @@ import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
 import Ranking from "./components/mypage/Ranking";
 import LastSeason from "./components/mypage/LastSeason";
+import PracticePage from "./components/battle/PracticePage";
 
 import alcol from "../src/assets/alcol_empty_white.png";
 
@@ -145,6 +146,7 @@ function App() {
           <Route path="/result" element={<ResultPage />} />
 
           {/* 문제 페이지(연습모드 진입) */}
+          <Route path="/practice" element={<PracticePage />} />
 
           {/* 랭킹 조회 페이지 */}
           <Route path="/ranking" element={<Ranking />} />
