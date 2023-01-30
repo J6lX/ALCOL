@@ -9,7 +9,7 @@ import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import ResultPage from "./components/battle/ResultPage";
-import ResultListPage from "./components/battle/ResultListPage";
+// import ResultListPage from "./components/battle/ResultListPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -193,10 +193,6 @@ function App() {
           backgroundColor: "#16171B",
         }}>
         {/* 라우터 태그 목록 */}
-        <Routes>
-          <Switch>
-            {/* 메인 페이지 */}
-            <Route exact path="/" component={HomePage} />
         <Router>
           <Switch>
             {/* 메인 페이지 */}
