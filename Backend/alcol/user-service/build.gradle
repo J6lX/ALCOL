@@ -41,6 +41,10 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.10.7'
 
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
+
+    // mysql
+    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.28'
 }
 
 dependencyManagement {
