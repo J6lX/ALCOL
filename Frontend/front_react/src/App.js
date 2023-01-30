@@ -14,9 +14,9 @@ import NotFound404 from "./components/NotFound404";
 import Ranking from "./components/mypage/Ranking";
 import alcol from "../src/assets/alcol_empty_white.png";
 
-import { Layout, Menu, Button, Row, Col, Avatar } from "antd";
+import { Layout, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { render } from "@testing-library/react";
+// import { render } from "@testing-library/react";
 const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
@@ -115,7 +115,7 @@ function App() {
         </Row>
       </Header>
       {/* 본문(임시) */}
-          <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
+      <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
       <Content
         style={{
           backgroundColor: "#16171B",
