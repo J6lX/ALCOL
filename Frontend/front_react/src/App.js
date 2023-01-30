@@ -8,15 +8,19 @@ import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
+import ResultPage from "./components/battle/ResultPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
 import Ranking from "./components/mypage/Ranking";
+import LastSeason from "./components/mypage/LastSeason";
+
 import alcol from "../src/assets/alcol_empty_white.png";
 
 import { Layout, Button, Row, Col, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-// import { render } from "@testing-library/react";
+// // import { render } from "@testing-library/react";
+
 const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
@@ -97,7 +101,7 @@ function App() {
 
           {/* 메뉴(Problem, Ranking, Battle) */}
           <Col xs={0} md={6} lg={11} xl={12} justify="center" align="middle">
-            <Link to="/problem" className="textDark menus">
+            <Link to="/practice" className="textDark menus">
               Problem
             </Link>
             <Link to="/ranking" className="textDark menus">
@@ -114,8 +118,8 @@ function App() {
           </Col>
         </Row>
       </Header>
-      <hr style={{ background: "#e9e9e9" }}></hr>
       {/* 본문(임시) */}
+      <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
       <Content
         style={{
           backgroundColor: "#16171B",
@@ -137,6 +141,9 @@ function App() {
           {/* 밴픽 페이지 */}
           <Route path="/ban" element={<BanPage />} />
 
+          {/* 결과 페이지 */}
+          <Route path="/result" element={<ResultPage />} />
+
           {/* 문제 페이지(연습모드 진입) */}
 
           {/* 랭킹 조회 페이지 */}
@@ -150,6 +157,9 @@ function App() {
 
           {/* 마이페이지(사용자 정보 열람 페이지) */}
           <Route path="/mypage/:username" exact={true} element={<Mypage />} />
+
+          {/* 지난 시즌 정보 조회 페이지 */}
+          <Route path="/season/:username" exact={true} element={<LastSeason />} />
 
           {/* 404 페이지 */}
           <Route path="*" element={<NotFound404 />} />

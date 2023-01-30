@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Space, Row, Col } from "antd";
+import { Row, Col } from "antd";
 import speedIcon from "../../assets/speed_mode_icon.png";
 import performanceIcon from "../../assets/performance_mode_icon.png";
 import banIcon from "../../assets/X.png";
@@ -10,38 +10,65 @@ import "./GuidePage.css";
 
 const Guide1 = () => {
   return (
-    <div className="middle" style={{ height: "1200px", backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <Row style={{ width: "85vw" }}>
-        <Col span={12} className="right">
-          <h1
-            className="NanumSquare"
-            style={{ marginTop: "4ch", fontSize: "2.1vw", color: "white" }}>
-            스피드 모드에서는 최대한 빠르게
-          </h1>
+        <Col span={12}>
+          <div className="right">
+            <h1
+              className="NanumSquare"
+              style={{
+                marginTop: "4ch",
+                marginRight: "0.5ch",
+                fontSize: "2.1vw",
+                color: "#FAC557",
+              }}>
+              스피드
+            </h1>
+            <h1
+              className="NanumSquare"
+              style={{ marginTop: "4ch", fontSize: "2.1vw", color: "white" }}>
+              모드에서는 최대한 빠르게
+            </h1>
+          </div>
           <br />
-          <h1 className="NanumSquare" style={{ fontSize: "2.1vw", color: "white" }}>
-            최적화 모드에서는 최대한 효율적으로
-          </h1>
+          <div className="right">
+            <h1
+              className="NanumSquare"
+              style={{ marginRight: "0.5ch", fontSize: "2.1vw", color: "#FAC557" }}>
+              최적화
+            </h1>
+            <h1 className="NanumSquare" style={{ fontSize: "2.1vw", color: "white" }}>
+              모드에서는 최대한 효율적으로
+            </h1>
+          </div>
           <br />
-          <h1 className="NanumSquare" style={{ fontSize: "2.1vw", color: "white" }}>
-            다양한 유형으로 게임을 즐겨요
-          </h1>
+          <div className="right">
+            <h1 className="NanumSquare" style={{ fontSize: "2.1vw", color: "white" }}>
+              다양한 유형으로 게임을 즐겨요
+            </h1>
+          </div>
           <br />
-          <p className="NanumSquare" style={{ fontSize: "1.2vw", color: "white" }}>
-            곧 다양한 언어가 추가될 거예요
-          </p>
+          <div className="right">
+            <p className="NanumSquare" style={{ fontSize: "1.2vw", color: "white" }}>
+              곧 다양한 언어가 추가될 거예요
+            </p>
+          </div>
         </Col>
         <Col span={1}></Col>
         <Col span={8} style={{ display: "flex", justifyContent: "space-evenly" }}>
           <div className="mode">
             <img src={speedIcon} alt="speedIcon" />
-            <h1 className="NanumSquare" style={{ fontSize: "1.5vw", fontWeight: "bold" }}>
+            <h1
+              className="NanumSquare"
+              style={{ fontSize: "1.5vw", color: "black", fontWeight: "bold" }}>
               스피드
             </h1>
           </div>
           <div className="mode">
             <img src={performanceIcon} alt="performanceIcon" />
-            <h1 className="NanumSquare" style={{ fontSize: "1.5vw", fontWeight: "bold" }}>
+            <h1
+              className="NanumSquare"
+              style={{ fontSize: "1.5vw", color: "black", fontWeight: "bold" }}>
               최적화
             </h1>
           </div>
@@ -53,18 +80,30 @@ const Guide1 = () => {
 
 const Guide2 = () => {
   return (
-    <div className="middle" style={{ height: "1200px", backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div className="usernameBox" style={{ left: "0%", top: "0%", justifyContent: "right" }}>
         <h1
           className="NanumSquare"
-          style={{ fontSize: "1.8vw", fontWeight: "bold", color: "#14161A", marginRight: "20px" }}>
+          style={{
+            fontSize: "1.8vw",
+            fontWeight: "bold",
+            color: "#16171B",
+            marginRight: "20px",
+            marginTop: "6%",
+          }}>
           당신
         </h1>
       </div>
       <div className="usernameBox" style={{ right: "0%", bottom: "0%", justifyContent: "left" }}>
         <h1
           className="NanumSquare"
-          style={{ fontSize: "1.8vw", fontWeight: "bold", color: "#14161A", marginLeft: "20px" }}>
+          style={{
+            fontSize: "1.8vw",
+            fontWeight: "bold",
+            color: "#16171B",
+            marginLeft: "20px",
+            marginTop: "6%",
+          }}>
           상대방
         </h1>
       </div>
@@ -98,12 +137,13 @@ const Guide2 = () => {
 
 const Guide3 = () => {
   return (
-    <div className="middle" style={{ height: "1200px", backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
         <div className="consoleBox">
           <div className="ver"></div>
           <div className="hor"></div>
         </div>
+        <br />
         <h1
           className="NanumSquare"
           style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
@@ -121,7 +161,7 @@ const Guide3 = () => {
 
 const Guide4 = () => {
   return (
-    <div className="middle" style={{ height: "1200px", backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div className="grayBackground">
         <Col span={1}></Col>
         <Col
@@ -131,10 +171,9 @@ const Guide4 = () => {
             flexDirection: "column",
             textAlign: "left",
           }}>
-          <div className="rankIconBox">
+          <div className="rankIconBox" style={{ marginBottom: "1vw" }}>
             <img style={{ width: "70%", height: "70%" }} src={rankingsIcon} alt="rankings" />
           </div>
-          <br />
           <div
             style={{
               display: "flex",
@@ -143,18 +182,29 @@ const Guide4 = () => {
             }}>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "1.7vw", color: "white", marginBottom: "10px" }}>
+              style={{
+                fontSize: "1.7vw",
+                color: "white",
+                marginTop: "10px",
+                marginBottom: "0.5vw",
+              }}>
               게임 플레이를 통해
             </h1>
+            <div style={{ display: "flex" }}>
+              <h1
+                className="NanumSquare"
+                style={{ fontSize: "1.7vw", color: "#FAC557", marginBottom: "2vw" }}>
+                랭커
+              </h1>
+              <h1
+                className="NanumSquare"
+                style={{ fontSize: "1.7vw", color: "white", marginBottom: "2vw" }}>
+                에 도전하세요!
+              </h1>
+            </div>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "1.7vw", color: "white", marginBottom: "10px" }}>
-              랭커에 도전하세요!
-            </h1>
-            <br />
-            <h1
-              className="NanumSquare"
-              style={{ fontSize: "1vw", color: "white", marginBottom: "10px" }}>
+              style={{ fontSize: "1vw", color: "white", marginBottom: "1vw" }}>
               성장의 재미를 위해
             </h1>
             <h1
@@ -172,10 +222,9 @@ const Guide4 = () => {
             flexDirection: "column",
             textAlign: "left",
           }}>
-          <div className="rankIconBox">
+          <div className="rankIconBox" style={{ marginBottom: "1vw" }}>
             <img style={{ width: "70%", height: "70%" }} src={rankingIcon} alt="ranking" />
           </div>
-          <br />
           <div
             style={{
               display: "flex",
@@ -184,18 +233,29 @@ const Guide4 = () => {
             }}>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "1.7vw", color: "white", marginBottom: "10px" }}>
+              style={{
+                fontSize: "1.7vw",
+                color: "white",
+                marginBottom: "0.5vw",
+                marginTop: "10px",
+              }}>
               상대방과의 결투로
             </h1>
+            <div style={{ display: "flex" }}>
+              <h1
+                className="NanumSquare"
+                style={{ fontSize: "1.7vw", color: "#FAC557", marginBottom: "2vw" }}>
+                높은 티어
+              </h1>
+              <h1
+                className="NanumSquare"
+                style={{ fontSize: "1.7vw", color: "white", marginBottom: "2vw" }}>
+                에 도전하세요!
+              </h1>
+            </div>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "1.7vw", color: "white", marginBottom: "10px" }}>
-              높은 티어에 도전하세요!
-            </h1>
-            <br />
-            <h1
-              className="NanumSquare"
-              style={{ fontSize: "1vw", color: "white", marginBottom: "10px" }}>
+              style={{ fontSize: "1vw", color: "white", marginBottom: "1vw" }}>
               이번 시즌의 챔피언은
             </h1>
             <h1
@@ -212,7 +272,7 @@ const Guide4 = () => {
 
 const Guide5 = () => {
   return (
-    <div className="middle" style={{ height: "1200px", backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={2}></Col>
         <Col
@@ -235,7 +295,7 @@ const Guide5 = () => {
                 style={{
                   fontSize: "1.1vw",
                   fontWeight: "bold",
-                  color: "#14161A",
+                  color: "#16171B",
                   marginTop: "10px",
                 }}>
                 따라잡기까지 30점
@@ -254,7 +314,7 @@ const Guide5 = () => {
                 style={{
                   fontSize: "1.1vw",
                   fontWeight: "bold",
-                  color: "#14161A",
+                  color: "#16171B",
                   marginTop: "10px",
                 }}>
                 당신의 친구들 중 2위입니다
@@ -273,7 +333,7 @@ const Guide5 = () => {
                 style={{
                   fontSize: "1.1vw",
                   fontWeight: "bold",
-                  color: "#14161A",
+                  color: "#16171B",
                   marginTop: "10px",
                 }}>
                 따라잡히기까지 15점
@@ -281,9 +341,9 @@ const Guide5 = () => {
             </Col>
           </div>
         </Col>
-        <Col span={1}></Col>
+        <Col span={2}></Col>
         <Col
-          span={12}
+          span={9}
           style={{
             display: "flex",
             flexDirection: "column",
@@ -311,7 +371,7 @@ const Guide5 = () => {
 
 const Guide6 = () => {
   return (
-    <div className="middle" style={{ height: "1200px", backgroundColor: "#14161A", padding: "7%" }}>
+    <div className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
       <div
         style={{
           display: "flex",
@@ -340,40 +400,34 @@ const Guide6 = () => {
           <Col span={5} style={{ display: "flex", flexDirection: "column" }}>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "2.1ch", color: "white", marginBottom: "10px" }}>
+              style={{ fontSize: "1vw", color: "white", marginBottom: "10px" }}>
               알고리즘
             </h1>
-            <h1
-              className="NanumSquare"
-              style={{ fontSize: "2.1ch", color: "white", marginBottom: "10px" }}>
+            <h1 className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
               입문자도
             </h1>
           </Col>
           <div
-            style={{ height: "8ch", width: "2px", backgroundColor: "white", margin: "15px" }}></div>
+            style={{ height: "4vw", width: "1px", backgroundColor: "white", margin: "15px" }}></div>
           <Col span={5} style={{ display: "flex", flexDirection: "column" }}>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "2.1ch", color: "white", marginBottom: "10px" }}>
+              style={{ fontSize: "1vw", color: "white", marginBottom: "10px" }}>
               가볍게
             </h1>
-            <h1
-              className="NanumSquare"
-              style={{ fontSize: "2.1ch", color: "white", marginBottom: "10px" }}>
+            <h1 className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
               재미있게
             </h1>
           </Col>
           <div
-            style={{ height: "8ch", width: "2px", backgroundColor: "white", margin: "15px" }}></div>
+            style={{ height: "4vw", width: "1px", backgroundColor: "white", margin: "15px" }}></div>
           <Col span={5} style={{ display: "flex", flexDirection: "column" }}>
             <h1
               className="NanumSquare"
-              style={{ fontSize: "2.1ch", color: "white", marginBottom: "10px" }}>
+              style={{ fontSize: "1vw", color: "white", marginBottom: "10px" }}>
               경쟁하며
             </h1>
-            <h1
-              className="NanumSquare"
-              style={{ fontSize: "2.1ch", color: "white", marginBottom: "10px" }}>
+            <h1 className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
               즐겨요
             </h1>
           </Col>
@@ -383,9 +437,9 @@ const Guide6 = () => {
           <p
             className="NanumSquare"
             style={{
-              fontSize: "3.5ch",
+              fontSize: "1.8vw",
               fontWeight: "bold",
-              color: "#14161A",
+              color: "#16171B",
               marginBottom: "10px",
               margin: "auto",
             }}>
@@ -402,27 +456,27 @@ const GuidePage = () => {
     <div className="fullmiddle">
       <Guide1 />
       <div>
-        <div style={{ width: "100vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide2 />
       <div>
-        <div style={{ width: "100vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide3 />
       <div>
-        <div style={{ width: "100vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide4 />
       <div>
-        <div style={{ width: "100vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide5 />
       <div>
-        <div style={{ width: "100vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide6 />
       <div>
-        <div style={{ width: "100vw", height: "20ch", backgroundColor: "#14161A" }}></div>
+        <div style={{ width: "50vw", height: "20ch", backgroundColor: "#16171B" }}></div>
       </div>
     </div>
   );
