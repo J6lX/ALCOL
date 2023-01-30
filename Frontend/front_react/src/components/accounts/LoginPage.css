@@ -17,9 +17,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background-color: rgb(25, 26, 29);
+    justify-content: center; 
+    background-color: #16171B;
     width: 600px;
+    height: 340px;
     border: 4px solid transparents;
     border-radius: 10px;
 }
@@ -43,22 +44,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgb(9, 9, 11);
+    background-color: #16171B;
     position: relative;
     width: 100%;
     height: 100vh;
-}
-
-.bgimage {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate( -50%, -50% );
-    opacity: 0.8;
-    width: 100vw;
-    height: 100vh;
-    background: url(/src/assets/loginbg.jpg);
-    background-size: cover;
 }
 
 .overlay {

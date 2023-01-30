@@ -1,6 +1,7 @@
 import React from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
+import loginBg from "../../assets/loginbg.jpg";
 import "./LoginPage.css";
 
 function LoginPage() {
@@ -13,14 +14,14 @@ function LoginPage() {
 
   return (
     <div className="fullmiddle">
-      <div className="bgimage">
+      <img src={loginBg} alt="loginbackgroundimg" style={{ height: "100%", width: "100vw"}} />
         <span className="overlay">
           <div className="gradientsquare">
             <div className="loginbackground">
               <h1 className="whiteletter">로그인</h1>
               <Form
                 name="normal_login"
-                className="login-form; middle"
+                className="login-form middle"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}>
                 <Form.Item
@@ -81,7 +82,6 @@ function LoginPage() {
             </div>
           </div>
         </span>
-      </div>
     </div>
   );
 }
