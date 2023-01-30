@@ -9,6 +9,7 @@ import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import ResultPage from "./components/battle/ResultPage";
+import ResultListPage from "./components/battle/ResultListPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -184,6 +185,7 @@ function App() {
           </Col>
         </Row>
       </Header>
+
       {/* 본문(임시) */}
       <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
       <Content
@@ -195,13 +197,23 @@ function App() {
           <Switch>
             {/* 메인 페이지 */}
             <Route exact path="/" component={HomePage} />
+        <Router>
+          <Switch>
+            {/* 메인 페이지 */}
+            <Route exact path="/" component={HomePage} />
 
+            {/* 로그인 페이지 */}
+            <Route exact path="/login" component={LoginPage} />
             {/* 로그인 페이지 */}
             <Route exact path="/login" component={LoginPage} />
 
             {/* 모드 선택 페이지 */}
             <Route path="/mode" component={ModeSelectPage} />
+            {/* 모드 선택 페이지 */}
+            <Route path="/mode" component={ModeSelectPage} />
 
+            {/* 매칭 페이지 */}
+            <Route path="/match" component={MatchingPage} />
             {/* 매칭 페이지 */}
             <Route path="/match" component={MatchingPage} />
 
@@ -216,16 +228,26 @@ function App() {
 
             {/* 랭킹 조회 페이지 */}
             <Route path="/ranking" component={Ranking} />
+            {/* 랭킹 조회 페이지 */}
+            <Route path="/ranking" component={Ranking} />
 
+            {/* 회원가입 페이지 */}
+            <Route path="/register" exact={true} component={RegisterPage} />
             {/* 회원가입 페이지 */}
             <Route path="/register" exact={true} component={RegisterPage} />
 
             {/* 회원정보 수정 페이지 */}
             <Route path="/modify" exact={true} component={ModifyPage} />
+            {/* 회원정보 수정 페이지 */}
+            <Route path="/modify" exact={true} component={ModifyPage} />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
             <Route path="/mypage/:username" exact={true} component={Mypage} />
+            {/* 마이페이지(사용자 정보 열람 페이지) */}
+            <Route path="/mypage/:username" exact={true} component={Mypage} />
 
+            {/* 지난 시즌 정보 조회 페이지 */}
+            <Route path="/season/:username" exact={true} component={LastSeason} />
             {/* 지난 시즌 정보 조회 페이지 */}
             <Route path="/season/:username" exact={true} component={LastSeason} />
 
