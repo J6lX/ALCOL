@@ -9,11 +9,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,11 +52,17 @@ public class UserController
     }
 
     // 회원 가입 요청
-    @PostMapping("/")
-    public ResponseEntity<UserDto.ResponseDto<?>> createUser(@RequestBody UserDto.SignUpDto signUpDto)
+    @PostMapping(value = "/", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
+    public ResponseEntity<UserDto.ResponseDto<?>> createUser(
+            @RequestPart UserDto.SignUpDto signUpDto,
+            @RequestPart MultipartFile file
+    )
             throws Exception
     {
-        String retVal = userService.createUser(signUpDto);
+        String retVal = userService.createUser(signUpDto, file);
 
         if (retVal.equals("DUPLICATE_EMAIL"))
         {
@@ -67,6 +75,13 @@ public class UserController
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                     ApiUtils.error(CustomStatusCode.DUPLICATE_USER_NICKNAME)
+            );
+        }
+
+        if (retVal.equals("PICTURE_UPLOAD_FAILURE"))
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    ApiUtils.error(CustomStatusCode.PICTURE_UPLOAD_FAILURE)
             );
         }
 
