@@ -1,4 +1,4 @@
-package com.alcol.rankservice.Entity;
+package com.alcol.rankservice.entity;
 
 import com.alcol.rankservice.dto.RecordDto;
 

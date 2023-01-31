@@ -1,19 +1,17 @@
-package com.alcol.rankservice.Entity;
+package com.alcol.rankservice.entity;
 
+import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.redis.core.RedisHash;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Getter
-@RedisHash(value = "winloseCnt")
+@Builder
 public class WinLoseCnt
 {
     @Id
     private String id;
-    private int win;
-    private int lose;
+    private String mode;
 
 }
