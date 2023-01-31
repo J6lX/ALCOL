@@ -34,13 +34,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
 
         // 모든 요청은 시큐리티에 의해 인증이 요구된다.
         http.authorizeRequests()
-                .antMatchers("/**").permitAll()
-//                .hasIpAddress("127.0.0.1")
+                .antMatchers("/**")
+                .hasIpAddress("127.0.0.1")
                 .and()
                 .addFilter(getAuthenticationFilter());
-
-        // h2-console 의 프레임 옵션을 사용하지 않음. 즉 h2-console 을 제대로 보기 위함
-        http.headers().frameOptions().disable();
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception
