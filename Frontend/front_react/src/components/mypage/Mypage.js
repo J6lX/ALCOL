@@ -1,10 +1,9 @@
 import Container from "react-bootstrap/Container";
-import { Row, Col } from "antd";
+import { Row, Col, Table } from "antd";
 import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -19,6 +18,64 @@ const userData = {
     friends: {},
   },
 };
+
+// 매치 기록 정렬 컬럼
+const matchCol = [
+  {
+    title: "결과",
+    dataIndex: "name",
+    key: "name",
+    render: (text) => <p>{text}</p>,
+  },
+  {
+    title: "플레이 모드",
+    dataIndex: "mode",
+    key: "mode",
+  },
+  {
+    title: "상대 플레이어",
+    dataIndex: "address",
+    key: "address",
+  },
+  {
+    title: "문제 난이도",
+    dataIndex: "difficulty",
+    key: "difficulty",
+  },
+  {
+    title: "기록일",
+    dataIndex: "matchDate",
+    key: "matchDate",
+  },
+];
+
+// 매치 기록 데이터
+const matchData = [
+  {
+    key: "1",
+    name: "John Brown",
+    mode: 32,
+    address: "New York No. 1 Lake Park",
+    difficulty: "Gold",
+    matchDate: "1일 전",
+  },
+  {
+    key: "2",
+    name: "Jim Green",
+    mode: 42,
+    address: "London No. 1 Lake Park",
+    difficulty: "Gold",
+    matchDate: "1일 전",
+  },
+  {
+    key: "3",
+    name: "Joe Black",
+    mode: 32,
+    address: "Sidney No. 1 Lake Park",
+    difficulty: "Gold",
+    matchDate: "1일 전",
+  },
+];
 
 function Mypage() {
   const userInfo = useParams();
@@ -95,7 +152,11 @@ function Mypage() {
                 style={{
                   margin: "10px",
                 }}>
-                <Row justify="center">
+                <Row
+                  justify="center"
+                  style={{
+                    paddingBottom: "15px",
+                  }}>
                   {/* 친구 정보 표시 */}
                   <Col xs={24} className="textHighlight miniBlock">
                     <p>친구 정보</p>
@@ -139,7 +200,11 @@ function Mypage() {
                   <img className="winrateCircle" src={tempImg} alt="원형 그래프"></img>
                 </Row>
                 {/* 전적 표시 블록 */}
-                <p className="text">전적 정보가 없습니다.</p>
+                <Row>
+                  <Col span={24}>
+                    <Table theme="dark" columns={matchCol} dataSource={matchData} />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>
