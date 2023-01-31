@@ -18,7 +18,7 @@ public class ApiUtils
     public static UserDto.ResponseDto<?> error(CustomStatusCode customStatusCode)
     {
         return UserDto.ResponseDto.builder()
-                .success(true)
+                .success(false)
                 .bodyData(null)
                 .customCode(customStatusCode.getCustomCode())
                 .description(customStatusCode.getDescription())
