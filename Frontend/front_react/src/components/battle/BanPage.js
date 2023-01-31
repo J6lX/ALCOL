@@ -76,6 +76,15 @@ function Bottom() {
 }
 
 function App() {
+  const [problemNums, setProblemNums] = React.useState(["1", "2", "3"]);
+  const [problem1, setProblem1] = React.useState(["구현", "그래프 이론", "그래프 탐색"]);
+  const [problem2, setProblem2] = React.useState(["수학", "브르투포스 알고리즘"]);
+  const [problem3, setProblem3] = React.useState([
+    "다이나믹 프로그래밍",
+    "비트 마스킹",
+    "최대 유량",
+  ]);
+
   return (
     <div className="matching_background">
       <UserInfo />

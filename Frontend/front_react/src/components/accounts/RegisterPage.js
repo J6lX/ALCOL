@@ -68,18 +68,24 @@ function App() {
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     setValues({ ...values });
-    console.log("입력한 회원 정보 : ", values.email, values.password, values.nickname);
-    console.log("저장된 회원 정보 : ", userInfo.email, userInfo.password, userInfo.nickname);
-    axios.post("http://localhost:8000/user-service/", { values }).then(function (response) {
-      console.log(response.data);
-      if (response.data.customCode === "000") {
-        console.log("회원가입 성공");
-      } else if (response.data.customCode === "001") {
-        console.log("이메일 중복");
-      } else if (response.data.customCode === "002") {
-        console.log("닉네임 중복");
-      }
-    });
+    console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
+    console.log("저장된 회원 정보 : ", userInfo.email, userInfo.pwd, userInfo.nickname);
+    axios
+      .post("http://localhost:8000/user-service/", {
+        email: values.email,
+        pwd: values.pwd,
+        nickname: values.nickname,
+      })
+      .then(function (response) {
+        console.log(response.data);
+        if (response.data.customCode === "000") {
+          console.log("회원가입 성공");
+        } else if (response.data.customCode === "001") {
+          console.log("이메일 중복");
+        } else if (response.data.customCode === "002") {
+          console.log("닉네임 중복");
+        }
+      });
   };
   return (
     <div className="contents_background">
@@ -110,7 +116,7 @@ function App() {
                   </div>
                 </Form.Item>
                 <Form.Item
-                  name="password"
+                  name="pwd"
                   rules={[
                     {
                       required: true,
