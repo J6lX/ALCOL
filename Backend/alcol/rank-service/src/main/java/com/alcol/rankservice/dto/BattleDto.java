@@ -10,7 +10,8 @@ import javax.validation.constraints.NotBlank;
 public class BattleDto {
 
     @AllArgsConstructor
-    public static class Info{
+    public static class Info
+    {
         private String profile_pic;
         private String nickname;
         private int level;
@@ -20,7 +21,8 @@ public class BattleDto {
     }
 
     @Builder
-    public static class Request {
+    public static class Request
+    {
         @NotBlank
         private String user_id_1; // 유저 식별 아이디1
         @NotBlank
@@ -38,7 +40,8 @@ public class BattleDto {
     }
 
     @Builder
-    public static class Response{
+    public static class Response
+    {
         private String returnMsg;
         private int returnCode;
     }
