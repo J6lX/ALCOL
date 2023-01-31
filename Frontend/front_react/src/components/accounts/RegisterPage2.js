@@ -97,29 +97,38 @@ function App() {
     password: "",
     nickname: "",
   });
-  const onFinish = (values) => {
-    console.log("Received values of form: ", values);
-    setValues(values);
-    console.log("회원 정보 저장", values.email, values.password, values.nickname);
+  const handleChange = (e) => {
+    setValues({
+      ...values,
+      [e.target.name]: e.target.values,
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(JSON.stringify(values, null, 3));
   };
   return (
     <div className="contents_background">
       <div className="contents_gradient">
         <div className="contents_box">
           <TextTitle text="SIGN UP" />
-          <Form onFinish={onFinish}>
+          <Form onSubmit={handleSubmit}>
             <Row>
               <Col span={14} push={10}>
                 <TextInfo text="사용자의 정보를 작성하세요" />
                 <FormRegister
                   type="email"
                   name="Email"
+                  setter={values.email}
+                  onChange={handleChange}
                   text_incorrect="올바른 이메일 양식을 사용해주세요"
                   text_empty="이메일을 작성해주세요!"
                 />
                 <FormRegister
                   type="password"
                   name="Password"
+                  setter={values.password}
+                  onChange={handleChange}
                   text_incorrect="비밀번호를 작성해주세요!"
                   text_empty="비밀번호를 작성해주세요!"
                 />
@@ -132,6 +141,8 @@ function App() {
             <FormRegister
               type="nickname"
               name="Nickname"
+              setter={values.nickname}
+              onChange={handleChange}
               text_incorrect="게임에서 사용할 닉네임을 지정해 주세요"
               text_empty="게임에서 사용할 닉네임을 지정해 주세요"
             />
