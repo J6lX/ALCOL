@@ -70,7 +70,7 @@ function App() {
     setValues({ ...values });
     console.log("입력한 회원 정보 : ", values.email, values.password, values.nickname);
     console.log("저장된 회원 정보 : ", userInfo.email, userInfo.password, userInfo.nickname);
-    axios.post("http://localhost:8000/user-service/", { userInfo }).then(function (response) {
+    axios.post("http://localhost:8000/user-service/", { values }).then(function (response) {
       console.log(response.data);
       if (response.data.customCode === "000") {
         console.log("회원가입 성공");
