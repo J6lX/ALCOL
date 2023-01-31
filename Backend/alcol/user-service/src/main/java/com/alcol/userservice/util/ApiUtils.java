@@ -1,27 +1,27 @@
 package com.alcol.userservice.util;
 
-import com.alcol.userservice.dto.ResponseDto;
+import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.error.CustomStatusCode;
 
 public class ApiUtils
 {
-    public static <T>ResponseDto<T> success(T bodyData, CustomStatusCode customStatusCode)
+    public static <T>UserDto.ResponseDto<T> success(T bodyData, CustomStatusCode customStatusCode)
     {
-        return new ResponseDto<>(
-                true,
-                bodyData,
-                customStatusCode.getCustomCode(),
-                customStatusCode.getDescription()
-        );
+        return UserDto.ResponseDto.<T>builder()
+                .success(true)
+                .bodyData(bodyData)
+                .customCode(customStatusCode.getCustomCode())
+                .description(customStatusCode.getDescription())
+                .build();
     }
 
-    public static ResponseDto<?> error(CustomStatusCode customStatusCode)
+    public static UserDto.ResponseDto<?> error(CustomStatusCode customStatusCode)
     {
-        return new ResponseDto<>(
-                false,
-                null,
-                customStatusCode.getCustomCode(),
-                customStatusCode.getDescription()
-        );
+        return UserDto.ResponseDto.builder()
+                .success(true)
+                .bodyData(null)
+                .customCode(customStatusCode.getCustomCode())
+                .description(customStatusCode.getDescription())
+                .build();
     }
 }

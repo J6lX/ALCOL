@@ -1,15 +1,14 @@
 package com.alcol.userservice.service;
 
-import com.alcol.userservice.dto.SignUpDto;
 import com.alcol.userservice.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 public interface UserService extends UserDetailsService
 {
-    String createUser(SignUpDto signUpDto) throws Exception;
+    String createUser(UserDto.SignUpDto signUpDto) throws Exception;
 
-    UserDto getUserDetailByEmail(String email);
+    UserDto.UserDetailDto getUserDetailByEmail(String email);
 
     String getNewAccessToken(String userId);
 }
