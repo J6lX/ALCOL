@@ -1,4 +1,4 @@
-import { Row, Col, Card } from "antd";
+import { Row, Col } from "antd";
 import styles from "./LastSeason.module.css";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -69,18 +69,21 @@ function LastSeason() {
 
             {/* 지난 시즌 정보 표시 블록*/}
             <Col xs={16} lg={18} className={styles.block}>
-              <Row gutter={16}>
+              <Row style={{ padding: "10px" }}>
                 {/* 한 줄에 3개씩 표시 */}
                 {dummy.map((cardTitle, key) => (
-                  <Col span={8} align="middle">
-                    <Card
-                      title={cardTitle}
-                      style={{
-                        margin: "10px",
-                        color: "#272B2E",
-                      }}>
-                      {key}
-                    </Card>
+                  <Col span={8} align="middle" className={styles.seasonGrid}>
+                    <Row>
+                      <Col span={8} className={styles.text}>
+                        Tiergraph
+                      </Col>
+                      <Col span={8} className={styles.text}>
+                        Winrategraph
+                      </Col>
+                      <Col span={8} className={styles.text}>
+                        {cardTitle}
+                      </Col>
+                    </Row>
                   </Col>
                 ))}
               </Row>

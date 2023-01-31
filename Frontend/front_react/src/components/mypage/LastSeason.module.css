@@ -37,14 +37,11 @@
   border-radius: 100%;
 }
 
-/* 스트릭 박스 */
-.streakBox {
+/* 시즌 요약  그리드 */
+.seasonGrid {
   justify-content: center;
-  margin: 5px;
-  width: 80%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 5%;
+  background: #272b2e;
+  border: solid 4px #1d1e22;
 }
 
 /* 모드 선택란(모두/스피드전/효율성전) */
