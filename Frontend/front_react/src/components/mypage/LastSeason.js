@@ -1,31 +1,31 @@
-import { Row, Col } from "antd";
-import "./LastSeason.css";
+import { Row, Col, Card } from "antd";
+import styles from "./LastSeason.module.css";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-// 현재 로그인한 사용자 정보
-const userData = {
-  dongjun: {
-    name: "Dongjun", // 이름
-    battleRec: {}, // 전적
-    friends: {}, // 친구 목록
-  },
-  tester: {
-    name: "Tester",
-    battleRec: {},
-    friends: {},
-  },
-};
-
-function Mypage() {
+function LastSeason() {
+  // 사용자 정보
   const userInfo = useParams();
-  const profile = userData[userInfo.username];
+
+  // 테스트용 더미 데이터
+  const dummy = [
+    "season1",
+    "season2",
+    "season3",
+    "season4",
+    "season5",
+    "season6",
+    "season7",
+    "season8",
+    "season9",
+    "season10",
+  ];
 
   return (
     <div>
-      {profile ? (
+      {userInfo ? (
         <div
-          className="pageBody"
+          className={styles.pageBody}
           style={{
             backgroundColor: "#16171B",
             padding: "30px",
@@ -37,41 +37,52 @@ function Mypage() {
           </Row>
           <Row justify="center">
             {/* 필터 탭 블록 */}
-            <Col xs={16} md={6} lg={4} className="text block">
+            <Col
+              xs={16}
+              md={6}
+              lg={4}
+              className={styles.block}
+              style={{
+                height: "100px",
+                padding: "10px",
+              }}>
               {/* 전체 보기 탭 */}
-              <Row className="miniBlock">
-                <Col className="innerText">
+              <Row className={styles.miniBlock}>
+                <Col className={styles.innerText}>
                   <Link to="/modify">전체보기 </Link>
                 </Col>
               </Row>
 
               {/* 스피드만 보기 탭 */}
-              <Row className="miniBlock">
-                <Col className="innerText">
+              <Row className={styles.miniBlock}>
+                <Col className={styles.innerText}>
                   <Link to="/modify">스피드 </Link>
                 </Col>
               </Row>
               {/* 최적화만 보기 탭 */}
-              <Row className="miniBlock">
-                <Col className="innerText">
+              <Row className={styles.miniBlock}>
+                <Col className={styles.innerText}>
                   <Link to="/modify">최적화 </Link>
                 </Col>
               </Row>
             </Col>
 
             {/* 지난 시즌 정보 표시 블록*/}
-            <Col xs={16} lg={18} className="text block">
-              <Row>
+            <Col xs={16} lg={18} className={styles.block}>
+              <Row gutter={16}>
                 {/* 한 줄에 3개씩 표시 */}
-                <Col span={8} align="middle">
-                  <p>지난 시즌 정보 1</p>
-                </Col>
-                <Col span={8} align="middle">
-                  <p>지난 시즌 정보 2</p>
-                </Col>
-                <Col span={8} align="middle">
-                  <p>지난 시즌 정보 3</p>
-                </Col>
+                {dummy.map((cardTitle, key) => (
+                  <Col span={8} align="middle">
+                    <Card
+                      title={cardTitle}
+                      style={{
+                        margin: "10px",
+                        color: "#272B2E",
+                      }}>
+                      {key}
+                    </Card>
+                  </Col>
+                ))}
               </Row>
             </Col>
           </Row>
@@ -100,4 +111,4 @@ function Mypage() {
   );
 }
 
-export default Mypage;
+export default LastSeason;
