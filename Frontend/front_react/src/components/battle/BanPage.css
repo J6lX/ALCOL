@@ -9,6 +9,8 @@
 
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
   scrollbar-width: none; /* 파이어폭스 */
+
+  overflow: hidden;
 }
 
 .matching_background::-webkit-scrollbar {
@@ -107,4 +109,26 @@
   100% {
     margin-top: -330px;
   } /*종료 */
+}
+
+@media screen and (max-width: 1200px) {
+  .ban_hands_left {
+    display: none;
+  }
+  .ban_hands_right {
+    display: none;
+  }
+}
+
+.banButton {
+  width: 150px;
+  height: 30px;
+  margin: auto;
+  margin-top: -50px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 30px;
+  background-color: #fef662;
+  color: rgb(0, 0, 0);
 }

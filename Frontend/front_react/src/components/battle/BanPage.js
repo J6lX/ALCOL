@@ -82,7 +82,7 @@ function App() {
       <Top />
       <Mid />
       <Bottom />
-      <div className="matchingButton">취소</div>
+      <div className="banButton">취소</div>
     </div>
   );
 }
