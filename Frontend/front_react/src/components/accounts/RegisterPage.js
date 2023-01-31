@@ -11,28 +11,6 @@ function TextInfo({ text }) {
   return <h4 style={{ color: "white" }}>{text}</h4>;
 }
 
-function FormRegister({ type, name, text_incorrect, text_empty, setter }) {
-  return (
-    <Form.Item
-      name={type}
-      rules={[
-        {
-          type: { type },
-          message: { text_incorrect },
-        },
-        {
-          required: true,
-          message: { text_empty },
-        },
-      ]}>
-      <div className="form_input">
-        <div style={{ color: "white", fontSize: "10px", marginLeft: "10px" }}> {name}</div>
-        <Input className="form_register" style={{ color: "white" }} bordered={false} />
-      </div>
-    </Form.Item>
-  );
-}
-
 function ProfileImage() {
   const [profileImage, setProfileImage] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
@@ -81,61 +59,101 @@ function ProfileImage() {
   );
 }
 
-function BtnRegister() {
-  return (
-    <Form.Item className="button_center">
-      <Button type="primary" htmlType="submit" className="button_register">
-        회원가입
-      </Button>
-    </Form.Item>
-  );
-}
-
 function App() {
-  const [values, setValues] = useState({
+  const [userInfo, setValues] = useState({
     email: "",
-    password: "",
+    pwd: "",
     nickname: "",
   });
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    setValues(values);
-    console.log("회원 정보 저장", values.email, values.password, values.nickname);
+    setValues({ ...values });
+    console.log("입력한 회원 정보 : ", values.email, values.password, values.nickname);
+    console.log("저장된 회원 정보 : ", userInfo.email, userInfo.password, userInfo.nickname);
+    axios.post("http://localhost:8000/user-service/", { userInfo }).then(function (response) {
+      console.log(response.data);
+      if (response.data.customCode === "000") {
+        console.log("회원가입 성공");
+      } else if (response.data.customCode === "001") {
+        console.log("이메일 중복");
+      } else if (response.data.customCode === "002") {
+        console.log("닉네임 중복");
+      }
+    });
   };
   return (
     <div className="contents_background">
       <div className="contents_gradient">
         <div className="contents_box">
           <TextTitle text="SIGN UP" />
-          <Form onFinish={onFinish}>
+          <Form onFinish={onFinish} name="register">
             <Row>
               <Col span={14} push={10}>
                 <TextInfo text="사용자의 정보를 작성하세요" />
-                <FormRegister
-                  type="email"
-                  name="Email"
-                  text_incorrect="올바른 이메일 양식을 사용해주세요"
-                  text_empty="이메일을 작성해주세요!"
-                />
-                <FormRegister
-                  type="password"
-                  name="Password"
-                  text_incorrect="비밀번호를 작성해주세요!"
-                  text_empty="비밀번호를 작성해주세요!"
-                />
+                <Form.Item
+                  name="email"
+                  rules={[
+                    {
+                      type: "email",
+                      message: "The input is not valid E-mail!",
+                    },
+                    {
+                      required: true,
+                      message: "Please input your E-mail!",
+                    },
+                  ]}>
+                  <div className="form_input">
+                    <div style={{ color: "white", fontSize: "10px", marginLeft: "10px" }}>
+                      email
+                    </div>
+                    <Input className="form_register" style={{ color: "white" }} bordered={false} />
+                  </div>
+                </Form.Item>
+                <Form.Item
+                  name="password"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your password!",
+                    },
+                  ]}
+                  hasFeedback>
+                  <div className="form_input">
+                    <div style={{ color: "white", fontSize: "10px", marginLeft: "10px" }}>
+                      password
+                    </div>
+                    <Input.Password
+                      className="form_register"
+                      style={{ color: "white" }}
+                      bordered={false}
+                    />
+                  </div>
+                </Form.Item>
               </Col>
               <Col span={10} pull={14}>
                 <ProfileImage />
               </Col>
             </Row>
             <TextInfo text="게임에서 사용할 닉네임을 작성하세요" />
-            <FormRegister
-              type="nickname"
-              name="Nickname"
-              text_incorrect="게임에서 사용할 닉네임을 지정해 주세요"
-              text_empty="게임에서 사용할 닉네임을 지정해 주세요"
-            />
-            <BtnRegister />
+            <Form.Item
+              name="nickname"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your nickName!",
+                },
+              ]}>
+              <div className="form_input">
+                <div style={{ color: "white", fontSize: "10px", marginLeft: "10px" }}>nickname</div>
+                <Input className="form_register" style={{ color: "white" }} bordered={false} />
+              </div>
+            </Form.Item>
+            {/* <BtnRegister /> */}
+            <Form.Item className="button_center">
+              <Button htmlType="submit" className="button_register">
+                회원가입
+              </Button>
+            </Form.Item>
           </Form>
         </div>
       </div>
