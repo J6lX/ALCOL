@@ -27,8 +27,11 @@ const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
-  // isLoggedIn === 로그인 상태 체크
+  // isLoggedIn === 로그인 상태 체크(임시 변수)
   const isLoggedIn = true;
+  // 로그인 페이지에서 세션에 인증 정보를 저장한 후sessionStorage 또는 localStorage에서 사용자 인증 여부 가져오기
+  console.log(sessionStorage);
+  console.log(localStorage);
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
