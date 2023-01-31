@@ -36,9 +36,9 @@ spring:
 
         # signUp
         - id: user-service
-          uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/user-service/signUp
+          uri: http://localhost:9000/   # final request -> http://127.0.0.1:9000/user-service/
           predicates:
-            - Path=/user-service/signUp
+            - Path=/user-service/
             - Method=POST
           filters:
             - RemoveRequestHeader=Cookie
