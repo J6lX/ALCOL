@@ -18,9 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -71,10 +69,9 @@ public class UserController
             );
         }
 
-        Map<String, String> map = new HashMap<>();
-        map.put("userId", retVal);
+        // 회원가입은 상태가 성공이지만 body 에 담을 것이 없음
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiUtils.success(map, CustomStatusCode.CREATE_USER_SUCCESS)
+                ApiUtils.success(null, CustomStatusCode.CREATE_USER_SUCCESS)
         );
     }
 

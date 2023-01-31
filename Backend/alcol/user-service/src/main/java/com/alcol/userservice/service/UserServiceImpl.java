@@ -6,6 +6,7 @@ import com.alcol.userservice.jpa.UserRepository;
 import com.alcol.userservice.util.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -58,11 +59,11 @@ public class UserServiceImpl implements UserService
     public String createUser(UserDto.SignUpDto signUpDto)
     {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-        UserEntity userEntity;
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT);
 
         // 중복 이메일 체크
-        userEntity = userRepository.findByEmail(signUpDto.getEmail());
+        UserEntity userEntity = userRepository.findByEmail(signUpDto.getEmail());
         if (userEntity != null)
         {
             return "DUPLICATE_EMAIL";
@@ -75,7 +76,9 @@ public class UserServiceImpl implements UserService
             return "DUPLICATE_NICKNAME";
         }
 
+        // UserEntity 에는 setter 가 구현되어 있으므로 mapper 설정이 필요없음
         userEntity = modelMapper.map(signUpDto, UserEntity.class);
+
         userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(signUpDto.getPwd()));
         userEntity.setCreatedAt(LocalDateTime.now());
         userEntity.setUserId(UUID.randomUUID().toString());
@@ -89,7 +92,12 @@ public class UserServiceImpl implements UserService
     public UserDto.UserDetailDto getUserDetailByEmail(String email)
     {
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                // UserDto.UserDetailDto 에 setter 가 없으므로 필요한 설정
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+
         UserEntity userEntity = userRepository.findByEmail(email);
 
         if (userEntity == null)
