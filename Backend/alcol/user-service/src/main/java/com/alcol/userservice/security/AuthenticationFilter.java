@@ -1,6 +1,5 @@
 package com.alcol.userservice.security;
 
-import com.alcol.userservice.dto.LoginDto;
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.service.UserService;
 import com.alcol.userservice.util.TokenProvider;
@@ -18,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 // 로그인 플로우
 
@@ -62,7 +60,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
             throws AuthenticationException
     {
         try {
-            LoginDto creds = new ObjectMapper().readValue(request.getInputStream(), LoginDto.class);
+            UserDto.LoginDto creds = new ObjectMapper().readValue(
+                    request.getInputStream(),
+                    UserDto.LoginDto.class
+            );
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -87,7 +88,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
     )
     {
         String email = ((User)authResult.getPrincipal()).getUsername();
-        UserDto userDetails = userService.getUserDetailByEmail(email);
+        UserDto.UserDetailDto userDetails = userService.getUserDetailByEmail(email);
         String accessToken = tokenProvider.createAccessToken(userDetails.getUserId());
         String refreshToken = tokenProvider.createRefreshToken(userDetails.getUserId());
 

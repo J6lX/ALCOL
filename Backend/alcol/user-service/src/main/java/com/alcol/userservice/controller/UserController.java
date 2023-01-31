@@ -1,7 +1,6 @@
 package com.alcol.userservice.controller;
 
-import com.alcol.userservice.dto.ResponseDto;
-import com.alcol.userservice.dto.SignUpDto;
+import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.error.CustomStatusCode;
 import com.alcol.userservice.service.UserService;
 import com.alcol.userservice.util.ApiUtils;
@@ -52,8 +51,8 @@ public class UserController
     }
 
     // 회원 가입 요청
-    @PostMapping("/signUp")
-    public ResponseEntity<ResponseDto<?>> createUser(@RequestBody SignUpDto signUpDto)
+    @PostMapping("/")
+    public ResponseEntity<UserDto.ResponseDto<?>> createUser(@RequestBody UserDto.SignUpDto signUpDto)
             throws Exception
     {
         String retVal = userService.createUser(signUpDto);
@@ -81,7 +80,10 @@ public class UserController
 
     // 새로운 access token 발급 요청
     @PostMapping("/refresh")
-    public ResponseEntity<ResponseDto<?>> createUser(HttpServletRequest request, HttpServletResponse response)
+    public ResponseEntity<UserDto.ResponseDto<?>> createUser(
+            HttpServletRequest request,
+            HttpServletResponse response
+    )
     {
         log.info("새로운 access token 을 발급합니다.");
 

@@ -1,6 +1,5 @@
 package com.alcol.userservice.service;
 
-import com.alcol.userservice.dto.SignUpDto;
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.jpa.UserEntity;
 import com.alcol.userservice.jpa.UserRepository;
@@ -56,7 +55,7 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public String createUser(SignUpDto signUpDto)
+    public String createUser(UserDto.SignUpDto signUpDto)
     {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -87,7 +86,7 @@ public class UserServiceImpl implements UserService
     }
 
     @Override
-    public UserDto getUserDetailByEmail(String email)
+    public UserDto.UserDetailDto getUserDetailByEmail(String email)
     {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
@@ -98,7 +97,7 @@ public class UserServiceImpl implements UserService
             throw new UsernameNotFoundException(email);
         }
 
-        return modelMapper.map(userEntity, UserDto.class);
+        return modelMapper.map(userEntity, UserDto.UserDetailDto.class);
     }
 
     @Override
