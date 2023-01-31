@@ -35,7 +35,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
         // 모든 요청은 시큐리티에 의해 인증이 요구된다.
         http.authorizeRequests()
                 .antMatchers("/**")
-                .hasIpAddress("127.0.0.1")
+                .hasIpAddress("13.209.10.133")
                 .and()
                 .addFilter(getAuthenticationFilter());
     }
