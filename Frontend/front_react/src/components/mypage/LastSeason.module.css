@@ -73,5 +73,9 @@
   padding: 5px;
 }
 
+.ant-menu-item-selected {
+  background-color: #b039cc !important;
+}
+
 @media (max-length: 500px) {
 }

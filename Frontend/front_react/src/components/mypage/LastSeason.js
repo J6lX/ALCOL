@@ -1,7 +1,18 @@
-import { Row, Col } from "antd";
+import { Row, Col, Menu } from "antd";
 import styles from "./LastSeason.module.css";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+
+function getItem(label, key, icon, children) {
+  return {
+    key,
+    icon,
+    children,
+    label,
+  };
+}
+
+const items = [getItem("모두", "1"), getItem("스피드", "2"), getItem("최적화", "3")];
 
 function LastSeason() {
   // 사용자 정보
@@ -9,16 +20,48 @@ function LastSeason() {
 
   // 테스트용 더미 데이터
   const dummy = [
-    "season1",
-    "season2",
-    "season3",
-    "season4",
-    "season5",
-    "season6",
-    "season7",
-    "season8",
-    "season9",
-    "season10",
+    {
+      modeName: "스피드",
+      seasonName: "season7",
+      tierName: "Gold",
+      ranking: "3201위",
+    },
+    {
+      modeName: "최적화",
+      seasonName: "season7",
+      tierName: "Silver",
+      ranking: "999위",
+    },
+    {
+      modeName: "스피드",
+      seasonName: "season6",
+      tierName: "Gold",
+      ranking: "599위",
+    },
+    {
+      modeName: "스피드",
+      seasonName: "season5",
+      tierName: "Gold",
+      ranking: "430위",
+    },
+    {
+      modeName: "스피드",
+      seasonName: "season4",
+      tierName: "Silver",
+      ranking: "552위",
+    },
+    {
+      modeName: "스피드",
+      seasonName: "season3",
+      tierName: "Gold",
+      ranking: "1999위",
+    },
+    {
+      modeName: "최적화",
+      seasonName: "season3",
+      tierName: "Bronze",
+      ranking: "1024위",
+    },
   ];
 
   return (
@@ -43,9 +86,11 @@ function LastSeason() {
               lg={4}
               className={styles.block}
               style={{
-                height: "100px",
+                height: "40%",
                 padding: "10px",
               }}>
+              <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" items={items} />
+
               {/* 전체 보기 탭 */}
               <Row className={styles.miniBlock}>
                 <Col className={styles.innerText}>
@@ -71,9 +116,9 @@ function LastSeason() {
             <Col xs={16} lg={18} className={styles.block}>
               <Row style={{ padding: "10px" }}>
                 {/* 한 줄에 3개씩 표시 */}
-                {dummy.map((cardTitle, key) => (
-                  <Col span={8} align="middle" className={styles.seasonGrid}>
-                    <Row>
+                {dummy.map((seasonData, key) => (
+                  <Col xs={24} lg={12} xl={8} align="middle" className={styles.seasonGrid}>
+                    <Row align="middle">
                       <Col span={8} className={styles.text}>
                         Tiergraph
                       </Col>
@@ -81,7 +126,32 @@ function LastSeason() {
                         Winrategraph
                       </Col>
                       <Col span={8} className={styles.text}>
-                        {cardTitle}
+                        {/* 모드 이름 */}
+                        <Row>
+                          <Col>{seasonData.modeName}</Col>
+                        </Row>
+
+                        {/* 시즌 이름 */}
+                        <Row>
+                          <Col>{seasonData.seasonName}</Col>
+                        </Row>
+
+                        {/* 티어 이름 */}
+                        <Row>
+                          <Col>티어명</Col>
+                        </Row>
+
+                        {/* 마지막 랭킹 레이블 */}
+                        <Row>
+                          <Col>
+                            <span>마지막 랭킹</span>
+                          </Col>
+                        </Row>
+
+                        {/* 시즌 이름 */}
+                        <Row>
+                          <Col>{seasonData.ranking}</Col>
+                        </Row>
                       </Col>
                     </Row>
                   </Col>
