@@ -10,8 +10,8 @@ import javax.persistence.Id;
 @Builder
 public class WinLoseCnt
 {
-    @Id
-    private String id;
+    private String userId;
     private String mode;
+    private int winLose;
 
 }

@@ -2,12 +2,10 @@ package com.alcol.rankservice.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
-
 @AllArgsConstructor
 public class BattleDto {
 
-    @RequiredArgsConstructor
+    @Getter
     public static class Request
     {
         private String user_id_1; // 유저 식별 아이디1
@@ -17,12 +15,12 @@ public class BattleDto {
         private int mmr_1; // 유저1의 MMR
         private int mmr_2; // 유저2의 MMR
         private int win_1; // 유저1의 승리 여부(1:승리, 0:패배)
+        private int win_2;
     }
 
     @Builder
     public static class Response
     {
         private String returnMsg;
-        private int returnCode;
     }
 }
