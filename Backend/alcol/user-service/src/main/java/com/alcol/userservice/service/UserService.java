@@ -12,4 +12,6 @@ public interface UserService extends UserDetailsService
     UserDto.UserDetailDto getUserDetailByEmail(String email);
 
     String getNewAccessToken(String userId);
+
+    UserDto.UserInfoDto getUserInfo(String userId);
 }

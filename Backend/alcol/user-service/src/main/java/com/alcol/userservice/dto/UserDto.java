@@ -23,6 +23,19 @@ public class UserDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UserInfoDto
+    {
+        private String nickname;
+        private String level;
+        private String tier;
+        private String originalFileName;
+        private String storedFileName;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SignUpDto
     {
         private String email;
