@@ -61,11 +61,11 @@ function ProfileImage({ setImage }) {
 }
 
 function App() {
-  const [userInfo, setValues] = useState({
-    email: "",
-    pwd: "",
-    nickname: "",
-  });
+  // const [userInfo, setValues] = useState({
+  //   email: "",
+  //   pwd: "",
+  //   nickname: "",
+  // });
   const [img, setImage] = useState(null);
   const onFinish = (values) => {
     //-----이미지 처리-----
@@ -73,10 +73,10 @@ function App() {
     //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 express 서버로 요청 보냅니다.
     const formData = new FormData();
     formData.append("file", img);
-    setValues({ ...values });
     console.log("보낼 이미지:", formData);
     //-----이미지 처리 끝-----
-    console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
+    // setValues({ ...values });
+    // console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
     axios
       .post("http://localhost:8000/user-service/", {
         email: values.email,
