@@ -1,5 +1,7 @@
 package com.alcol.apigatewayservice.filter;
 
+import com.alcol.apigatewayservice.error.CustomStatusCode;
+import com.alcol.apigatewayservice.util.ApiUtils;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -8,10 +10,7 @@ import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFac
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -54,7 +53,11 @@ public class AccessTokenFilter extends AbstractGatewayFilterFactory<AccessTokenF
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION))
             {
                 // 헤더에 access token 이 없는 경우 -> 재 로그인
-                return onError(exchange, "This request does not have an access-token", HttpStatus.BAD_REQUEST);
+                return ApiUtils.getResponse(
+                        exchange,
+                        HttpStatus.BAD_REQUEST,
+                        CustomStatusCode.NOT_ACCESS_TOKEN_IN_HEADER
+                );
             }
 
             // 헤더에서 access token 추출
@@ -68,24 +71,22 @@ public class AccessTokenFilter extends AbstractGatewayFilterFactory<AccessTokenF
             } catch (ExpiredJwtException e) {
                 // access token 이 만료된 경우
                 // 클라이언트에게 refresh 요청을 하라고 알림
-                return onError(exchange, "Access-token is expired", HttpStatus.UNAUTHORIZED);
+                return ApiUtils.getResponse(
+                        exchange,
+                        HttpStatus.UNAUTHORIZED,
+                        CustomStatusCode.ACCESS_TOKEN_EXPIRED
+                );
             } catch (Exception e) {
                 // 잘못된 access token 을 보낸 경우 -> 재 로그인
-                return onError(exchange, "Bad access-token", HttpStatus.BAD_REQUEST);
+                return ApiUtils.getResponse(
+                        exchange,
+                        HttpStatus.BAD_REQUEST,
+                        CustomStatusCode.BAD_ACCESS_TOKEN
+                );
             }
 
             // 정상적인 access token 이 왔으므로 기존 요청 진행
             return chain.filter(exchange);
         });
-    }
-
-    // api-gateway 는 사용자 요청에 대한 반환값의 타입으로 Mono, Flux 라는 타입을 사용함
-    // Mono : 단일값, Flux : 다중값 -> Spring WebFlux
-    private Mono<Void> onError(ServerWebExchange exchange, String error, HttpStatus httpStatus)
-    {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        log.error(error);
-        return response.setComplete();
     }
 }
