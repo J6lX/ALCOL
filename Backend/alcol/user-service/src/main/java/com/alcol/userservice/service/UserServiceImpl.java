@@ -96,10 +96,11 @@ public class UserServiceImpl implements UserService
         userEntity.setCreatedAt(LocalDateTime.now());
         userEntity.setUserId(UUID.randomUUID().toString());
 
-        // 사진 저장 테스트
-        if (!fileHandler.parseFileInfo(file, userEntity))
-        {
-            return "PICTURE_UPLOAD_FAILURE";
+        // 사진이 회원 가입 시 같이 전달된 경우
+        if (file != null) {
+            if (!fileHandler.parseFileInfo(file, userEntity)) {
+                return "PICTURE_UPLOAD_FAILURE";
+            }
         }
 
         // 회원가입 정보 저장
