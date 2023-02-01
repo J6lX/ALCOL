@@ -11,7 +11,7 @@ function TextInfo({ text }) {
   return <h4 style={{ color: "white" }}>{text}</h4>;
 }
 
-function ProfileImage() {
+function ProfileImage({ setImage }) {
   const [profileImage, setProfileImage] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
   );
@@ -20,6 +20,7 @@ function ProfileImage() {
     if (e.target.files[0]) {
       //사진을 선택했을때
       setProfileImage(e.target.files[0]);
+      setImage(e.target.files[0]);
     } else {
       //취소했을때
       setProfileImage(
@@ -65,6 +66,7 @@ function App() {
     pwd: "",
     nickname: "",
   });
+  const [img, setImage] = useState(null);
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
     setValues({ ...values });
@@ -75,6 +77,7 @@ function App() {
         email: values.email,
         pwd: values.pwd,
         nickname: values.nickname,
+        img: img,
       })
       .then(function (response) {
         if (response.data.customCode === "000") {
@@ -139,7 +142,7 @@ function App() {
                 </Form.Item>
               </Col>
               <Col span={10} pull={14}>
-                <ProfileImage />
+                <ProfileImage setImage={setImage} />
               </Col>
             </Row>
             <TextInfo text="게임에서 사용할 닉네임을 작성하세요" />
