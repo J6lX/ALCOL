@@ -1,6 +1,42 @@
-import { Button, Row, Col, Pagination, Input } from "antd";
+import { Button, Row, Col, Input } from "antd";
 import "./Ranking.css";
 import rankingHeader from "../../assets/ranking_header.png";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Pagination from "@mui/material/Pagination";
+import { DataGrid } from "@mui/x-data-grid";
+import { styled } from "@mui/system";
+
+// 랭커 목록 다크 모드 적용
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
+// 데이터 그리드 컬럼 가리기 옵션
+const HideColumn = styled(DataGrid)(({ theme }) => ({
+  "& .MuiDataGrid-columnHeaders": { display: "none" },
+  "& .MuiDataGrid-virtualScroller": { marginTop: "0!important" },
+}));
+
+// 연습 문제 구분 설명
+const problemLabel = [
+  { field: "id", headerName: "순위", width: 100, align: "center", headerAlign: "center" },
+  { field: "name", headerName: "ID", width: 200, align: "center", headerAlign: "center" },
+  { field: "level", headerName: "LEVEL", width: 150, align: "center", headerAlign: "center" },
+  { field: "mmr", headerName: "MMR", width: 150, align: "center", headerAlign: "center" },
+  { field: "tier", headerName: "시즌 티어", width: 190, align: "center", headerAlign: "center" },
+  { field: "record", headerName: "시즌 전적", width: 200, align: "center", headerAlign: "center" },
+];
+
+// 연습 문제 데이터
+const problemData = [
+  { id: 1, name: "맥주", record: "22승 17패(56%)", tier: "Diamond" },
+  { id: 2, name: "소주", record: "22승 17패(56%)", tier: "Diamond" },
+  { id: 3, name: "막걸리", record: "22승 17패(56%)", tier: "Diamond" },
+  { id: 4, name: "와인", record: "22승 17패(56%)", tier: "Diamond" },
+  { id: 5, name: "고량주", record: "22승 17패(56%)", tier: "Diamond" },
+];
 
 function Ranking() {
   return (
@@ -62,9 +98,31 @@ function Ranking() {
                     <hr></hr>
 
                     {/* 내 랭킹 표시 */}
-                    <Row justify="center">
-                      <Col>
-                        <div className="profileBox">MyRanking</div>
+                    <Row align="center" style={{ paddingTop: "40px" }}>
+                      <Col justify="center" align="center" className="profileBox">
+                        <Row align="center" style={{ padding: "4px" }}>
+                          <Col span={3}>
+                            <p>MyRank</p>
+                          </Col>
+                          <Col span={1}>
+                            <p>MyImg</p>
+                          </Col>
+                          <Col span={4}>
+                            <p>MyName</p>
+                          </Col>
+                          <Col span={3}>
+                            <p>MyLevel</p>
+                          </Col>
+                          <Col span={4}>
+                            <p>MyMMR</p>
+                          </Col>
+                          <Col span={4}>
+                            <p>MyTier</p>
+                          </Col>
+                          <Col span={3}>
+                            <p>MyRecord</p>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
 
@@ -74,10 +132,25 @@ function Ranking() {
                         <h2>랭킹 정보</h2>
                       </Col>
                     </Row>
-                    <hr></hr>
                     <Row justify="center">
-                      <Col>
-                        <h3>RankerRankingInfo</h3>
+                      <Col span={24}>
+                        {/* 랭커 정보 표시 */}
+                        <ThemeProvider theme={darkTheme}>
+                          <HideColumn
+                            rows={problemData}
+                            columns={problemLabel}
+                            pageSize={10}
+                            disableColumnSelector
+                            disableColumnMenu
+                            disableColumnFilter
+                            autoHeight
+                            hideFooter={true}
+                            style={{
+                              borderBottomLeftRadius: "7%",
+                              borderBottomRightRadius: "7%",
+                            }}
+                          />
+                        </ThemeProvider>
                       </Col>
                     </Row>
                   </Col>
@@ -86,15 +159,14 @@ function Ranking() {
                 {/* 페이지네이션 표시 */}
                 <Row justify="center">
                   <Col align="center">
-                    <Pagination
-                      defaultCurrent={1}
-                      total={50}
-                      responsive="true"
-                      theme="dark"
-                      style={{
-                        padding: "10px",
-                      }}
-                    />
+                    <ThemeProvider theme={darkTheme}>
+                      <Pagination
+                        defaultCurrent={1}
+                        total={50}
+                        responsive="true"
+                        className="pagiNation"
+                      />
+                    </ThemeProvider>
                   </Col>
                 </Row>
               </Col>
