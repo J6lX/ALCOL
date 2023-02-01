@@ -34,6 +34,7 @@ public class BattleRecordController
         battleResultService.recordResult(winLose);
         winLose = new WinLose(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWin_2());
 
+        /*
         // 여기 되는지 확인
         Map<String, String> map = new HashMap<>();
         map.put("userId", battleResult.getUser_id_1());
@@ -42,7 +43,7 @@ public class BattleRecordController
 
 //        System.out.println(userInfo.toString());
         battleResultService.recordRank(userInfo, battleResult.getBattle_mode() ,battleResult.getMmr_1());
-
+*/
 
         return ResponseEntity.status(HttpStatus.OK).body(battleResultService.recordResult(winLose));
     }

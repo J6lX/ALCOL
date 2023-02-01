@@ -45,7 +45,10 @@ public class BattleResultServiceImpl implements BattleResultService
     public String recordRank(Rank.ReceivedUserData user, String mode, int mmr)
     {
         ranking = redisTemplate.opsForZSet();
-        String key = "winloseCnt:"+":"+winningRate.getMode();
+        String key = "winloseCnt:" + ":" + mode;
+        long win = winLoseCount.get(key, 1);
+        long lose = winLoseCount.get(key, 10);
+        long winningRate = win / (win+lose);
 
         // key = speend/optimization, member = userId, score = mmr
         Rank.RankingData userInfo = Rank.RankingData.builder()
@@ -54,24 +57,9 @@ public class BattleResultServiceImpl implements BattleResultService
                 .level(user.getLevel())
                 .tier(user.getTier())
                 .mmr(mmr)
-                .record()
-
+                .winningRate(winningRate)
                 .build();
-        ranking.add("keyyy", );
-        return "aa";
+        ranking.add("keyyy", userInfo, 2);
+        return "OK";
     }
-
-//    public BattleDto.Response saveResult(BattleDto battleResult){
-//        WinLose user1 = WinLose.builder()
-//                .userId(battleResult.getUser_id_1())
-//                .mode(battleResult.getBattle_mode())
-//                .winLose(battleResult.getWin_1())
-//                .build();
-//        WinLose user2 = WinLose.builder()
-//                .userId(battleResult.getUser_id_2())
-//                .mode(battleResult.getBattle_mode())
-//                .winLose(battleResult.getWin_2())
-//                .build();
-//    }
-
 }
