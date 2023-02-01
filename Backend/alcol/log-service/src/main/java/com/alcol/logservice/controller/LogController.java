@@ -26,4 +26,10 @@ public class LogController
         return logs;
     }
 
+    @PostMapping("/getLevelAndNickname")
+    public List<String> getLevelAndNickname(@RequestParam(value="userId") String userId)
+    {
+        List<String> levelAndNickname = new ArrayList<>();
+        return levelAndNickname;
+    }
 }
