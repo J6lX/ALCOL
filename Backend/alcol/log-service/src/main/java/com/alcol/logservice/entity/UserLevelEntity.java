@@ -13,11 +13,11 @@ import javax.persistence.Table;
 public class UserLevelEntity
 {
     @Id
-    private String tier;
+    private int level;
 
     @Column(nullable = false)
-    private int minMmr;
+    private int needExp;
 
     @Column(nullable = false)
-    private int maxMmr;
+    private int sumExp;
 }

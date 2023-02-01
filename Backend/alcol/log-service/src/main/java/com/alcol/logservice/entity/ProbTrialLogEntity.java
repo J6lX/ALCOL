@@ -23,7 +23,7 @@ public class ProbTrialLogEntity
     private int probNo;
 
     @Column(nullable = false)
-    private String isCorrect;
+    private int isCorrect;
 
     @Column(nullable = false)
     private int addExp;

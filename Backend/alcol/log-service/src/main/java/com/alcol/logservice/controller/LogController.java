@@ -1,5 +1,6 @@
 package com.alcol.logservice.controller;
 
+import com.alcol.logservice.service.LogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,13 @@ import java.util.List;
 @Slf4j
 public class LogController
 {
+    private final LogService logService;
+
+    public LogController(LogService logService)
+    {
+        this.logService = logService;
+    }
+
     // RestTemplate 을 통한 서비스 간 호출 테스트
     @PostMapping("/getLog")
     public List<String> getLog(@RequestParam(value="param") String plusData)
@@ -29,7 +37,6 @@ public class LogController
     @PostMapping("/getLevelAndNickname")
     public List<String> getLevelAndNickname(@RequestParam(value="userId") String userId)
     {
-        List<String> levelAndNickname = new ArrayList<>();
-        return levelAndNickname;
+        return logService.getLevelAndNickname(userId);
     }
 }
