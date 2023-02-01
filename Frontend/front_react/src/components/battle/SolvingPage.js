@@ -1,7 +1,13 @@
-import { React } from "react";
+import { React, useState } from "react";
+// import { RecoilRoot, atom, useRecoilState } from "recoil";
+
 import Logo from "../../assets/alcol_empty_black.png";
+import CodeMirror from "@uiw/react-codemirror";
+import { python } from "@codemirror/lang-python";
+// import { oneDark } from "@codemirror/theme-one-dark";
+import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
-import { Button, message } from "antd";
+import { Button, message, Modal } from "antd";
 
 const ResultMessage = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -75,7 +81,9 @@ const Problem = () => {
           문제 내용
         </p>
         <hr style={{ height: "1px", background: "gray" }} />
-        <p className="NanumSquare" style={{ color: "white", lineHeight: "2", padding: "5px" }}>
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           프로그래밍 대회 전날, 은상과 친구들은 이상한 술집에 모였다. 이 술집에서 막걸리를 시키면
           주전자의 용량은 똑같았으나 안에 들어 있는 막걸리 용량은 랜덤이다. 즉 한 번 주문에 막걸리
           용량이 802ml 이기도 1002ml가 나오기도 한다. 은상은 막걸리 N 주전자를 주문하고, 자신을
@@ -93,7 +101,9 @@ const Problem = () => {
           입력
         </p>
         <hr style={{ height: "1px", background: "gray" }} />
-        <p className="NanumSquare" style={{ color: "white", lineHeight: "2", padding: "5px" }}>
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           첫째 줄에는 은상이가 주문한 막걸리 주전자의 개수 N, 그리고 은상이를 포함한 친구들의 수 K가
           주어진다. 둘째 줄부터 N개의 줄에 차례로 주전자의 용량이 주어진다. N은 10000이하의
           정수이고, K는 1,000,000이하의 정수이다. 막걸리의 용량은 2의 23 빼기 1 보다 작거나 같은
@@ -105,7 +115,9 @@ const Problem = () => {
           출력
         </p>
         <hr style={{ color: "gray" }} />
-        <p className="NanumSquare" style={{ color: "white", lineHeight: "2", padding: "5px" }}>
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           첫째 줄에 K명에게 나눠줄 수 있는 최대의 막걸리 용량 ml 를 출력한다.
         </p>
       </div>
@@ -114,6 +126,34 @@ const Problem = () => {
 };
 
 const CodingPlace = () => {
+  let [code, setCode] = useState("");
+  let [consoleHeight, setHeight] = useState("");
+
+  const onChange = (newValue) => {
+    setCode(newValue);
+    console.log("code ", code);
+  };
+
+  const modifyHeight = (newValue) => {
+    setHeight(newValue);
+    console.log(consoleHeight);
+  };
+
+  const clickSubmit = () => {
+    console.log("submit ", code);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       <div style={{ width: "70vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
@@ -129,48 +169,77 @@ const CodingPlace = () => {
           height: "46vh",
           verticalAlign: "top",
         }}>
-        <textarea
-          className="NanumSquare"
-          style={{
-            width: "70vw",
-            height: "100%",
-            border: "0.1px solid gray",
-            backgroundColor: "#1D1E22",
-            color: "white",
-            overflow: "wrap",
-            fontWeight: "lighter",
-            wordSpacing: "3px",
-            lineHeight: "1.5",
-            padding: "5px",
-          }}></textarea>
+        <CodeMirror
+          value={code}
+          width="70vw"
+          height="46vh"
+          extensions={[python({ jsx: true })]}
+          onChange={onChange}
+          theme={darcula}
+        />
       </div>
+      <div style={{ width: "70vw", height: "0.7vh", background: "gray" }}></div>
+      <div
+        style={{
+          width: "70vw",
+          height: "5.3vh",
+          border: "0.1px solid gray",
+        }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: "100%",
+          }}>
+          <p
+            className="NanumSquare"
+            style={{ color: "white", marginLeft: "10px", fontSize: "2.1vh" }}>
+            결과창
+          </p>
+          <div>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSubmit}>
+              제출
+            </Button>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showModal}>
+              항복
+            </Button>
+          </div>
+        </div>
+      </div>
+      <Modal title="항복" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p className="NanumSquare">정말로 항복하시겠습니까?</p>
+      </Modal>
     </div>
   );
 };
 
-const ButtonsLayer = () => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: "100%",
-      }}>
-      <p className="NanumSquare" style={{ color: "white", marginLeft: "10px", fontSize: "2.1vh" }}>
-        결과창
-      </p>
-      <div>
-        <Button className="NanumSquare" style={{ margin: "5px" }}>
-          제출
-        </Button>
-        <Button className="NanumSquare" style={{ margin: "5px" }}>
-          항복
-        </Button>
-      </div>
-    </div>
-  );
-};
+// const ButtonsLayer = () => {
+//   // const clickSubmit = () => {
+//   //   console.log(code); onClick={clickSubmit}
+//   // };
+//   return (
+//     <div
+//       style={{
+//         display: "flex",
+//         alignItems: "center",
+//         justifyContent: "space-between",
+//         height: "100%",
+//       }}>
+//       <p className="NanumSquare" style={{ color: "white", marginLeft: "10px", fontSize: "2.1vh" }}>
+//         결과창
+//       </p>
+//       <div>
+//         <Button className="NanumSquare" style={{ margin: "5px" }}>
+//           제출
+//         </Button>
+//         <Button className="NanumSquare" style={{ margin: "5px" }}>
+//           항복
+//         </Button>
+//       </div>
+//     </div>
+//   );
+// };
 
 const Console = () => {
   return (
@@ -183,6 +252,13 @@ const Console = () => {
 const SolvingPage = () => {
   return (
     <div>
+      {/* <RecoilRoot>
+        <BattleNav />
+        <Problem />
+        <CodingPlace />
+        <ButtonsLayer />
+        <Console />
+      </RecoilRoot> */}
       <div>
         <BattleNav />
         <div
@@ -196,12 +272,10 @@ const SolvingPage = () => {
             <Problem />
           </div>
           <div>
-            <div style={{ width: "70vw", height: "53vh", border: "0.1px solid gray" }}>
+            <div style={{ width: "70vw", height: "59vh", border: "0.1px solid gray" }}>
               <CodingPlace />
             </div>
-            <div style={{ width: "70vw", height: "6vh", border: "0.1px solid gray" }}>
-              <ButtonsLayer />
-            </div>
+
             <div style={{ width: "70vw", height: "33vh", border: "0.1px solid gray" }}>
               <Console />
             </div>

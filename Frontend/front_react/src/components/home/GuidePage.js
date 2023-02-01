@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { Link as ScrollLink } from "react-scroll";
+import { Link as ScrollLink } from "react-scroll";
 import { Row, Col } from "antd";
 import speedIcon from "../../assets/speed_mode_icon.png";
 import performanceIcon from "../../assets/performance_mode_icon.png";
@@ -75,14 +75,14 @@ const Guide1 = () => {
           </div>
         </Col>
       </Row>
-      {/* <ScrollLink
+      <ScrollLink
         className="NanumSquare"
         to="Guide2"
         spy={true}
         smooth={true}
         style={{ color: "white", marginTop: "13vw" }}>
         다음
-      </ScrollLink> */}
+      </ScrollLink>
     </div>
   );
 };
@@ -140,14 +140,14 @@ const Guide2 = () => {
           금지되지 않은 문제 중 하나가 출제돼요
         </h1>
       </div>
-      {/* <ScrollLink
+      <ScrollLink
         className="NanumSquare"
         to="Guide3"
         spy={true}
         smooth={true}
         style={{ color: "white", marginTop: "5vw" }}>
         다음
-      </ScrollLink> */}
+      </ScrollLink>
     </div>
   );
 };
@@ -172,14 +172,14 @@ const Guide3 = () => {
           같이하면 재미가 두 배
         </h1>
       </div>
-      {/* <ScrollLink
+      <ScrollLink
         className="NanumSquare"
         to="Guide4"
         spy={true}
         smooth={true}
         style={{ color: "white", marginTop: "1vw" }}>
         다음
-      </ScrollLink> */}
+      </ScrollLink>
     </div>
   );
 };
@@ -291,14 +291,14 @@ const Guide4 = () => {
           </div>
         </Col>
       </div>
-      {/* <ScrollLink
+      <ScrollLink
         className="NanumSquare"
         to="Guide5"
         spy={true}
         smooth={true}
         style={{ color: "white", marginTop: "1vw" }}>
         다음
-      </ScrollLink> */}
+      </ScrollLink>
     </div>
   );
 };
@@ -398,14 +398,14 @@ const Guide5 = () => {
           </h1>
         </Col>
       </Row>
-      {/* <ScrollLink
+      <ScrollLink
         className="NanumSquare"
         to="Guide6"
         spy={true}
         smooth={true}
         style={{ color: "white", marginTop: "1vw" }}>
         다음
-      </ScrollLink> */}
+      </ScrollLink>
     </div>
   );
 };
@@ -490,14 +490,14 @@ const Guide6 = () => {
           </div>
         </Link>
       </div>
-      {/* <ScrollLink
+      <ScrollLink
         className="NanumSquare"
         to="MainPage"
         spy={true}
         smooth={true}
         style={{ color: "white", marginTop: "1vw" }}>
         맨 위로
-      </ScrollLink> */}
+      </ScrollLink>
     </div>
   );
 };
