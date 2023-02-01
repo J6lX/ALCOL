@@ -48,13 +48,52 @@ function Top() {
   );
 }
 
-function Mid() {
+// function Category({ problem, key }) {
+//   function makeDiv(problem) {
+//     const result = [];
+//     for (let i = 0; i < problem.length; i++) {
+//       console.log(problem[i]);
+//       result.push(<div key={i}>{problem[i]}</div>);
+//     }
+//     return result;
+//   }
+//   return <div> {makeDiv(problem.problem_category)} </div>;
+// }
+
+// function Categorys({ problem }) {
+//   // const cat = problem.problem_category;
+//   return <div>{problem.problem_category.problem_cat[0]}</div>;
+// }
+
+function Mid({ onClick }) {
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box"></Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box"></Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box"></Col>
+      <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
+        <div className="ban_algo_problem_title">알고리즘 유형</div>
+        <div className="ban_algo_problem_category">
+          {/* {problems.map((problem, index) => (
+            <Category problem={problem} key={index} />
+          ))} */}
+          {/* <Categorys problem={problems} /> */}
+        </div>
+      </Col>
+      <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "2")}>
+        <div className="ban_algo_problem_title">알고리즘 유형</div>
+        <div className="ban_algo_problem_category">
+          {/* {problems.map((problem, index) => (
+            <Category problem={problem} key={index} />
+          ))} */}
+        </div>
+      </Col>
+      <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "3")}>
+        <div className="ban_algo_problem_title">알고리즘 유형</div>
+        <div className="ban_algo_problem_category">
+          {/* {problems.map((problem, index) => (
+            <Category problem={problem} key={index} />
+          ))} */}
+        </div>
+      </Col>
       <Col sm={0} md={0} xl={4}></Col>
     </Row>
   );
@@ -76,20 +115,42 @@ function Bottom() {
 }
 
 function App() {
-  const [problemNums, setProblemNums] = React.useState(["1", "2", "3"]);
-  const [problem1, setProblem1] = React.useState(["구현", "그래프 이론", "그래프 탐색"]);
-  const [problem2, setProblem2] = React.useState(["수학", "브르투포스 알고리즘"]);
-  const [problem3, setProblem3] = React.useState([
-    "다이나믹 프로그래밍",
-    "비트 마스킹",
-    "최대 유량",
-  ]);
+  const [choose, setChoose] = React.useState("-1");
+
+  const onClick = (event, category) => {
+    setChoose(category);
+    console.log("선택한 문제는:" + category);
+    console.log("저장한 문제는:" + choose);
+  };
+
+  const problems = [
+    {
+      problem_no: 1001,
+      problem_category: [
+        { problem_cat: "구현" },
+        { problem_cat: "그래프 이론" },
+        { problem_cat: "그래프 탐색" },
+      ],
+    },
+    {
+      problem_no: 1002,
+      problem_category: [{ problem_cat: "수학" }, { problem_cat: "브르투포스 알고리즘" }],
+    },
+    {
+      problem_no: 1003,
+      problem_category: [
+        { problem_cat: "다이나믹 프로그래밍" },
+        { problem_cat: "비트 마스킹" },
+        { problem_cat: "최대 유량" },
+      ],
+    },
+  ];
 
   return (
     <div className="matching_background">
       <UserInfo />
       <Top />
-      <Mid />
+      <Mid problems={problems} onClick={onClick} />
       <Bottom />
       <div className="banButton">취소</div>
     </div>

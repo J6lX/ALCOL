@@ -70,7 +70,8 @@
 
 .ban_hands_left {
   position: absolute;
-  margin-top: -210px;
+  width: 430px;
+  /* margin-top: -200px; */
   z-index: 10;
   animation: ban_hands_left_Ani 2s;
   animation-fill-mode: forwards; /* 애니메이션이 끝나면 그대로 멈춤 */
@@ -83,10 +84,10 @@
 @keyframes ban_hands_left_Ani {
   /*애니메이션 정의:시작점이 기준 */
   0% {
-    margin-top: -230px;
+    margin-top: -190px;
   } /* 시작 */
   100% {
-    margin-top: -190px;
+    margin-top: -160px;
   } /*종료 */
 }
 
@@ -118,6 +119,12 @@
   .ban_hands_right {
     display: none;
   }
+  .ban_title {
+    display: none;
+  }
+  .ban_info {
+    display: none;
+  }
 }
 
 .banButton {
@@ -131,4 +138,19 @@
   line-height: 30px;
   background-color: #fef662;
   color: rgb(0, 0, 0);
+}
+
+.ban_algo_problem_title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1vw;
+  color: white;
+  margin-top: 50px;
+}
+
+.ban_algo_problem_category {
+  text-align: center;
+  font-size: 1vw;
+  color: white;
+  margin-top: 50px;
 }
