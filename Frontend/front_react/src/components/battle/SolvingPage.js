@@ -73,7 +73,7 @@ const Problem = () => {
         className="scrollDesign"
         style={{
           width: "29.6vw",
-          height: "84.5vh",
+          height: "84.7vh",
           overflowY: "scroll",
           backgroundColor: "#1D1E22",
         }}>
@@ -126,18 +126,33 @@ const Problem = () => {
 };
 
 const CodingPlace = () => {
+  // let allheight = window.innerHeight
+  // let height = allheight * 0.46
+  // console.log(height)
   let [code, setCode] = useState("");
-  let [consoleHeight, setHeight] = useState("");
+  // let [solvingHeight, setHeight] = useState(height);
+  // let [isClick, setIsClick] = useState(false);
 
   const onChange = (newValue) => {
     setCode(newValue);
     console.log("code ", code);
   };
 
-  const modifyHeight = (newValue) => {
-    setHeight(newValue);
-    console.log(consoleHeight);
-  };
+  // const upMouse = (event) => {
+  //   setIsClick(false)
+  // }
+
+  // const downMouse = (event) => {
+  //   setIsClick(true)
+  // }
+
+  // const moveHeight = (event) => {
+  //   if (isClick === true) {
+  //     console.log(event)
+  //     setHeight(solvingHeight-1)
+  //   }
+  //   // console.log(solvingHeight);
+  // };
 
   const clickSubmit = () => {
     console.log("submit ", code);
@@ -164,6 +179,7 @@ const CodingPlace = () => {
         </p>
       </div>
       <div
+        id="console"
         style={{
           width: "69.5vw",
           height: "46vh",
@@ -178,6 +194,7 @@ const CodingPlace = () => {
           theme={darcula}
         />
       </div>
+      {/* onMouseDown={downMouse} onMouseUp={upMouse} onMouseMove={moveHeight}   */}
       <div style={{ width: "70vw", height: "0.7vh", background: "gray" }}></div>
       <div
         style={{
@@ -214,33 +231,6 @@ const CodingPlace = () => {
   );
 };
 
-// const ButtonsLayer = () => {
-//   // const clickSubmit = () => {
-//   //   console.log(code); onClick={clickSubmit}
-//   // };
-//   return (
-//     <div
-//       style={{
-//         display: "flex",
-//         alignItems: "center",
-//         justifyContent: "space-between",
-//         height: "100%",
-//       }}>
-//       <p className="NanumSquare" style={{ color: "white", marginLeft: "10px", fontSize: "2.1vh" }}>
-//         결과창
-//       </p>
-//       <div>
-//         <Button className="NanumSquare" style={{ margin: "5px" }}>
-//           제출
-//         </Button>
-//         <Button className="NanumSquare" style={{ margin: "5px" }}>
-//           항복
-//         </Button>
-//       </div>
-//     </div>
-//   );
-// };
-
 const Console = () => {
   return (
     <div style={{ backgroundColor: "#1D1E22" }}>
@@ -251,7 +241,7 @@ const Console = () => {
 
 const SolvingPage = () => {
   return (
-    <div>
+    <div id="allconsole">
       {/* <RecoilRoot>
         <BattleNav />
         <Problem />
@@ -275,7 +265,6 @@ const SolvingPage = () => {
             <div style={{ width: "70vw", height: "59vh", border: "0.1px solid gray" }}>
               <CodingPlace />
             </div>
-
             <div style={{ width: "70vw", height: "33vh", border: "0.1px solid gray" }}>
               <Console />
             </div>
