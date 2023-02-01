@@ -18,12 +18,6 @@ public class FileHandler
     public boolean parseFileInfo(MultipartFile multipartFile, UserEntity userEntity)
             throws IOException
     {
-        // 파일이 빈 것이 들어오면 false 반환
-        if (multipartFile.isEmpty())
-        {
-            return false;
-        }
-
         // 파일 이름을 업로드 한 날짜로 바꾸어서 저장
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         String currentDate = simpleDateFormat.format(new Date());
