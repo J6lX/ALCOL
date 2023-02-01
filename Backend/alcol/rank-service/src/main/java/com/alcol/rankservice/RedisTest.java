@@ -11,15 +11,15 @@ import javax.annotation.Resource;
 
 
 @RequiredArgsConstructor
-@RestController
-@RequestMapping("/BattleResult")
+//@RestController
+//@RequestMapping("/BattleResult")
 public class RedisTest
 {
 
     private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, String> hash;
 
-    @GetMapping("/here")
+//    @GetMapping("/here")
         public String example(){
 //            hash = redisTemplate.opsForHash();
             // key는 winloseCnt:{userId}:{mode}
