@@ -77,13 +77,20 @@ function App() {
     //-----이미지 처리 끝-----
     // setValues({ ...values });
     // console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
+    const userData = JSON.stringify({
+      email: values.email,
+      pwd: values.pwd,
+      nickname: values.nickname
+    });
+    formData.append(
+      "signUpDto",
+      new Blob([userData], { type: 'application/json' })
+    );
     axios
-      .post("http://localhost:8000/user-service/", {
-        email: values.email,
-        pwd: values.pwd,
-        nickname: values.nickname,
-        img: formData,
-      })
+      .post("http://localhost:8000/user-service/",
+        formData,
+        { headers: { 'Content-Type': 'multipart/form-data' } }
+      )
       .then(function (response) {
         if (response.data.customCode === "000") {
           alert("회원가입 성공");
