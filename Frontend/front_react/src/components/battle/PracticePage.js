@@ -52,7 +52,7 @@ function Ranking() {
         <Col span={16}>
           {/* 검색 상자 */}
           <Row justify="end">
-            <Col xs={8} lg={5}>
+            <Col xs={0} sm={8} lg={5}>
               <Input
                 placeholder="유형 이름 검색"
                 allowClear
@@ -65,7 +65,9 @@ function Ranking() {
             <Col
               style={{
                 padding: "5px",
-              }}>
+              }}
+              xs={0}
+              sm={3}>
               <Button>검색</Button>
             </Col>
           </Row>
