@@ -68,16 +68,21 @@ function App() {
   });
   const [img, setImage] = useState(null);
   const onFinish = (values) => {
-    console.log("Received values of form: ", values);
+    //-----이미지 처리-----
+    console.log("받은 이미지:", img);
+    //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 express 서버로 요청 보냅니다.
+    const formData = new FormData();
+    formData.append("file", img);
     setValues({ ...values });
+    console.log("보낼 이미지:", formData);
+    //-----이미지 처리 끝-----
     console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
-    console.log("저장된 회원 정보 : ", userInfo.email, userInfo.password, userInfo.nickname);
     axios
       .post("http://localhost:8000/user-service/", {
         email: values.email,
         pwd: values.pwd,
         nickname: values.nickname,
-        img: img,
+        img: formData,
       })
       .then(function (response) {
         if (response.data.customCode === "000") {
