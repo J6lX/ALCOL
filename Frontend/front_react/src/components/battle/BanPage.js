@@ -32,18 +32,18 @@ function UserInfo() {
 function Top() {
   return (
     <Row>
-      <Col xs={12} sm={10} md={8} lg={6} xl={6}>
+      <Col xs={12} sm={10} md={8} xl={6}>
         <div className="ban_player_info">Player1</div>
         <img src={img_leftHand} alt="hand" className="ban_hands_left" />
       </Col>
-      <Col xs={12} sm={14} md={12} lg={12} xl={12} style={{ marginTop: "50px" }}>
+      <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
         <div className="ban_title">금지할 문제를 선택해주세요</div>
         <div className="ban_info">
           선택된 문제는 이번 게임에서 출제되지 않습니다. 만약 같은 문제를 금지했다면 남은 문제 중
           랜덤하게 출제됩니다.
         </div>
       </Col>
-      <Col xs={0} sm={0} md={4} lg={6} xl={6}></Col>
+      <Col xs={0} sm={0} md={4} xl={6}></Col>
     </Row>
   );
 }
@@ -51,11 +51,11 @@ function Top() {
 function Mid() {
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
-      <Col xs={0} sm={0} md={0} lg={4} xl={4}></Col>
-      <Col xs={7} sm={7} md={7} lg={4} xl={4} className="ban_algo_box"></Col>
-      <Col xs={7} sm={7} md={7} lg={4} xl={4} className="ban_algo_box"></Col>
-      <Col xs={7} sm={7} md={7} lg={4} xl={4} className="ban_algo_box"></Col>
-      <Col xs={0} sm={0} md={0} lg={4} xl={4}></Col>
+      <Col sm={0} md={0} xl={4}></Col>
+      <Col sm={7} md={7} xl={4} className="ban_algo_box"></Col>
+      <Col sm={7} md={7} xl={4} className="ban_algo_box"></Col>
+      <Col sm={7} md={7} xl={4} className="ban_algo_box"></Col>
+      <Col sm={0} md={0} xl={4}></Col>
     </Row>
   );
 }
@@ -63,9 +63,9 @@ function Mid() {
 function Bottom() {
   return (
     <Row style={{ marginTop: "60px" }}>
-      <Col xs={0} sm={0} md={4} lg={6} xl={6}></Col>
-      <Col xs={12} sm={14} md={12} lg={12} xl={12} style={{ marginTop: "100px" }}></Col>
-      <Col xs={12} sm={10} md={8} lg={6} xl={6}>
+      <Col xs={0} sm={0} md={4} xl={6}></Col>
+      <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "100px" }}></Col>
+      <Col xs={12} sm={10} md={8} xl={6}>
         <img src={img_rightHand} alt="hand" className="ban_hands_right" />
         <div style={{ marginTop: "70px" }} className="ban_player_info">
           Player1
