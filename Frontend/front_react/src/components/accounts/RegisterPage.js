@@ -70,7 +70,7 @@ function App() {
   const onFinish = (values) => {
     //-----이미지 처리-----
     console.log("받은 이미지:", img);
-    //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 express 서버로 요청 보냅니다.
+    //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 서버로 요청 보냅니다.
     const formData = new FormData();
     formData.append("file", img);
     console.log("보낼 이미지:", formData);
