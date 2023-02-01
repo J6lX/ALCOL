@@ -134,6 +134,7 @@ public class UserController
     @PostMapping("/getUserInfo")
     public UserDto.UserInfoDto getUserInfo(@RequestParam(value="userId") String userId)
     {
+
         return userService.getUserInfo(userId);
     }
 
