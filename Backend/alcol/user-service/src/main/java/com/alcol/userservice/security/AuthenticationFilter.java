@@ -1,7 +1,9 @@
 package com.alcol.userservice.security;
 
 import com.alcol.userservice.dto.UserDto;
+import com.alcol.userservice.error.CustomStatusCode;
 import com.alcol.userservice.service.UserService;
+import com.alcol.userservice.util.ApiUtils;
 import com.alcol.userservice.util.TokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 // 로그인 플로우
 
@@ -34,6 +38,7 @@ import java.util.ArrayList;
 // 그래야 로그인 요청으로 온 평문 비밀번호와 db 에 저장되어 있는 암호화 비밀번호를 비교할 수 있음
 
 // 5. 로그인 성공 시 successfulAuthentication 메소드로 넘어감
+// 6. 로그인 실패 시 unsuccessfulAuthentication 메소드로 넘어감
 
 @Slf4j
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
@@ -54,8 +59,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
 
     @Override
     public Authentication attemptAuthentication (
-                    HttpServletRequest request,
-                    HttpServletResponse response
+            HttpServletRequest request,
+            HttpServletResponse response
     )
             throws AuthenticationException
     {
@@ -69,7 +74,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
                     new UsernamePasswordAuthenticationToken(
                             creds.getEmail(),
                             creds.getPwd(),
-                            new ArrayList<>())  // 권한들을 집어넣음
+                            // 권한들을 집어넣음
+                            new ArrayList<>()
+                    )
             );
         } catch (IOException e) {
             throw new RuntimeException();
@@ -86,14 +93,47 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
             FilterChain chain,
             Authentication authResult
     )
+            throws IOException
     {
         String email = ((User)authResult.getPrincipal()).getUsername();
         UserDto.UserDetailDto userDetails = userService.getUserDetailByEmail(email);
         String accessToken = tokenProvider.createAccessToken(userDetails.getUserId());
         String refreshToken = tokenProvider.createRefreshToken(userDetails.getUserId());
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userDetails.getUserId());
 
-        response.addHeader("userId", userDetails.getUserId());
         response.addHeader("access-token", accessToken);
         response.addHeader("refresh-token", refreshToken);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+
+        response.getWriter().write(
+                new ObjectMapper().writeValueAsString(
+                        ApiUtils.success(
+                                map,
+                                CustomStatusCode.LOGIN_SUCCESS
+                        )
+                )
+        );
+    }
+
+    // 로그인 실패 시
+    @Override
+    protected void unsuccessfulAuthentication(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException failed
+    )
+            throws IOException
+    {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+        response.setStatus(HttpServletResponse.SC_CONFLICT);
+
+        response.getWriter().write(
+                new ObjectMapper().writeValueAsString(
+                        ApiUtils.error(CustomStatusCode.LOGIN_FAILURE)
+                )
+        );
     }
 }
