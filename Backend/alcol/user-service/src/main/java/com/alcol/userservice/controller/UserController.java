@@ -130,4 +130,11 @@ public class UserController
         return logs;
     }
 
+    // 사용자 상세 정보 요청
+    @PostMapping("/getUserInfo")
+    public UserDto.UserInfoDto getUserInfo(@RequestParam(value="userId") String userId)
+    {
+        return userService.getUserInfo(userId);
+    }
+
 }

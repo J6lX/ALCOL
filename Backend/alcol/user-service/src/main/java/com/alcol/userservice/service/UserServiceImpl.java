@@ -9,18 +9,23 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,18 +36,21 @@ public class UserServiceImpl implements UserService
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenProvider tokenProvider;
     private final FileHandler fileHandler;
+    private final RestTemplate restTemplate;
 
     public UserServiceImpl(
             UserRepository userRepository,
             BCryptPasswordEncoder bCryptPasswordEncoder,
             TokenProvider tokenProvider,
-            FileHandler fileHandler
+            FileHandler fileHandler,
+            RestTemplate restTemplate
     )
     {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenProvider = tokenProvider;
         this.fileHandler = fileHandler;
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -132,5 +140,32 @@ public class UserServiceImpl implements UserService
     public String getNewAccessToken(String userId)
     {
         return tokenProvider.createAccessToken(userId);
+    }
+
+    @Override
+    public UserDto.UserInfoDto getUserInfo(String userId)
+    {
+        // 닉네임, 사진 정보는 다 가져왔음
+        UserEntity userEntity = userRepository.findByUserId(userId);
+
+        MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
+        bodyData.add("userId", userId);
+        String url = "http://localhost:9005/log-service/getLevelAndNickname";
+
+        // 리턴받은 리스트에는 레벨, 티어가 순서대로 있음
+        // 인덱스 0 : 레벨, 인덱스 1 : 티어
+        ResponseEntity<List> response = restTemplate.postForEntity(
+                url,
+                bodyData,
+                List.class
+        );
+
+        return UserDto.UserInfoDto.builder()
+                .nickname(userEntity.getNickname())
+                .originalFileName(userEntity.getOriginalFileName())
+                .storedFileName(userEntity.getStoredFileName())
+                .level(String.valueOf(response.getBody().get(0)))
+                .tier(String.valueOf(response.getBody().get(1)))
+                .build();
     }
 }

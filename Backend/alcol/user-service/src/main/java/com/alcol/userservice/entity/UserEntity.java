@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "user_tb")
-public class UserEntity {
-
+public class UserEntity
+{
     @Id
     private String userId;
 
