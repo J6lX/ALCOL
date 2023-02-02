@@ -75,7 +75,7 @@ function LastSeason() {
           }}>
           <Row justify="center">
             <Col span={21}>
-              <h1>지난 시즌 이력</h1>
+              <h1>{userInfo.username}님의 지난 시즌 이력</h1>
             </Col>
           </Row>
           <Row justify="center">
