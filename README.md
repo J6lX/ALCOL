@@ -18,20 +18,27 @@ SSAFY 8기 2학기 공통프로젝트 - ALCOL
     - 친구(FRIEND_TB)
     - 사용자 레벨(USER_LEVEL_TB)
     - 사용자 티어(USER_TIER_TB)
+    <br/>
 - ### Problem Service
     - 문제(PROBLEM_TB)
     - 문제 티어(PROB_TIER_TB)
     - 문제 유형(PROB_CATEGORY_TB)
     - 문제 유형 연결 테이블(PROB_CATEGORY_PIVOT_TB)
+    <br/>
 - ### Battle Service
     - 배틀 모드(BATTLE_MODE_TB)
+    <br/>
 - ### Log Service
     - 문제 제출 로그(PROB_TRIAL_LOG_TB)
     - 배틀 전적 로그(BATTLE_LOG_TB)
     - 배틀 문제 제출 로그(BATTLE_PROB_SUBMIT_LOG_TB)
     - 과거 시즌 로그(PAST_SEASON_LOG_TB)
+    <br/>
 - ### Rank Service
+    <br/>
 - ### Match Service
+    <br/>
+
 </br>
 ### ERD
 ![Untitled](/uploads/b4f22590820e7d6cf8a0d4f343a8fb8f/Untitled.png)
@@ -64,6 +71,7 @@ ALCOL은 학습동기 유발을 위해 배틀 구조의 대결을 제공하는 �
     - 스피드전, 최적화전 중에서 원하는 모드를 선택할 수 있습니다.
     - 사용자는 알고리즘 유형을 보고 원하지 않는 문제 하나를 밴할 수 있습니다.
     - 문제를 푸는 도중에 상대의 문제 풀이 현황 알림을 확인할 수 있습니다.
+    <br/>
 - ### 랭킹 서비스
     - 게임 모드별 개인과 전체 랭킹을 확인할 수 있습니다.
     - 유저 닉네임을 검색하여 해당 유저의 랭킹과 정보를 확인할 수 있습니다.
