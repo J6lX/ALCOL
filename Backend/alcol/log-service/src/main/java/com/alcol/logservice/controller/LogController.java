@@ -19,7 +19,7 @@ public class LogController
     }
 
     @PostMapping("/getLevelAndTier")
-    public List<String> getLevelAndTier(@RequestParam(value="userId") String userId)
+    public List<String> getLevelAndTier(@RequestParam(value="user_id") String userId)
     {
         return logService.getLevelAndTier(userId);
     }
