@@ -17,11 +17,10 @@ function LoginPage() {
 
   // 로그인 요청 전송
   const onFinish = (values) => {
-
     // 백엔드에 보낼 데이터 구성
     const userData = JSON.stringify({
       email: values.email,
-      pwd: values.pwd
+      pwd: values.pwd,
     });
 
     // axios 통신 진행
@@ -46,6 +45,8 @@ function LoginPage() {
       .catch((error) => {
         if (error.response.data.customCode === "005") {
           console.log("로그인 실패");
+
+          // 로그인 실패 시 표시하는 내용
           alert(error.response.data.description);
         }
       });
