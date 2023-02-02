@@ -83,16 +83,78 @@ const recentRecord = [
   {
     id: "win",
     label: "win",
-    value: 12,
+    value: 13,
     color: "#5cfdfd",
   },
   {
     id: "lose",
     label: "lose",
-    value: 8,
+    value: 7,
     color: "#FDE14B",
   },
 ];
+
+// 그래프 중앙에 표시할 텍스트 레이블
+const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+  let total = 0;
+  dataWithArc.forEach((datum) => {
+    total += datum.value;
+  });
+
+  const win = recentRecord[0].value;
+  const lose = recentRecord[1].value;
+  const winrate = Math.round((win / total) * 100);
+  // const innerText = {
+  //   0: `최근 ${win+lose}전\n ${win}승 ${lose}패\n (${winrate}%)`
+  // }
+
+  return (
+    <>
+      <text
+        x={centerX}
+        y={centerY - 10}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="white"
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "18px",
+          fontWeight: 600,
+          whiteSpace: "pre-line",
+        }}>
+        최근 {total} 전
+      </text>
+      <text
+        x={centerX}
+        y={centerY + 10}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="white"
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "14px",
+          fontWeight: 400,
+          whiteSpace: "pre-line",
+        }}>
+        {win}승 {lose}패
+      </text>
+      <text
+        x={centerX}
+        y={centerY + 28}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="#fde14b"
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "12px",
+          fontWeight: 300,
+          whiteSpace: "pre-line",
+        }}>
+        ({winrate}%)
+      </text>
+    </>
+  );
+};
 
 function Mypage() {
   const userInfo = useParams();
@@ -213,7 +275,7 @@ function Mypage() {
                 </Row>
 
                 {/* 도넛 그래프 블록(최근 20전) */}
-                <Row justify="center" style={{ height: "220px" }}>
+                <Row justify="center" style={{ height: "270px" }}>
                   <ResponsivePie
                     data={recentRecord}
                     margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
@@ -231,7 +293,7 @@ function Mypage() {
                     arcLinkLabelsThickness={2}
                     arcLinkLabelsColor={{ from: "color" }}
                     arcLabelsSkipAngle={10}
-                    layers={["arcs", "arcLabels", "arcLinkLabels", "legends"]}
+                    layers={["arcs", "arcLabels", "arcLinkLabels", "legends", CenteredMetric]}
                     arcLabelsTextColor={{
                       from: "color",
                       modifiers: [["darker", 2]],

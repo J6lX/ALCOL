@@ -15,6 +15,7 @@
     "@uiw/codemirror-extensions-basic-setup": "^4.19.7",
     "@uiw/codemirror-extensions-langs": "^4.19.7",
     "@uiw/codemirror-theme-darcula": "^4.19.7",
+    "@uiw/codemirror-theme-dracula": "^4.19.7",
     "@uiw/codemirror-themes": "^4.19.7",
     "@uiw/react-codemirror": "^4.19.7",
     "antd": "^5.1.5",
