@@ -4,6 +4,7 @@ import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams, Link } from "react-router-dom";
+import { ResponsivePie } from "@nivo/pie";
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -74,6 +75,22 @@ const matchData = [
     address: "Sidney No. 1 Lake Park",
     difficulty: "Gold",
     matchDate: "1일 전",
+  },
+];
+
+// 최근 20전 표시 데이터(임시)
+const recentRecord = [
+  {
+    id: "win",
+    label: "win",
+    value: 12,
+    color: "#5cfdfd",
+  },
+  {
+    id: "lose",
+    label: "lose",
+    value: 8,
+    color: "#FDE14B",
   },
 ];
 
@@ -195,9 +212,44 @@ function Mypage() {
                   </Col>
                 </Row>
 
-                {/* 그래프 블록(최근 20전) */}
-                <Row justify="center">
-                  <img className="winrateCircle" src={tempImg} alt="원형 그래프"></img>
+                {/* 도넛 그래프 블록(최근 20전) */}
+                <Row justify="center" style={{ height: "220px" }}>
+                  <ResponsivePie
+                    data={recentRecord}
+                    margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+                    innerRadius={0.5}
+                    padAngle={0.7}
+                    cornerRadius={3}
+                    activeOuterRadiusOffset={8}
+                    colors={["#5cfdfd", "#FDE14B"]}
+                    colorBy="index"
+                    borderWidth={1}
+                    borderColor={{ theme: "background" }}
+                    enableArcLinkLabels={false}
+                    arcLinkLabelsSkipAngle={10}
+                    arcLinkLabelsTextColor="#333333"
+                    arcLinkLabelsThickness={2}
+                    arcLinkLabelsColor={{ from: "color" }}
+                    arcLabelsSkipAngle={10}
+                    layers={["arcs", "arcLabels", "arcLinkLabels", "legends"]}
+                    arcLabelsTextColor={{
+                      from: "color",
+                      modifiers: [["darker", 2]],
+                    }}
+                    fill={[
+                      {
+                        match: {
+                          id: "win",
+                        },
+                      },
+                      {
+                        match: {
+                          id: "lose",
+                        },
+                      },
+                    ]}
+                    legends={[]}
+                  />
                 </Row>
                 {/* 전적 표시 블록 */}
                 <Row>
