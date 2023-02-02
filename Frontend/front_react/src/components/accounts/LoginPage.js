@@ -21,7 +21,7 @@ function LoginPage() {
     //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 서버로 요청 보냅니다.
     const formData = new FormData();
     formData.append("file");
-    console.log("보낼 이미지:", formData);
+    console.log("전송하는 정보:", formData);
     //-----이미지 처리 끝-----
     // setValues({ ...values });
     // console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
@@ -35,14 +35,21 @@ function LoginPage() {
 
     // axios 통신 진행
     axios
-      .post("http://localhost:8000/user-service/", formData, {
+      .post("http://i8b303.p.ssafy.io:8000/user-service/login", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
+
+      // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
-        if (response.data.customCode === "000") {
-          alert("회원가입 성공");
+        if (response.data.customCode === "006") {
+          //access-token, refresh-token, userId 저장
+          const accessToken = response.headers.accessToken;
+          const refreshToken = response.headers.refreshToken;
+          const userId = response.data.bodyData.userId;
         }
       })
+
+      //로그인 실패 시
       .catch((error) => {
         if (error.response.data.customCode === "001") {
           alert("이메일 중복");
