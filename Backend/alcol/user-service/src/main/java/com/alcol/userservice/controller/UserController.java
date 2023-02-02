@@ -33,7 +33,7 @@ public class UserController
 
     public UserController(
             UserService userService,
-            Environment env,
+            Environment env
     )
     {
         this.userService = userService;
