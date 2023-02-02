@@ -13,7 +13,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="fullmiddle" style={{ backgroundColor: "black" }}>
+    <div className="fullmiddle_login" style={{ backgroundColor: "black" }}>
       <div style={{ position: "relative", width: "100vw", height: "100ch", opacity: "0.4" }}>
         <div
           style={{
