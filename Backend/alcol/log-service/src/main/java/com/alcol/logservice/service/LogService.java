@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface LogService
 {
-    List<String> getLevelAndNickname(String userId);
+    List<String> getLevelAndTier(String userId);
 }
