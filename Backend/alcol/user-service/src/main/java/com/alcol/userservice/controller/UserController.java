@@ -115,21 +115,6 @@ public class UserController
         );
     }
 
-    // RestTemplate 을 통한 서비스 간 호출 테스트
-    @GetMapping("/restTemplate")
-    public ResponseEntity<List> restTemplateTestToLogService()
-    {
-        MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
-        bodyData.add("param", "this is plus data from user-service");
-        String url = "http://localhost:9005/log-service/getLog";
-        ResponseEntity<List> logs = restTemplate.postForEntity(
-                url,
-                bodyData,
-                List.class
-        );
-        return logs;
-    }
-
     // 사용자 상세 정보 요청
     @PostMapping("/getUserInfo")
     public UserDto.UserInfoDto getUserInfo(@RequestParam(value="userId") String userId)
@@ -137,4 +122,15 @@ public class UserController
         return userService.getUserInfo(userId);
     }
 
+    // 현재 경험치, 현재 스피드전 mmr, 현재 효율성전 mmr 을 받아서
+    // 현재 레벨, 현재 스피드전 티어, 현재 효율성전 티어를 리턴
+    @PostMapping("/getLevelAndTier")
+    public List<String> getLevelAndTier(
+            @RequestParam(value="curExp") String curExp,
+            @RequestParam(value="nowMmrBySpeed") String nowMmrBySpeed,
+            @RequestParam(value="nowMmrByOptimization") String nowMmrByOptimization
+    )
+    {
+        return userService.getLevelAndTier(curExp, nowMmrBySpeed, nowMmrByOptimization);
+    }
 }

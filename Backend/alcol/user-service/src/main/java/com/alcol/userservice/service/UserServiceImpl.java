@@ -2,7 +2,11 @@ package com.alcol.userservice.service;
 
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.entity.UserEntity;
+import com.alcol.userservice.entity.UserLevelEntity;
+import com.alcol.userservice.entity.UserTierEntity;
+import com.alcol.userservice.repository.UserLevelRepository;
 import com.alcol.userservice.repository.UserRepository;
+import com.alcol.userservice.repository.UserTierRepository;
 import com.alcol.userservice.util.FileHandler;
 import com.alcol.userservice.util.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +37,8 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService
 {
     private final UserRepository userRepository;
+    private final UserLevelRepository userLevelRepository;
+    private final UserTierRepository userTierRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenProvider tokenProvider;
     private final FileHandler fileHandler;
@@ -40,6 +46,8 @@ public class UserServiceImpl implements UserService
 
     public UserServiceImpl(
             UserRepository userRepository,
+            UserLevelRepository userLevelRepository,
+            UserTierRepository userTierRepository,
             BCryptPasswordEncoder bCryptPasswordEncoder,
             TokenProvider tokenProvider,
             FileHandler fileHandler,
@@ -47,6 +55,8 @@ public class UserServiceImpl implements UserService
     )
     {
         this.userRepository = userRepository;
+        this.userLevelRepository = userLevelRepository;
+        this.userTierRepository = userTierRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenProvider = tokenProvider;
         this.fileHandler = fileHandler;
@@ -150,10 +160,13 @@ public class UserServiceImpl implements UserService
 
         MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
         bodyData.add("userId", userId);
-        String url = "http://localhost:9005/log-service/getLevelAndNickname";
+        String url = "http://localhost:9005/log-service/getLevelAndTier";
 
-        // 리턴받은 리스트에는 레벨, 티어가 순서대로 있음
-        // 인덱스 0 : 레벨, 인덱스 1 : 티어
+        // 여기는 유저 서비스!!!
+        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
+        // 인덱스 0 : 레벨
+        // 인덱스 1 : 스피드전 티어
+        // 인덱스 2 : 효율성전 티어
         ResponseEntity<List> response = restTemplate.postForEntity(
                 url,
                 bodyData,
@@ -162,10 +175,38 @@ public class UserServiceImpl implements UserService
 
         return UserDto.UserInfoDto.builder()
                 .nickname(userEntity.getNickname())
-                .originalFileName(userEntity.getOriginalFileName())
                 .storedFileName(userEntity.getStoredFileName())
                 .level(String.valueOf(response.getBody().get(0)))
-                .tier(String.valueOf(response.getBody().get(1)))
+                .speedTier(String.valueOf(response.getBody().get(1)))
+                .optimizationTier(String.valueOf(response.getBody().get(2)))
                 .build();
+    }
+
+    @Override
+    public List<String> getLevelAndTier(String curExp, String nowMmrBySpeed, String nowMmrByOptimization)
+    {
+        UserLevelEntity userLevelEntity =
+                userLevelRepository.findTopBySumExpLessThanEqualOrderByLevelDesc(Integer.parseInt(curExp));
+        UserTierEntity userTierEntityBySpeed =
+                userTierRepository.findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(
+                        Integer.parseInt(nowMmrBySpeed),
+                        Integer.parseInt(nowMmrBySpeed)
+                );
+        UserTierEntity userTierEntityByOptimization =
+                userTierRepository.findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(
+                        Integer.parseInt(nowMmrByOptimization),
+                        Integer.parseInt(nowMmrByOptimization)
+                );
+
+        int level = userLevelEntity.getLevel();
+        String tierBySpeed = userTierEntityBySpeed.getTier();
+        String tierByOptimization = userTierEntityByOptimization.getTier();
+
+        List<String> retList = new ArrayList<>();
+        retList.add(level + "");
+        retList.add(tierBySpeed);
+        retList.add(tierByOptimization);
+
+        return retList;
     }
 }

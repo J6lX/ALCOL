@@ -4,6 +4,8 @@ import com.alcol.userservice.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 
 public interface UserService extends UserDetailsService
 {
@@ -14,4 +16,10 @@ public interface UserService extends UserDetailsService
     String getNewAccessToken(String userId);
 
     UserDto.UserInfoDto getUserInfo(String userId);
+
+    List<String> getLevelAndTier(
+            String curExp,
+            String nowMmrBySpeed,
+            String nowMmrByOptimization
+    );
 }
