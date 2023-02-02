@@ -3,7 +3,7 @@ import { Col, Row } from "antd";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 
 function UserInfo() {
   return (
@@ -117,17 +117,15 @@ function Bottom() {
   );
 }
 
-function SetChoose({ selected }) {
-  useEffect(() => {
-    setInterval(() => {
-      console.log(selected);
-    });
-  }, [selected]);
+// function SetChoose({ selected }) {
+//   useEffect(() => {
+//     setInterval(() => {
+//       console.log(selected);
+//     });
+//   }, [selected]);
 
-  return <div>내가 리턴하는 값은 "{selected}"</div>;
-}
-
-SetChoose("이 줄은 합칠 때 지워주세요");
+//   return <div>내가 리턴하는 값은 "{selected}"</div>;
+// }
 
 function App() {
   const [choose, setChoose] = React.useState("-1");
