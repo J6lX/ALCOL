@@ -9,6 +9,14 @@ import rankingsIcon from "../../assets/rankings_black.png";
 import rankingIcon from "../../assets/ranking_black.png";
 import "./GuidePage.css";
 
+const changeColor = (event) => {
+  event.target.style.color = "#FEF15D";
+};
+
+const returnColor = (event) => {
+  event.target.style.color = "white";
+};
+
 const Guide1 = () => {
   return (
     <div id="Guide1" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
@@ -80,6 +88,8 @@ const Guide1 = () => {
         to="Guide2"
         spy={true}
         smooth={true}
+        onMouseEnter={changeColor}
+        onMouseLeave={returnColor}
         style={{ color: "white", marginTop: "13vw" }}>
         다음
       </ScrollLink>
@@ -145,6 +155,8 @@ const Guide2 = () => {
         to="Guide3"
         spy={true}
         smooth={true}
+        onMouseEnter={changeColor}
+        onMouseLeave={returnColor}
         style={{ color: "white", marginTop: "5vw" }}>
         다음
       </ScrollLink>
@@ -177,6 +189,8 @@ const Guide3 = () => {
         to="Guide4"
         spy={true}
         smooth={true}
+        onMouseEnter={changeColor}
+        onMouseLeave={returnColor}
         style={{ color: "white", marginTop: "1vw" }}>
         다음
       </ScrollLink>
@@ -296,6 +310,8 @@ const Guide4 = () => {
         to="Guide5"
         spy={true}
         smooth={true}
+        onMouseEnter={changeColor}
+        onMouseLeave={returnColor}
         style={{ color: "white", marginTop: "1vw" }}>
         다음
       </ScrollLink>
@@ -403,6 +419,8 @@ const Guide5 = () => {
         to="Guide6"
         spy={true}
         smooth={true}
+        onMouseEnter={changeColor}
+        onMouseLeave={returnColor}
         style={{ color: "white", marginTop: "1vw" }}>
         다음
       </ScrollLink>
@@ -495,6 +513,8 @@ const Guide6 = () => {
         to="MainPage"
         spy={true}
         smooth={true}
+        onMouseEnter={changeColor}
+        onMouseLeave={returnColor}
         style={{ color: "white", marginTop: "1vw" }}>
         맨 위로
       </ScrollLink>

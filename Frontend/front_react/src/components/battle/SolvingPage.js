@@ -2,12 +2,25 @@ import { React, useState } from "react";
 import { RecoilRoot, atom, useRecoilState } from "recoil";
 
 import Logo from "../../assets/alcol_empty_black.png";
+import Dots from "../../assets/dots.png";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, message, Modal } from "antd";
+
+let allheight = window.innerHeight;
+
+const isClickState = atom({
+  key: "isClickState",
+  default: false,
+});
+
+const solvingHeightState = atom({
+  key: "solvingHeightState",
+  default: allheight * 0.46,
+});
 
 const ResultMessage = () => {
   const [messageApi, contextHolder] = message.useMessage();
@@ -126,9 +139,9 @@ const Problem = () => {
 };
 
 const CodingPlace = () => {
-  // let allheight = window.innerHeight
-  // let height = allheight * 0.46
-  // console.log(height)
+  const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
+  const [isClick, setIsClick] = useRecoilState(isClickState);
+
   let [code, setCode] = useState("");
 
   const onChange = (newValue) => {
@@ -136,21 +149,32 @@ const CodingPlace = () => {
     console.log("code ", code);
   };
 
-  // const upMouse = (event) => {
-  //   setIsClick(false)
-  // }
+  document.addEventListener("mouseup", (e) => {
+    setIsClick(false);
+  });
 
-  // const downMouse = (event) => {
-  //   setIsClick(true)
-  // }
+  const upMouse = (event) => {
+    setIsClick(false);
+    console.log(isClick);
+  };
 
-  // const moveHeight = (event) => {
-  //   if (isClick === true) {
-  //     console.log(event)
-  //     setHeight(solvingHeight-1)
-  //   }
-  //   // console.log(solvingHeight);
-  // };
+  const downMouse = (event) => {
+    setIsClick(true);
+  };
+
+  const moveMouse = (event) => {
+    if (isClick === true) {
+      let y = event.clientY - allheight * 0.13;
+      if (solvingHeight < y && solvingHeight < allheight * 0.6) {
+        setHeight(solvingHeight + 3);
+      } else if (solvingHeight > y && solvingHeight > allheight * 0.2) {
+        setHeight(solvingHeight - 3);
+      }
+      console.log(event);
+      console.log(event.clientY);
+      console.log(y);
+    }
+  };
 
   const clickSubmit = () => {
     console.log("submit ", code);
@@ -168,7 +192,7 @@ const CodingPlace = () => {
   };
 
   return (
-    <div>
+    <div onMouseUp={upMouse} onMouseMove={moveMouse}>
       <div style={{ width: "70vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
         <p
           className="NanumSquare"
@@ -180,20 +204,40 @@ const CodingPlace = () => {
         id="console"
         style={{
           width: "69.5vw",
-          height: "46vh",
+          height: `${solvingHeight}px`,
           verticalAlign: "top",
         }}>
         <CodeMirror
           value={code}
           width="70vw"
-          height="46vh"
+          height={`${solvingHeight}px`}
           extensions={[python({ jsx: true })]}
           onChange={onChange}
           theme={darcula}
         />
       </div>
       {/* onMouseDown={downMouse} onMouseUp={upMouse} onMouseMove={moveHeight}   */}
-      <div style={{ width: "70vw", height: "0.7vh", background: "gray" }}></div>
+      <div
+        role="button"
+        onMouseDown={downMouse}
+        onMouseMove={moveMouse}
+        onMouseUp={upMouse}
+        style={{ position: "relative", width: "70vw", height: "1vh", background: "gray" }}>
+        <img
+          onMouseDown={downMouse}
+          onMouseMove={moveMouse}
+          onMouseUp={upMouse}
+          src={Dots}
+          alt="dots"
+          style={{
+            position: "absolute",
+            top: "20%",
+            left: "50%",
+            transform: "(-50%, -50%)",
+            height: "5px",
+          }}
+        />
+      </div>
       <div
         style={{
           width: "70vw",
@@ -238,27 +282,6 @@ const Console = () => {
 };
 
 const SolvingPage = () => {
-  let allheight = window.innerHeight;
-  let height = allheight * 0.46;
-
-  const isClickState = atom({
-    key: "isClickState",
-    default: false,
-  });
-
-  const solvingHeightState = atom({
-    key: "solvingHeightState",
-    default: height,
-  });
-
-  const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
-  const [isClick, setIsClick] = useRecoilState(isClickState);
-
-  console.log(solvingHeight);
-  console.log(isClick);
-  setHeight(height);
-  setIsClick(false);
-
   return (
     <div id="allconsole">
       <RecoilRoot>
@@ -275,10 +298,10 @@ const SolvingPage = () => {
               <Problem />
             </div>
             <div>
-              <div style={{ width: "70vw", height: "59vh", border: "0.1px solid gray" }}>
+              <div style={{ width: "70vw", height: "auto", border: "0.1px solid gray" }}>
                 <CodingPlace />
               </div>
-              <div style={{ width: "70vw", height: "33vh", border: "0.1px solid gray" }}>
+              <div style={{ width: "70vw", height: "auto" }}>
                 <Console />
               </div>
             </div>
