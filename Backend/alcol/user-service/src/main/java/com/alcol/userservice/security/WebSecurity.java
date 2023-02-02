@@ -2,11 +2,15 @@ package com.alcol.userservice.security;
 
 import com.alcol.userservice.service.UserService;
 import com.alcol.userservice.util.TokenProvider;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter
@@ -37,7 +41,22 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
                 .antMatchers("/**").permitAll()
 //                .hasIpAddress("127.0.0.1")
                 .and()
-                .addFilter(getAuthenticationFilter());
+                .addFilter(getAuthenticationFilter())
+                .cors();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource()
+    {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
+                new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return urlBasedCorsConfigurationSource;
     }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception

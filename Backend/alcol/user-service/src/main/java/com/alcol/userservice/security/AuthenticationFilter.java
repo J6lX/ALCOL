@@ -99,11 +99,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter
         UserDto.UserDetailDto userDetails = userService.getUserDetailByEmail(email);
         String accessToken = tokenProvider.createAccessToken(userDetails.getUserId());
         String refreshToken = tokenProvider.createRefreshToken(userDetails.getUserId());
-        Map<String, String> map = new HashMap<>();
-        map.put("userId", userDetails.getUserId());
 
-        response.addHeader("access-token", accessToken);
-        response.addHeader("refresh-token", refreshToken);
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", userDetails.getUserId());
+        map.put("access_token", accessToken);
+        map.put("refresh_token", refreshToken);
+
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
