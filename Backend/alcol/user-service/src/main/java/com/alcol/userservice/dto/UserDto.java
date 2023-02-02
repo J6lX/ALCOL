@@ -1,5 +1,7 @@
 package com.alcol.userservice.dto;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ public class UserDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserInfoDto
     {
         private String nickname;
@@ -56,6 +59,7 @@ public class UserDto
     @Getter
     @Builder
     @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ResponseDto<T>
     {
         private final boolean success;

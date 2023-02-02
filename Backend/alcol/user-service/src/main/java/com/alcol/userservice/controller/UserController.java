@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -88,13 +89,8 @@ public class UserController
 
     // 새로운 access token 발급 요청
     @PostMapping("/refresh")
-    public ResponseEntity<UserDto.ResponseDto<?>> createUser(
-            HttpServletRequest request,
-            HttpServletResponse response
-    )
+    public ResponseEntity<UserDto.ResponseDto<?>> createUser(HttpServletRequest request)
     {
-        log.info("새로운 access token 을 발급합니다.");
-
         String authorizationHeader = request.getHeaders(HttpHeaders.AUTHORIZATION).nextElement();
         String jwt = authorizationHeader.replace("Bearer", "");
         String userId = Jwts.parser()
@@ -102,16 +98,17 @@ public class UserController
                 .parseClaimsJws(jwt).getBody().getSubject();
         String newAccessToken = userService.getNewAccessToken(userId);
 
-        response.addHeader("new-access-token", newAccessToken);
+        Map<String, String> map = new HashMap<>();
+        map.put("new_access_token", newAccessToken);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                ApiUtils.success(null, CustomStatusCode.CREATE_NEW_ACCESS_TOKEN)
+                ApiUtils.success(map, CustomStatusCode.CREATE_NEW_ACCESS_TOKEN)
         );
     }
 
     // 사용자 상세 정보 요청
     @PostMapping("/getUserInfo")
-    public UserDto.UserInfoDto getUserInfo(@RequestParam(value="userId") String userId)
+    public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
     {
         return userService.getUserInfo(userId);
     }
@@ -120,9 +117,9 @@ public class UserController
     // 현재 레벨, 현재 스피드전 티어, 현재 효율성전 티어를 리턴
     @PostMapping("/getLevelAndTier")
     public List<String> getLevelAndTier(
-            @RequestParam(value="curExp") String curExp,
-            @RequestParam(value="nowMmrBySpeed") String nowMmrBySpeed,
-            @RequestParam(value="nowMmrByOptimization") String nowMmrByOptimization
+            @RequestParam(value="cur_exp") String curExp,
+            @RequestParam(value="now_mmr_by_speed") String nowMmrBySpeed,
+            @RequestParam(value="now_mmr_by_optimization") String nowMmrByOptimization
     )
     {
         return userService.getLevelAndTier(curExp, nowMmrBySpeed, nowMmrByOptimization);
