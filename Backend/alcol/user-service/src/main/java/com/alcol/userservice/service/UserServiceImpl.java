@@ -115,7 +115,8 @@ public class UserServiceImpl implements UserService
         userEntity.setUserId(UUID.randomUUID().toString());
 
         // 사진이 회원 가입 시 같이 전달된 경우
-        if (file != null) {
+
+        if (file != null && file.getSize() != 0) {
             if (!fileHandler.parseFileInfo(file, userEntity)) {
                 return "PICTURE_UPLOAD_FAILURE";
             }
