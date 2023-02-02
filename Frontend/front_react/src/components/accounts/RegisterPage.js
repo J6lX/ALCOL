@@ -80,17 +80,13 @@ function App() {
     const userData = JSON.stringify({
       email: values.email,
       pwd: values.pwd,
-      nickname: values.nickname
+      nickname: values.nickname,
     });
-    formData.append(
-      "signUpDto",
-      new Blob([userData], { type: 'application/json' })
-    );
+    formData.append("signUpDto", new Blob([userData], { type: "application/json" }));
     axios
-      .post("http://localhost:8000/user-service/",
-        formData,
-        { headers: { 'Content-Type': 'multipart/form-data' } }
-      )
+      .post("http://localhost:8000/user-service/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
       .then(function (response) {
         if (response.data.customCode === "000") {
           alert("회원가입 성공");
