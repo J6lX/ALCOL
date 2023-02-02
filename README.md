@@ -9,6 +9,31 @@
 SSAFY 8기 2학기 공통프로젝트 - ALCOL
 
 </br>
+## 🕹Sub-PJT Ⅲ
+### 서비스별 데이터베이스 분리
+- ###User Service
+    - 사용자(USER_TB)
+    - 사용자 탈퇴(USER_LEFT_TB)
+    - 친구(FRIEND_TB)
+    - 사용자 레벨(USER_LEVEL_TB)
+    - 사용자 티어(USER_TIER_TB)
+- ### Problem Service
+    - 문제(PROBLEM_TB)
+    - 문제 티어(PROB_TIER_TB)
+    - 문제 유형(PROB_CATEGORY_TB)
+    - 문제 유형 연결 테이블(PROB_CATEGORY_PIVOT_TB)
+- ### Battle Service
+    - 배틀 모드(BATTLE_MODE_TB)
+- ### Log Service
+    - 문제 제출 로그(PROB_TRIAL_LOG_TB)
+    - 배틀 전적 로그(BATTLE_LOG_TB)
+    - 배틀 문제 제출 로그(BATTLE_PROB_SUBMIT_LOG_TB)
+    - 과거 시즌 로그(PAST_SEASON_LOG_TB)
+- ### Rank Service
+- ### Match Service
+### ERD
+![Untitled](/uploads/b4f22590820e7d6cf8a0d4f343a8fb8f/Untitled.png)
+</br>
 
 ## ✔ 기획의도
 IT직군 채용 프로세스의 일부로 코딩테스트를 도입하는 기업들이 증가함에 따라 관련 사이트의 수요가 증가하고 있습니다.
