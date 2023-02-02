@@ -3,7 +3,6 @@ import { Col, Row } from "antd";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-import { useEffect } from "react";
 
 function UserInfo() {
   return (
@@ -49,52 +48,35 @@ function Top() {
   );
 }
 
-// function Category({ problem, key }) {
-//   function makeDiv(problem) {
-//     const result = [];
-//     for (let i = 0; i < problem.length; i++) {
-//       console.log(problem[i]);
-//       result.push(<div key={i}>{problem[i]}</div>);
-//     }
-//     return result;
-//   }
-//   return <div> {makeDiv(problem.problem_category)} </div>;
-// }
-
-// function Categorys({ problem }) {
-//   // const cat = problem.problem_category;
-//   return <div>{problem.problem_category.problem_cat[0]}</div>;
-// }
-
 function Mid({ problems, onClick }) {
+  const printProblems = (problems) => {
+    const result = [];
+
+    for (let i = 0; i < problems.length; i++) {
+      result.push(<div key={i}> {problems[i]} </div>);
+    }
+    return result;
+  };
+
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
-          {/* {
-            for(const key in Object.keys({problems}))
-            {
-              console.log(problems[key].problem_category)
-            }
-          } */}
+          {printProblems(problems[0].problem_category)}
         </div>
       </Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "2")}>
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
-          {/* {problems.map((problem, index) => (
-            <Category problem={problem} key={index} />
-          ))} */}
+          {printProblems(problems[1].problem_category)}
         </div>
       </Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "3")}>
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
-          {/* {problems.map((problem, index) => (
-            <Category problem={problem} key={index} />
-          ))} */}
+          {printProblems(problems[2].problem_category)}
         </div>
       </Col>
       <Col sm={0} md={0} xl={4}></Col>
@@ -117,23 +99,13 @@ function Bottom() {
   );
 }
 
-function SetChoose({ selected }) {
-  useEffect(() => {
-    setInterval(() => {
-      console.log(selected);
-    });
-  }, [selected]);
-
-  return <div>내가 리턴하는 값은 "{selected}"</div>;
-}
-
 function App() {
   const [choose, setChoose] = React.useState("-1");
 
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     console.log("저장한 문제는:" + choose);
-    setChoose(category).then((respose) => console.log("선택한 값이 저장되었나요?:" + respose));
+    setChoose(category);
   };
 
   const problems = [
