@@ -50,6 +50,10 @@
   border: 2px solid #ffffff;
 }
 
+.ban_algo_box:hover {
+  background-color: rgba(161, 161, 161, 0.6);
+}
+
 .ban_player_info {
   width: 100%;
   height: 80px;
@@ -112,21 +116,6 @@
   } /*종료 */
 }
 
-@media screen and (max-width: 1200px) {
-  .ban_hands_left {
-    display: none;
-  }
-  .ban_hands_right {
-    display: none;
-  }
-  .ban_title {
-    display: none;
-  }
-  .ban_info {
-    display: none;
-  }
-}
-
 .banButton {
   width: 150px;
   height: 30px;
@@ -153,4 +142,22 @@
   font-size: 1vw;
   color: white;
   margin-top: 50px;
+}
+
+@media screen and (max-width: 1200px) {
+  .ban_hands_left {
+    display: none;
+  }
+  .ban_hands_right {
+    display: none;
+  }
+  .ban_title {
+    display: none;
+  }
+  .ban_info {
+    display: none;
+  }
+  .banButton {
+    margin-top: 30px;
+  }
 }
