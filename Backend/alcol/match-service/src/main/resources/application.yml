@@ -1,5 +1,5 @@
 server:
-  port: 9004
+  port: 9111
 
 spring:
   application:
@@ -13,10 +13,14 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
+  redis:
+    host: 13.209.10.133
+    port: 6000
 
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://127.0.0.1:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
+
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://127.0.0.1:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
