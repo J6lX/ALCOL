@@ -1,31 +1,13 @@
 import { React, useState } from "react";
-import { RecoilRoot, atom, useRecoilState } from "recoil";
+// import { RecoilRoot, atom, useRecoilState } from "recoil";
 
 import Logo from "../../assets/alcol_empty_black.png";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
 import { darcula } from "@uiw/codemirror-theme-darcula";
-import "./SolvingPage.css";
-import { Button, message, Modal } from "antd";
-
-const ResultMessage = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const success = () => {
-    messageApi.open({
-      type: "warning",
-      content: "맥주 5000cc님이 코드를 제출했습니다. (테스트케이스 50개 중 46개 정답)",
-      duration: 3,
-      style: { marginTop: "5.5vh" },
-    });
-  };
-  return (
-    <>
-      {contextHolder}
-      <Button onClick={success}>제출 소식</Button>
-    </>
-  );
-};
+import "./PracticeSolvingPage.css";
+import { Button, Modal } from "antd";
 
 const BattleNav = () => {
   let now = new Date();
@@ -39,18 +21,8 @@ const BattleNav = () => {
         <p
           className="NanumSquare"
           style={{ color: "black", fontSize: "2.5vh", marginRight: "3vw" }}>
-          배틀 유형
+          문제 풀이
         </p>
-        <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          소주 세 병
-        </p>
-        <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          Vs.
-        </p>
-        <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          맥주 5000cc
-        </p>
-        <ResultMessage className="MessageToast" />
       </div>
       <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh", marginRight: "20px" }}>
         {hours} : {minutes}
@@ -130,6 +102,8 @@ const CodingPlace = () => {
   // let height = allheight * 0.46
   // console.log(height)
   let [code, setCode] = useState("");
+  // let [solvingHeight, setHeight] = useState(height);
+  // let [isClick, setIsClick] = useState(false);
 
   const onChange = (newValue) => {
     setCode(newValue);
@@ -217,13 +191,13 @@ const CodingPlace = () => {
               제출
             </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showModal}>
-              항복
+              나가기
             </Button>
           </div>
         </div>
       </div>
-      <Modal title="항복" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <p className="NanumSquare">정말로 항복하시겠습니까?</p>
+      <Modal title="나가기" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p className="NanumSquare">정말로 나가시겠습니까?</p>
       </Modal>
     </div>
   );
@@ -237,56 +211,40 @@ const Console = () => {
   );
 };
 
-const SolvingPage = () => {
-  let allheight = window.innerHeight;
-  let height = allheight * 0.46;
-
-  const isClickState = atom({
-    key: "isClickState",
-    default: false,
-  });
-
-  const solvingHeightState = atom({
-    key: "solvingHeightState",
-    default: height,
-  });
-
-  const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
-  const [isClick, setIsClick] = useRecoilState(isClickState);
-
-  console.log(solvingHeight);
-  console.log(isClick);
-  setHeight(height);
-  setIsClick(false);
-
+const PracticeSolvingPage = () => {
   return (
     <div id="allconsole">
-      <RecoilRoot>
-        <div>
-          <BattleNav />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              position: "relative",
-              border: "0.1px solid gray",
-            }}>
-            <div style={{ width: "30vw", height: "92vh", border: "0.1px solid gray" }}>
-              <Problem />
+      {/* <RecoilRoot>
+        <BattleNav />
+        <Problem />
+        <CodingPlace />
+        <ButtonsLayer />
+        <Console />
+      </RecoilRoot> */}
+      <div>
+        <BattleNav />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            position: "relative",
+            border: "0.1px solid gray",
+          }}>
+          <div style={{ width: "30vw", height: "92vh", border: "0.1px solid gray" }}>
+            <Problem />
+          </div>
+          <div>
+            <div style={{ width: "70vw", height: "59vh", border: "0.1px solid gray" }}>
+              <CodingPlace />
             </div>
-            <div>
-              <div style={{ width: "70vw", height: "59vh", border: "0.1px solid gray" }}>
-                <CodingPlace />
-              </div>
-              <div style={{ width: "70vw", height: "33vh", border: "0.1px solid gray" }}>
-                <Console />
-              </div>
+            <div style={{ width: "70vw", height: "33vh", border: "0.1px solid gray" }}>
+              <Console />
             </div>
           </div>
         </div>
-      </RecoilRoot>
+      </div>
     </div>
   );
 };
 
-export default SolvingPage;
+export default PracticeSolvingPage;
