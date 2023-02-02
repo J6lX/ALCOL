@@ -19,9 +19,9 @@ function LoginPage() {
   const onFinish = (values) => {
     //-----이미지 처리-----
     //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 서버로 요청 보냅니다.
-    const formData = new FormData();
-    formData.append("file");
-    console.log("전송하는 정보:", formData);
+    // const formData = new FormData();
+    // formData.append("file");
+    // console.log("전송하는 정보:", formData);
     //-----이미지 처리 끝-----
     // setValues({ ...values });
     // console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
@@ -31,11 +31,12 @@ function LoginPage() {
       email: values.email,
       pwd: values.pwd,
     });
-    formData.append("signUpDto", new Blob([userData], { type: "application/json" }));
+    // formData.append("signUpDto", new Blob([userData], { type: "application/json" }));
+    console.log(userData);
 
     // axios 통신 진행
     axios
-      .post("http://i8b303.p.ssafy.io:8000/user-service/login", formData, {
+      .post("http://i8b303.p.ssafy.io:8000/user-service/login", userData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
 
@@ -103,7 +104,7 @@ function LoginPage() {
                 />
               </Form.Item>
               <Form.Item
-                name="password"
+                name="pwd"
                 rules={[{ required: true, message: "비밀번호를 입력해주세요." }]}
                 className="inputwidth">
                 <Input
