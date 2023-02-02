@@ -104,101 +104,8 @@ function App() {
     locationNow.pathname === "/solveprac"
   )
     return (
-      <RecoilRoot>
-        <Layout>
-          <Content
-            style={{
-              backgroundColor: "#16171B",
-            }}>
-            {/* 라우터 태그 목록 */}
-            <Switch>
-              {/* 메인 페이지 */}
-              <Route exact path="/" component={HomePage} />
-
-              {/* 로그인 페이지 */}
-              <Route exact path="/login" component={LoginPage} />
-
-              {/* 모드 선택 페이지 */}
-              <Route path="/mode" component={ModeSelectPage} />
-
-              {/* 매칭 페이지 */}
-              <Route path="/match" component={MatchingPage} />
-
-              {/* 밴픽 페이지 */}
-              <Route path="/ban" component={BanPage} />
-
-              {/* 문제 페이지(연습모드 진입) */}
-              <Route path="/practice" component={PracticePage} />
-
-              {/* 랭킹 조회 페이지 */}
-              <Route path="/ranking" component={Ranking} />
-
-              {/* 회원가입 페이지 */}
-              <Route path="/register" exact={true} component={RegisterPage} />
-
-              {/* 회원정보 수정 페이지 */}
-              <Route path="/modify" exact={true} component={ModifyPage} />
-
-              {/* 배틀 문제 푸는 페이지 */}
-              <Route path="/solve" exact={true} component={SolvingPage} />
-
-              {/* 혼자 문제 푸는 페이지 */}
-              <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
-
-              {/* 마이페이지(사용자 정보 열람 페이지) */}
-              <Route path="/mypage/:username" exact={true} component={Mypage} />
-
-              {/* 지난 시즌 정보 조회 페이지 */}
-              <Route path="/season/:username" exact={true} component={LastSeason} />
-
-              {/* 404 페이지 */}
-              <Route component={NotFound404} />
-              {/* <Route exact path="/register" element={RegisterPage()} /> */}
-            </Switch>
-          </Content>
-        </Layout>
-      </RecoilRoot>
-    );
-
-  // 그 이외의 경우에는 헤더 표시
-  return (
-    <RecoilRoot>
+      // <RecoilRoot>
       <Layout>
-        {/* 헤더(상단 네비게이션 바) */}
-        <Header
-          style={{
-            backgroundColor: "#17181c",
-          }}>
-          <Row gutter={16} justify="space-between">
-            {/* 로고 표시 구역 */}
-            <Col span={4} align="center">
-              <Link to="/">
-                <img src={alcol} alt="logo" className="logo" />
-              </Link>
-            </Col>
-
-            {/* 메뉴(Problem, Ranking, Battle) */}
-            <Col xs={0} md={6} lg={11} xl={12} justify="center" align="middle">
-              <Link to="/practice" className="textDark menus">
-                Problem
-              </Link>
-              <Link to="/ranking" className="textDark menus">
-                Ranking
-              </Link>
-              <Link to="/mode" className="textDark menus">
-                Battle
-              </Link>
-            </Col>
-
-            {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-            <Col xs={8} lg={4} justify="center">
-              <LoginTag />
-            </Col>
-          </Row>
-        </Header>
-
-        {/* 본문(임시) */}
-        <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
         <Content
           style={{
             backgroundColor: "#16171B",
@@ -219,12 +126,6 @@ function App() {
 
             {/* 밴픽 페이지 */}
             <Route path="/ban" component={BanPage} />
-
-            {/* 결과 페이지 */}
-            <Route path="/result" component={ResultPage} />
-
-            {/* 결과 페이지 */}
-            <Route path="/resultList" component={ResultListPage} />
 
             {/* 문제 페이지(연습모드 진입) */}
             <Route path="/practice" component={PracticePage} />
@@ -255,17 +156,115 @@ function App() {
             {/* <Route exact path="/register" element={RegisterPage()} /> */}
           </Switch>
         </Content>
-        {/* 푸터 */}
-        <footer className="footer">
-          <h2 className="J6IX">J6IX</h2>
-          <h3 className="textDark">SSAFY 공통 프로젝트</h3>
-          <p className="textDark">이용약관</p>
-          <p className="textDark">개인정보 처리방침</p>
-          <p className="textDark">쿠키 설정</p>
-          <p></p>
-        </footer>
       </Layout>
-    </RecoilRoot>
+      // </RecoilRoot>
+    );
+
+  // 그 이외의 경우에는 헤더 표시
+  return (
+    // <RecoilRoot>
+    <Layout>
+      {/* 헤더(상단 네비게이션 바) */}
+      <Header
+        style={{
+          backgroundColor: "#17181c",
+        }}>
+        <Row gutter={16} justify="space-between">
+          {/* 로고 표시 구역 */}
+          <Col span={4} align="center">
+            <Link to="/">
+              <img src={alcol} alt="logo" className="logo" />
+            </Link>
+          </Col>
+
+          {/* 메뉴(Problem, Ranking, Battle) */}
+          <Col xs={0} md={6} lg={11} xl={12} justify="center" align="middle">
+            <Link to="/practice" className="textDark menus">
+              Problem
+            </Link>
+            <Link to="/ranking" className="textDark menus">
+              Ranking
+            </Link>
+            <Link to="/mode" className="textDark menus">
+              Battle
+            </Link>
+          </Col>
+
+          {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
+          <Col xs={8} lg={4} justify="center">
+            <LoginTag />
+          </Col>
+        </Row>
+      </Header>
+
+      {/* 본문(임시) */}
+      <hr style={{ width: "100%", background: "#e9e9e9" }}></hr>
+      <Content
+        style={{
+          backgroundColor: "#16171B",
+        }}>
+        {/* 라우터 태그 목록 */}
+        <Switch>
+          {/* 메인 페이지 */}
+          <Route exact path="/" component={HomePage} />
+
+          {/* 로그인 페이지 */}
+          <Route exact path="/login" component={LoginPage} />
+
+          {/* 모드 선택 페이지 */}
+          <Route path="/mode" component={ModeSelectPage} />
+
+          {/* 매칭 페이지 */}
+          <Route path="/match" component={MatchingPage} />
+
+          {/* 밴픽 페이지 */}
+          <Route path="/ban" component={BanPage} />
+
+          {/* 결과 페이지 */}
+          <Route path="/result" component={ResultPage} />
+
+          {/* 결과 페이지 */}
+          <Route path="/resultList" component={ResultListPage} />
+
+          {/* 문제 페이지(연습모드 진입) */}
+          <Route path="/practice" component={PracticePage} />
+
+          {/* 랭킹 조회 페이지 */}
+          <Route path="/ranking" component={Ranking} />
+
+          {/* 회원가입 페이지 */}
+          <Route path="/register" exact={true} component={RegisterPage} />
+
+          {/* 회원정보 수정 페이지 */}
+          <Route path="/modify" exact={true} component={ModifyPage} />
+
+          {/* 배틀 문제 푸는 페이지 */}
+          <Route path="/solve" exact={true} component={SolvingPage} />
+
+          {/* 혼자 문제 푸는 페이지 */}
+          <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
+
+          {/* 마이페이지(사용자 정보 열람 페이지) */}
+          <Route path="/mypage/:username" exact={true} component={Mypage} />
+
+          {/* 지난 시즌 정보 조회 페이지 */}
+          <Route path="/season/:username" exact={true} component={LastSeason} />
+
+          {/* 404 페이지 */}
+          <Route component={NotFound404} />
+          {/* <Route exact path="/register" element={RegisterPage()} /> */}
+        </Switch>
+      </Content>
+      {/* 푸터 */}
+      <footer className="footer">
+        <h2 className="J6IX">J6IX</h2>
+        <h3 className="textDark">SSAFY 공통 프로젝트</h3>
+        <p className="textDark">이용약관</p>
+        <p className="textDark">개인정보 처리방침</p>
+        <p className="textDark">쿠키 설정</p>
+        <p></p>
+      </footer>
+    </Layout>
   );
 }
 
