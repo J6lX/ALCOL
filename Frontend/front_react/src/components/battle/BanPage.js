@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Row } from "antd";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
@@ -104,9 +104,12 @@ function App() {
 
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
-    console.log("저장한 문제는:" + choose);
     setChoose(category);
   };
+
+  useEffect(() => {
+    console.log("useEffect가 불러졌다..!!!" + choose);
+  }, [choose]);
 
   const problems = [
     {
