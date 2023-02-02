@@ -1,7 +1,7 @@
 # 🏛 ALCOL - 알고리즘 대결 사이트
 
 
-## ALCOL 링크 : [http://i8b303.p.ssafy.io] (http://i8b303.p.ssafy.io)
+## ALCOL 링크 : [http://i8b303.p.ssafy.io]
 
 
 ## 프로젝트 진행 기간
@@ -128,6 +128,6 @@ service
 - [와이어프레임](https://www.figma.com/file/VHlwCDfrbRYxbhY3gxLO5r/UI?t=TQoZZjmzCwyifvzN-6)
 - [컨벤션](https://blushing-friend-fae.notion.site/e3b2e67c015b44bbabbde02d8a32ef0a)
 - [API](https://blushing-friend-fae.notion.site/API-84eacb82e6614561a3456764761e8fe1)
-- [ERD](.https://blushing-friend-fae.notion.site/ERD-a3f7f107e10d48f2ad4509eb8eb11819)
+- [ERD](https://blushing-friend-fae.notion.site/ERD-a3f7f107e10d48f2ad4509eb8eb11819)
 - [회의록](https://blushing-friend-fae.notion.site/TEAM-J6IX-4319b50de1bf4cb58222b889304ccef4)
 - [시스템기술서](https://blushing-friend-fae.notion.site/735840ca0f694c30b366eda4774e31f7)
