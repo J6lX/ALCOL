@@ -11,7 +11,8 @@ SSAFY 8기 2학기 공통프로젝트 - ALCOL
 </br>
 ## 🕹Sub-PJT Ⅲ
 ### 서비스별 데이터베이스 분리
-- ###User Service
+---
+- ### User Service
     - 사용자(USER_TB)
     - 사용자 탈퇴(USER_LEFT_TB)
     - 친구(FRIEND_TB)
@@ -31,6 +32,7 @@ SSAFY 8기 2학기 공통프로젝트 - ALCOL
     - 과거 시즌 로그(PAST_SEASON_LOG_TB)
 - ### Rank Service
 - ### Match Service
+</br>
 ### ERD
 ![Untitled](/uploads/b4f22590820e7d6cf8a0d4f343a8fb8f/Untitled.png)
 </br>
