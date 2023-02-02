@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,17 +30,14 @@ public class UserController
 {
     private final UserService userService;
     private final Environment env;
-    private final RestTemplate restTemplate;
 
     public UserController(
             UserService userService,
             Environment env,
-            RestTemplate restTemplate
     )
     {
         this.userService = userService;
         this.env = env;
-        this.restTemplate = restTemplate;
     }
 
     @GetMapping("/hello")
