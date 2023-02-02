@@ -107,8 +107,20 @@ function App() {
     setChoose(category);
   };
 
+  function matchProblemAndChoose() {
+    if (choose === "1") {
+      console.log("선택한 문제 번호는:" + problems[0].problem_no);
+      setChoose(problems[0].problem_no);
+    } else if (choose === "2") {
+      console.log("선택한 문제 번호는:" + problems[1].problem_no);
+      setChoose(problems[1].problem_no);
+    } else if (choose === "3") {
+      console.log("선택한 문제 번호는:" + problems[2].problem_no);
+      setChoose(problems[2].problem_no);
+    }
+  }
   useEffect(() => {
-    console.log("useEffect가 불러졌다..!!!" + choose);
+    matchProblemAndChoose();
   }, [choose]);
 
   const problems = [
