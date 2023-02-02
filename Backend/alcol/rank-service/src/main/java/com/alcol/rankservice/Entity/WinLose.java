@@ -11,6 +11,6 @@ public class WinLose
 {
     private String userId;
     private String mode;
-    private int winLose;
+    private int winLoseResult;
 
 }

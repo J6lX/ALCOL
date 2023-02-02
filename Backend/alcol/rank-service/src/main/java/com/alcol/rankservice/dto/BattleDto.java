@@ -20,7 +20,6 @@ public class BattleDto {
         private int win_2;
     }
 
-    @Getter
     @Builder
     public static class Response
     {

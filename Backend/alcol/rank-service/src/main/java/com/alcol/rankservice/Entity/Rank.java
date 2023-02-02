@@ -8,6 +8,7 @@ import lombok.Getter;
 public class Rank
 {
     @Builder
+    @Getter
     public static class RankingData
     {
         private String nickname;
@@ -15,6 +16,8 @@ public class Rank
         private int level;
         private String tier;
         private int mmr;
+        private int winCnt;
+        private int loseCnt;
         private long winningRate;
     }
 
