@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
+// import { RecoilRoot } from "recoil";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
@@ -10,6 +11,8 @@ import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
+import SolvingPage from "./components/battle/SolvingPage";
+import PracticeSolvingPage from "./components/battle/PracticeSolvingPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
 import NotFound404 from "./components/NotFound404";
@@ -27,8 +30,11 @@ const { Header, Content } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
-  // isLoggedIn === 로그인 상태 체크
+  // isLoggedIn === 로그인 상태 체크(임시 변수)
   const isLoggedIn = true;
+  // 로그인 페이지에서 세션에 인증 정보를 저장한 후sessionStorage 또는 localStorage에서 사용자 인증 여부 가져오기
+  console.log(sessionStorage);
+  console.log(localStorage);
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
@@ -93,7 +99,9 @@ function App() {
   if (
     locationNow.pathname === "/match" ||
     locationNow.pathname === "/ban" ||
-    locationNow.pathname === "/mode"
+    locationNow.pathname === "/mode" ||
+    locationNow.pathname === "/solve" ||
+    locationNow.pathname === "/solveprac"
   )
     return (
       <Layout>
@@ -129,6 +137,12 @@ function App() {
 
             {/* 회원정보 수정 페이지 */}
             <Route path="/modify" exact={true} component={ModifyPage} />
+
+            {/* 배틀 문제 푸는 페이지 */}
+            <Route path="/solve" exact={true} component={SolvingPage} />
+
+            {/* 혼자 문제 푸는 페이지 */}
+            <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
             <Route path="/mypage/:username" exact={true} component={Mypage} />
@@ -232,6 +246,12 @@ function App() {
           <Route path="/modify" exact={true} component={ModifyPage} />
           {/* 회원정보 수정 페이지 */}
           <Route path="/modify" exact={true} component={ModifyPage} />
+
+          {/* 배틀 문제 푸는 페이지 */}
+          <Route path="/solve" exact={true} component={SolvingPage} />
+
+          {/* 혼자 문제 푸는 페이지 */}
+          <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
 
           {/* 마이페이지(사용자 정보 열람 페이지) */}
           <Route path="/mypage/:username" exact={true} component={Mypage} />

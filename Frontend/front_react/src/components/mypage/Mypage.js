@@ -1,10 +1,10 @@
 import Container from "react-bootstrap/Container";
-import { Row, Col } from "antd";
+import { Row, Col, Table } from "antd";
 import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { ResponsivePie } from "@nivo/pie";
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -14,10 +14,146 @@ const userData = {
     friends: {}, // 친구 목록
   },
   tester: {
-    name: "Tester",
+    name: "tester",
     battleRec: {},
     friends: {},
   },
+};
+
+// 매치 기록 정렬 컬럼
+const matchCol = [
+  {
+    title: "결과",
+    dataIndex: "name",
+    key: "name",
+    render: (text) => <p>{text}</p>,
+  },
+  {
+    title: "플레이 모드",
+    dataIndex: "mode",
+    key: "mode",
+  },
+  {
+    title: "상대 플레이어",
+    dataIndex: "address",
+    key: "address",
+  },
+  {
+    title: "문제 난이도",
+    dataIndex: "difficulty",
+    key: "difficulty",
+  },
+  {
+    title: "기록일",
+    dataIndex: "matchDate",
+    key: "matchDate",
+  },
+];
+
+// 매치 기록 데이터
+const matchData = [
+  {
+    key: "1",
+    name: "John Brown",
+    mode: 32,
+    address: "New York No. 1 Lake Park",
+    difficulty: "Gold",
+    matchDate: "1일 전",
+  },
+  {
+    key: "2",
+    name: "Jim Green",
+    mode: 42,
+    address: "London No. 1 Lake Park",
+    difficulty: "Gold",
+    matchDate: "1일 전",
+  },
+  {
+    key: "3",
+    name: "Joe Black",
+    mode: 32,
+    address: "Sidney No. 1 Lake Park",
+    difficulty: "Gold",
+    matchDate: "1일 전",
+  },
+];
+
+// 최근 20전 표시 데이터(임시)
+const recentRecord = [
+  {
+    id: "win",
+    label: "win",
+    value: 13,
+    color: "#5cfdfd",
+  },
+  {
+    id: "lose",
+    label: "lose",
+    value: 7,
+    color: "#FDE14B",
+  },
+];
+
+// 그래프 중앙에 표시할 텍스트 레이블
+const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+  let total = 0;
+  dataWithArc.forEach((datum) => {
+    total += datum.value;
+  });
+
+  const win = recentRecord[0].value;
+  const lose = recentRecord[1].value;
+  const winrate = Math.round((win / total) * 100);
+  // const innerText = {
+  //   0: `최근 ${win+lose}전\n ${win}승 ${lose}패\n (${winrate}%)`
+  // }
+
+  return (
+    <>
+      <text
+        x={centerX}
+        y={centerY - 10}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="white"
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "18px",
+          fontWeight: 600,
+          whiteSpace: "pre-line",
+        }}>
+        최근 {total} 전
+      </text>
+      <text
+        x={centerX}
+        y={centerY + 10}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="white"
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "14px",
+          fontWeight: 400,
+          whiteSpace: "pre-line",
+        }}>
+        {win}승 {lose}패
+      </text>
+      <text
+        x={centerX}
+        y={centerY + 28}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="#fde14b"
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "12px",
+          fontWeight: 300,
+          whiteSpace: "pre-line",
+        }}>
+        ({winrate}%)
+      </text>
+    </>
+  );
 };
 
 function Mypage() {
@@ -65,14 +201,14 @@ function Mypage() {
               <Col xs={16} lg={18} className="textHighlight block">
                 <Row>
                   {/* 티어 정보 표시 블록 */}
-                  <Col span={18} justify="center" align="middle">
+                  <Col span={24} justify="center" align="middle">
                     <Row justify="center">
                       {/* 스피드전 티어 뱃지 */}
-                      <Col>
+                      <Col span={6} justify="center">
                         <img src={tempImg} alt="프사" className="userImg"></img>
                       </Col>
                       {/* 최적화전 티어 뱃지 */}
-                      <Col>
+                      <Col span={6} justify="center">
                         <img src={tempImg} alt="프사" className="userImg"></img>
                       </Col>
                     </Row>
@@ -95,7 +231,11 @@ function Mypage() {
                 style={{
                   margin: "10px",
                 }}>
-                <Row justify="center">
+                <Row
+                  justify="center"
+                  style={{
+                    paddingBottom: "15px",
+                  }}>
                   {/* 친구 정보 표시 */}
                   <Col xs={24} className="textHighlight miniBlock">
                     <p>친구 정보</p>
@@ -112,8 +252,8 @@ function Mypage() {
                     <p className="textHighlight">시즌 기록 없음</p>
                     <hr />
                     {/* 지난 시즌 이력 조회 링크 */}
-                    <Link to="/season" params={{ username: profile }}>
-                      지난 시즌 조회
+                    <Link to={`/season/${userInfo.username}`}>
+                      <p className="textHighlight">지난 시즌 조회</p>
                     </Link>
                   </Col>
                 </Row>
@@ -134,12 +274,45 @@ function Mypage() {
                   </Col>
                 </Row>
 
-                {/* 그래프 블록(최근 20전) */}
-                <Row justify="center">
-                  <img className="winrateCircle" src={tempImg} alt="원형 그래프"></img>
+                {/* 도넛 그래프 블록(최근 20전) */}
+                <Row justify="center" style={{ height: "270px" }}>
+                  <ResponsivePie
+                    data={recentRecord}
+                    margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+                    innerRadius={0.5}
+                    padAngle={0.7}
+                    cornerRadius={3}
+                    activeOuterRadiusOffset={8}
+                    colors={["#5cfdfd", "#FDE14B"]}
+                    colorBy="index"
+                    borderWidth={1}
+                    borderColor={{ theme: "background" }}
+                    enableArcLabels={false}
+                    enableArcLinkLabels={false}
+                    arcLabelsSkipAngle={10}
+                    isInteractive={false}
+                    layers={["arcs", "arcLabels", "arcLinkLabels", "legends", CenteredMetric]}
+                    fill={[
+                      {
+                        match: {
+                          id: "win",
+                        },
+                      },
+                      {
+                        match: {
+                          id: "lose",
+                        },
+                      },
+                    ]}
+                    legends={[]}
+                  />
                 </Row>
                 {/* 전적 표시 블록 */}
-                <p className="text">전적 정보가 없습니다.</p>
+                <Row>
+                  <Col span={24}>
+                    <Table theme="dark" columns={matchCol} dataSource={matchData} />
+                  </Col>
+                </Row>
               </Col>
             </Row>
           </Container>
