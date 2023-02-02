@@ -287,17 +287,11 @@ function Mypage() {
                     colorBy="index"
                     borderWidth={1}
                     borderColor={{ theme: "background" }}
+                    enableArcLabels={false}
                     enableArcLinkLabels={false}
-                    arcLinkLabelsSkipAngle={10}
-                    arcLinkLabelsTextColor="#333333"
-                    arcLinkLabelsThickness={2}
-                    arcLinkLabelsColor={{ from: "color" }}
                     arcLabelsSkipAngle={10}
+                    isInteractive={false}
                     layers={["arcs", "arcLabels", "arcLinkLabels", "legends", CenteredMetric]}
-                    arcLabelsTextColor={{
-                      from: "color",
-                      modifiers: [["darker", 2]],
-                    }}
                     fill={[
                       {
                         match: {
