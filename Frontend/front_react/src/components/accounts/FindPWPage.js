@@ -1,6 +1,6 @@
 import React from "react";
 import "./FindPWPage.css";
-import { Button, Form, Input, Avatar, Col, Row } from "antd";
+import { Button, Form, Input, Col, Row } from "antd";
 
 function TextTitle({ text }) {
   return <h1 style={{ color: "white", textAlign: "center", marginBottom: 20 }}>{text}</h1>;

@@ -7,6 +7,7 @@ import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
+import "animate.css";
 
 const MainPage = () => {
   const changeColor = (event) => {
@@ -29,6 +30,7 @@ const MainPage = () => {
         style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "1vw", zIndex: "2" }}>
         <Link to="/mode">
           <Button
+            class="animate__animated animate__bounce"
             style={{
               width: "100%",
               height: "100%",
