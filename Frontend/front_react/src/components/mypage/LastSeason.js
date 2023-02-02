@@ -4,26 +4,13 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 // 현재 로그인한 사용자 정보
-const userData = {
-  dongjun: {
-    name: "Dongjun", // 이름
-    battleRec: {}, // 전적
-    friends: {}, // 친구 목록
-  },
-  tester: {
-    name: "Tester",
-    battleRec: {},
-    friends: {},
-  },
-};
 
 function Mypage() {
   const userInfo = useParams();
-  const profile = userData[userInfo.username];
 
   return (
     <div>
-      {profile ? (
+      {userInfo ? (
         <div
           className="pageBody"
           style={{
@@ -32,7 +19,7 @@ function Mypage() {
           }}>
           <Row justify="center">
             <Col span={21}>
-              <h1>지난 시즌 이력</h1>
+              <h1>{userInfo.username}님의 지난 시즌 이력</h1>
             </Col>
           </Row>
           <Row justify="center">
