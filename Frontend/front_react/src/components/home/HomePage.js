@@ -9,6 +9,14 @@ import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 
 const MainPage = () => {
+  const changeColor = (event) => {
+    event.target.style.color = "#FEF15D";
+  };
+
+  const returnColor = (event) => {
+    event.target.style.color = "white";
+  };
+
   return (
     <div id="MainPage" className="fullmiddle">
       <video src={video} loop autoPlay muted className="bgvideo" style={{ zIndex: "1" }}></video>
@@ -36,7 +44,11 @@ const MainPage = () => {
         </Link>
         <ScrollLink to="Guide1" spy={true} smooth={true}>
           <Button type="text" block style={{ marginTop: "5px" }}>
-            <p className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
+            <p
+              className="NanumSquare"
+              onMouseEnter={changeColor}
+              onMouseLeave={returnColor}
+              style={{ fontSize: "1vw", color: "white" }}>
               배틀 방법이 궁금하신가요?
             </p>
           </Button>

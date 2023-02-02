@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Col, Row } from "antd";
 import "./ModeSelectPage.css";
 import iconSpeed from "../../assets/speed_mode_icon.png";
@@ -112,7 +113,7 @@ function SelectLanguage({ setLanguage }) {
 function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setMode }) {
   return (
     <div>
-      <div className="battle_mode_box" onClick={() => setMode("gameMode")}>
+      <div className="battle_mode_box" onClick={() => setMode(gameMode)}>
         <img src={gameModeIcon} alt="mode icon" className="img_mode" />
         <div className="text_Mode">{gameMode}</div>
         <div className="battle_info_box">
@@ -152,11 +153,32 @@ function FixedText() {
 
 function App() {
   const [mode, setMode] = React.useState("-1");
-  // const [language, setLanguage] = React.useState("-1");
+  const [language, setLanguage] = React.useState("-1");
+  const history = useHistory();
+
+  function handleUseHistory() {
+    history.push("/match");
+  }
+
+  useEffect(() => {
+    console.log("모드 선택 완료! mode:" + mode);
+  }, [mode]);
+
+  useEffect(() => {
+    console.log("언어 선택 완료! language:" + language);
+    if (language !== "-1") {
+      handleUseHistory();
+    }
+  }, [language]);
+
   return (
     <div className="battle_background">
       <UserInfo />
-      {mode === "-1" ? <SelectMode setMode={setMode} /> : <SelectLanguage />}
+      {mode === "-1" ? (
+        <SelectMode setMode={setMode} />
+      ) : (
+        <SelectLanguage setLanguage={setLanguage} />
+      )}
       <FixedText />
     </div>
   );
