@@ -46,6 +46,7 @@ SSAFY 8기 2학기 공통프로젝트 - ALCOL
 
 
 ### ERD
+---
 ![Untitled](/uploads/b4f22590820e7d6cf8a0d4f343a8fb8f/Untitled.png)
 </br>
 
