@@ -19,24 +19,9 @@ public class LogController
         this.logService = logService;
     }
 
-    // RestTemplate 을 통한 서비스 간 호출 테스트
-    @PostMapping("/getLog")
-    public List<String> getLog(@RequestParam(value="param") String plusData)
+    @PostMapping("/getLevelAndTier")
+    public List<String> getLevelAndTier(@RequestParam(value="userId") String userId)
     {
-        log.info("user-service -> log-service 호출 완료!!");
-        log.info("log-service 로 전달된 plusData : " + plusData);
-        List<String> logs = new ArrayList<>();
-        for (int i = 1; i <= 5; i++)
-        {
-            logs.add("Log data " + i);
-        }
-        logs.add(plusData);
-        return logs;
-    }
-
-    @PostMapping("/getLevelAndNickname")
-    public List<String> getLevelAndNickname(@RequestParam(value="userId") String userId)
-    {
-        return logService.getLevelAndNickname(userId);
+        return logService.getLevelAndTier(userId);
     }
 }
