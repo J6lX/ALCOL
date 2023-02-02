@@ -27,8 +27,8 @@ public class UserDto
     {
         private String nickname;
         private String level;
-        private String tier;
-        private String originalFileName;
+        private String speedTier;
+        private String optimizationTier;
         private String storedFileName;
     }
 
