@@ -3,6 +3,7 @@ import { Col, Row } from "antd";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
+import { useEffect } from "react";
 
 function UserInfo() {
   return (
@@ -65,17 +66,19 @@ function Top() {
 //   return <div>{problem.problem_category.problem_cat[0]}</div>;
 // }
 
-function Mid({ onClick }) {
+function Mid({ problems, onClick }) {
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
-          {/* {problems.map((problem, index) => (
-            <Category problem={problem} key={index} />
-          ))} */}
-          {/* <Categorys problem={problems} /> */}
+          {/* {
+            for(const key in Object.keys({problems}))
+            {
+              console.log(problems[key].problem_category)
+            }
+          } */}
         </div>
       </Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "2")}>
@@ -114,35 +117,37 @@ function Bottom() {
   );
 }
 
+function SetChoose({ selected }) {
+  useEffect(() => {
+    setInterval(() => {
+      console.log(selected);
+    });
+  }, [selected]);
+
+  return <div>내가 리턴하는 값은 "{selected}"</div>;
+}
+
 function App() {
   const [choose, setChoose] = React.useState("-1");
 
   const onClick = (event, category) => {
-    setChoose(category);
     console.log("선택한 문제는:" + category);
     console.log("저장한 문제는:" + choose);
+    setChoose(category).then((respose) => console.log("선택한 값이 저장되었나요?:" + respose));
   };
 
   const problems = [
     {
       problem_no: 1001,
-      problem_category: [
-        { problem_cat: "구현" },
-        { problem_cat: "그래프 이론" },
-        { problem_cat: "그래프 탐색" },
-      ],
+      problem_category: ["구현", "그래프 이론", "그래프 탐색"],
     },
     {
       problem_no: 1002,
-      problem_category: [{ problem_cat: "수학" }, { problem_cat: "브르투포스 알고리즘" }],
+      problem_category: ["수학", "브르투포스 알고리즘"],
     },
     {
       problem_no: 1003,
-      problem_category: [
-        { problem_cat: "다이나믹 프로그래밍" },
-        { problem_cat: "비트 마스킹" },
-        { problem_cat: "최대 유량" },
-      ],
+      problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
     },
   ];
 
