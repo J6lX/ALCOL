@@ -50,6 +50,10 @@
   border: 2px solid #ffffff;
 }
 
+.ban_algo_box:hover {
+  background-color: rgba(161, 161, 161, 0.6);
+}
+
 .ban_player_info {
   width: 100%;
   height: 80px;
