@@ -127,6 +127,8 @@ function SetChoose({ selected }) {
   return <div>내가 리턴하는 값은 "{selected}"</div>;
 }
 
+SetChoose("이 줄은 합칠 때 지워주세요");
+
 function App() {
   const [choose, setChoose] = React.useState("-1");
 
