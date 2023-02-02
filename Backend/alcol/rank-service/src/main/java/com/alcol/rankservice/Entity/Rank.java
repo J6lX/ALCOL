@@ -25,9 +25,10 @@ public class Rank
     public static class ReceivedUserData
     {
         private String nickname;
-        private String profile_pic;
+        private String stored_file_name;
         private int level;
-        private String tier;
+        private String speed_tier;
+        private String optimization_tier;
     }
 
 }

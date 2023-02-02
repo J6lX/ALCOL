@@ -1,5 +1,6 @@
 package com.alcol.rankservice.service;
 
+import com.alcol.rankservice.entity.Rank;
 import com.alcol.rankservice.entity.WinLose;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,10 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +22,11 @@ public class BattleResultServiceImpl implements BattleResultService
     private HashOperations<String, String, Long> winLoseCount;
     private HashOperations<String, String, String> userInfo;
     private ZSetOperations<String, Object> ranking;
+    private final RestTemplate restTemplate;
 
     /**
      * @implSpec 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
+     * Hash 사용
      * */
     public String recordCnt(WinLose winLose)
     {
@@ -45,7 +52,7 @@ public class BattleResultServiceImpl implements BattleResultService
     }
 
     /**
-     * @implSpec 랭킹집계 value에 필요한 데이터를 user service에 요청하는 메서드
+     * @implSpec 배틀이 끝난 뒤 redis에 유저별 랭킹 기록하는 메서드
      * Sorted set 사용
      * */
     public String recordRank(String mode, int mmr, String userId)
@@ -59,4 +66,20 @@ public class BattleResultServiceImpl implements BattleResultService
 
         return "OK";
     }
+    /**
+     * @implSpec 배틀이 끝난 뒤 redis에 랭킹에 필요한 사용자 데이터 저장하는 메서드
+     * Hash 사용
+     * */
+    public String recordUserData(String userId){
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", userId);
+//        String url = "http://localhost:9000/user-service/getUserInfo";
+        String url = "http://localhost:8080";
+        Rank.ReceivedUserData userInfo = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
+        System.out.println(userInfo.getOptimization_tier());
+
+        return "OKDK";
+    }
+
 }

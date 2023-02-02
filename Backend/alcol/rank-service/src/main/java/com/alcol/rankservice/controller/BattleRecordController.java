@@ -42,6 +42,8 @@ public class BattleRecordController
  */
         battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_1(), battleResult.getUser_id_1());
         battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_2(), battleResult.getUser_id_2());
+        battleResultService.recordUserData(battleResult.getUser_id_1());
+
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 }
