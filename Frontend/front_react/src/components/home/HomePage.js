@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import { Link as ScrollLink } from "react-scroll";
+import { Link as ScrollLink } from "react-scroll";
 import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
@@ -34,13 +34,13 @@ const MainPage = () => {
             </p>
           </Button>
         </Link>
-        {/* <ScrollLink to="Guide1" spy={true} smooth={true}>
+        <ScrollLink to="Guide1" spy={true} smooth={true}>
           <Button type="text" block style={{ marginTop: "5px" }}>
             <p className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
               배틀 방법이 궁금하신가요?
             </p>
           </Button>
-        </ScrollLink> */}
+        </ScrollLink>
       </div>
     </div>
   );
