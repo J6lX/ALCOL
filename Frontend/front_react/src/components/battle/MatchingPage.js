@@ -25,7 +25,7 @@ function App() {
   return (
     <div className="matching_background">
       <UserInfo />
-      <div style={{ color: "white", textAlign: "center", marginTop: "220px" }}>
+      <div style={{ color: "white", textAlign: "center", marginTop: "25vh" }}>
         상대를 찾는중..
         <div class="wrapper" style={{ marginTop: "-30px" }}>
           <svg
