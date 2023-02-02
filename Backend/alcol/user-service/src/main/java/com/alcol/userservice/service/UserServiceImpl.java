@@ -160,7 +160,7 @@ public class UserServiceImpl implements UserService
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
-        bodyData.add("userId", userId);
+        bodyData.add("user_id", userId);
         String url = "http://localhost:9005/log-service/getLevelAndTier";
 
         // 여기는 유저 서비스!!!
