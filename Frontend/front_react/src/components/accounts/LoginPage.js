@@ -10,44 +10,39 @@ function LoginPage() {
   // 성공 시 localstorage에 토큰 발급
   // 아니면 에러 알림, 로그인 입력창 지워주기
 
-  // 기존 코드
-  // const onFinish = (values) => {
-  //   console.log("Received values of form: ", values);
-  // };
-
   // 로그인 요청 전송
   const onFinish = (values) => {
-    //-----이미지 처리-----
-    //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 서버로 요청 보냅니다.
-    const formData = new FormData();
-    formData.append("file");
-    console.log("보낼 이미지:", formData);
-    //-----이미지 처리 끝-----
-    // setValues({ ...values });
-    // console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
-
     // 백엔드에 보낼 데이터 구성
     const userData = JSON.stringify({
       email: values.email,
       pwd: values.pwd,
     });
-    formData.append("signUpDto", new Blob([userData], { type: "application/json" }));
 
     // axios 통신 진행
     axios
-      .post("http://localhost:8000/user-service/", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      .post("http://localhost:8000/user-service/login", userData)
+      // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
-        if (response.data.customCode === "000") {
-          alert("회원가입 성공");
+        if (response.data.customCode === "006") {
+          console.log("로그인 성공");
+          alert(response.data.description);
+          //access-token, refresh-token, userId 저장
+          // 이 데이터들을 리코일에 저장하면 됨
+          const accessToken = response.data.bodyData.access_token;
+          const refreshToken = response.data.bodyData.refresh_token;
+          const userId = response.data.bodyData.user_id;
+          console.log("access_token: " + accessToken);
+          console.log("refresh_token: " + refreshToken);
+          console.log("user_id: " + userId);
         }
       })
+      //로그인 실패 시
       .catch((error) => {
-        if (error.response.data.customCode === "001") {
-          alert("이메일 중복");
-        } else if (error.response.data.customCode === "002") {
-          alert("닉네임 중복");
+        if (error.response.data.customCode === "005") {
+          console.log("로그인 실패");
+
+          // 로그인 실패 시 표시하는 내용
+          alert(error.response.data.description);
         }
       });
   };
@@ -96,7 +91,7 @@ function LoginPage() {
                 />
               </Form.Item>
               <Form.Item
-                name="password"
+                name="pwd"
                 rules={[{ required: true, message: "비밀번호를 입력해주세요." }]}
                 className="inputwidth">
                 <Input

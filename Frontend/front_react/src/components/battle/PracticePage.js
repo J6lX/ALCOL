@@ -16,10 +16,38 @@ const darkTheme = createTheme({
 
 // 연습 문제 구분 설명
 const problemLabel = [
-  { field: "id", headerName: "문제 번호", width: 200, align: "center", headerAlign: "center" },
-  { field: "name", headerName: "문제 이름", width: 340, align: "center", headerAlign: "center" },
-  { field: "type", headerName: "문제 유형", width: 220, align: "center", headerAlign: "center" },
-  { field: "tier", headerName: "난이도", width: 190, align: "center", headerAlign: "center" },
+  {
+    field: "id",
+    headerName: "문제 번호",
+    width: 200,
+    flex: 0.5,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "name",
+    headerName: "문제 이름",
+    width: 320,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "type",
+    headerName: "문제 유형",
+    width: 210,
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "tier",
+    headerName: "난이도",
+    width: 180,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
 ];
 
 // 연습 문제 데이터
@@ -64,6 +92,7 @@ function Ranking() {
             </Col>
             <Col
               style={{
+                marginLeft: "5px",
                 padding: "5px",
               }}
               xs={0}
@@ -83,7 +112,8 @@ function Ranking() {
                   disableColumnSelector
                   disableColumnMenu
                   disableColumnFilter
-                  autoHeight
+                  autoHeight={true}
+                  autoPageSize={true}
                   hideFooter={true}
                   style={{
                     borderRadius: "5%",
@@ -91,7 +121,7 @@ function Ranking() {
                 />
                 {/* 페이지네이션 */}
                 <Pagination
-                  count={10}
+                  count={5}
                   style={{
                     display: "flex",
                     justifyContent: "center",
