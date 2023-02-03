@@ -42,5 +42,6 @@ public class BattleRecordController
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
+    
 
 }

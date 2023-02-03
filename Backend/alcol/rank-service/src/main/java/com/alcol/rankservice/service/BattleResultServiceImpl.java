@@ -67,6 +67,7 @@ public class BattleResultServiceImpl implements BattleResultService
         
         // redis ranking data update
         ranking.add(zKey, zMember, zScore);
+
 //        ranking.add("speed", "1", 1200);
 //        ranking.add("speed", "2", 1280);
 //        ranking.add("speed", "3", 1170);
