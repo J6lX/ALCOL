@@ -71,6 +71,11 @@ body {
   text-decoration: solid white;
 }
 
+/* 페이지네이션 가운데 고정 */
+.css-n830jf-MuiDataGrid-footerContainer {
+  justify-content: center !important;
+}
+
 h1 {
   color: white;
   position: relative;
