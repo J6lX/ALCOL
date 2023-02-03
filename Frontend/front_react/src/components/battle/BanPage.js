@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "antd";
-// import $ from 'jq'
+import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
@@ -84,6 +84,16 @@ function Mid({ problems, onClick }) {
     </Row>
   );
 }
+
+$(".ban_algo_box").click(function () {
+  if ($(this).hasClass("active")) {
+    $(".ban_algo_box").removeClass("active");
+  } else {
+    $(".ban_algo_box").removeClass("active");
+
+    $(this).addClass("active");
+  }
+});
 
 function Bottom() {
   return (
