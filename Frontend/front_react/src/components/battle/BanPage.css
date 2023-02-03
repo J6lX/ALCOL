@@ -51,7 +51,8 @@
 }
 
 .active {
-  background-color: rgba(161, 161, 161, 0.6);
+  box-shadow: 0 0 5px black;
+  border: 2px solid black;
 }
 
 .ban_algo_box:hover {
