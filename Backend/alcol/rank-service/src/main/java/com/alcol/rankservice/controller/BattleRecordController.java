@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 
@@ -22,7 +21,6 @@ import javax.validation.Valid;
 public class BattleRecordController
 {
     private final BattleResultService battleResultService;
-    private final RestTemplate restTemplate;
 
     @PostMapping("/BattleResult")
     public ResponseEntity<String> example(@Valid @RequestBody BattleDto.Request battleResult)
@@ -33,13 +31,6 @@ public class BattleRecordController
         winLose = new WinLose(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWin_2());
         battleResultService.recordCnt(winLose);
 
-/*
-        Map<String, String> map = new HashMap<>();
-        map.put("userId", battleResult.getUser_id_1());
-//        String url = "http://localhost:9000/user-service/getUserInfo";
-        String url = "http://localhost:8080";
-        Rank.ReceivedUserData userInfo = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
- */
         battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_1(), battleResult.getUser_id_1());
         battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_2(), battleResult.getUser_id_2());
         battleResultService.recordUserData(battleResult.getUser_id_1());
