@@ -1,16 +1,24 @@
 
 package com.alcol.matchservice.util;
 
+import com.alcol.matchservice.config.ServerEndpointConfigurator;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.server.standard.SpringConfigurator;
 
+import javax.inject.Inject;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -18,12 +26,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
-@ServerEndpoint(value="/websocket")
+@ServerEndpoint(value="/websocket", configurator = ServerEndpointConfigurator.class)
 public class WebSocket {
-
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private RestTemplate restTemplate;
     private ZSetOperations<String, Object> ranking;
     private int mmr;
     private static Set<String> sessionSet = new HashSet<String>();
@@ -73,8 +83,10 @@ public class WebSocket {
      * 웹소켓 메시지(From Client) 수신하는 경우 호출
      */
     @OnMessage
-    public void handleMessage(String jsonMessage, Session session) throws ParseException, IOException {
-        if (session != null) {
+    public void handleMessage(String jsonMessage, Session session) throws ParseException, IOException
+    {
+        if (session != null)
+        {
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(jsonMessage);
             System.out.println(jsonMessage);
@@ -82,38 +94,72 @@ public class WebSocket {
             Object object = null;
             System.out.println(method + " 메세지 요청 받음");
             System.out.println("음 ?");
-            if (method.equals("init")) {
+            if (method.equals("init"))
+            {
                 System.out.println("이닛으로는 들어옴 ?");
                 String id = obj.get("id").toString();
                 String name = obj.get("name").toString();
                 String mode = obj.get("Mode").toString();
-//                String language = obj.get("Language").toString();
-                mmr = ranking.score("speed", id).intValue();
+                String language = obj.get("Language").toString();
+                System.out.println("redis : "+redisTemplate);
+                ranking = redisTemplate.opsForZSet();
+                try
+                {
+                    mmr = ranking.score("speed", name).intValue();
+                }
+                catch (Exception e)
+                {
+                    MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
+                    bodyData.add("user_id",name);
+                    bodyData.add("mode",mode);
+                    System.out.println("this is restTempalte : "+ restTemplate);
+                    String url = "http://localhost:9005/log-service/getLevelAndTier";
+                    ResponseEntity<List> MMRs = restTemplate.postForEntity(
+                            url,
+                            bodyData,
+                            List.class
+                    );
+                }
 //                handleClose(session);
+                System.out.println(mmr);
                 System.out.println("???여기서 터짐 ?");
 //                mmr = getMMR(id);
+//
+//                System.out.println(MMRs);
                 System.out.println(id +" "+ name+" "+ mode+" "+ mmr);
-                if (refreshMap.containsKey(id + "고객")) {
+                if (refreshMap.containsKey(id + "고객"))
+                {
                     LocalTime first = refreshMap.get(id + "고객");
                     LocalTime second = LocalTime.now();
-                    if (Duration.between(first, second).getSeconds() <= 1) {
+                    if (Duration.between(first, second).getSeconds() <= 1)
+                    {
                         sendMessageToAll("[고객/" + name + "] 님이 새로고침 하셨어요~~");
-                    } else {
+                    }
+                    else
+                    {
                         sendMessageToAll("[고객/" + name + "] 님이 다시 들어오셨어요~~");
                     }
                 }
 
                 System.out.println("유저 입장");
-//                getMMR(id);
-                User user = User.builder().id(id).name(name).mode(mode).mmr(mmr).build();
+                User user = User.builder().id(id).name(name).mode(mode).mmr(mmr).language(language).build();
 
                 userSet.add(id);
                 userMap.put(id, user);
                 sessionId2Obj.put(session.getId(), user);
-                for(int i=0; i< sessionMap.size(); i++){
-//                    System.out.println(i+"바퀴째");
-//                    System.out.println(sessionId2Obj.containsKey(i) && sessionId2Obj.get(i+"").mmr);
-                    if((sessionId2Obj.size()>1 && sessionId2Obj.containsKey(i+"")) &&((sessionId2Obj.get(i+"").mmr - 30 <= mmr) && (mmr <= sessionId2Obj.get(i+"").mmr + 30 )))
+                for(int i=0; i< sessionMap.size(); i++)
+                {
+//                    System.out.println("언어가 같은지?" + sessionId2Obj.get(i+"").language.equals(language));
+//                    System.out.println("모드가 같은지?" + sessionId2Obj.get(i+"").mode.equals(mode));
+                    if(
+                            (sessionId2Obj.size()>1 && sessionId2Obj.containsKey(i+"")) &&
+                            ((sessionId2Obj.get(i+"").mode.equals(mode)) &&
+                            (sessionId2Obj.get(i+"").language.equals(language))&&
+                            (
+                                    (sessionId2Obj.get(i+"").mmr - 30 <= mmr) &&
+                                    (mmr <= sessionId2Obj.get(i+"").mmr + 30 )
+                            )
+                    ))
                     {
                         System.out.println(sessionId2Obj.get(i+"").id);
                         System.out.println(id);
@@ -124,11 +170,14 @@ public class WebSocket {
                         }
                     }
                 }
-            } else if (method.equals("msg")) {
+            }
+            else if (method.equals("msg"))
+            {
                 String msg = obj.get("msg").toString();
                 StringBuilder sb = new StringBuilder();
                 object = sessionId2Obj.get(session.getId());
-                if (object instanceof User) {
+                if (object instanceof User)
+                {
                     String id = ((User) object).getId();
                     String name = userMap.get(id).getName();
                     sb.append("[유저/").append(name).append("]");
@@ -144,8 +193,10 @@ public class WebSocket {
      * 웹소켓 사용자 연결 해제하는 경우 호출
      */
     @OnClose
-    public void handleClose(Session session) {
-        if (session != null) {
+    public void handleClose(Session session)
+    {
+        if (session != null)
+        {
             String sessionId = session.getId();
             sessionSet.remove(sessionId);
 
@@ -169,11 +220,13 @@ public class WebSocket {
      * 웹소켓 에러 발생하는 경우 호출
      */
     @OnError
-    public void handleError(Throwable t) {
+    public void handleError(Throwable t)
+    {
         t.printStackTrace();
     }
 
-    public void printInfo() {
+    public void printInfo()
+    {
 
         System.out.println("sessionSet" + sessionSet);
         System.out.println("userSet" + userSet);
@@ -183,7 +236,8 @@ public class WebSocket {
         System.out.println("------------------------------");
     }
 
-    public Set<String> getSessionSet() {
+    public Set<String> getSessionSet()
+    {
         return this.sessionSet;
     }
 

@@ -14,7 +14,7 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
   redis:
-    host: 13.209.10.133
+    host: i8b303.p.ssafy.io
     port: 6000
 
 
