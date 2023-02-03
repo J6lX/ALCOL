@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "antd";
+import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
@@ -84,6 +85,16 @@ function Mid({ problems, onClick }) {
   );
 }
 
+$(".ban_algo_box").click(function () {
+  if ($(this).hasClass("active")) {
+    $(".ban_algo_box").removeClass("active");
+  } else {
+    $(".ban_algo_box").removeClass("active");
+
+    $(this).addClass("active");
+  }
+});
+
 function Bottom() {
   return (
     <Row style={{ marginTop: "60px" }}>
@@ -101,7 +112,6 @@ function Bottom() {
 
 function App() {
   const [choose, setChoose] = React.useState("-1");
-
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);
@@ -144,7 +154,6 @@ function App() {
       <Top />
       <Mid problems={problems} onClick={onClick} />
       <Bottom />
-      <div className="banButton">취소</div>
     </div>
   );
 }
