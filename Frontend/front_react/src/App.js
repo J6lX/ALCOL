@@ -9,8 +9,8 @@ import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
-// import ResultPage from "./components/battle/ResultPage";
-// import ResultListPage from "./components/battle/ResultListPage";
+import ResultPage from "./components/battle/ResultPage";
+import ResultListPage from "./components/battle/ResultListPage";
 import SolvingPage from "./components/battle/SolvingPage";
 import PracticeSolvingPage from "./components/battle/PracticeSolvingPage";
 import "./App.css";
@@ -64,6 +64,12 @@ function App() {
 
             {/* 배틀 문제 푸는 페이지 */}
             <Route path="/solve" exact={true} component={SolvingPage} />
+
+            {/* 배틀 결과 페이지 */}
+            <Route path="/result" exact={true} component={ResultPage} />
+
+            {/* 배틀 상세 결과 페이지 */}
+            <Route path="/resultList" exact={true} component={ResultListPage} />
 
             {/* 문제 페이지(연습모드 진입) */}
             <Route path="/practice" component={PracticePage} />

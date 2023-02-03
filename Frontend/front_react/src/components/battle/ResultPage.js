@@ -4,13 +4,46 @@ import img_victory from "../../assets/result_victory.png";
 import { Col, Row } from "antd";
 
 function App() {
+  const [result, setResult] = React.useState({
+    battle_result: "28:35",
+    get_exp: "300",
+    get_mmr: "25",
+  });
+
   return (
     <div className="result_background">
       <img src={img_victory} alt="result" className="result_title" />
       <div className="result_box">
-        <div className="result_content">결과1</div>
-        <div className="result_content">결과2</div>
-        <div className="result_content">결과3</div>
+        <div className="result_content">
+          <Row>
+            <Col className="result_text" span={10}>
+              걸린 시간
+            </Col>
+            <Col className="result_text" span={10}>
+              {result.battle_result}
+            </Col>
+          </Row>
+        </div>
+        <div className="result_content">
+          <Row>
+            <Col className="result_text" span={10}>
+              얻은 경험치
+            </Col>
+            <Col className="result_text" span={10}>
+              {result.get_exp}
+            </Col>
+          </Row>
+        </div>
+        <div className="result_content">
+          <Row>
+            <Col className="result_text" span={10}>
+              얻은 점수
+            </Col>
+            <Col className="result_text" span={10}>
+              {result.get_mmr}
+            </Col>
+          </Row>
+        </div>
       </div>
       <div>
         <Row justify="space-between" style={{ marginTop: "30px" }}>
