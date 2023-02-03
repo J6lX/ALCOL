@@ -156,23 +156,26 @@ public class UserServiceImpl implements UserService
     @Override
     public UserDto.UserInfoDto getUserInfo(String userId)
     {
-        // 닉네임, 사진 정보는 다 가져왔음
+        // 닉네임, 사진 정보는 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
         bodyData.add("user_id", userId);
         String url = "http://localhost:9005/log-service/getLevelAndTier";
 
-        // 여기는 유저 서비스!!!
-        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
-        // 인덱스 0 : 레벨
-        // 인덱스 1 : 스피드전 티어
-        // 인덱스 2 : 효율성전 티어
+        // user-service -> log-service
+        // log-service 에게 user_id 를 보내서
+        // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
         ResponseEntity<List> response = restTemplate.postForEntity(
                 url,
                 bodyData,
                 List.class
         );
+
+        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
+        // 인덱스 0 : 레벨
+        // 인덱스 1 : 스피드전 티어
+        // 인덱스 2 : 효율성전 티어
 
         return UserDto.UserInfoDto.builder()
                 .nickname(userEntity.getNickname())
