@@ -17,7 +17,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BattleResultServiceImpl implements BattleResultService
 {
-    @Autowired
     private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, Long> winLoseCount;
     private HashOperations<String, String, String> userInfo;
@@ -63,6 +62,14 @@ public class BattleResultServiceImpl implements BattleResultService
         String zMember = userId;
         int zScore = mmr;
         ranking.add(zKey, zMember, zScore);
+//        ranking.add("speed", "1", 1200);
+//        ranking.add("speed", "2", 1280);
+//        ranking.add("speed", "3", 1170);
+//        ranking.add("speed", "4", 1250);
+//        ranking.add("optimization", "1", 1200);
+//        ranking.add("optimization", "2", 1280);
+//        ranking.add("optimization", "3", 1170);
+//        ranking.add("optimization", "4", 1250);
 
         return "OK";
     }
@@ -77,8 +84,8 @@ public class BattleResultServiceImpl implements BattleResultService
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
-//        String url = "http://localhost:9000/user-service/getUserInfo";
-        String url = "http://localhost:8080";
+        String url = "http://localhost:8000/user-service/getUserInfo";
+//        String url = "http://localhost:8080";
         Rank.ReceivedUserData userData = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
 
         userInfo.put(key, "nickname", userData.getNickname());

@@ -14,7 +14,7 @@ public class BattleDto {
         private int problem_number; // 문제 번호
         private int mmr_1; // 유저1의 MMR
         private int mmr_2; // 유저2의 MMR
-        private int exp_1; // 유저1의 경험치
+        private int exp_1; // 유저1의 경험치c
         private int exp_2; // 유저2의 경험치
         private int win_1; // 유저1의 승리 여부(1:승리, 0:패배)
         private int win_2;
