@@ -4,6 +4,7 @@ import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
+import { ReactReduxContext } from "react-redux";
 
 function UserInfo() {
   return (
@@ -59,6 +60,22 @@ function Mid({ problems, onClick }) {
     return result;
   };
 
+  useEffect(() => {
+    // $(".ban_algo_box").click(function () {
+    //   if ($(this).hasClass("active")) {
+    //     $(".ban_algo_box").removeClass("active");
+    //   } else {
+    //     $(".ban_algo_box").removeClass("active");
+
+    //     $(this).addClass("active");
+    //   }
+    // });
+    $(".ban_algo_box").click(function () {
+      $(".ban_algo_box").not(this).removeClass("active");
+      $(this).toggleClass("active");
+    });
+  });
+
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
@@ -84,16 +101,6 @@ function Mid({ problems, onClick }) {
     </Row>
   );
 }
-
-$(".ban_algo_box").click(function () {
-  if ($(this).hasClass("active")) {
-    $(".ban_algo_box").removeClass("active");
-  } else {
-    $(".ban_algo_box").removeClass("active");
-
-    $(this).addClass("active");
-  }
-});
 
 function Bottom() {
   return (
