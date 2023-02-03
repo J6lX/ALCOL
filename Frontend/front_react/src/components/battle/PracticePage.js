@@ -59,6 +59,12 @@ const problemData = [
   { id: 5, name: "문제5", type: "DP", tier: "Gold" },
 ];
 
+// 커스텀 페이지네이션
+function CustomPagination() {
+  return <Pagination defaultCurrent={1} total={50} responsive="true" />;
+}
+
+// 페이지 렌더링
 function Ranking() {
   return (
     <div>
@@ -114,18 +120,11 @@ function Ranking() {
                   disableColumnFilter
                   autoHeight={true}
                   autoPageSize={true}
-                  hideFooter={true}
                   style={{
                     borderRadius: "5%",
                   }}
-                />
-                {/* 페이지네이션 */}
-                <Pagination
-                  count={5}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    margin: "5px",
+                  components={{
+                    Pagination: CustomPagination,
                   }}
                 />
               </ThemeProvider>
