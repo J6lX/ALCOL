@@ -72,12 +72,20 @@ public class BattleResultServiceImpl implements BattleResultService
      * */
     public String recordUserData(String userId){
 
+        userInfo = redisTemplate.opsForHash();
+        String key = "userInfo:" + userId;
+
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
 //        String url = "http://localhost:9000/user-service/getUserInfo";
         String url = "http://localhost:8080";
-        Rank.ReceivedUserData userInfo = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
-        System.out.println(userInfo.getOptimization_tier());
+        Rank.ReceivedUserData userData = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
+
+        userInfo.put(key, "nickname", userData.getNickname());
+        userInfo.put(key, "stored_file_name", userData.getStored_file_name());
+        userInfo.put(key, "level", String.valueOf(userData.getLevel()));
+        userInfo.put(key, "speed_tier", userData.getSpeed_tier());
+        userInfo.put(key, "optimization_tier", userData.getOptimization_tier());
 
         return "OKDK";
     }
