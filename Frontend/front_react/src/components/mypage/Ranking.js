@@ -73,6 +73,11 @@ const problemData = [
   { id: 5, name: "고량주", record: "22승 17패(56%)", tier: "Diamond" },
 ];
 
+// 커스텀 페이지네이션
+function CustomPagination() {
+  return <Pagination defaultCurrent={1} total={50} responsive="true" />;
+}
+
 function Ranking() {
   return (
     <>
@@ -171,19 +176,22 @@ function Ranking() {
                       </Col>
                     </Row>
                     <Row justify="center">
-                      <Col span={24}>
+                      <Col justify="center" span={24}>
                         {/* 랭커 정보 표시 */}
                         <ThemeProvider theme={darkTheme}>
                           <HideColumn
                             rows={problemData}
                             columns={problemLabel}
-                            pageSize={10}
+                            pageSize={8}
                             disableColumnSelector
                             disableColumnMenu
                             disableColumnFilter
                             autoHeight={true}
                             autoPageSize={true}
-                            hideFooter={true}
+                            justify="center"
+                            components={{
+                              Pagination: CustomPagination,
+                            }}
                             style={{
                               borderBottomLeftRadius: "7%",
                               borderBottomRightRadius: "7%",
@@ -196,7 +204,7 @@ function Ranking() {
                 </Row>
 
                 {/* 페이지네이션 표시 */}
-                <Row justify="center">
+                {/* <Row justify="center">
                   <Col align="center">
                     <ThemeProvider theme={darkTheme}>
                       <Pagination
@@ -207,7 +215,7 @@ function Ranking() {
                       />
                     </ThemeProvider>
                   </Col>
-                </Row>
+                </Row> */}
               </Col>
             </Row>
           </Col>

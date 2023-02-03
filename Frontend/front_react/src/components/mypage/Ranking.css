@@ -63,12 +63,20 @@ body {
   color: white;
 }
 
+.css-n830jf-MuiDataGrid-footerContainer {
+  display: flex;
+  justify-content: center !important;
+  align-items: center;
+  min-height: 52px;
+  border-top: 1px solid rgb(81, 81, 81);
+}
+
 .profileBox {
   width: 90%;
   height: 100%;
   text-align: center;
   background: white;
-  border-radius: 5%;
+  border-radius: 15px;
 }
 
 h1 {
