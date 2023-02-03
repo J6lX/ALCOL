@@ -6,6 +6,7 @@ import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
 import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
+import ChangePWPage from "./components/accounts/ChangePWPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
@@ -139,6 +140,9 @@ function App() {
               {/* 회원정보 수정 페이지 */}
               <Route path="/modify" exact={true} component={ModifyPage} />
 
+              {/* 비밀번호 찾기 페이지 */}
+              <Route path="/changePW" exact={true} component={ChangePWPage} />
+
               {/* 배틀 문제 푸는 페이지 */}
               <Route path="/solve" exact={true} component={SolvingPage} />
 
@@ -237,6 +241,9 @@ function App() {
 
             {/* 회원정보 수정 페이지 */}
             <Route path="/modify" exact={true} component={ModifyPage} />
+
+            {/* 비밀번호 찾기 페이지 */}
+            <Route path="/changePW" exact={true} component={ChangePWPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
             <Route path="/solve" exact={true} component={SolvingPage} />

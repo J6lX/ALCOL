@@ -7,6 +7,7 @@ import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
+import "animate.css";
 
 const MainPage = () => {
   const changeColor = (event) => {
@@ -22,7 +23,7 @@ const MainPage = () => {
       <video src={video} loop autoPlay muted className="bgvideo" style={{ zIndex: "1" }}></video>
       <div className="gradientBox" style={{ zIndex: "2" }}></div>
       <div className="mainh1" style={{ zIndex: "2" }}>
-        <img src={mainSlogan} alt="slogan" style={{ width: "30vw", marginBottom: "5%" }} />
+        <img className="animate__animated animate__bounce" src={mainSlogan} alt="slogan" style={{ width: "30vw", marginBottom: "5%" }} />
       </div>
       <div
         className="battleStart"
@@ -60,7 +61,7 @@ const MainPage = () => {
 
 const SpeedRanking = () => {
   return (
-    <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
+    <div className="todaysRanking speedRanking animate__animated animate__fadeInLeft" style={{ border: "5px solid #FAC557" }}>
       <h1
         className="PyeongChangPeace textOrangeGradient"
         style={{ fontSize: "2.5vw", paddingTop: "2ch" }}>
@@ -81,7 +82,7 @@ const SpeedRanking = () => {
 
 const EfficiencyRanking = () => {
   return (
-    <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
+    <div className="todaysRanking efficiencyRanking animate__animated animate__fadeInRight" style={{ border: "5px solid #5CFDFD" }}>
       <h1
         className="PyeongChangPeace textSkyblueGradient"
         style={{ fontSize: "2.5vw", paddingTop: "2ch" }}>
