@@ -1,10 +1,9 @@
 // 헤더와 푸터를 별도의 문서(컴포넌트)로 분리
-
 import { Link, useLocation } from "react-router-dom";
 import "./HeaderFooter.css";
 import alcol from "../assets/alcol_empty_white.png";
 
-import { Layout, Button, Row, Col, Avatar } from "antd";
+import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
 const { Header } = Layout;
@@ -72,6 +71,22 @@ function LoginTag(props) {
   }
 }
 
+// 작은 화면에 표시할 메뉴
+function getItem(label, key) {
+  return {
+    key,
+    label,
+  };
+}
+const miniItems = [
+  getItem("Navigation One", "sub1", [
+    getItem("Option 1", "1"),
+    getItem("Option 2", "2"),
+    getItem("Option 3", "3"),
+    getItem("Option 4", "4"),
+  ]),
+];
+
 // App.js에 반환할 값
 function AppHeader() {
   const locationNow = useLocation(); // 현재 접속 중인 URL 확인
@@ -108,6 +123,11 @@ function AppHeader() {
             <Link to="/mode" className="textDark menus">
               Battle
             </Link>
+          </Col>
+
+          {/* 작은 화면용 메뉴(collapse) */}
+          <Col xs={12} md={0} align="middle">
+            <Menu items={miniItems} />
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}

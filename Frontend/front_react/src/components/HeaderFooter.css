@@ -20,6 +20,13 @@ body {
   padding: 5px;
 }
 
+/* collapse 스타일 */
+
+.miniMenus {
+  border: none;
+  color: #16171b;
+}
+
 /* 로그인 버튼 */
 .loginButton {
   color: #e51c29;
