@@ -156,9 +156,9 @@ function App() {
   const [language, setLanguage] = React.useState("-1");
   const history = useHistory();
 
-  function handleUseHistory() {
-    history.push("/match");
-  }
+  // function handleUseHistory() {
+  //   history.push("/match");
+  // }
 
   useEffect(() => {
     console.log("모드 선택 완료! mode:" + mode);
@@ -167,10 +167,9 @@ function App() {
   useEffect(() => {
     console.log("언어 선택 완료! language:" + language);
     if (language !== "-1") {
-      handleUseHistory();
+      history.push("/match");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [language]);
+  }, [language, history]);
 
   return (
     <div className="battle_background">
