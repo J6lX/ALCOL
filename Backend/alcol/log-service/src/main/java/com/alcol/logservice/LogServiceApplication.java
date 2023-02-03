@@ -8,8 +8,8 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class LogServiceApplication {
-
+public class LogServiceApplication
+{
     public static void main(String[] args) {
         SpringApplication.run(LogServiceApplication.class, args);
     }

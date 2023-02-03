@@ -1,8 +1,10 @@
 package com.alcol.logservice.service;
 
+import com.alcol.logservice.TestDto;
+
 import java.util.List;
 
 public interface LogService
 {
-    List<String> getLevelAndTier(String userId);
+    List<TestDto> getLevelAndTier(String userId);
 }
