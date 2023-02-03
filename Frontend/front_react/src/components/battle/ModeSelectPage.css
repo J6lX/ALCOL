@@ -4,15 +4,6 @@
   background-size: cover;
 }
 
-.navbar {
-  display: none;
-  visibility: hidden;
-}
-
-.footer {
-  display: none;
-}
-
 .battle_user_info_row {
   position: relative;
   display: flex;
