@@ -1,9 +1,20 @@
-import { Row, Col, Table } from "antd";
+import { Row, Col } from "antd";
 import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
+import React, { Component, useState, useEffect } from "react";
+import Chart from "react-apexcharts";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { DataGrid } from "@mui/x-data-grid";
+
+// 전적 기록 다크 모드 적용
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -22,60 +33,240 @@ const userData = {
 // 매치 기록 정렬 컬럼
 const matchCol = [
   {
-    title: "결과",
-    dataIndex: "name",
-    key: "name",
-    render: (text) => <p>{text}</p>,
+    field: "matchResult",
+    headerName: "결과",
+    width: 200,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
   },
   {
-    title: "플레이 모드",
-    dataIndex: "mode",
-    key: "mode",
+    field: "playMode",
+    headerName: "플레이 모드",
+    width: 200,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
   },
   {
-    title: "상대 플레이어",
-    dataIndex: "address",
-    key: "address",
+    field: "opponent",
+    headerName: "대결 상대",
+    width: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
   },
   {
-    title: "문제 난이도",
-    dataIndex: "difficulty",
-    key: "difficulty",
+    field: "problemName",
+    headerName: "문제 이름",
+    width: 150,
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
   },
   {
-    title: "기록일",
-    dataIndex: "matchDate",
-    key: "matchDate",
+    field: "difficulty",
+    headerName: "문제 난이도",
+    width: 190,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
+  },
+  {
+    field: "recordDate",
+    headerName: "일시",
+    width: 200,
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
+    sortable: false,
   },
 ];
 
 // 매치 기록 데이터
 const matchData = [
   {
-    key: "1",
-    name: "John Brown",
-    mode: 32,
-    address: "New York No. 1 Lake Park",
-    difficulty: "Gold",
-    matchDate: "1일 전",
+    id: 1,
+    playMode: "스피드",
+    problemName: "Problem1",
+    matchResult: "승리",
+    opponent: "맥주",
+    recordDate: "어제",
+    difficulty: "Diamond",
   },
   {
-    key: "2",
-    name: "Jim Green",
-    mode: 42,
-    address: "London No. 1 Lake Park",
-    difficulty: "Gold",
-    matchDate: "1일 전",
+    id: 2,
+    playMode: "스피드",
+    problemName: "Problem2",
+    matchResult: "승리",
+    opponent: "소주",
+    recordDate: "어제",
+    difficulty: "Diamond",
   },
   {
-    key: "3",
-    name: "Joe Black",
-    mode: 32,
-    address: "Sidney No. 1 Lake Park",
-    difficulty: "Gold",
-    matchDate: "1일 전",
+    id: 3,
+    playMode: "스피드",
+    problemName: "Problem3",
+    matchResult: "승리",
+    opponent: "막걸리",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 4,
+    playMode: "스피드",
+    problemName: "Problem4",
+    matchResult: "승리",
+    opponent: "와인",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 5,
+    playMode: "스피드",
+    problemName: "Problem5",
+    matchResult: "승리",
+    opponent: "고량주",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 6,
+    playMode: "스피드",
+    problemName: "Problem1",
+    matchResult: "승리",
+    opponent: "1번 플레이어",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 7,
+    playMode: "스피드",
+    problemName: "Problem2",
+    matchResult: "승리",
+    opponent: "2번 플레이어",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 8,
+    playMode: "스피드",
+    problemName: "Problem3",
+    matchResult: "승리",
+    opponent: "3번 플레이어",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 9,
+    playMode: "스피드",
+    problemName: "Problem4",
+    matchResult: "승리",
+    opponent: "4번 플레이어",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 10,
+    playMode: "스피드",
+    problemName: "Problem5",
+    matchResult: "승리",
+    opponent: "5번 플레이어",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 11,
+
+    playMode: "스피드",
+    problemName: "Problem1",
+    matchResult: "승리",
+    opponent: "플레이어 6",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 12,
+    playMode: "스피드",
+    problemName: "Problem2",
+    matchResult: "승리",
+    opponent: "플레이어 7",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 13,
+    playMode: "스피드",
+    problemName: "Problem3",
+    matchResult: "승리",
+    opponent: "플레이어 8",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 14,
+    playMode: "스피드",
+    problemName: "Problem4",
+    matchResult: "승리",
+    opponent: "플레이어 9",
+    recordDate: "어제",
+    difficulty: "Diamond",
+  },
+  {
+    id: 15,
+    playMode: "스피드",
+    problemName: "Problem5",
+    matchResult: "승리",
+    opponent: "플레이어 10",
+    recordDate: "어제",
+    difficulty: "Diamond",
   },
 ];
+
+// 스피드전 데이터
+class ApexChart extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      options: {
+        width: 50,
+        chart: {
+          type: "donut",
+        },
+        size: "65%",
+        plotOptions: {
+          pie: {
+            startAngle: -180,
+            endAngle: 180,
+          },
+        },
+        legend: {
+          show: false,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+      },
+      series: [44, 56],
+      labels: ["A", "B"],
+    };
+  }
+
+  render() {
+    return (
+      <div className="donut">
+        <Chart options={this.state.options} series={this.state.series} type="donut" width="380" />
+      </div>
+    );
+  }
+}
+// 효율성전 데이터
 
 // 최근 20전 표시 데이터(임시)
 const recentRecord = [
@@ -103,9 +294,6 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
   const win = recentRecord[0].value;
   const lose = recentRecord[1].value;
   const winrate = Math.round((win / total) * 100);
-  // const innerText = {
-  //   0: `최근 ${win+lose}전\n ${win}승 ${lose}패\n (${winrate}%)`
-  // }
 
   return (
     <>
@@ -159,6 +347,14 @@ function Mypage() {
   const userInfo = useParams();
   const profile = userData[userInfo.username];
 
+  // 더 보기 단추
+  // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
+  const [resultCount, setResultCount] = useState(10);
+
+  useEffect(() => {
+    console.log(`현재 ${resultCount}개 표시 중`);
+  });
+
   return (
     <div
       className="pageBody"
@@ -202,8 +398,13 @@ function Mypage() {
                 <Col span={24} justify="center" align="middle">
                   <Row justify="center">
                     {/* 스피드전 티어 뱃지 */}
-                    <Col span={6} justify="center">
-                      <img src={tempImg} alt="프사" className="userImg"></img>
+                    <Col
+                      span={6}
+                      justify="center"
+                      style={{
+                        margin: "15px",
+                      }}>
+                      <ApexChart />
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col span={6} justify="center">
@@ -308,7 +509,24 @@ function Mypage() {
               {/* 전적 표시 블록 */}
               <Row>
                 <Col span={24}>
-                  <Table theme="dark" columns={matchCol} dataSource={matchData} />
+                  <ThemeProvider theme={darkTheme}>
+                    <DataGrid
+                      rows={matchData}
+                      columns={matchCol}
+                      pageSize={resultCount}
+                      disableColumnSelector
+                      disableColumnMenu
+                      disableColumnFilter
+                      autoHeight={true}
+                      autoPageSize={true}
+                      hideFooter={true}
+                      style={{
+                        borderBottomLeftRadius: "5px",
+                        borderBottomRightRadius: "5px",
+                      }}
+                    />
+                    <p onClick={() => setResultCount(resultCount + 10)}>더 보기</p>
+                  </ThemeProvider>{" "}
                 </Col>
               </Row>
             </Col>
