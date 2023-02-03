@@ -169,6 +169,7 @@ function App() {
     if (language !== "-1") {
       handleUseHistory();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language]);
 
   return (

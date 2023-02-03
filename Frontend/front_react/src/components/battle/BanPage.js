@@ -131,6 +131,7 @@ function App() {
   }
   useEffect(() => {
     matchProblemAndChoose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [choose]);
 
   const problems = [
