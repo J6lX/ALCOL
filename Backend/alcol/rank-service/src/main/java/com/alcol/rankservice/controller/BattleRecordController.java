@@ -31,11 +31,16 @@ public class BattleRecordController
         winLose = new WinLose(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWin_2());
         battleResultService.recordCnt(winLose);
 
+        // ranking 순위를 바꾸기 위해 mmr 값으로 sort하는 작업
         battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_1(), battleResult.getUser_id_1());
         battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_2(), battleResult.getUser_id_2());
-        battleResultService.recordUserData(battleResult.getUser_id_1());
-        battleResultService.recordUserData(battleResult.getUser_id_2());
+
+        // 랭킹 페이지에서 유저 정보를 보여주기 위해 사용자 정보를 저장해놓는 작업
+        //        battleResultService.recordUserData(battleResult.getUser_id_1());
+//        battleResultService.recordUserData(battleResult.getUser_id_2());
 
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
+
+
 }
