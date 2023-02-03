@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import "./HeaderFooter.css";
 
 // 푸터 영역
 function AppFooter() {

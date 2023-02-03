@@ -1,7 +1,7 @@
 // 헤더와 푸터를 별도의 문서(컴포넌트)로 분리
 
 import { Link, useLocation } from "react-router-dom";
-
+import "./HeaderFooter.css";
 import alcol from "../assets/alcol_empty_white.png";
 
 import { Layout, Button, Row, Col, Avatar } from "antd";

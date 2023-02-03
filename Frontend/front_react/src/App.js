@@ -28,62 +28,64 @@ import { Layout } from "antd";
 const { Content } = Layout;
 
 function App() {
-  <RecoilRoot>
-    <Layout>
-      <AppHeader />
-      <Content
-        style={{
-          backgroundColor: "#16171B",
-        }}>
-        {/* 라우터 태그 목록 */}
-        <Switch>
-          {/* 메인 페이지 */}
-          <Route exact path="/" component={HomePage} />
+  return (
+    <RecoilRoot>
+      <Layout>
+        <AppHeader />
+        <Content
+          style={{
+            backgroundColor: "#16171B",
+          }}>
+          {/* 라우터 태그 목록 */}
+          <Switch>
+            {/* 메인 페이지 */}
+            <Route exact path="/" component={HomePage} />
 
-          {/* 로그인 페이지 */}
-          <Route exact path="/login" component={LoginPage} />
+            {/* 로그인 페이지 */}
+            <Route exact path="/login" component={LoginPage} />
 
-          {/* 모드 선택 페이지 */}
-          <Route path="/mode" component={ModeSelectPage} />
+            {/* 모드 선택 페이지 */}
+            <Route path="/mode" component={ModeSelectPage} />
 
-          {/* 매칭 페이지 */}
-          <Route path="/match" component={MatchingPage} />
+            {/* 매칭 페이지 */}
+            <Route path="/match" component={MatchingPage} />
 
-          {/* 밴픽 페이지 */}
-          <Route path="/ban" component={BanPage} />
+            {/* 밴픽 페이지 */}
+            <Route path="/ban" component={BanPage} />
 
-          {/* 문제 페이지(연습모드 진입) */}
-          <Route path="/practice" component={PracticePage} />
+            {/* 랭킹 조회 페이지 */}
+            <Route path="/ranking" component={Ranking} />
 
-          {/* 랭킹 조회 페이지 */}
-          <Route path="/ranking" component={Ranking} />
+            {/* 회원가입 페이지 */}
+            <Route path="/register" exact={true} component={RegisterPage} />
 
-          {/* 회원가입 페이지 */}
-          <Route path="/register" exact={true} component={RegisterPage} />
+            {/* 회원정보 수정 페이지 */}
+            <Route path="/modify" exact={true} component={ModifyPage} />
 
-          {/* 회원정보 수정 페이지 */}
-          <Route path="/modify" exact={true} component={ModifyPage} />
+            {/* 배틀 문제 푸는 페이지 */}
+            <Route path="/solve" exact={true} component={SolvingPage} />
 
-          {/* 배틀 문제 푸는 페이지 */}
-          <Route path="/solve" exact={true} component={SolvingPage} />
+            {/* 문제 페이지(연습모드 진입) */}
+            <Route path="/practice" component={PracticePage} />
 
-          {/* 혼자 문제 푸는 페이지 */}
-          <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
+            {/* 혼자 문제 푸는 페이지 */}
+            <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
 
-          {/* 마이페이지(사용자 정보 열람 페이지) */}
-          <Route path="/mypage/:username" exact={true} component={Mypage} />
+            {/* 마이페이지(사용자 정보 열람 페이지) */}
+            <Route path="/mypage/:username" exact={true} component={Mypage} />
 
-          {/* 지난 시즌 정보 조회 페이지 */}
-          <Route path="/season/:username" exact={true} component={LastSeason} />
+            {/* 지난 시즌 정보 조회 페이지 */}
+            <Route path="/season/:username" exact={true} component={LastSeason} />
 
-          {/* 404 페이지 */}
-          <Route component={NotFound404} />
-          {/* <Route exact path="/register" element={RegisterPage()} /> */}
-        </Switch>
-      </Content>
-      <AppFooter />
-    </Layout>
-  </RecoilRoot>;
+            {/* 404 페이지 */}
+            <Route component={NotFound404} />
+            {/* <Route exact path="/register" element={RegisterPage()} /> */}
+          </Switch>
+        </Content>
+        <AppFooter />
+      </Layout>
+    </RecoilRoot>
+  );
 }
 
 export default App;
