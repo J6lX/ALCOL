@@ -5,6 +5,10 @@ spring:
   redis:
     host: localhost
     port: 6379
+#spring:
+#  redis:
+#    host: i8b303.p.ssafy.io
+#    port: 6000
 
 #spring:
 #  application:
