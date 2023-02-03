@@ -21,12 +21,47 @@ const HideColumn = styled(DataGrid)(({ theme }) => ({
 
 // 연습 문제 구분 설명
 const problemLabel = [
-  { field: "id", headerName: "순위", width: 100, align: "center", headerAlign: "center" },
-  { field: "name", headerName: "ID", width: 200, align: "center", headerAlign: "center" },
-  { field: "level", headerName: "LEVEL", width: 150, align: "center", headerAlign: "center" },
-  { field: "mmr", headerName: "MMR", width: 150, align: "center", headerAlign: "center" },
-  { field: "tier", headerName: "시즌 티어", width: 190, align: "center", headerAlign: "center" },
-  { field: "record", headerName: "시즌 전적", width: 200, align: "center", headerAlign: "center" },
+  {
+    field: "id",
+    headerName: "순위",
+    width: 100,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  { field: "name", headerName: "ID", width: 200, flex: 1, align: "center", headerAlign: "center" },
+  {
+    field: "level",
+    headerName: "LEVEL",
+    width: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "mmr",
+    headerName: "MMR",
+    width: 150,
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "tier",
+    headerName: "시즌 티어",
+    width: 190,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "record",
+    headerName: "시즌 전적",
+    width: 200,
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
+  },
 ];
 
 // 연습 문제 데이터
@@ -60,7 +95,7 @@ function Ranking() {
           <Col span={16}>
             {/* 검색 상자 */}
             <Row justify="end">
-              <Col xs={8} lg={5}>
+              <Col xs={0} md={8} lg={5}>
                 <Input
                   placeholder="닉네임으로 검색"
                   allowClear
@@ -71,7 +106,10 @@ function Ranking() {
                 />
               </Col>
               <Col
+                xs={0}
+                md={3}
                 style={{
+                  marginLeft: "5px",
                   padding: "5px",
                 }}>
                 <Button>검색</Button>
@@ -143,7 +181,8 @@ function Ranking() {
                             disableColumnSelector
                             disableColumnMenu
                             disableColumnFilter
-                            autoHeight
+                            autoHeight={true}
+                            autoPageSize={true}
                             hideFooter={true}
                             style={{
                               borderBottomLeftRadius: "7%",
