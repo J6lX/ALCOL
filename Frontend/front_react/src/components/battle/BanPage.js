@@ -4,7 +4,7 @@ import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-import { ReactReduxContext } from "react-redux";
+import CountDownTimer from "./CountDownTimer";
 
 function UserInfo() {
   return (
@@ -44,6 +44,9 @@ function Top() {
           선택된 문제는 이번 게임에서 출제되지 않습니다. 만약 같은 문제를 금지했다면 남은 문제 중
           랜덤하게 출제됩니다.
         </div>
+        <div>
+          <CountDownTimer />
+        </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
     </Row>
@@ -61,15 +64,6 @@ function Mid({ problems, onClick }) {
   };
 
   useEffect(() => {
-    // $(".ban_algo_box").click(function () {
-    //   if ($(this).hasClass("active")) {
-    //     $(".ban_algo_box").removeClass("active");
-    //   } else {
-    //     $(".ban_algo_box").removeClass("active");
-
-    //     $(this).addClass("active");
-    //   }
-    // });
     $(".ban_algo_box").click(function () {
       $(".ban_algo_box").not(this).removeClass("active");
       $(this).toggleClass("active");
