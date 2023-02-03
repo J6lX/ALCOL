@@ -44,9 +44,9 @@ function GameInfo() {
     padding: "8px 0",
     background: "rgba(0,0,0,0.5)",
     color: "white",
-    height: "19vh",
+    height: "10em",
     textAlign: "center",
-    lineHeight: "150px",
+    lineHeight: "10em",
   };
   return (
     <div>
@@ -150,7 +150,7 @@ function ResultButton() {
 
 function App() {
   return (
-    <div className="result_background">
+    <div className="resultList_background">
       <div
         style={{
           textAlign: "center",
@@ -162,15 +162,15 @@ function App() {
         결과 상세정보
       </div>
       <Row justify="space-between" style={{ marginTop: "70px" }}>
-        <Col sm={10} md={8} xl={2}></Col>
-        <Col sm={10} md={8} xl={7} className="result_list_wrap">
+        <Col sm={0} md={0} lg={0} xl={2}></Col>
+        <Col sm={24} md={24} lg={12} xl={7} className="result_list_wrap">
           <GameInfo />
         </Col>
-        <Col sm={10} md={8} xl={12} className="result_list_wrap">
+        <Col sm={24} md={24} lg={12} xl={12} className="result_list_wrap">
           <ResultPlayerInfo />
           <ResultList />
         </Col>
-        <Col sm={10} md={8} xl={2}></Col>
+        <Col sm={0} md={0} lg={0} xl={2}></Col>
       </Row>
       <ResultButton />
     </div>
