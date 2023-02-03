@@ -62,7 +62,7 @@ const MainPage = () => {
 const SpeedRanking = () => {
   // 스피드전 랭킹 요청
   axios
-    .get("http://localhost:8000/speedRankList/1")
+    .get("http://i8b303.p.ssafy.io/speedRankList/1")
     // 요청 성공 시
     .then(function (response) {
       console.log("스피드 랭킹: ", response.data);
