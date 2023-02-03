@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { Col, Row } from "antd";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
@@ -101,11 +102,17 @@ function Bottom() {
 
 function App() {
   const [choose, setChoose] = React.useState("-1");
-
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);
   };
+
+  const history = useHistory();
+
+  function hanleHistoryMatchCancle() {
+    console.log("클릭되었다.....이동해야지.....");
+    history.push("/");
+  }
 
   function matchProblemAndChoose() {
     if (choose === "1") {
@@ -144,7 +151,9 @@ function App() {
       <Top />
       <Mid problems={problems} onClick={onClick} />
       <Bottom />
-      <div className="banButton">취소</div>
+      {/* <div className="banButton" onClick={hanleHistoryMatchCancle}>
+        취소
+      </div>  */}
     </div>
   );
 }

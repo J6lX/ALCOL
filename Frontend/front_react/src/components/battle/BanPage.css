@@ -127,6 +127,7 @@
   line-height: 30px;
   background-color: #fef662;
   color: rgb(0, 0, 0);
+  z-index: 15;
 }
 
 .ban_algo_problem_title {
