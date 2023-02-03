@@ -202,7 +202,7 @@ const CodingPlace = () => {
       };
 
       axios
-        .post(`http://localhost:8000/submit/${problem_number}`, solving_data, header)
+        .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
         .then((response) => {
           setSubmitMessage(response);
         })
