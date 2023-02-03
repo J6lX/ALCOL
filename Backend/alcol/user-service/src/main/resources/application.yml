@@ -25,7 +25,7 @@ eureka:
       defaultZone: http://127.0.0.1:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
 
 access-token:
-  expiration_time: 30000 # milliseconds
+  expiration_time: 60000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
 
 refresh-token:

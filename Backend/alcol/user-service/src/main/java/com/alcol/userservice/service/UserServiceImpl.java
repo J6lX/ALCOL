@@ -1,5 +1,6 @@
 package com.alcol.userservice.service;
 
+import com.alcol.userservice.dto.TestDto;
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.entity.UserEntity;
 import com.alcol.userservice.entity.UserLevelEntity;
@@ -13,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,11 +28,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.attribute.standard.Media;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -155,6 +158,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     public UserDto.UserInfoDto getUserInfo(String userId)
+            throws URISyntaxException
     {
         // 닉네임, 사진 정보는 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
@@ -163,13 +167,23 @@ public class UserServiceImpl implements UserService
         bodyData.add("user_id", userId);
         String url = "http://localhost:9005/log-service/getLevelAndTier";
 
+        // 레디스에서 mmr, 경험치 정보를 가져와서 레벨, 티어를 추출
+        // 레디스에 정보가 없으면 log-service 로 mmr, 경험치 받아오기
+
+        RequestEntity<Map> request = RequestEntity
+                .post(new URI(url))
+                .accept(MediaType.APPLICATION_FORM_URLENCODED)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(bodyData);
+
         // user-service -> log-service
         // log-service 에게 user_id 를 보내서
         // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
-        ResponseEntity<List> response = restTemplate.postForEntity(
+        ResponseEntity<List<TestDto>> response = restTemplate.exchange(
                 url,
-                bodyData,
-                List.class
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<List<TestDto>>() {}
         );
 
         // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
