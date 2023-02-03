@@ -4,6 +4,8 @@ import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
+import React, { Component } from "react";
+import Chart from "react-apexcharts";
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -34,6 +36,11 @@ const matchCol = [
   },
   {
     title: "상대 플레이어",
+    dataIndex: "address",
+    key: "address",
+  },
+  {
+    title: "문제 이름",
     dataIndex: "address",
     key: "address",
   },
@@ -77,6 +84,46 @@ const matchData = [
   },
 ];
 
+// 스피드전 데이터
+class ApexChart extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      options: {
+        width: 50,
+        chart: {
+          type: "donut",
+        },
+        size: "65%",
+        plotOptions: {
+          pie: {
+            startAngle: -180,
+            endAngle: 180,
+          },
+        },
+        legend: {
+          show: false,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+      },
+      series: [44, 56],
+      labels: ["A", "B"],
+    };
+  }
+
+  render() {
+    return (
+      <div className="donut">
+        <Chart options={this.state.options} series={this.state.series} type="donut" width="380" />
+      </div>
+    );
+  }
+}
+// 효율성전 데이터
+
 // 최근 20전 표시 데이터(임시)
 const recentRecord = [
   {
@@ -103,9 +150,6 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
   const win = recentRecord[0].value;
   const lose = recentRecord[1].value;
   const winrate = Math.round((win / total) * 100);
-  // const innerText = {
-  //   0: `최근 ${win+lose}전\n ${win}승 ${lose}패\n (${winrate}%)`
-  // }
 
   return (
     <>
@@ -202,8 +246,13 @@ function Mypage() {
                 <Col span={24} justify="center" align="middle">
                   <Row justify="center">
                     {/* 스피드전 티어 뱃지 */}
-                    <Col span={6} justify="center">
-                      <img src={tempImg} alt="프사" className="userImg"></img>
+                    <Col
+                      span={6}
+                      justify="center"
+                      style={{
+                        margin: "15px",
+                      }}>
+                      <ApexChart />
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col span={6} justify="center">
