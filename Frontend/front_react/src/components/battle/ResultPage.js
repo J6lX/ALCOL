@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import "./ResultPage.css";
 import img_victory from "../../assets/result_victory.gif";
 import img_defeat from "../../assets/result_defeat.gif";
@@ -21,6 +22,19 @@ function App() {
     }
     return img;
   };
+
+  //페이지 이동 관련 함수/변수
+  const history = useHistory();
+
+  function hanleHistoryMatchAgain() {
+    history.push("/mode");
+  }
+  function hanleHistoryResultList() {
+    history.push("/resultList");
+  }
+  function hanleHistoryMain() {
+    history.push("/");
+  }
 
   return (
     <div className="result_background">
@@ -61,13 +75,13 @@ function App() {
       <div>
         <Row justify="space-between" style={{ marginTop: "30px" }}>
           <Col span={8}></Col>
-          <Col span={2} className="result_button">
+          <Col span={2} className="result_button" onClick={hanleHistoryResultList}>
             자세히보기
           </Col>
-          <Col span={2} className="result_button">
+          <Col span={2} className="result_button" onClick={hanleHistoryMatchAgain}>
             다시하기
           </Col>
-          <Col span={2} className="result_button">
+          <Col span={2} className="result_button" onClick={hanleHistoryMain}>
             그만하기
           </Col>
           <Col span={8}></Col>
