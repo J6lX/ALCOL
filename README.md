@@ -50,6 +50,11 @@ SSAFY 8기 2학기 공통프로젝트 - ALCOL
 ![Untitled](/uploads/b4f22590820e7d6cf8a0d4f343a8fb8f/Untitled.png)
 </br>
 
+### MSA구조에 맞게 프로젝트 단위마다 Docker 컨테이너로 나누어 관리, 젠킨스를 통해 자동 빌드, 배포 중
+---
+![iimage](/uploads/c718ce6a72f89c83957f886f2ccbf4b9/iimage.png)
+</br>
+
 ## ✔ 기획의도
 IT직군 채용 프로세스의 일부로 코딩테스트를 도입하는 기업들이 증가함에 따라 관련 사이트의 수요가 증가하고 있습니다.
 
