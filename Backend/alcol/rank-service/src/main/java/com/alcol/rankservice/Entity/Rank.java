@@ -1,13 +1,34 @@
-package com.alcol.rankservice.Entity;
+package com.alcol.rankservice.entity;
 
-import com.alcol.rankservice.dto.RecordDto;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
+@AllArgsConstructor
 public class Rank
 {
-    private String profile_pic;
-    private String nickname;
-    private int level;
-    private String tier;
-    private int MMR;
-    private RecordDto record;
+    @Builder
+    @Getter
+    public static class RankingData
+    {
+        private String nickname;
+        private String profile_pic;
+        private int level;
+        private String tier;
+        private int mmr;
+        private int winCnt;
+        private int loseCnt;
+        private long winningRate;
+    }
+
+    @Getter
+    public static class ReceivedUserData
+    {
+        private String nickname;
+        private String stored_file_name;
+        private int level;
+        private String speed_tier;
+        private String optimization_tier;
+    }
+
 }
