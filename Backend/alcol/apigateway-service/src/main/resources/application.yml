@@ -65,7 +65,7 @@ spring:
 
 
 access-token:
-  expiration_time: 30000 # milliseconds
+  expiration_time: 60000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
 
 refresh-token:
