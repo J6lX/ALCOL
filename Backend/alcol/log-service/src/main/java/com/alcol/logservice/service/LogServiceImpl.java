@@ -31,6 +31,7 @@ public class LogServiceImpl implements LogService
         this.restTemplate = restTemplate;
     }
 
+    // user_id 를 받아서 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴
     @Override
     public List<String> getLevelAndTier(String userId)
     {
@@ -55,17 +56,19 @@ public class LogServiceImpl implements LogService
         bodyData.add("now_mmr_by_optimization", nowMmrByOptimization + "");
         String url = "http://localhost:9000/user-service/getLevelAndTier";
 
-        // 여기는 로그 서비스!!!
-        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
-        // 인덱스 0 : 레벨
-        // 인덱스 1 : 스피드전 티어
-        // 인덱스 2 : 효율성전 티어
+        // log-service -> user-service
+        // user-service 에게 현재 경험치, 현재 스피드전 mmr, 현재 효율성전 mmr 을 보내서
+        // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
         ResponseEntity<List> response = restTemplate.postForEntity(
                 url,
                 bodyData,
                 List.class
         );
 
+        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
+        // 인덱스 0 : 레벨
+        // 인덱스 1 : 스피드전 티어
+        // 인덱스 2 : 효율성전 티어
         return response.getBody();
     }
 }
