@@ -117,34 +117,6 @@ function App() {
     setChoose(category);
   };
 
-  // function matchProblemAndChoose() {
-  //   if (choose === "1") {
-  //     console.log("선택한 문제 번호는:" + problems[0].problem_no);
-  //     setChoose(problems[0].problem_no);
-  //   } else if (choose === "2") {
-  //     console.log("선택한 문제 번호는:" + problems[1].problem_no);
-  //     setChoose(problems[1].problem_no);
-  //   } else if (choose === "3") {
-  //     console.log("선택한 문제 번호는:" + problems[2].problem_no);
-  //     setChoose(problems[2].problem_no);
-  //   }
-  // }
-
-  // const problems = [
-  //   {
-  //     problem_no: 1001,
-  //     problem_category: ["구현", "그래프 이론", "그래프 탐색"],
-  //   },
-  //   {
-  //     problem_no: 1002,
-  //     problem_category: ["수학", "브르투포스 알고리즘"],
-  //   },
-  //   {
-  //     problem_no: 1003,
-  //     problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
-  //   },
-  // ];
-
   const [problem, setProblem] = React.useState([
     {
       problem_no: 1001,

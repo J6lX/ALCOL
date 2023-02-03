@@ -156,10 +156,6 @@ function App() {
   const [language, setLanguage] = React.useState("-1");
   const history = useHistory();
 
-  // function handleUseHistory() {
-  //   history.push("/match");
-  // }
-
   useEffect(() => {
     console.log("모드 선택 완료! mode:" + mode);
   }, [mode]);
