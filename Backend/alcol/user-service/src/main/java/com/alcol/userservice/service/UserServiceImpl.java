@@ -1,6 +1,5 @@
 package com.alcol.userservice.service;
 
-import com.alcol.userservice.dto.TestDto;
 import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.entity.UserEntity;
 import com.alcol.userservice.entity.UserLevelEntity;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -66,6 +64,12 @@ public class UserServiceImpl implements UserService
         this.restTemplate = restTemplate;
     }
 
+    /**
+     * DB 에 입력받은 이메일의 사용자가 저장되어 있는 지 확인
+     * @param username 로그인 시 넘어오는 사용자 이메일
+     * @return
+     * @throws UsernameNotFoundException
+     */
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException
@@ -85,12 +89,19 @@ public class UserServiceImpl implements UserService
         );
     }
 
+    /**
+     *
+     * @param signUpDto 회원가입 정보
+     * @param file      유저 프로필 사진
+     * @return 성공 시 사용자의 유저 아이디
+     * @throws IOException
+     */
+    // 회원 가입 메소드
     @Override
     public String createUser(
             @RequestBody UserDto.SignUpDto signUpDto,
             @RequestPart MultipartFile file
     )
-            throws IOException
     {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
@@ -112,13 +123,11 @@ public class UserServiceImpl implements UserService
 
         // UserEntity 에는 setter 가 구현되어 있으므로 mapper 설정이 필요없음
         userEntity = modelMapper.map(signUpDto, UserEntity.class);
-
         userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(signUpDto.getPwd()));
         userEntity.setCreatedAt(LocalDateTime.now());
         userEntity.setUserId(UUID.randomUUID().toString());
 
-        // 사진이 회원 가입 시 같이 전달된 경우
-
+        // 프로필 사진이 회원 가입 시 같이 전달된 경우
         if (file != null && file.getSize() != 0) {
             if (!fileHandler.parseFileInfo(file, userEntity)) {
                 return "PICTURE_UPLOAD_FAILURE";
@@ -156,6 +165,12 @@ public class UserServiceImpl implements UserService
         return tokenProvider.createAccessToken(userId);
     }
 
+    /**
+     * user_id 를 받아서 해당 유저의 레벨, 티어를 반환
+     * @param userId
+     * @return
+     * @throws URISyntaxException
+     */
     @Override
     public UserDto.UserInfoDto getUserInfo(String userId)
             throws URISyntaxException
@@ -163,12 +178,12 @@ public class UserServiceImpl implements UserService
         // 닉네임, 사진 정보는 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
+        // 레디스에서 mmr, 경험치 정보를 가져와서 레벨, 티어를 추출
+        // 레디스에 정보가 없으면 log-service 로 mmr, 경험치 받아오기
+
         MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
         bodyData.add("user_id", userId);
         String url = "http://localhost:9005/log-service/getLevelAndTier";
-
-        // 레디스에서 mmr, 경험치 정보를 가져와서 레벨, 티어를 추출
-        // 레디스에 정보가 없으면 log-service 로 mmr, 경험치 받아오기
 
         RequestEntity<Map> request = RequestEntity
                 .post(new URI(url))
@@ -176,40 +191,38 @@ public class UserServiceImpl implements UserService
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(bodyData);
 
+        // 레디스에 mmr, 경험치 정보가 없을 때 요청
         // user-service -> log-service
         // log-service 에게 user_id 를 보내서
         // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
-        ResponseEntity<List<TestDto>> response = restTemplate.exchange(
+        ResponseEntity<UserDto.UserPlayDto> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 request,
-                new ParameterizedTypeReference<List<TestDto>>() {}
+                new ParameterizedTypeReference<UserDto.UserPlayDto>() {}
         );
-
-        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
-        // 인덱스 0 : 레벨
-        // 인덱스 1 : 스피드전 티어
-        // 인덱스 2 : 효율성전 티어
 
         return UserDto.UserInfoDto.builder()
                 .nickname(userEntity.getNickname())
                 .storedFileName(userEntity.getStoredFileName())
-                .level(String.valueOf(response.getBody().get(0)))
-                .speedTier(String.valueOf(response.getBody().get(1)))
-                .optimizationTier(String.valueOf(response.getBody().get(2)))
+                .level(String.valueOf(response.getBody().getLevel()))
+                .speedTier(String.valueOf(response.getBody().getSpeedTier()))
+                .optimizationTier(String.valueOf(response.getBody().getOptimizationTier()))
                 .build();
     }
 
     @Override
-    public List<String> getLevelAndTier(String curExp, String nowMmrBySpeed, String nowMmrByOptimization)
+    public UserDto.UserPlayDto getLevelAndTier(String curExp, String nowMmrBySpeed, String nowMmrByOptimization)
     {
         UserLevelEntity userLevelEntity =
                 userLevelRepository.findTopBySumExpLessThanEqualOrderByLevelDesc(Integer.parseInt(curExp));
+
         UserTierEntity userTierEntityBySpeed =
                 userTierRepository.findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(
                         Integer.parseInt(nowMmrBySpeed),
                         Integer.parseInt(nowMmrBySpeed)
                 );
+
         UserTierEntity userTierEntityByOptimization =
                 userTierRepository.findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(
                         Integer.parseInt(nowMmrByOptimization),
@@ -220,11 +233,37 @@ public class UserServiceImpl implements UserService
         String tierBySpeed = userTierEntityBySpeed.getTier();
         String tierByOptimization = userTierEntityByOptimization.getTier();
 
-        List<String> retList = new ArrayList<>();
-        retList.add(level + "");
-        retList.add(tierBySpeed);
-        retList.add(tierByOptimization);
+        return UserDto.UserPlayDto.builder()
+                .level(level + "")
+                .speedTier(tierBySpeed)
+                .optimizationTier(tierByOptimization)
+                .build();
+    }
 
-        return retList;
+    public void test() throws URISyntaxException
+    {
+        MultiValueMap<String, List> bodyData = new LinkedMultiValueMap<>();
+        List<String> probNoList = new ArrayList<>();
+        probNoList.add("10");
+        probNoList.add("20");
+        probNoList.add("30");
+        bodyData.add("prob_no_list", probNoList);
+
+        String url = "http://localhost:9005/log-service/test";
+
+        RequestEntity<Map> request = RequestEntity
+                .post(new URI(url))
+                .accept(MediaType.APPLICATION_FORM_URLENCODED)
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(bodyData);
+
+        ResponseEntity<List<UserDto.UserPlayDto>> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<List<UserDto.UserPlayDto>>() {}
+        );
+
+        return;
     }
 }

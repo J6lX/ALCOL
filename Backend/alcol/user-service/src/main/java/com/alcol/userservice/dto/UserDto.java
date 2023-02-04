@@ -37,6 +37,17 @@ public class UserDto
 
     @Getter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UserPlayDto
+    {
+        private String level;
+        private String speedTier;
+        private String optimizationTier;
+    }
+
+    @Getter
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SignUpDto

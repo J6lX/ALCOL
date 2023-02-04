@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.net.URISyntaxException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -107,20 +106,21 @@ public class UserController
         );
     }
 
-    // 사용자 상세 정보 요청
-    // user_id 를 받아서
-    // 해당 유저의 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
+    // user_id 를 받아서 해당 유저의
+    // 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
     @PostMapping("/getUserInfo")
     public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
             throws URISyntaxException
     {
+        userService.test();
         return userService.getUserInfo(userId);
     }
 
     // 현재 경험치, 스피드전 mmr, 효율성전 mmr 을 받아서
     // 현재 레벨, 스피드전 티어, 효율성전 티어를 리턴
     @PostMapping("/getLevelAndTier")
-    public List<String> getLevelAndTier(
+    public UserDto.UserPlayDto getLevelAndTier
+    (
             @RequestParam(value="cur_exp") String curExp,
             @RequestParam(value="now_mmr_by_speed") String nowMmrBySpeed,
             @RequestParam(value="now_mmr_by_optimization") String nowMmrByOptimization
