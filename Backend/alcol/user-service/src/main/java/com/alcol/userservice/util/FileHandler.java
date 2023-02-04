@@ -16,7 +16,6 @@ import java.util.Date;
 public class FileHandler
 {
     public boolean parseFileInfo(MultipartFile multipartFile, UserEntity userEntity)
-            throws IOException
     {
         // 파일 이름을 업로드 한 날짜로 바꾸어서 저장
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -45,7 +44,7 @@ public class FileHandler
         String contentType = multipartFile.getContentType();
         String originalFileExtension = null;
 
-        // 확장자 명이 없으면 이 파일은 잘 못 된 것이다
+        // 확장자 명이 없으면 이 파일은 잘못된 것이다
         if (ObjectUtils.isEmpty(contentType))
         {
             return false;
@@ -68,7 +67,12 @@ public class FileHandler
         file = new File(absolutePath + path + "/" + new_file_name);
 
         // 파일을 저장
-        multipartFile.transferTo(file);
+        try {
+//            multipartFile.transferTo(file);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return false;
+        }
 
         userEntity.setOriginalFileName(multipartFile.getOriginalFilename());
         userEntity.setStoredFileName(new_file_name);

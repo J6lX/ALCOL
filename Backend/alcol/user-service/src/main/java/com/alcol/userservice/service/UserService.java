@@ -4,7 +4,7 @@ import com.alcol.userservice.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.net.URISyntaxException;
 
 
 public interface UserService extends UserDetailsService
@@ -15,11 +15,13 @@ public interface UserService extends UserDetailsService
 
     String getNewAccessToken(String userId);
 
-    UserDto.UserInfoDto getUserInfo(String userId);
+    UserDto.UserInfoDto getUserInfo(String userId) throws URISyntaxException;
 
-    List<String> getLevelAndTier(
+    UserDto.UserPlayDto getLevelAndTier(
             String curExp,
             String nowMmrBySpeed,
             String nowMmrByOptimization
     );
+
+    void test() throws URISyntaxException;
 }
