@@ -4,15 +4,6 @@
   background-size: cover;
 }
 
-.navbar {
-  display: none;
-  visibility: hidden;
-}
-
-.footer {
-  display: none;
-}
-
 .battle_user_info_row {
   position: relative;
   display: flex;
@@ -71,7 +62,7 @@
   height: 50px;
   background-color: black;
   margin: auto;
-  padding-top: 20px;
+  padding-top: 5px;
 }
 
 .battle_avg_time_box {
@@ -91,4 +82,13 @@
   color: white;
   font-size: 80px;
   margin-left: 30px;
+}
+
+@media screen and (max-width: 1000px) {
+  .battle_user_info_contents {
+    display: none;
+  }
+  .battle_fixed_text {
+    display: none;
+  }
 }

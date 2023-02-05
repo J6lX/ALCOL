@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
+import axios from "axios";
 import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
@@ -8,17 +10,24 @@ import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 
 const MainPage = () => {
+  const changeColor = (event) => {
+    event.target.style.color = "#FEF15D";
+  };
+
+  const returnColor = (event) => {
+    event.target.style.color = "white";
+  };
+
   return (
-    <div className="fullmiddle">
+    <div id="MainPage" className="fullmiddle">
       <video src={video} loop autoPlay muted className="bgvideo" style={{ zIndex: "1" }}></video>
       <div className="gradientBox" style={{ zIndex: "2" }}></div>
       <div className="mainh1" style={{ zIndex: "2" }}>
         <img src={mainSlogan} alt="slogan" style={{ width: "30vw", marginBottom: "5%" }} />
       </div>
-
       <div
         className="battleStart"
-        style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "1vw", zIndex: "1" }}>
+        style={{ height: "10%", border: "5px solid #FDE14B", borderRadius: "1vw", zIndex: "2" }}>
         <Link to="/mode">
           <Button
             style={{
@@ -34,17 +43,35 @@ const MainPage = () => {
             </p>
           </Button>
         </Link>
-        <Button type="text" block style={{ marginTop: "5px" }}>
-          <p className="NanumSquare" style={{ fontSize: "1vw", color: "white" }}>
-            배틀 방법이 궁금하신가요?
-          </p>
-        </Button>
+        <ScrollLink to="Guide1" spy={true} smooth={true}>
+          <Button type="text" block style={{ marginTop: "5px" }}>
+            <p
+              className="NanumSquare"
+              onMouseEnter={changeColor}
+              onMouseLeave={returnColor}
+              style={{ fontSize: "1vw", color: "white" }}>
+              배틀 방법이 궁금하신가요?
+            </p>
+          </Button>
+        </ScrollLink>
       </div>
     </div>
   );
 };
 
 const SpeedRanking = () => {
+  // 스피드전 랭킹 요청
+  axios
+    .get("http://i8b303.p.ssafy.io/speedRankList/1")
+    // 요청 성공 시
+    .then(function (response) {
+      console.log("스피드 랭킹: ", response.data);
+    })
+    // 요청 실패 시
+    .catch((error) => {
+      console.log(error);
+    });
+
   return (
     <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
       <h1
@@ -66,6 +93,18 @@ const SpeedRanking = () => {
 };
 
 const EfficiencyRanking = () => {
+  // 최적화전 랭킹 요청
+  axios
+    .get("http://localhost:8000/optimizationRankList/1")
+    // 요청 성공 시
+    .then(function (response) {
+      console.log("최적화 랭킹: ", response.data);
+    })
+    // 요청 실패 시
+    .catch((error) => {
+      console.log(error);
+    });
+
   return (
     <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
       <h1
@@ -105,11 +144,13 @@ const RankingPage = () => {
           <p className="NanumSquare" style={{ fontSize: "1.5vw", color: "white" }}>
             Today's
           </p>
-          <p
-            className="NanumSquare"
-            style={{ fontSize: "3vw", fontWeight: "bold", color: "white" }}>
-            Ranking
-          </p>
+          <Link to="/ranking">
+            <p
+              className="NanumSquare"
+              style={{ fontSize: "3vw", fontWeight: "bold", color: "white" }}>
+              Ranking
+            </p>
+          </Link>
         </div>
       </div>
       <div

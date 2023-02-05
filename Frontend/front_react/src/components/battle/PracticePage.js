@@ -1,10 +1,11 @@
-import { Button, Row, Col, Pagination, Input } from "antd";
+import { Button, Row, Col, Input } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
 // MaterialUI(MUI) 사용: 프레임워크 다운로드 필요
 // npm install @mui/x-data-grid 입력하여 다운로드
-import { DataGrid } from "@mui/x-data-grid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Pagination from "@mui/material/Pagination";
+import { DataGrid } from "@mui/x-data-grid";
 
 // 문제 목록 다크 모드 적용
 const darkTheme = createTheme({
@@ -18,17 +19,35 @@ const problemLabel = [
   {
     field: "id",
     headerName: "문제 번호",
-    width: 160,
+    width: 200,
+    flex: 0.5,
     align: "center",
+    headerAlign: "center",
   },
   {
     field: "name",
     headerName: "문제 이름",
-    width: 160,
+    width: 320,
+    flex: 1,
     align: "center",
+    headerAlign: "center",
   },
-  { field: "type", headerName: "문제 유형", width: 160, align: "center" },
-  { field: "tier", headerName: "난이도", width: 160, align: "center" },
+  {
+    field: "type",
+    headerName: "문제 유형",
+    width: 210,
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "tier",
+    headerName: "난이도",
+    width: 180,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
 ];
 
 // 연습 문제 데이터
@@ -40,6 +59,12 @@ const problemData = [
   { id: 5, name: "문제5", type: "DP", tier: "Gold" },
 ];
 
+// 커스텀 페이지네이션
+function CustomPagination() {
+  return <Pagination defaultCurrent={1} total={50} responsive="true" />;
+}
+
+// 페이지 렌더링
 function Ranking() {
   return (
     <div>
@@ -61,7 +86,7 @@ function Ranking() {
         <Col span={16}>
           {/* 검색 상자 */}
           <Row justify="end">
-            <Col xs={8} lg={5}>
+            <Col xs={0} sm={8} lg={5}>
               <Input
                 placeholder="유형 이름 검색"
                 allowClear
@@ -73,15 +98,18 @@ function Ranking() {
             </Col>
             <Col
               style={{
+                marginLeft: "5px",
                 padding: "5px",
-              }}>
+              }}
+              xs={0}
+              sm={3}>
               <Button>검색</Button>
             </Col>
           </Row>
 
-          {/* 연습 문제 목록 블록 */}
+          {/* 연습 문제 목록 블록(페이지네이션 포함) */}
           <Row className="block" justify="center" align="center">
-            <Col className="problems" span={24}>
+            <Col className="problems" span={24} justify="center">
               <ThemeProvider theme={darkTheme}>
                 <DataGrid
                   rows={problemData}
@@ -90,26 +118,16 @@ function Ranking() {
                   disableColumnSelector
                   disableColumnMenu
                   disableColumnFilter
+                  autoHeight={true}
+                  autoPageSize={true}
                   style={{
                     borderRadius: "5%",
                   }}
+                  components={{
+                    Pagination: CustomPagination,
+                  }}
                 />
               </ThemeProvider>
-            </Col>
-          </Row>
-
-          {/* 페이지네이션 표시 */}
-          <Row justify="center">
-            <Col align="center">
-              <Pagination
-                defaultCurrent={1}
-                total={50}
-                responsive="true"
-                theme="dark"
-                style={{
-                  padding: "10px",
-                }}
-              />
             </Col>
           </Row>
         </Col>

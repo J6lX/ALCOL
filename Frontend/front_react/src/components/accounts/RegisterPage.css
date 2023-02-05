@@ -43,6 +43,10 @@
   background-color: #27292e;
 }
 
+.form_register input {
+  color: white;
+}
+
 .button_register {
   border-radius: 3px;
   background-color: white;

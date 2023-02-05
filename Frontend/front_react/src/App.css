@@ -69,13 +69,6 @@ body {
   margin: 3px;
 }
 
-/* 푸터 테마 */
-.footer {
-  padding: 20px;
-  text-align: center;
-  background-color: #17181c;
-}
-
 .App-link {
   color: #61dafb;
 }
@@ -84,6 +77,12 @@ body {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+/* 선택된 필터 색상 변경 */
+.ant-menu-item-selected {
+  background-color: #5cfdfd !important;
+  color: #16171b !important;
 }
 
 @keyframes App-logo-spin {

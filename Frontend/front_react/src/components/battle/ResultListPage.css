@@ -1,0 +1,100 @@
+.resultList_background {
+  /* height: 100vh; */
+  background: url(/src/assets/result_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.result_list_wrap {
+  background-color: rgba(255, 255, 255, 0.5);
+  margin: auto 0;
+  height: 50vh;
+}
+
+.result_game_mode {
+  font-family: "PyeongChangPeace";
+  font-weight: bold;
+  font-size: 50px;
+  color: white;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.result_icon_vs {
+  margin-left: -6px;
+}
+
+.result_user_info {
+  margin-top: 3px;
+  height: 37px;
+  text-align: center;
+  line-height: 37px;
+  background-color: #5cfdfd;
+}
+
+.result_enemy_info {
+  margin-top: 22px;
+  height: 36px;
+  text-align: center;
+  line-height: 36px;
+  background-color: #fef15d;
+}
+
+.result_list_circle_user {
+  padding-left: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #5cfdfd;
+}
+
+.result_list_circle_enemy {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  background-color: #fef15d;
+}
+
+.result_list_info_wrap {
+  margin-top: 10px;
+}
+
+.result_list_info_wrap > div {
+  float: left;
+}
+
+.result_list_time {
+  color: white;
+  height: 6vh;
+  line-height: 6vh;
+  text-align: center;
+}
+
+.result_list_info {
+  background-color: rgba(255, 255, 255, 0.5);
+  margin-top: 0.5vh;
+  /* padding-left: 10px; */
+  height: 5vh;
+  line-height: 5vh;
+}
+
+.result_list_result {
+  background-color: #5cfdfd;
+  margin-top: 0.5vh;
+  height: 5vh;
+  width: 0.5px;
+}
+
+.result_button {
+  background-color: rgba(255, 255, 255, 0.6);
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+}
