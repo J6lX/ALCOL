@@ -24,11 +24,13 @@ public class FileHandler
         // 프로젝트 폴더에 저장하기 위해 절대경로를 설정
         String absolutePath = new File("").getAbsolutePath() + "\\";
 
+        log.info("absolute path : " + absolutePath);
+
         // 경로를 지정하고 그곳에 저장
         String path = "images/" + currentDate;
         File file = new File(path);
 
-        // 저장할 위치의 디렉토리가 존지하지 않을 경우
+        // 저장할 위치의 디렉토리가 존재하지 않을 경우
         if (!file.exists())
         {
             // mkdir() 함수와 다른 점은 상위 디렉토리가 존재하지 않을 때 그것까지 생성
@@ -68,7 +70,7 @@ public class FileHandler
 
         // 파일을 저장
         try {
-//            multipartFile.transferTo(file);
+            multipartFile.transferTo(file);
         } catch(Exception e) {
             e.printStackTrace();
             return false;

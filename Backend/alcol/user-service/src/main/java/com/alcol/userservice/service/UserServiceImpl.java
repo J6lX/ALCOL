@@ -8,6 +8,7 @@ import com.alcol.userservice.repository.UserLevelRepository;
 import com.alcol.userservice.repository.UserRepository;
 import com.alcol.userservice.repository.UserTierRepository;
 import com.alcol.userservice.util.FileHandler;
+import com.alcol.userservice.util.RestTemplateUtils;
 import com.alcol.userservice.util.TokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService
     private final TokenProvider tokenProvider;
     private final FileHandler fileHandler;
     private final RestTemplate restTemplate;
+    private final RestTemplateUtils restTemplateUtils;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -52,7 +53,8 @@ public class UserServiceImpl implements UserService
             BCryptPasswordEncoder bCryptPasswordEncoder,
             TokenProvider tokenProvider,
             FileHandler fileHandler,
-            RestTemplate restTemplate
+            RestTemplate restTemplate,
+            RestTemplateUtils restTemplateUtils
     )
     {
         this.userRepository = userRepository;
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService
         this.tokenProvider = tokenProvider;
         this.fileHandler = fileHandler;
         this.restTemplate = restTemplate;
+        this.restTemplateUtils = restTemplateUtils;
     }
 
     /**
@@ -90,13 +93,12 @@ public class UserServiceImpl implements UserService
     }
 
     /**
-     *
+     * 회원 가입 메소드
      * @param signUpDto 회원가입 정보
      * @param file      유저 프로필 사진
      * @return 성공 시 사용자의 유저 아이디
      * @throws IOException
      */
-    // 회원 가입 메소드
     @Override
     public String createUser(
             @RequestBody UserDto.SignUpDto signUpDto,
@@ -159,6 +161,11 @@ public class UserServiceImpl implements UserService
         return modelMapper.map(userEntity, UserDto.UserDetailDto.class);
     }
 
+    /**
+     * 새로운 access token 발급
+     * @param userId
+     * @return
+     */
     @Override
     public String getNewAccessToken(String userId)
     {
@@ -173,34 +180,33 @@ public class UserServiceImpl implements UserService
      */
     @Override
     public UserDto.UserInfoDto getUserInfo(String userId)
-            throws URISyntaxException
-    {
+            throws URISyntaxException {
         // 닉네임, 사진 정보는 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         // 레디스에서 mmr, 경험치 정보를 가져와서 레벨, 티어를 추출
         // 레디스에 정보가 없으면 log-service 로 mmr, 경험치 받아오기
 
-        MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
-        bodyData.add("user_id", userId);
-        String url = "http://localhost:9005/log-service/getLevelAndTier";
-
-        RequestEntity<Map> request = RequestEntity
-                .post(new URI(url))
-                .accept(MediaType.APPLICATION_FORM_URLENCODED)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(bodyData);
+        boolean redisHasData = false;
+        ResponseEntity<UserDto.UserPlayDto> response = null;
 
         // 레디스에 mmr, 경험치 정보가 없을 때 요청
-        // user-service -> log-service
-        // log-service 에게 user_id 를 보내서
-        // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
-        ResponseEntity<UserDto.UserPlayDto> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                request,
-                new ParameterizedTypeReference<UserDto.UserPlayDto>() {}
-        );
+        if (!redisHasData)
+        {
+            // user-service -> log-service
+            // log-service 에게 user_id 를 보내서
+            // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
+            MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
+            bodyData.add("user_id", userId);
+            String url = "http://localhost:9005/log-service/getLevelAndTier";
+
+            response = restTemplateUtils.sendRequest(
+                    bodyData,
+                    url,
+                    new ParameterizedTypeReference<UserDto.UserPlayDto>() {
+                    }
+            );
+        }
 
         return UserDto.UserInfoDto.builder()
                 .nickname(userEntity.getNickname())
@@ -251,17 +257,8 @@ public class UserServiceImpl implements UserService
 
         String url = "http://localhost:9005/log-service/test";
 
-        RequestEntity<Map> request = RequestEntity
-                .post(new URI(url))
-                .accept(MediaType.APPLICATION_FORM_URLENCODED)
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(bodyData);
-
-        ResponseEntity<List<UserDto.UserPlayDto>> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                request,
-                new ParameterizedTypeReference<List<UserDto.UserPlayDto>>() {}
+        ResponseEntity<List<UserDto.UserPlayDto>> response = restTemplateUtils.sendRequest(
+                bodyData, url, new ParameterizedTypeReference<List<UserDto.UserPlayDto>>() {}
         );
 
         return;
