@@ -48,7 +48,7 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Link className="textDark">Logout</Link>
+          <Link to="/" className="textDark">Logout</Link>
         </Col>
       </Row>
     );

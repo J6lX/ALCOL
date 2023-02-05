@@ -9,6 +9,8 @@ import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
+import ReadyPage from "./components/battle/ReadyPage";
+import ContinuousBattlePage from "./components/battle/ContinuousBattlePage";
 import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
 import SolvingPage from "./components/battle/SolvingPage";
@@ -52,6 +54,12 @@ function App() {
 
             {/* 밴픽 페이지 */}
             <Route path="/ban" component={BanPage} />
+
+            {/* 매칭 후 소켓 연결 대기 페이지 */}
+            <Route path="/ready" component={ReadyPage} />
+
+            {/* 배틀 페이지 */}
+            <Route path="/battle" component={ContinuousBattlePage} />
 
             {/* 랭킹 조회 페이지 */}
             <Route path="/ranking" component={Ranking} />
