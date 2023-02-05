@@ -1,5 +1,6 @@
 package com.alcol.logservice.service;
 
+import com.alcol.logservice.dto.LogDto;
 import com.alcol.logservice.entity.BattleLogEntity;
 import com.alcol.logservice.entity.ProbTrialLogEntity;
 import com.alcol.logservice.repository.BattleLogRepository;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 @Service
 public class LogServiceImpl implements LogService
@@ -33,14 +32,16 @@ public class LogServiceImpl implements LogService
 
     // user_id 를 받아서 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴
     @Override
-    public List<String> getLevelAndTier(String userId)
+    public LogDto.UserPlayDto getLevelAndTier(String userId)
     {
         ProbTrialLogEntity probTrialLogEntity =
                 probTrialLogRepository.findTopByUserIdOrderByProbTrialLogNoDesc(userId);
+
         BattleLogEntity battleLogEntityBySpeed =
                 battleLogRepository.findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(
                         userId, "speed"
                 );
+
         BattleLogEntity battleLogEntityByOptimization =
                 battleLogRepository.findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(
                         userId, "optimization"
@@ -59,16 +60,12 @@ public class LogServiceImpl implements LogService
         // log-service -> user-service
         // user-service 에게 현재 경험치, 현재 스피드전 mmr, 현재 효율성전 mmr 을 보내서
         // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
-        ResponseEntity<List> response = restTemplate.postForEntity(
+        ResponseEntity<LogDto.UserPlayDto> response = restTemplate.postForEntity(
                 url,
                 bodyData,
-                List.class
+                LogDto.UserPlayDto.class
         );
 
-        // 리턴받은 리스트에는 레벨, 스피드전 티어, 효율성전 티어가 순서대로 있음
-        // 인덱스 0 : 레벨
-        // 인덱스 1 : 스피드전 티어
-        // 인덱스 2 : 효율성전 티어
         return response.getBody();
     }
 }
