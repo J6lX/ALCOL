@@ -53,7 +53,7 @@ function App() {
             <Route path="/match" component={MatchingPage} />
 
             {/* 밴픽 페이지 */}
-            <Route path="/ban" component={BanPage} />
+            {/* <Route path="/ban" component={BanPage} /> */}
 
             {/* 매칭 후 소켓 연결 대기 페이지 */}
             <Route path="/ready" component={ReadyPage} />
@@ -71,10 +71,10 @@ function App() {
             <Route path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
-            <Route path="/solve" exact={true} component={SolvingPage} />
+            {/* <Route path="/solve" exact={true} component={SolvingPage} /> */}
 
             {/* 배틀 결과 페이지 */}
-            <Route path="/result" exact={true} component={ResultPage} />
+            {/* <Route path="/result" exact={true} component={ResultPage} /> */}
 
             {/* 배틀 상세 결과 페이지 */}
             <Route path="/resultList" exact={true} component={ResultListPage} />

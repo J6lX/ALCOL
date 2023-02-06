@@ -43,6 +43,7 @@
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.4.2",
     "sass": "^1.57.1",
+    "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
