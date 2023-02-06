@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,22 +26,38 @@ public class LogController
     }
 
     /**
+     *  user-service 에서 user_id 를 넘겨주면 해당 유저의 배틀 로그를 리턴
+     * @param userId
+     * @return
+     */
+    @PostMapping("/getBattleLog")
+    public ResponseEntity<List<LogDto.UserBattleLogDto>> getBattleLog(
+            @RequestParam(value="user_id") String userId
+    )
+    {
+        List<LogDto.UserBattleLogDto> list = logService.getBattleLog(userId);
+        return restTemplateUtils.sendResponse(list);
+    }
+
+    /**
      * user-service 에서 user_id 를 넘겨주면 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴
      * @param userId
      * @return
      */
     @PostMapping(value = "/getLevelAndTier")
-    public ResponseEntity<LogDto.UserPlayDto> getLevelAndTier(@RequestParam(value="user_id") String userId)
+    public ResponseEntity<LogDto.UserPlayDto> getLevelAndTier(
+            @RequestParam(value="user_id") String userId
+    )
+            throws URISyntaxException
     {
         LogDto.UserPlayDto userPlayDto = logService.getLevelAndTier(userId);
         return restTemplateUtils.sendResponse(userPlayDto);
     }
 
     @PostMapping("/test")
-    public ResponseEntity<List<LogDto.UserPlayDto>> test
-            (
-                    @RequestParam(value = "prob_no_list") List<String> probNoList
-            )
+    public ResponseEntity<List<LogDto.UserPlayDto>> test(
+            @RequestParam(value = "prob_no_list") List<String> probNoList
+    )
     {
         List<LogDto.UserPlayDto> ret = new ArrayList<>();
         ret.add(new LogDto.UserPlayDto(probNoList.get(0), "g", "g"));

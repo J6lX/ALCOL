@@ -12,4 +12,6 @@ public interface BattleLogRepository extends CrudRepository<BattleLogEntity, Lon
 //    order by battle_log_no desc
 //    limit 1;
     BattleLogEntity findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(String userId, String battleMode);
+
+    BattleLogEntity findTop10ByMyUserIdOrderByBattleLogNoDesc(String userId);
 }
