@@ -25,7 +25,7 @@ public class BattleResultServiceImpl implements BattleResultService
     private final RestTemplate restTemplate;
 
     /**
-     * @implSpec 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
+     * 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
      * Hash 사용
      * */
     public String recordCnt(WinLoseDto winLose)
@@ -55,7 +55,7 @@ public class BattleResultServiceImpl implements BattleResultService
     }
 
     /**
-     * @implSpec 배틀이 끝난 뒤 redis에 유저별 랭킹 기록하는 메서드
+     * 배틀이 끝난 뒤 redis에 유저별 랭킹 기록하는 메서드
      * Sorted set 사용
      * */
     public String recordRank(String mode, int mmr, String userId)
@@ -81,7 +81,7 @@ public class BattleResultServiceImpl implements BattleResultService
         return "OK";
     }
     /**
-     * @implSpec 배틀이 끝난 뒤 redis에 랭킹에 필요한 사용자 데이터 저장하는 메서드
+     * 배틀이 끝난 뒤 redis에 랭킹에 필요한 사용자 데이터 저장하는 메서드
      * Hash 사용
      * */
     public String recordUserData(String userId){

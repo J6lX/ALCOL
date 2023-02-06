@@ -1,6 +1,7 @@
 package com.alcol.rankservice.controller;
 
 import com.alcol.rankservice.dto.BattleDto;
+import com.alcol.rankservice.dto.RankDto;
 import com.alcol.rankservice.dto.WinLoseDto;
 import com.alcol.rankservice.service.BattleResultService;
 import com.alcol.rankservice.service.RankService;
@@ -44,19 +45,51 @@ public class BattleRecordController
         return ResponseEntity.status(HttpStatus.OK).body("OK");
     }
 
-    @PostMapping("/mySpeedRank")
-    public ResponseEntity<String> requestMySpeedRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
+    @PostMapping("/myRank")
+    public ResponseEntity<RankDto.Ranking> requestMySpeedRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
         // header에 있는 user_id값 가져옴
         String userId = requestHeader.getHeaders("user_id").nextElement();
         String battleMode = requestMap.get("battle_mode");
 
         // redis의 랭킹 부분에서 해당 유저의 mmr값이 존재하는지 확인
-        int mmr = rankService.getMySpeedRank(userId, battleMode);
+        int mmr = rankService.getMyRank(userId, battleMode);
 
-        // mmr이 -1이면 해당 유저는 배틀을 진행한적이 없는 유저이다.
+        // mmr이 -1이면 해당 유저는 배틀을 진행한 적이 없는 유저이다.
         if(mmr == -1){
+            RankDto.UserData userData = rankService.getUserData(userId);
+            RankDto.Ranking rank = RankDto.Ranking.builder()
+                    .nickname(userData.getNickname())
+                    .profile_pic(userData.getStored_file_name())
+                    .level(userData.getLevel())
+                    .tier("none")
+                    .mmr(-1)
+                    .winCnt(-1)
+                    .loseCnt(-1)
+                    .winningRate(-1)
+                    .grade(-1)
+                    .build();
 
+            return ResponseEntity.status(HttpStatus.OK).body(rank);
         }
-        return ResponseEntity.status(HttpStatus.OK).body("ㅎㄵ");
+        // mmr이 -1이 아니라면 배틀을 진행한 적이 있는 유저이다.
+        // 그렇다면 ranking에서 순위, mmr값을 가져오고 win/lose count도 가져와야 한다.
+
+        RankDto.UserData userData = rankService.getUserData(userId);
+        RankDto.WinLoseCount winLoseCount = rankService.getWinLoseCount(userId, battleMode);
+        RankDto.RankingAndMMR rankingAndMMR = rankService.getRankingAndMMR(userId, battleMode);
+
+        RankDto.Ranking rank = RankDto.Ranking.builder()
+                .nickname(userData.getNickname())
+                .profile_pic(userData.getStored_file_name())
+                .level(userData.getLevel())
+                .tier(userData.getSpeed_tier())
+                .mmr(rankingAndMMR.getMMR())
+                .winCnt(winLoseCount.getWin())
+                .loseCnt(winLoseCount.getLose())
+                .winningRate(winLoseCount.getWinningRate())
+                .grade(rankingAndMMR.getGrade() + 1)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(rank);
     }
 }
