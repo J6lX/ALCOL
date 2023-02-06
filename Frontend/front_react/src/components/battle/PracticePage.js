@@ -1,7 +1,7 @@
 import { Button, Row, Col, Input, Table, ConfigProvider, theme } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 // 연습 문제 구분 설명
 const problemLabel = [
@@ -43,6 +43,17 @@ const problemData = [
 
 // 페이지 렌더링
 function Ranking() {
+  // 검색 기능 사용 시
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query"); // 쿼리가 있는 경우 가져오기
+
+  // URL에 검색어가 있는 경우
+  if (query) {
+    // (대충 연습 문제 중에서 필터링해야 한다는 뜻)
+  } else {
+    // (대충 모든 문제 보여주면 된다는 뜻)
+  }
+
   return (
     <div>
       {/* 페이지 제목(이미지 위에 띄우기) */}
