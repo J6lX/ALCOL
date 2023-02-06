@@ -20,7 +20,7 @@ function LoginPage() {
 
     // axios 통신 진행
     axios
-      .post("http://localhost:8000/user-service/login", userData)
+      .post("http://i8b303.p.ssafy.io:8000/user-service/login", userData)
       // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
         if (response.data.customCode === "006") {

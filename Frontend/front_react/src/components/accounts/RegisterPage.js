@@ -84,7 +84,7 @@ function App() {
     });
     formData.append("signUpDto", new Blob([userData], { type: "application/json" }));
     axios
-      .post("http://localhost:8000/user-service/", formData, {
+      .post("http://i8b303.p.ssafy.io:8000/user-service/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(function (response) {
