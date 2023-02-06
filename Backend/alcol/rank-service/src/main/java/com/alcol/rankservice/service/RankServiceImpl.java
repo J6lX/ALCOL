@@ -88,14 +88,10 @@ public class RankServiceImpl implements RankService{
      * */
     public RankDto.RankingAndMMR getRankingAndMMR(String userId, String battleMode)
     {
-        System.out.println("GET RANKING AND MMR 들어왔음");
-        System.out.println(userId + " " + battleMode);
         ranking = redisTemplate.opsForZSet();
 
         long grade = ranking.rank(battleMode, userId);
-        System.out.println("등수: " + grade);
         int MMR = ranking.score(battleMode, userId).intValue();
-        System.out.println("MMR: " + MMR);
 
         return RankDto.RankingAndMMR.builder()
                 .grade(grade)

@@ -14,9 +14,7 @@ public class RankDto
                 private int level;
                 private String tier;
                 private int mmr;
-                private long winCnt;
-                private long loseCnt;
-                private long winningRate;
+                private WinLoseCount record;
                 private long grade;
         }
 
