@@ -1,4 +1,4 @@
-import { Row, Col } from "antd";
+import { Row, Col, ConfigProvider, Table, theme } from "antd";
 import "./Mypage.css";
 import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
@@ -6,15 +6,6 @@ import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
 import React, { Component, useState, useEffect } from "react";
 import Chart from "react-apexcharts";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { DataGrid } from "@mui/x-data-grid";
-
-// 전적 기록 다크 모드 적용
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
 
 // 현재 로그인한 사용자 정보
 const userData = {
@@ -33,58 +24,40 @@ const userData = {
 // 매치 기록 정렬 컬럼
 const matchCol = [
   {
-    field: "matchResult",
-    headerName: "결과",
-    width: 200,
-    flex: 1,
+    title: "결과",
+    dataIndex: "matchResult",
+    key: "matchResult",
     align: "center",
-    headerAlign: "center",
-    sortable: false,
   },
   {
-    field: "playMode",
-    headerName: "플레이 모드",
-    width: 200,
-    flex: 1,
+    dataIndex: "playMode",
+    title: "플레이 모드",
     align: "center",
-    headerAlign: "center",
-    sortable: false,
+    key: "playMode",
   },
   {
-    field: "opponent",
-    headerName: "대결 상대",
-    width: 150,
-    flex: 1,
+    dataIndex: "opponent",
+    key: "opponent",
+    title: "대결 상대",
     align: "center",
-    headerAlign: "center",
-    sortable: false,
   },
   {
-    field: "problemName",
-    headerName: "문제 이름",
-    width: 150,
-    flex: 0.7,
+    dataIndex: "problemName",
+    key: "problemName",
+    title: "문제 이름",
     align: "center",
-    headerAlign: "center",
-    sortable: false,
   },
   {
-    field: "difficulty",
-    headerName: "문제 난이도",
-    width: 190,
-    flex: 1,
+    dataIndex: "problemDifficulty",
+    key: "problemDifficulty",
+    title: "문제 난이도",
     align: "center",
-    headerAlign: "center",
-    sortable: false,
   },
   {
-    field: "recordDate",
-    headerName: "일시",
-    width: 200,
-    flex: 1.3,
+    dataIndex: "recordDate",
+    key: "recordDate",
+    title: "일시",
     align: "center",
-    headerAlign: "center",
-    sortable: false,
   },
 ];
 
@@ -97,7 +70,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "맥주",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 2,
@@ -106,7 +79,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "소주",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 3,
@@ -115,7 +88,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "막걸리",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 4,
@@ -124,7 +97,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "와인",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 5,
@@ -133,7 +106,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "고량주",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 6,
@@ -142,7 +115,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "1번 플레이어",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 7,
@@ -151,7 +124,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "2번 플레이어",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 8,
@@ -160,7 +133,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "3번 플레이어",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 9,
@@ -169,7 +142,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "4번 플레이어",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 10,
@@ -178,17 +151,16 @@ const matchData = [
     matchResult: "승리",
     opponent: "5번 플레이어",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 11,
-
     playMode: "스피드",
     problemName: "Problem1",
     matchResult: "승리",
     opponent: "플레이어 6",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 12,
@@ -197,7 +169,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "플레이어 7",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 13,
@@ -206,7 +178,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "플레이어 8",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 14,
@@ -215,7 +187,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "플레이어 9",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
   {
     id: 15,
@@ -224,7 +196,7 @@ const matchData = [
     matchResult: "승리",
     opponent: "플레이어 10",
     recordDate: "어제",
-    difficulty: "Diamond",
+    problemDifficulty: "Diamond",
   },
 ];
 
@@ -509,24 +481,24 @@ function Mypage() {
               {/* 전적 표시 블록 */}
               <Row>
                 <Col span={24}>
-                  <ThemeProvider theme={darkTheme}>
-                    <DataGrid
-                      rows={matchData}
-                      columns={matchCol}
-                      pageSize={resultCount}
-                      disableColumnSelector
-                      disableColumnMenu
-                      disableColumnFilter
-                      autoHeight={true}
-                      autoPageSize={true}
-                      hideFooter={true}
+                  <ConfigProvider
+                    theme={{
+                      algorithm: theme.darkAlgorithm,
+                      token: {
+                        colorPrimary: "#FAC557",
+                      },
+                    }}>
+                    <Table
                       style={{
-                        borderBottomLeftRadius: "5px",
-                        borderBottomRightRadius: "5px",
+                        padding: "3px",
                       }}
+                      dataSource={matchData}
+                      columns={matchCol}
+                      pagination={false}
+                      rowkey="id"
                     />
                     <p onClick={() => setResultCount(resultCount + 10)}>더 보기</p>
-                  </ThemeProvider>{" "}
+                  </ConfigProvider>
                 </Col>
               </Row>
             </Col>

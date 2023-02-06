@@ -68,12 +68,12 @@ body {
   height: 100%;
   width: 100%;
   color: white;
-  text-decoration: solid white;
 }
 
-/* 페이지네이션 가운데 고정 */
-.css-n830jf-MuiDataGrid-footerContainer {
-  justify-content: center !important;
+/* 페이지네이션 커스텀 */
+.ant-pagination .ant-pagination-item-active {
+  border: none;
+  background-color: #1d1e22;
 }
 
 h1 {
