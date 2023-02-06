@@ -1,6 +1,7 @@
 import React from "react";
 import "./ResultListPage.css";
 import { Col, Row, Divider } from "antd";
+import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import icon_vs from "../../assets/vs.png";
 import { resultListPlayerInfo, resultListModeInfo, resultListResultInfo } from "../../states/atoms";
@@ -142,14 +143,24 @@ function ResultList() {
 }
 
 function ResultButton() {
+  //페이지 이동 관련 함수/변수
+  const history = useHistory();
+
+  function hanleHistoryMatchAgain() {
+    history.push("/mode");
+  }
+  function hanleHistoryMain() {
+    history.push("/");
+  }
+
   return (
     <Row justify="space-between" style={{ marginTop: "30px" }}>
       <Col span={8}></Col>
-      <Col span={3} className="result_button">
-        자세히보기
-      </Col>
-      <Col span={3} className="result_button">
+      <Col span={3} className="result_button" onClick={hanleHistoryMatchAgain}>
         다시하기
+      </Col>
+      <Col span={3} className="result_button" onClick={hanleHistoryMain}>
+        그만하기
       </Col>
       <Col span={8}></Col>
     </Row>
