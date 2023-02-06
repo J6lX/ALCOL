@@ -130,8 +130,7 @@ public class UserController
     }
 
     /**
-     * user_id 를 받아서 해당 유저의
-     * 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
+     * user_id 를 받아서 해당 유저의 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
      * @param userId
      * @return
      * @throws URISyntaxException
