@@ -69,6 +69,22 @@ public class UserDto
 
     @Getter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserBattleLogDto
+    {
+        private int battleResult;
+        private String battleMode;
+        private String otherUserId;
+        private String otherUserNickname;
+        private int probNo;
+        private String probName;
+        private String probTier;
+        private LocalDateTime endTime;
+    }
+
+    @Getter
+    @Builder
     @AllArgsConstructor
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class ResponseDto<T>

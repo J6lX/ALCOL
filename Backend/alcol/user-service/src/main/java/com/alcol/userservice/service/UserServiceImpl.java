@@ -25,7 +25,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -43,7 +42,6 @@ public class UserServiceImpl implements UserService
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final TokenProvider tokenProvider;
     private final FileHandler fileHandler;
-    private final RestTemplate restTemplate;
     private final RestTemplateUtils restTemplateUtils;
 
     public UserServiceImpl(
@@ -53,7 +51,6 @@ public class UserServiceImpl implements UserService
             BCryptPasswordEncoder bCryptPasswordEncoder,
             TokenProvider tokenProvider,
             FileHandler fileHandler,
-            RestTemplate restTemplate,
             RestTemplateUtils restTemplateUtils
     )
     {
@@ -63,7 +60,6 @@ public class UserServiceImpl implements UserService
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.tokenProvider = tokenProvider;
         this.fileHandler = fileHandler;
-        this.restTemplate = restTemplate;
         this.restTemplateUtils = restTemplateUtils;
     }
 
@@ -180,7 +176,8 @@ public class UserServiceImpl implements UserService
      */
     @Override
     public UserDto.UserInfoDto getUserInfo(String userId)
-            throws URISyntaxException {
+            throws URISyntaxException
+    {
         // 닉네임, 사진 정보는 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
@@ -215,6 +212,23 @@ public class UserServiceImpl implements UserService
                 .speedTier(String.valueOf(response.getBody().getSpeedTier()))
                 .optimizationTier(String.valueOf(response.getBody().getOptimizationTier()))
                 .build();
+    }
+
+    @Override
+    public List<UserDto.UserBattleLogDto> getBattleLog(String userId)
+            throws URISyntaxException
+    {
+        MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
+        bodyData.add("user_id", userId);
+        String url = "http://localhost:9005/log-service/getBattleLog";
+
+        ResponseEntity<List<UserDto.UserBattleLogDto>> response = restTemplateUtils.sendRequest(
+                bodyData,
+                url,
+                new ParameterizedTypeReference<List<UserDto.UserPlayDto>>() {}
+        );
+
+        return response.getBody();
     }
 
     @Override

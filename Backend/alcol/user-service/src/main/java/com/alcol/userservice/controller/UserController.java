@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -47,7 +48,13 @@ public class UserController
         return "Hello, this is msa";
     }
 
-    // 회원 가입 요청
+    /**
+     * 회원 가입 요청
+     * @param signUpDto
+     * @param file
+     * @return
+     * @throws Exception
+     */
     @PostMapping(value = "/", consumes = {
             MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE
@@ -87,7 +94,11 @@ public class UserController
         );
     }
 
-    // 새로운 access token 발급 요청
+    /**
+     * 새로운 access token 발급 요청
+     * @param request
+     * @return
+     */
     @PostMapping("/refresh")
     public ResponseEntity<UserDto.ResponseDto<?>> createUser(HttpServletRequest request)
     {
@@ -106,8 +117,13 @@ public class UserController
         );
     }
 
-    // user_id 를 받아서 해당 유저의
-    // 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
+    /**
+     * user_id 를 받아서 해당 유저의
+     * 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
+     * @param userId
+     * @return
+     * @throws URISyntaxException
+     */
     @PostMapping("/getUserInfo")
     public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
             throws URISyntaxException
@@ -116,8 +132,26 @@ public class UserController
         return userService.getUserInfo(userId);
     }
 
-    // 현재 경험치, 스피드전 mmr, 효율성전 mmr 을 받아서
-    // 현재 레벨, 스피드전 티어, 효율성전 티어를 리턴
+    /**
+     * user_id 를 받아서 해당 유저의 배틀 로그를 리턴
+     * @param userId
+     * @return
+     */
+    @PostMapping("/getBattleLog")
+    public List<UserDto.UserBattleLogDto> getBattleLog(@RequestParam(value="user_id") String userId)
+            throws URISyntaxException
+    {
+        return userService.getBattleLog(userId);
+    }
+
+    /**
+     * 현재 경험치, 스피드전 mmr, 효율성전 mmr 을 받아서
+     * 현재 레벨, 스피드전 티어, 효율성전 티어를 리턴
+     * @param curExp
+     * @param nowMmrBySpeed
+     * @param nowMmrByOptimization
+     * @return
+     */
     @PostMapping("/getLevelAndTier")
     public UserDto.UserPlayDto getLevelAndTier
     (

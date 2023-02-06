@@ -22,7 +22,7 @@ public class FileHandler
         String currentDate = simpleDateFormat.format(new Date());
 
         // 프로젝트 폴더에 저장하기 위해 절대경로를 설정
-        String absolutePath = new File("").getAbsolutePath() + "\\";
+        String absolutePath = new File("").getAbsolutePath();
 
         log.info("absolute path : " + absolutePath);
 
