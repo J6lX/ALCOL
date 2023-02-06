@@ -3,6 +3,7 @@ package com.alcol.rankservice.controller;
 import com.alcol.rankservice.dto.BattleDto;
 import com.alcol.rankservice.entity.WinLose;
 import com.alcol.rankservice.service.BattleResultService;
+import com.alcol.rankservice.service.RankService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class BattleRecordController
 {
     private final BattleResultService battleResultService;
+    private final RankService rankService;
 
     @PostMapping("/BattleResult")
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
@@ -51,7 +53,7 @@ public class BattleRecordController
         String battleMode = requestMap.get("battle_mode");
 
         // redis의 랭킹 부분에서 해당 유저의 mmr값이 존재하는지 확인
-        int mmr = battleResultService.getMySpeedRank(userId, battleMode);
+        int mmr = rankService.getMySpeedRank(userId, battleMode);
 
         // mmr이 -1이면 해당 유저는 배틀을 진행한적이 없는 유저이다.
         if(mmr == -1){
