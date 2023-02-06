@@ -3,6 +3,8 @@ package com.alcol.logservice.repository;
 import com.alcol.logservice.entity.BattleLogEntity;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 public interface BattleLogRepository extends CrudRepository<BattleLogEntity, Long>
 {
     //    # 사용자 최신 MMR 가져오기
@@ -13,5 +15,5 @@ public interface BattleLogRepository extends CrudRepository<BattleLogEntity, Lon
 //    limit 1;
     BattleLogEntity findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(String userId, String battleMode);
 
-    BattleLogEntity findTop10ByMyUserIdOrderByBattleLogNoDesc(String userId);
+    List<BattleLogEntity> findTop10ByMyUserIdOrderByBattleLogNoDesc(String userId);
 }

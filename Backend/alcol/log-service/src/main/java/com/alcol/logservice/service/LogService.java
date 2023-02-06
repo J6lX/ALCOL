@@ -9,5 +9,5 @@ public interface LogService
 {
     LogDto.UserPlayDto getLevelAndTier(String userId) throws URISyntaxException;
 
-    List<LogDto.UserBattleLogDto> getBattleLog(String userId);
+    List<LogDto.UserBattleLogDto> getBattleLog(String userId) throws URISyntaxException;
 }

@@ -6,6 +6,10 @@ import com.alcol.logservice.entity.ProbTrialLogEntity;
 import com.alcol.logservice.repository.BattleLogRepository;
 import com.alcol.logservice.repository.ProbTrialLogRepository;
 import com.alcol.logservice.util.RestTemplateUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,8 +40,46 @@ public class LogServiceImpl implements LogService
 
     @Override
     public List<LogDto.UserBattleLogDto> getBattleLog(String userId)
+            throws URISyntaxException
     {
-        battleLogRepository.findTop10ByMyUserIdOrderByBattleLogNoDesc(userId);
+        List<BattleLogEntity> battleLogEntityList =
+                battleLogRepository.findTop10ByMyUserIdOrderByBattleLogNoDesc(userId);
+
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+
+        List<LogDto.UserBattleLogDto> battleLogDtoList = new ArrayList<>();
+        List<String> otherUserIdList = new ArrayList<>();
+        List<Integer> probNoList = new ArrayList<>();
+
+        for (BattleLogEntity battleLogEntity : battleLogEntityList)
+        {
+            battleLogDtoList.add(modelMapper.map(battleLogEntity, LogDto.UserBattleLogDto.class));
+            otherUserIdList.add(battleLogEntity.getOtherUserId());
+            probNoList.add(battleLogEntity.getProbNo());
+        }
+
+        // user service 에게 user_id 를 보내서 user nickname 받아오기
+        MultiValueMap<String, List> bodyData = new LinkedMultiValueMap<>();
+        bodyData.add("user_id_list", otherUserIdList);
+        ResponseEntity<List<String>> nickNameList = restTemplateUtils.sendRequest(
+                bodyData,
+                "http://localhost:9000/user-service/getNicknameList",
+                new ParameterizedTypeReference<List<String>>() {}
+        );
+
+        // problem service 에 problem no 를 보내서 prob name, prob tier 받아오기
+        bodyData = new LinkedMultiValueMap<>();
+        bodyData.add("prob_no_list", probNoList);
+        ResponseEntity<List<LogDto.ProbDetailDto>> probDetailList = restTemplateUtils.sendRequest(
+                bodyData,
+                "http://localhost:9001/problem-service/getProbDetail",
+                new ParameterizedTypeReference<List<LogDto.ProbDetailDto>>() {}
+        );
+
         return null;
     }
 

@@ -36,4 +36,14 @@ public class LogDto
         private LocalDateTime endTime;
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProbDetailDto
+    {
+        private int probNo;
+        private String probName;
+        private String probTier;
+    }
 }
