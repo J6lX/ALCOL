@@ -84,9 +84,24 @@ function getItem(label, key, icon, children, type) {
 }
 const miniItems = [
   getItem("MENU", "sub1", null, [
-    getItem("Problem", "1"),
-    getItem("Ranking", "2"),
-    getItem("Battle", "3"),
+    getItem(
+      <Link to="/practice" className="textDark">
+        Problem
+      </Link>,
+      "1"
+    ),
+    getItem(
+      <Link to="/ranking" className="textDark">
+        Ranking
+      </Link>,
+      "2"
+    ),
+    getItem(
+      <Link to="/mode" className="textDark">
+        Battle
+      </Link>,
+      "3"
+    ),
   ]),
 ];
 
@@ -175,7 +190,7 @@ function HeaderData() {
         }}>
         <Row align="middle">
           {/* 로고 표시 구역 */}
-          <Col span={7} align="center">
+          <Col span={6} align="center">
             <Link to="/">
               <img
                 src={alcol}
@@ -194,14 +209,19 @@ function HeaderData() {
             <Menu
               mode="inline"
               items={miniItems}
-              theme="dark"
+              theme={{
+                token: {
+                  colorPrimary: "#FAC557",
+                },
+              }}
               style={{
                 backgroundColor: "#16171b",
+                color: "white",
               }}
             />
           </Col>
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col xs={8} justify="center">
+          <Col xs={10} justify="center">
             <LoginTag />
           </Col>
         </Row>

@@ -49,6 +49,7 @@ body {
 .text {
   color: white;
   margin: 3px;
+  align-items: center;
 }
 
 /* 노랑 텍스트 */
