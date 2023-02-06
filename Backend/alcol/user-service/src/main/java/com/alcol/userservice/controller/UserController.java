@@ -67,12 +67,16 @@ public class UserController
     {
         String retVal = userService.createUser(signUpDto, file);
 
+        log.info("request : " + signUpDto.getEmail());
+
         if (retVal.equals("DUPLICATE_EMAIL"))
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                     ApiUtils.error(CustomStatusCode.DUPLICATE_USER_EMAIL)
             );
         }
+
+        log.info("request2 : " + signUpDto.getEmail());
 
         if (retVal.equals("DUPLICATE_NICKNAME"))
         {
@@ -81,12 +85,16 @@ public class UserController
             );
         }
 
+        log.info("request3 : " + signUpDto.getEmail());
+
         if (retVal.equals("PICTURE_UPLOAD_FAILURE"))
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                     ApiUtils.error(CustomStatusCode.PICTURE_UPLOAD_FAILURE)
             );
         }
+
+        log.info("request4 : " + signUpDto.getEmail());
 
         // 회원가입은 상태가 성공이지만 body 에 담을 것이 없음
         return ResponseEntity.status(HttpStatus.CREATED).body(
