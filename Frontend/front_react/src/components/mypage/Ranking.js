@@ -203,7 +203,9 @@ function Ranking() {
                         {/* 랭커 정보 표시 */}
                         <ConfigProvider
                           theme={{
+                            // algorithm : AntD에서 기본적으로 제공하는 다크 모드 테마
                             algorithm: theme.darkAlgorithm,
+                            // token : AntD의 기본 색상 테마 설정(기존 : 파란색)
                             token: {
                               colorPrimary: "#FAC557",
                             },
