@@ -11,7 +11,8 @@ function AppFooter() {
     locationNow.pathname !== "/ban" &&
     locationNow.pathname !== "/mode" &&
     locationNow.pathname !== "/solve" &&
-    locationNow.pathname !== "/solveprac"
+    locationNow.pathname !== "/solveprac" &&
+    locationNow.pathname !== "/battle"
   )
     return (
       <footer className="footer">

@@ -48,7 +48,9 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Link to="/" className="textDark">Logout</Link>
+          <Link to="/" className="textDark">
+            Logout
+          </Link>
         </Col>
       </Row>
     );
@@ -97,7 +99,8 @@ function AppHeader() {
     locationNow.pathname !== "/ban" &&
     locationNow.pathname !== "/mode" &&
     locationNow.pathname !== "/solve" &&
-    locationNow.pathname !== "/solveprac"
+    locationNow.pathname !== "/solveprac" &&
+    locationNow.pathname !== "/battle"
   )
     return (
       <Header
