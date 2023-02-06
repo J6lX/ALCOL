@@ -4,6 +4,7 @@ import com.alcol.userservice.dto.UserDto;
 import com.alcol.userservice.error.CustomStatusCode;
 import com.alcol.userservice.service.UserService;
 import com.alcol.userservice.util.ApiUtils;
+import com.alcol.userservice.util.RestTemplateUtils;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -31,14 +32,17 @@ public class UserController
 {
     private final UserService userService;
     private final Environment env;
+    private final RestTemplateUtils restTemplateUtils;
 
     public UserController(
             UserService userService,
-            Environment env
+            Environment env,
+            RestTemplateUtils restTemplateUtils
     )
     {
         this.userService = userService;
         this.env = env;
+        this.restTemplateUtils = restTemplateUtils;
     }
 
     @GetMapping("/hello")
@@ -136,20 +140,7 @@ public class UserController
     public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
             throws URISyntaxException
     {
-        userService.test();
         return userService.getUserInfo(userId);
-    }
-
-    /**
-     * user_id 를 받아서 해당 유저의 배틀 로그를 리턴
-     * @param userId
-     * @return
-     */
-    @PostMapping("/getBattleLog")
-    public List<UserDto.UserBattleLogDto> getBattleLog(@RequestParam(value="user_id") String userId)
-            throws URISyntaxException
-    {
-        return userService.getBattleLog(userId);
     }
 
     /**
@@ -170,4 +161,26 @@ public class UserController
     {
         return userService.getLevelAndTier(curExp, nowMmrBySpeed, nowMmrByOptimization);
     }
+
+    /**
+     * user_id 를 받아서 해당 유저의 배틀 로그를 리턴
+     * @param userId
+     * @return
+     */
+    @PostMapping("/getBattleLog")
+    public List<UserDto.UserBattleLogDto> getBattleLog(@RequestParam(value="user_id") String userId)
+            throws URISyntaxException
+    {
+        return userService.getBattleLog(userId);
+    }
+
+    @PostMapping("/getNicknameList")
+    public ResponseEntity<List<String>> getNicknameList(
+            @RequestParam(value="user_id_list") List<String> userIdList
+    )
+    {
+        List<String> list = userService.getNicknameList(userIdList);
+        return restTemplateUtils.sendResponse(list);
+    }
+
 }
