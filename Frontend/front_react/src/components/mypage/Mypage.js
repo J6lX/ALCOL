@@ -316,16 +316,25 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
 };
 
 function Mypage() {
+  // URL 파라미터로 사용자 정보 가져오기
   const userInfo = useParams();
+  // profile = 사용자 닉네임
   const profile = userData[userInfo.username];
 
   // 더 보기 단추
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
   const [resultCount, setResultCount] = useState(10);
 
+  const dataLength = matchData.length;
   useEffect(() => {
-    console.log(`현재 ${resultCount}개 표시 중`);
+    // 모든 데이터를 불러왔음에도 '더 보기'를 누르는 경우 알림
+    if (resultCount - 10 >= dataLength) {
+      alert("전적을 모두 불러왔습니다.");
+    }
   });
+
+  // 서버에서 전적을 한 번에 불러온 후 10개씩 표시
+  const refinedData = matchData.slice(0, resultCount);
 
   return (
     <div
@@ -492,7 +501,7 @@ function Mypage() {
                       style={{
                         padding: "3px",
                       }}
-                      dataSource={matchData}
+                      dataSource={refinedData}
                       columns={matchCol}
                       pagination={false}
                       rowkey="id"
