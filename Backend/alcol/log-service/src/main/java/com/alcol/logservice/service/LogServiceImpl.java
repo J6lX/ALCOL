@@ -5,34 +5,45 @@ import com.alcol.logservice.entity.BattleLogEntity;
 import com.alcol.logservice.entity.ProbTrialLogEntity;
 import com.alcol.logservice.repository.BattleLogRepository;
 import com.alcol.logservice.repository.ProbTrialLogRepository;
+import com.alcol.logservice.util.RestTemplateUtils;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+
+import java.net.URISyntaxException;
+import java.util.List;
 
 @Service
 public class LogServiceImpl implements LogService
 {
     private final ProbTrialLogRepository probTrialLogRepository;
     private final BattleLogRepository battleLogRepository;
-
-    private final RestTemplate restTemplate;
+    private final RestTemplateUtils restTemplateUtils;
 
     public LogServiceImpl(
             ProbTrialLogRepository probTrialLogRepository,
             BattleLogRepository battleLogRepository,
-            RestTemplate restTemplate
+            RestTemplateUtils restTemplateUtils
     )
     {
         this.probTrialLogRepository = probTrialLogRepository;
         this.battleLogRepository = battleLogRepository;
-        this.restTemplate = restTemplate;
+        this.restTemplateUtils = restTemplateUtils;
+    }
+
+    @Override
+    public List<LogDto.UserBattleLogDto> getBattleLog(String userId)
+    {
+        battleLogRepository.findTop10ByMyUserIdOrderByBattleLogNoDesc(userId);
+        return null;
     }
 
     // user_id 를 받아서 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴
     @Override
     public LogDto.UserPlayDto getLevelAndTier(String userId)
+            throws URISyntaxException
     {
         ProbTrialLogEntity probTrialLogEntity =
                 probTrialLogRepository.findTopByUserIdOrderByProbTrialLogNoDesc(userId);
@@ -60,10 +71,10 @@ public class LogServiceImpl implements LogService
         // log-service -> user-service
         // user-service 에게 현재 경험치, 현재 스피드전 mmr, 현재 효율성전 mmr 을 보내서
         // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
-        ResponseEntity<LogDto.UserPlayDto> response = restTemplate.postForEntity(
-                url,
+        ResponseEntity<LogDto.UserPlayDto> response = restTemplateUtils.sendRequest(
                 bodyData,
-                LogDto.UserPlayDto.class
+                url,
+                new ParameterizedTypeReference<LogDto.UserPlayDto>() {}
         );
 
         return response.getBody();
