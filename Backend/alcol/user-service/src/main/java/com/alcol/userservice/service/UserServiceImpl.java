@@ -261,12 +261,14 @@ public class UserServiceImpl implements UserService
     public List<String> getNicknameList(List<String> userIdList)
     {
         List<String> nicknameList = new ArrayList<>();
+
         for (String userId : userIdList)
         {
             userId = userId.replaceAll("\\[|\\]", "");
             UserEntity userEntity = userRepository.findByUserId(userId);
             nicknameList.add(userEntity.getNickname());
         }
+
         return nicknameList;
     }
 }
