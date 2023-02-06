@@ -23,8 +23,9 @@ function LoginPage() {
       .post("http://i8b303.p.ssafy.io:8000/user-service/login", userData)
       // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
-        if (response.data.customCode === "006") {
-          console.log("로그인 성공");
+        console.log("로그인 성공1 : " + response);
+        if (response.data.customCode === "001") {
+          console.log("로그인 성공2 : " + response);
           alert(response.data.description);
           //access-token, refresh-token, userId 저장
           // 이 데이터들을 리코일에 저장하면 됨
@@ -38,9 +39,9 @@ function LoginPage() {
       })
       //로그인 실패 시
       .catch((error) => {
-        if (error.response.data.customCode === "005") {
-          console.log("로그인 실패");
-
+        console.log("로그인 실패1 : " + error);
+        if (error.response.data.customCode === "006") {
+          console.log("로그인 실패2 : " + error);
           // 로그인 실패 시 표시하는 내용
           alert(error.response.data.description);
         }
