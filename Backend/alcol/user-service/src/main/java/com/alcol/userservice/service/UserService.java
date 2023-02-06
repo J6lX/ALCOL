@@ -24,7 +24,7 @@ public interface UserService extends UserDetailsService
             String nowMmrByOptimization
     );
 
-    void test() throws URISyntaxException;
-
     List<UserDto.UserBattleLogDto> getBattleLog(String userId) throws URISyntaxException;
+
+    List<String> getNicknameList(List<String> userIdList);
 }

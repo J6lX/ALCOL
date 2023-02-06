@@ -195,13 +195,11 @@ public class UserServiceImpl implements UserService
             // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
             MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
             bodyData.add("user_id", userId);
-            String url = "http://localhost:9005/log-service/getLevelAndTier";
 
             response = restTemplateUtils.sendRequest(
                     bodyData,
-                    url,
-                    new ParameterizedTypeReference<UserDto.UserPlayDto>() {
-                    }
+                    "http://localhost:9005/log-service/getLevelAndTier",
+                    new ParameterizedTypeReference<UserDto.UserPlayDto>() {}
             );
         }
 
@@ -212,23 +210,6 @@ public class UserServiceImpl implements UserService
                 .speedTier(String.valueOf(response.getBody().getSpeedTier()))
                 .optimizationTier(String.valueOf(response.getBody().getOptimizationTier()))
                 .build();
-    }
-
-    @Override
-    public List<UserDto.UserBattleLogDto> getBattleLog(String userId)
-            throws URISyntaxException
-    {
-        MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
-        bodyData.add("user_id", userId);
-        String url = "http://localhost:9005/log-service/getBattleLog";
-
-        ResponseEntity<List<UserDto.UserBattleLogDto>> response = restTemplateUtils.sendRequest(
-                bodyData,
-                url,
-                new ParameterizedTypeReference<List<UserDto.UserPlayDto>>() {}
-        );
-
-        return response.getBody();
     }
 
     @Override
@@ -260,21 +241,34 @@ public class UserServiceImpl implements UserService
                 .build();
     }
 
-    public void test() throws URISyntaxException
+    @Override
+    public List<UserDto.UserBattleLogDto> getBattleLog(String userId)
+            throws URISyntaxException
     {
-        MultiValueMap<String, List> bodyData = new LinkedMultiValueMap<>();
-        List<String> probNoList = new ArrayList<>();
-        probNoList.add("10");
-        probNoList.add("20");
-        probNoList.add("30");
-        bodyData.add("prob_no_list", probNoList);
+        MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
+        bodyData.add("user_id", userId);
 
-        String url = "http://localhost:9005/log-service/test";
-
-        ResponseEntity<List<UserDto.UserPlayDto>> response = restTemplateUtils.sendRequest(
-                bodyData, url, new ParameterizedTypeReference<List<UserDto.UserPlayDto>>() {}
+        ResponseEntity<List<UserDto.UserBattleLogDto>> response = restTemplateUtils.sendRequest(
+                bodyData,
+                "http://localhost:9005/log-service/getBattleLog",
+                new ParameterizedTypeReference<List<UserDto.UserBattleLogDto>>() {}
         );
 
-        return;
+        return response.getBody();
+    }
+
+    @Override
+    public List<String> getNicknameList(List<String> userIdList)
+    {
+        List<String> nicknameList = new ArrayList<>();
+
+        for (String userId : userIdList)
+        {
+            userId = userId.replaceAll("\\[|\\]", "");
+            UserEntity userEntity = userRepository.findByUserId(userId);
+            nicknameList.add(userEntity.getNickname());
+        }
+
+        return nicknameList;
     }
 }
