@@ -20,7 +20,6 @@ import java.util.Map;
 @Slf4j
 public class BattleResultServiceImpl implements BattleResultService
 {
-    @Autowired
     private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, Long> winLoseCount;
     private HashOperations<String, String, String> userInfo;
@@ -48,7 +47,10 @@ public class BattleResultServiceImpl implements BattleResultService
             winLoseCount.put(key, "win", (long)0);
             winLoseCount.put(key, "lose", (long)0);
         }
+
+        // 승패 여부에 따라 count+=1
         hashValue = winLoseCount.get(key, hashKey) + 1;
+        // redis update
         winLoseCount.put(key, hashKey, hashValue);
 
         return "OK";
@@ -65,7 +67,18 @@ public class BattleResultServiceImpl implements BattleResultService
         String zKey = mode;
         String zMember = userId;
         int zScore = mmr;
+        
+        // redis ranking data update
         ranking.add(zKey, zMember, zScore);
+
+//        ranking.add("speed", "1", 1200);
+//        ranking.add("speed", "2", 1280);
+//        ranking.add("speed", "3", 1170);
+//        ranking.add("speed", "4", 1250);
+//        ranking.add("optimization", "1", 1200);
+//        ranking.add("optimization", "2", 1280);
+//        ranking.add("optimization", "3", 1170);
+//        ranking.add("optimization", "4", 1250);
 
         return "OK";
     }
@@ -84,6 +97,7 @@ public class BattleResultServiceImpl implements BattleResultService
         String url = "http://localhost:8080";
         UserData userData = restTemplate.postForObject(url, map, UserData.class);
 
+        // 유저 정보 redis update
         userInfo.put(key, "nickname", userData.getNickname());
         userInfo.put(key, "stored_file_name", userData.getStored_file_name());
         userInfo.put(key, "level", String.valueOf(userData.getLevel()));
