@@ -1,37 +1,45 @@
 import React from "react";
 import "./ResultListPage.css";
 import { Col, Row, Divider } from "antd";
+import { useRecoilValue } from "recoil";
 import icon_vs from "../../assets/vs.png";
+import { resultListPlayerInfo, resultListModeInfo, resultListResultInfo } from "../../states/atoms";
 
 function PlayerInfo() {
+  //atoms에 저장한 playerInfo를 불러옵니다.
+  const playerInfo = useRecoilValue(resultListPlayerInfo);
+  console.log(playerInfo);
   return (
     <Row justify="space-between">
       <Col span={6} className="result_user_info">
-        꺽여가는 마음
+        {playerInfo.player1_info}
       </Col>
       <Col span={2} className="result_user_info">
-        티어
+        {playerInfo.player1_level}
       </Col>
       <Col span={2} className="result_user_info">
-        티어
+        {playerInfo.player1_tier}
       </Col>
       <Col span={3} className="result_icon_vs">
         <img src={icon_vs} alt="vs"></img>
       </Col>
       <Col span={2} className="result_enemy_info">
-        티어
+        {playerInfo.player2_tier}
       </Col>
       <Col span={2} className="result_enemy_info">
-        티어
+        {playerInfo.player2_level}
       </Col>
       <Col span={6} className="result_enemy_info">
-        멋진 닉네임
+        {playerInfo.player2_info}
       </Col>
     </Row>
   );
 }
 
 function GameInfo() {
+  //atoms에 저장한 battleModeInfo를 불러옵니다.
+  const ModeInfo = useRecoilValue(resultListModeInfo);
+  console.log(ModeInfo);
   const gameInfoTitle = {
     padding: "8px 0",
     background: "rgba(0,0,0,0.5)",
@@ -67,16 +75,16 @@ function GameInfo() {
           <div style={gameInfoTitle}>걸린 시간</div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div style={gameInfoList}>col-6</div>
+          <div style={gameInfoList}>{ModeInfo.problem_difficulty}</div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div style={gameInfoList}>col-6</div>
+          <div style={gameInfoList}>{ModeInfo.used_language}</div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div style={gameInfoList}>col-6</div>
+          <div style={gameInfoList}>{ModeInfo.avg_try}</div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div style={gameInfoList}>col-6</div>
+          <div style={gameInfoList}>{ModeInfo.spend_time}</div>
         </Col>
       </Row>
     </div>
@@ -96,7 +104,7 @@ function ResultPlayerInfo() {
   );
 }
 
-function ResultInfo({ message }) {
+function ResultInfo({ sendResult }) {
   return (
     <div style={{ clear: "both" }}>
       <Row justify="space-between">
@@ -107,7 +115,10 @@ function ResultInfo({ message }) {
         <Col span={20} className="result_list_info">
           <Row>
             <Col span={2}>사진</Col>
-            <Col span={22}>{message}</Col>
+            <Col span={22}>
+              {sendResult.player_info}님의 {sendResult.result}코드 제출! 코드길이:
+              {sendResult.code_length} 메모리:{sendResult.memory} 걸린시간:{sendResult.time}
+            </Col>
           </Row>
         </Col>
         <Col span={1}></Col>
@@ -117,20 +128,17 @@ function ResultInfo({ message }) {
 }
 
 function ResultList() {
-  return (
-    <div style={{ clear: "both", height: "45vh", overflow: "auto" }}>
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-      <ResultInfo message="꺾여가는 마음의 정답 코드 제출! 코드 길이 : 3000 메모리 300 실행시간 : 300" />
-    </div>
-  );
+  //atoms에 저장한 battleResultList를 불러옵니다.
+  const resultList = useRecoilValue(resultListResultInfo);
+  console.log(resultList);
+  const printResults = () => {
+    const result = [];
+    for (let i = 0; i < resultList.length; i++) {
+      result.push(<ResultInfo key={i} sendResult={resultList[i]} />);
+    }
+    return result;
+  };
+  return <div style={{ clear: "both", height: "45vh", overflow: "auto" }}>{printResults()}</div>;
 }
 
 function ResultButton() {
