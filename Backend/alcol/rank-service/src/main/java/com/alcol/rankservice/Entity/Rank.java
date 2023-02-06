@@ -3,14 +3,12 @@ package com.alcol.rankservice.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@AllArgsConstructor
+@Builder
+@Getter
 public class Rank
 {
-    @Builder
-    @Getter
-    public static class RankingData
-    {
         private String nickname;
         private String profile_pic;
         private int level;
@@ -19,16 +17,4 @@ public class Rank
         private int winCnt;
         private int loseCnt;
         private long winningRate;
-    }
-
-    @Getter
-    public static class ReceivedUserData
-    {
-        private String nickname;
-        private String stored_file_name;
-        private int level;
-        private String speed_tier;
-        private String optimization_tier;
-    }
-
 }

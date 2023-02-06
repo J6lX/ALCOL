@@ -1,6 +1,7 @@
 package com.alcol.rankservice.service;
 
 import com.alcol.rankservice.entity.Rank;
+import com.alcol.rankservice.entity.UserData;
 import com.alcol.rankservice.entity.WinLose;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,7 +82,7 @@ public class BattleResultServiceImpl implements BattleResultService
         map.put("user_id", userId);
 //        String url = "http://localhost:9000/user-service/getUserInfo";
         String url = "http://localhost:8080";
-        Rank.ReceivedUserData userData = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
+        UserData userData = restTemplate.postForObject(url, map, UserData.class);
 
         userInfo.put(key, "nickname", userData.getNickname());
         userInfo.put(key, "stored_file_name", userData.getStored_file_name());
