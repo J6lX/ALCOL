@@ -34,6 +34,7 @@ public class LogController
     public ResponseEntity<List<LogDto.UserBattleLogDto>> getBattleLog(
             @RequestParam(value="user_id") String userId
     )
+            throws URISyntaxException
     {
         List<LogDto.UserBattleLogDto> list = logService.getBattleLog(userId);
         return restTemplateUtils.sendResponse(list);
@@ -52,17 +53,5 @@ public class LogController
     {
         LogDto.UserPlayDto userPlayDto = logService.getLevelAndTier(userId);
         return restTemplateUtils.sendResponse(userPlayDto);
-    }
-
-    @PostMapping("/test")
-    public ResponseEntity<List<LogDto.UserPlayDto>> test(
-            @RequestParam(value = "prob_no_list") List<String> probNoList
-    )
-    {
-        List<LogDto.UserPlayDto> ret = new ArrayList<>();
-        ret.add(new LogDto.UserPlayDto(probNoList.get(0), "g", "g"));
-        ret.add(new LogDto.UserPlayDto(probNoList.get(1), "s", "s"));
-        ret.add(new LogDto.UserPlayDto(probNoList.get(2), "b", "b"));
-        return restTemplateUtils.sendResponse(ret);
     }
 }
