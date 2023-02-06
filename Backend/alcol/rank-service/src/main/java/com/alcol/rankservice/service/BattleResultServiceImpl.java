@@ -1,10 +1,9 @@
 package com.alcol.rankservice.service;
 
-import com.alcol.rankservice.entity.Rank;
-import com.alcol.rankservice.entity.WinLose;
+import com.alcol.rankservice.dto.RankDto;
+import com.alcol.rankservice.dto.WinLoseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -26,10 +25,10 @@ public class BattleResultServiceImpl implements BattleResultService
     private final RestTemplate restTemplate;
 
     /**
-     * @implSpec 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
+     * 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
      * Hash 사용
      * */
-    public String recordCnt(WinLose winLose)
+    public String recordCnt(WinLoseDto winLose)
     {
         winLoseCount = redisTemplate.opsForHash();
         /** key = winloseCnt:{userId}:{mode}
@@ -56,7 +55,7 @@ public class BattleResultServiceImpl implements BattleResultService
     }
 
     /**
-     * @implSpec 배틀이 끝난 뒤 redis에 유저별 랭킹 기록하는 메서드
+     * 배틀이 끝난 뒤 redis에 유저별 랭킹 기록하는 메서드
      * Sorted set 사용
      * */
     public String recordRank(String mode, int mmr, String userId)
@@ -70,19 +69,10 @@ public class BattleResultServiceImpl implements BattleResultService
         // redis ranking data update
         ranking.add(zKey, zMember, zScore);
 
-//        ranking.add("speed", "1", 1200);
-//        ranking.add("speed", "2", 1280);
-//        ranking.add("speed", "3", 1170);
-//        ranking.add("speed", "4", 1250);
-//        ranking.add("optimization", "1", 1200);
-//        ranking.add("optimization", "2", 1280);
-//        ranking.add("optimization", "3", 1170);
-//        ranking.add("optimization", "4", 1250);
-
         return "OK";
     }
     /**
-     * @implSpec 배틀이 끝난 뒤 redis에 랭킹에 필요한 사용자 데이터 저장하는 메서드
+     * 배틀이 끝난 뒤 redis에 랭킹에 필요한 사용자 데이터 저장하는 메서드
      * Hash 사용
      * */
     public String recordUserData(String userId){
@@ -92,11 +82,9 @@ public class BattleResultServiceImpl implements BattleResultService
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
-        String url = "http://localhost:8000/user-service/getUserInfo";
-//        String url = "http://localhost:8080";
-
-        // 랭킹 데이터를 보여줄 때 필요한 유저정보를 user Service에 요청해 받아옴
-        Rank.ReceivedUserData userData = restTemplate.postForObject(url, map, Rank.ReceivedUserData.class);
+//        String url = "http://localhost:9000/user-service/getUserInfo";
+        String url = "http://localhost:8080";
+        RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
 
         // 유저 정보 redis update
         userInfo.put(key, "nickname", userData.getNickname());
@@ -106,29 +94,6 @@ public class BattleResultServiceImpl implements BattleResultService
         userInfo.put(key, "optimization_tier", userData.getOptimization_tier());
 
         return "OKDK";
-    }
-    /**
-     * @implSpec 스피드전 개인 랭킹 가져오기
-     */
-    public int getMySpeedRank(String userId, String mode)
-    {
-        // 1. 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
-        ranking = redisTemplate.opsForZSet();
-        String key = mode;
-        String member = userId;
-        int mmr = -1;
-
-        try {
-            mmr = ranking.score(key, member).intValue();
-        } catch(NullPointerException e){
-            log.error("mmr값이 존재하지 않음!!!!!!!!");
-            return -1;
-        } catch (Exception e){
-            log.error("개인 스피드전 랭킹을 조회하기 위해 MMR값이 존재하는지 확인하는 과정에서 에러 발생");
-            return -1;
-        }
-
-        return mmr;
     }
 
 }
