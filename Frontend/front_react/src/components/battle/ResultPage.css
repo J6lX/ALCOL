@@ -14,9 +14,9 @@
 .result_title {
   margin: auto;
   margin-bottom: 1%;
+  margin-top: 6vh;
   width: 30vw;
   height: auto;
-  margin-top: 100px;
   display: block;
 }
 
@@ -42,7 +42,17 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+.result_text {
+  margin-left: 2vw;
+  line-height: 7vh;
+  color: white;
+  font-size: 20px;
+  font-weight: lighter;
+  font-family: "NanumSquareNeo";
+}
+
 .result_button {
   background-color: rgba(255, 255, 255, 0.6);
   height: 50px;
+  font-family: "NanumSquareNeo";
 }

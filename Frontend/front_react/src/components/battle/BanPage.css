@@ -50,6 +50,11 @@
   border: 2px solid #ffffff;
 }
 
+.active {
+  box-shadow: 0 0 5px black;
+  border: 2px solid black;
+}
+
 .ban_algo_box:hover {
   background-color: rgba(161, 161, 161, 0.6);
 }
@@ -127,6 +132,7 @@
   line-height: 30px;
   background-color: #fef662;
   color: rgb(0, 0, 0);
+  z-index: 15;
 }
 
 .ban_algo_problem_title {

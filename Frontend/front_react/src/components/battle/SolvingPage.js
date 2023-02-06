@@ -1,6 +1,6 @@
 import { React, useState } from "react";
-import { RecoilRoot, atom, useRecoilState } from "recoil";
-
+import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import axios from "axios";
 import Logo from "../../assets/alcol_empty_black.png";
 import Dots from "../../assets/dots.png";
 import CodeMirror from "@uiw/react-codemirror";
@@ -20,6 +20,11 @@ const isClickState = atom({
 const solvingHeightState = atom({
   key: "solvingHeightState",
   default: allheight * 0.46,
+});
+
+const submitMessageState = atom({
+  key: "submitMessageState",
+  default: "",
 });
 
 const ResultMessage = () => {
@@ -142,7 +147,9 @@ const CodingPlace = () => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
 
-  let [code, setCode] = useState("");
+  const [code, setCode] = useState("");
+  const setSubmitMessage = useSetRecoilState(submitMessageState);
+  const problem_number = 1;
 
   const onChange = (newValue) => {
     setCode(newValue);
@@ -177,7 +184,32 @@ const CodingPlace = () => {
   };
 
   const clickSubmit = () => {
-    console.log("submit ", code);
+    if (code.trim() === "") {
+      setSubmitMessage("코드를 입력해주세요.");
+    } else {
+      const solving_data = {
+        problem_id: problem_number,
+        language: "python3",
+        code: code,
+      };
+      // 나중에 recoil이나 shared로 뺄 수 있으면 빼기.
+      const header = {
+        headers: {
+          access_token: "access_token",
+          refresh_token: "refresh_token",
+          user_id: "user_id",
+        },
+      };
+
+      axios
+        .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
+        .then((response) => {
+          setSubmitMessage(response);
+        })
+        .catch((error) => {
+          setSubmitMessage(error);
+        });
+    }
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -216,7 +248,6 @@ const CodingPlace = () => {
           theme={darcula}
         />
       </div>
-      {/* onMouseDown={downMouse} onMouseUp={upMouse} onMouseMove={moveHeight}   */}
       <div
         role="button"
         onMouseDown={downMouse}
@@ -274,9 +305,10 @@ const CodingPlace = () => {
 };
 
 const Console = () => {
+  const submitMessage = useRecoilValue(submitMessageState);
   return (
     <div style={{ backgroundColor: "#1D1E22" }}>
-      <div></div>
+      <div>{submitMessage}</div>
     </div>
   );
 };

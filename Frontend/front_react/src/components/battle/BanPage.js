@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { Col, Row } from "antd";
+import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
+import CountDownTimer from "./CountDownTimer";
 
 function UserInfo() {
   return (
@@ -42,6 +44,9 @@ function Top() {
           선택된 문제는 이번 게임에서 출제되지 않습니다. 만약 같은 문제를 금지했다면 남은 문제 중
           랜덤하게 출제됩니다.
         </div>
+        <div>
+          <CountDownTimer />
+        </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
     </Row>
@@ -57,6 +62,14 @@ function Mid({ problems, onClick }) {
     }
     return result;
   };
+
+  useEffect(() => {
+    $(".ban_algo_box").click(function () {
+      $(".ban_algo_box").not(this).removeClass("active");
+      // $(this).toggleClass("active");
+      $(this).addClass("active");
+    });
+  });
 
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
@@ -101,29 +114,12 @@ function Bottom() {
 
 function App() {
   const [choose, setChoose] = React.useState("-1");
-
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);
   };
 
-  function matchProblemAndChoose() {
-    if (choose === "1") {
-      console.log("선택한 문제 번호는:" + problems[0].problem_no);
-      setChoose(problems[0].problem_no);
-    } else if (choose === "2") {
-      console.log("선택한 문제 번호는:" + problems[1].problem_no);
-      setChoose(problems[1].problem_no);
-    } else if (choose === "3") {
-      console.log("선택한 문제 번호는:" + problems[2].problem_no);
-      setChoose(problems[2].problem_no);
-    }
-  }
-  useEffect(() => {
-    matchProblemAndChoose();
-  }, [choose]);
-
-  const problems = [
+  const [problem, setProblem] = React.useState([
     {
       problem_no: 1001,
       problem_category: ["구현", "그래프 이론", "그래프 탐색"],
@@ -136,15 +132,27 @@ function App() {
       problem_no: 1003,
       problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    if (choose === "1") {
+      console.log("선택한 문제 번호는:" + problem[0].problem_no);
+      setChoose(problem[0].problem_no);
+    } else if (choose === "2") {
+      console.log("선택한 문제 번호는:" + problem[1].problem_no);
+      setChoose(problem[1].problem_no);
+    } else if (choose === "3") {
+      console.log("선택한 문제 번호는:" + problem[2].problem_no);
+      setChoose(problem[2].problem_no);
+    }
+  }, [choose, problem]);
 
   return (
     <div className="matching_background">
       <UserInfo />
       <Top />
-      <Mid problems={problems} onClick={onClick} />
+      <Mid problems={problem} onClick={onClick} setProblem={setProblem} />
       <Bottom />
-      <div className="banButton">취소</div>
     </div>
   );
 }

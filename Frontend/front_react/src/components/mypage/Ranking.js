@@ -21,12 +21,47 @@ const HideColumn = styled(DataGrid)(({ theme }) => ({
 
 // 연습 문제 구분 설명
 const problemLabel = [
-  { field: "id", headerName: "순위", width: 100, align: "center", headerAlign: "center" },
-  { field: "name", headerName: "ID", width: 200, align: "center", headerAlign: "center" },
-  { field: "level", headerName: "LEVEL", width: 150, align: "center", headerAlign: "center" },
-  { field: "mmr", headerName: "MMR", width: 150, align: "center", headerAlign: "center" },
-  { field: "tier", headerName: "시즌 티어", width: 190, align: "center", headerAlign: "center" },
-  { field: "record", headerName: "시즌 전적", width: 200, align: "center", headerAlign: "center" },
+  {
+    field: "id",
+    headerName: "순위",
+    width: 100,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  { field: "name", headerName: "ID", width: 200, flex: 1, align: "center", headerAlign: "center" },
+  {
+    field: "level",
+    headerName: "LEVEL",
+    width: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "mmr",
+    headerName: "MMR",
+    width: 150,
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "tier",
+    headerName: "시즌 티어",
+    width: 190,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "record",
+    headerName: "시즌 전적",
+    width: 200,
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
+  },
 ];
 
 // 연습 문제 데이터
@@ -37,6 +72,11 @@ const problemData = [
   { id: 4, name: "와인", record: "22승 17패(56%)", tier: "Diamond" },
   { id: 5, name: "고량주", record: "22승 17패(56%)", tier: "Diamond" },
 ];
+
+// 커스텀 페이지네이션
+function CustomPagination() {
+  return <Pagination defaultCurrent={1} total={50} responsive="true" />;
+}
 
 function Ranking() {
   return (
@@ -60,7 +100,7 @@ function Ranking() {
           <Col span={16}>
             {/* 검색 상자 */}
             <Row justify="end">
-              <Col xs={8} lg={5}>
+              <Col xs={0} md={8} lg={5}>
                 <Input
                   placeholder="닉네임으로 검색"
                   allowClear
@@ -71,7 +111,10 @@ function Ranking() {
                 />
               </Col>
               <Col
+                xs={0}
+                md={3}
                 style={{
+                  marginLeft: "5px",
                   padding: "5px",
                 }}>
                 <Button>검색</Button>
@@ -133,18 +176,22 @@ function Ranking() {
                       </Col>
                     </Row>
                     <Row justify="center">
-                      <Col span={24}>
+                      <Col justify="center" span={24}>
                         {/* 랭커 정보 표시 */}
                         <ThemeProvider theme={darkTheme}>
                           <HideColumn
                             rows={problemData}
                             columns={problemLabel}
-                            pageSize={10}
+                            pageSize={8}
                             disableColumnSelector
                             disableColumnMenu
                             disableColumnFilter
-                            autoHeight
-                            hideFooter={true}
+                            autoHeight={true}
+                            autoPageSize={true}
+                            justify="center"
+                            components={{
+                              Pagination: CustomPagination,
+                            }}
                             style={{
                               borderBottomLeftRadius: "7%",
                               borderBottomRightRadius: "7%",
@@ -157,7 +204,7 @@ function Ranking() {
                 </Row>
 
                 {/* 페이지네이션 표시 */}
-                <Row justify="center">
+                {/* <Row justify="center">
                   <Col align="center">
                     <ThemeProvider theme={darkTheme}>
                       <Pagination
@@ -168,7 +215,7 @@ function Ranking() {
                       />
                     </ThemeProvider>
                   </Col>
-                </Row>
+                </Row> */}
               </Col>
             </Row>
           </Col>
