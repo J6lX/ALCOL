@@ -1,11 +1,9 @@
 package com.alcol.rankservice.service;
 
-import com.alcol.rankservice.entity.Rank;
-import com.alcol.rankservice.entity.UserData;
-import com.alcol.rankservice.entity.WinLose;
+import com.alcol.rankservice.dto.RankDto;
+import com.alcol.rankservice.dto.WinLoseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -30,7 +28,7 @@ public class BattleResultServiceImpl implements BattleResultService
      * @implSpec 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
      * Hash 사용
      * */
-    public String recordCnt(WinLose winLose)
+    public String recordCnt(WinLoseDto winLose)
     {
         winLoseCount = redisTemplate.opsForHash();
         /** key = winloseCnt:{userId}:{mode}
@@ -95,7 +93,7 @@ public class BattleResultServiceImpl implements BattleResultService
         map.put("user_id", userId);
 //        String url = "http://localhost:9000/user-service/getUserInfo";
         String url = "http://localhost:8080";
-        UserData userData = restTemplate.postForObject(url, map, UserData.class);
+        RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
 
         // 유저 정보 redis update
         userInfo.put(key, "nickname", userData.getNickname());

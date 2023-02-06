@@ -1,12 +1,11 @@
 package com.alcol.rankservice.controller;
 
 import com.alcol.rankservice.dto.BattleDto;
-import com.alcol.rankservice.entity.WinLose;
+import com.alcol.rankservice.dto.WinLoseDto;
 import com.alcol.rankservice.service.BattleResultService;
 import com.alcol.rankservice.service.RankService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Enumeration;
 import java.util.Map;
 
 @Controller
@@ -30,9 +28,9 @@ public class BattleRecordController
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
     {
         // 승패 count를 세기 위해 redis에 저장하는 작업
-        WinLose winLose = new WinLose(battleResult.getUser_id_1(), battleResult.getBattle_mode(), battleResult.getWin_1());
+        WinLoseDto winLose = new WinLoseDto(battleResult.getUser_id_1(), battleResult.getBattle_mode(), battleResult.getWin_1());
         battleResultService.recordCnt(winLose);
-        winLose = new WinLose(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWin_2());
+        winLose = new WinLoseDto(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWin_2());
         battleResultService.recordCnt(winLose);
 
         // ranking 순위를 바꾸기 위해 mmr 값으로 sort하는 작업
