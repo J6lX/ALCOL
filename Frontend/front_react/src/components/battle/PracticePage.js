@@ -42,31 +42,27 @@ const problemData = [
   { key: 5, problemNo: "5", problemName: "문제5", problemType: "DFS", problemDifficulty: "Gold" },
 ];
 
+// 데이터 필터링
+
 // 페이지 렌더링
 function Ranking() {
   // 검색 기능 사용 시
   const urlSrc = useLocation();
   const query = urlSrc.search;
 
-  // // URL에 검색어가 있는 경우
-  // if (query) {
-  //   // (대충 연습 문제 중에서 필터링해야 한다는 뜻)
-  // } else {
-  //   // (대충 모든 문제 보여주면 된다는 뜻)
-  // }
-
-  console.log(query);
-
-  // 문제 검색 시
+  // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");
 
-  const onSearch = (e) => {
-    console.log("검색 버튼 누름");
-  };
+  // 검색어 입력 시 value(search)가 실시간으로 변경되도록 적용
+  const inputChange = ({ target: { value } }) => setSearch(value);
 
-  const onChangeSearch = (e) => {
-    e.preventDefault();
-    setSearch(e.target.value);
+  // 검색 버튼을 누르면 query가 추가되고, 데이터가 필터링됨
+  const querySubmit = (event) => {
+    event.preventDefault();
+    const refinedData = problemData.filter((problem) => problem.problemName.includes(query));
+    window.history.pushState("", "ALCOL", `/practice?search=${search}`);
+    console.log(refinedData);
+    console.log(query);
   };
 
   return (
@@ -89,29 +85,33 @@ function Ranking() {
         <Col span={16}>
           {/* 검색 상자 */}
           <Row justify="end">
-            <Col xs={0} sm={8} lg={5}>
-              <form onSubmit={(e) => onSearch(e)}>
-                <Input
-                  placeholder="유형 이름 검색"
-                  allowClear
-                  size="middle"
-                  type="text"
-                  value={search}
-                  onChangeSearch={onChangeSearch}
-                  style={{
-                    margin: "5px",
-                  }}
-                />
+            <Col xs={12} sm={8} justify="end">
+              <form onSubmit={querySubmit}>
+                <Row>
+                  <Col xs={12} lg={16}>
+                    <Input
+                      placeholder="유형 이름 검색"
+                      allowClear
+                      size="middle"
+                      type="text"
+                      value={search}
+                      onChange={inputChange}
+                      style={{
+                        margin: "5px",
+                      }}
+                    />
+                  </Col>
+                  <Col
+                    style={{
+                      marginLeft: "5px",
+                      padding: "5px",
+                    }}
+                    xs={3}
+                    lg={6}>
+                    <Button onClick={querySubmit}>검색</Button>
+                  </Col>
+                </Row>
               </form>
-            </Col>
-            <Col
-              style={{
-                marginLeft: "5px",
-                padding: "5px",
-              }}
-              xs={0}
-              sm={3}>
-              <Button>검색</Button>
             </Col>
           </Row>
 
