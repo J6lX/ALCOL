@@ -1,0 +1,16 @@
+{
+	"problems": [
+		{
+			"problem_no" : 1001,
+			"problem_category" : ["bfs", "수학", "dfs"]
+		},
+		{
+			"problem_no" : 1002,
+			"problem_category" : ["bfs", "수학", "dfs"]
+		},
+		{
+			"problem_no" : 1003,
+			"problem_category" : ["bfs", "수학", "dfs"]
+		}
+    ]
+}

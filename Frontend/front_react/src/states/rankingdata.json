@@ -1,0 +1,178 @@
+{
+	"1": {
+		"nickname" : "seoyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 25,
+		"MMR" : 153,
+		"tier" : "alcol",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+	"2": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "alcol",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "3": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "alcol",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "4": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "diamond",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "5": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "diamond",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "6": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "diamond",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "7": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "gold",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "8": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "gold",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "9": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "gold",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "10": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "silver",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "11": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "silver",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "12": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "silver",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "13": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "bronze",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "14": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "bronze",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "15": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "bronze",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	},
+    "16": {
+		"nickname" : "seyoung",
+		"profile_pic" : "/assets/profile_images/cogi.jpg",
+		"level" : 39,
+		"MMR" : 150,
+		"tier" : "bronze",
+		"record" : {
+			"win" : 22,
+			"lose" : 17
+		}
+	}
+}

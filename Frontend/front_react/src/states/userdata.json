@@ -1,0 +1,44 @@
+{
+	"user": {
+		"nickname": "dohyung",
+		"level": "120",
+		"picture": "/assets/profile_images/cogi.jpg"
+	},
+	"info": {
+		"consecutive_access_date": "10",
+		"consecutive_win_cnt": "5",
+		"play_cnt": "52"
+	},
+	"recent": {
+		"win": "13",
+		"lose": "7"
+	},
+	"speed": "gold",
+	"optimization": "silver",
+	"record_list": {
+		"1": {
+			"result": "win",
+			"battle_mode": "speed",
+			"other_player": "kimjusung",
+			"problem_tier": "gold",
+			"submit_count": "3",
+			"date": "2"
+		},
+		"2": {
+			"result": "win",
+			"battle_mode": "optimization",
+			"other_player": "kimjuyeoup",
+			"problem_tier": "silver",
+			"submit_count": "3",
+			"date": "0"
+		},
+		"3": {
+			"result": "lose",
+			"battle_mode": "speed",
+			"other_player": "kimyoungbin",
+			"problem_tier": "silver",
+			"submit_count": "2",
+			"date": "5"
+		}
+    }
+}

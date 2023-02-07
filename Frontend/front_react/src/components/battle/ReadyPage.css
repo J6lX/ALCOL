@@ -1,0 +1,5 @@
+.ready_background {
+    height: 100vh;
+    background: url(/src/assets/battle_background.png);
+    background-size: cover;
+  }

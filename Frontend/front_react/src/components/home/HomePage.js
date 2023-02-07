@@ -1,13 +1,19 @@
-import React from "react";
+import { React, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import axios from "axios";
+// import { atom, useRecoilState } from "recoil";
 import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
+
+// const speedRankingState = atom({
+//   key: "speedRankingState",
+//   default: "",
+// });
 
 const MainPage = () => {
   const changeColor = (event) => {
@@ -61,16 +67,18 @@ const MainPage = () => {
 
 const SpeedRanking = () => {
   // 스피드전 랭킹 요청
-  axios
-    .get("http://i8b303.p.ssafy.io/speedRankList/1")
-    // 요청 성공 시
-    .then(function (response) {
-      console.log("스피드 랭킹: ", response.data);
-    })
-    // 요청 실패 시
-    .catch((error) => {
-      console.log(error);
-    });
+  useEffect(() => {
+    axios
+      .get("http://i8b303.p.ssafy.io/speedRankList/1")
+      // 요청 성공 시
+      .then(function (response) {
+        console.log("스피드 랭킹: ", response.data);
+      })
+      // 요청 실패 시
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
@@ -94,16 +102,18 @@ const SpeedRanking = () => {
 
 const EfficiencyRanking = () => {
   // 최적화전 랭킹 요청
-  axios
-    .get("http://localhost:8000/optimizationRankList/1")
-    // 요청 성공 시
-    .then(function (response) {
-      console.log("최적화 랭킹: ", response.data);
-    })
-    // 요청 실패 시
-    .catch((error) => {
-      console.log(error);
-    });
+  useEffect(() => {
+    axios
+      .get("http://i8b303.p.ssafy.io/optimizationRankList/1")
+      // 요청 성공 시
+      .then(function (response) {
+        console.log("최적화 랭킹: ", response.data);
+      })
+      // 요청 실패 시
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   return (
     <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
