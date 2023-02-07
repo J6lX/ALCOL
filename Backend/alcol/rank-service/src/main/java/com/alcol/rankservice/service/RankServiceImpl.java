@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -89,7 +90,6 @@ public class RankServiceImpl implements RankService{
     public RankDto.RankingAndMMR getRankingAndMMR(String userId, String battleMode)
     {
         ranking = redisTemplate.opsForZSet();
-
         long grade = ranking.rank(battleMode, userId);
         int MMR = ranking.score(battleMode, userId).intValue();
 
@@ -98,4 +98,14 @@ public class RankServiceImpl implements RankService{
                 .MMR(MMR)
                 .build();
     }
+
+    /**
+     * 모드에 따라 모든 유저의 랭킹 정보를 가져오는 메소드
+     * */
+    public void getAllRankingList(String battleMode, int pageNum)
+    {
+        ranking = redisTemplate.opsForZSet();
+        System.out.println(ranking.range("speed", 0 ,2));
+    }
+
 }

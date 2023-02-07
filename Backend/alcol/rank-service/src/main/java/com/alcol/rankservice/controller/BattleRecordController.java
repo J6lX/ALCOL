@@ -93,4 +93,10 @@ public class BattleRecordController
 
         return ResponseEntity.status(HttpStatus.OK).body(rank);
     }
+
+    @GetMapping("/RankList")
+    public void requestAllRankingList(@RequestParam String battle_mode, int page)
+    {
+        rankService.getAllRankingList(battle_mode, page);
+    }
 }
