@@ -6,13 +6,15 @@ import alcol from "../assets/alcol_empty_white.png";
 import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
+import { LoginState } from "../states/LoginState";
+import { useRecoilValue } from "recoil";
 
 const { Header } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크(임시 변수)
-  const isLoggedIn = true;
+  const isLoggedIn = useRecoilValue(LoginState);
   // 로그인 페이지에서 세션에 인증 정보를 저장한 후sessionStorage 또는 localStorage에서 사용자 인증 여부 가져오기
   console.log(sessionStorage);
   console.log(localStorage);
