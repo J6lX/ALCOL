@@ -66,7 +66,6 @@ function Mid({ problems, onClick }) {
   useEffect(() => {
     $(".ban_algo_box").click(function () {
       $(".ban_algo_box").not(this).removeClass("active");
-      // $(this).toggleClass("active");
       $(this).addClass("active");
     });
   });

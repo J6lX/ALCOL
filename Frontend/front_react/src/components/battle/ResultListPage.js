@@ -139,7 +139,7 @@ function ResultList() {
     }
     return result;
   };
-  return <div style={{ clear: "both", height: "45vh", overflow: "auto" }}>{printResults()}</div>;
+  return <div style={{ clear: "both", height: "45vh" }}>{printResults()}</div>;
 }
 
 function ResultButton() {
@@ -176,16 +176,28 @@ function App() {
           fontSize: "40px",
           fontWeight: "bold",
           color: "white",
-          marginTop: "50px",
+          // marginTop: "50px",
         }}>
         결과 상세정보
       </div>
       <Row justify="space-between" style={{ marginTop: "70px" }}>
         <Col sm={0} md={0} lg={0} xl={2}></Col>
-        <Col sm={24} md={24} lg={12} xl={7} className="result_list_wrap">
+        <Col
+          sm={24}
+          md={24}
+          lg={12}
+          xl={7}
+          className="result_list_wrap"
+          style={{ overflow: "auto" }}>
           <GameInfo />
         </Col>
-        <Col sm={24} md={24} lg={12} xl={12} className="result_list_wrap">
+        <Col
+          sm={24}
+          md={24}
+          lg={12}
+          xl={12}
+          className="result_list_wrap"
+          style={{ overflow: "auto" }}>
           <ResultPlayerInfo />
           <ResultList />
         </Col>

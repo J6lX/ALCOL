@@ -4,6 +4,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+  padding-top: 3%;
 }
 
 .result_list_wrap {
@@ -97,4 +98,20 @@
   height: 50px;
   line-height: 50px;
   text-align: center;
+}
+
+/* 아래의 모든 코드는 영역::코드로 사용 */
+.result_list_wrap::-webkit-scrollbar {
+  width: 5px; /* 스크롤바의 너비 */
+}
+
+.result_list_wrap::-webkit-scrollbar-thumb {
+  height: 5px; /* 스크롤바의 길이 */
+  background: #ffffff; /* 스크롤바의 색상 */
+
+  border-radius: 10px;
+}
+
+.result_list_wrap::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.4); /*스크롤바 뒷 배경 색상*/
 }
