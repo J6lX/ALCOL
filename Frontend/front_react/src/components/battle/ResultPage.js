@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./ResultPage.css";
 import img_victory from "../../assets/result_victory.gif";
 import img_defeat from "../../assets/result_defeat.gif";
 import { Col, Row } from "antd";
+import confetti from "canvas-confetti";
 
 function App() {
   // eslint-disable-next-line
@@ -17,6 +18,11 @@ function App() {
     var img = "";
     if (result.battle_result === "win") {
       img = <img src={img_victory} alt="result" className="result_title" />;
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      });
     } else {
       img = <img src={img_defeat} alt="result" className="result_title" />;
     }
