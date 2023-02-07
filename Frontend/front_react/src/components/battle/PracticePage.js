@@ -1,7 +1,8 @@
 import { Button, Row, Col, Input, Table, ConfigProvider, theme } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 // 연습 문제 구분 설명
 const problemLabel = [
@@ -44,15 +45,29 @@ const problemData = [
 // 페이지 렌더링
 function Ranking() {
   // 검색 기능 사용 시
-  const [searchParams] = useSearchParams();
-  const query = searchParams.get("query"); // 쿼리가 있는 경우 가져오기
+  const urlSrc = useLocation();
+  const query = urlSrc.search;
 
-  // URL에 검색어가 있는 경우
-  if (query) {
-    // (대충 연습 문제 중에서 필터링해야 한다는 뜻)
-  } else {
-    // (대충 모든 문제 보여주면 된다는 뜻)
-  }
+  // // URL에 검색어가 있는 경우
+  // if (query) {
+  //   // (대충 연습 문제 중에서 필터링해야 한다는 뜻)
+  // } else {
+  //   // (대충 모든 문제 보여주면 된다는 뜻)
+  // }
+
+  console.log(query);
+
+  // 문제 검색 시
+  const [search, setSearch] = useState("");
+
+  const onSearch = (e) => {
+    console.log("검색 버튼 누름");
+  };
+
+  const onChangeSearch = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  };
 
   return (
     <div>
@@ -75,14 +90,19 @@ function Ranking() {
           {/* 검색 상자 */}
           <Row justify="end">
             <Col xs={0} sm={8} lg={5}>
-              <Input
-                placeholder="유형 이름 검색"
-                allowClear
-                size="middle"
-                style={{
-                  margin: "5px",
-                }}
-              />
+              <form onSubmit={(e) => onSearch(e)}>
+                <Input
+                  placeholder="유형 이름 검색"
+                  allowClear
+                  size="middle"
+                  type="text"
+                  value={search}
+                  onChangeSearch={onChangeSearch}
+                  style={{
+                    margin: "5px",
+                  }}
+                />
+              </form>
             </Col>
             <Col
               style={{
