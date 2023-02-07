@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Col, Row } from "antd";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
@@ -37,23 +37,35 @@ function Mid({ props, problems }) {
     }
     return result;
   };
-
+  const box1 = document.querySelector("#algo_box1")
+  const box2 = document.querySelector("#algo_box2")
+  const box3 = document.querySelector("#algo_box3")
+  if (props === "1") {
+    box2.className = "ban_algo_box active"
+    box3.className = "ban_algo_box active"
+  } else if (props === "2") {
+    box1.className = "ban_algo_box active"
+    box3.className = "ban_algo_box active"
+  } else if (props === "3") {
+    box1.className = "ban_algo_box active"
+    box2.className = "ban_algo_box active"
+  }
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box">
+      <Col sm={7} md={7} xl={4} id="algo_box1" className="ban_algo_box">
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
           {printProblems(problems[0].problem_category)}
         </div>
       </Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box">
+      <Col sm={7} md={7} xl={4} id="algo_box2" className="ban_algo_box">
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
           {printProblems(problems[1].problem_category)}
         </div>
       </Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box">
+      <Col sm={7} md={7} xl={4} id="algo_box3" className="ban_algo_box">
         <div className="ban_algo_problem_title">알고리즘 유형</div>
         <div className="ban_algo_problem_category">
           {printProblems(problems[2].problem_category)}

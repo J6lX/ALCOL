@@ -20,6 +20,7 @@ const ContinuousBattlePage = () => {
   const [isReady, setIsReady] = useState(false);
   const [isBanWait, setIsBanWait] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
+  const [isSolving, setIsSolving] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
   const [problemNumber, setProblemNumber] = useState("-1");
 
@@ -55,9 +56,13 @@ const ContinuousBattlePage = () => {
           setIsReady(false);
         }, 5000);
       } else if (data.messageType === "select_success") {
-        setTimeout(() => {
+        setTimeout (() => {
           setIsBanWait(false);
           setIsSelected(true);
+          setTimeout(() => {
+            setIsSelected(false);
+            setIsSolving(true);
+          }, 15000);
         }, 5000);
       } else if (data.messageType === "submit_success") {
         submitResult = data.submitResult;
@@ -83,7 +88,13 @@ const ContinuousBattlePage = () => {
 
   const changeBanProblem = (data) => {
     setProblemNumber(data);
-    socket.send(JSON.stringify({ method: "ban", data: data }));
+    // socket.send(JSON.stringify({ method: "ban", data: data }));
+    setIsReady(false)
+    setIsBanWait(true)
+    setTimeout(() => {
+        setIsBanWait(false)
+        setIsSelected(true)
+    }, 10000)
   };
 
   //확인용 함수들
@@ -113,10 +124,10 @@ const ContinuousBattlePage = () => {
         <button>submit_resultfail</button>
         <button onClick={changeSolvedTrue}>submit_resultsuccess</button>
         {!isConnected && <ReadyPage />}
-        {isReady && <BanPage changeBanProblem={changeBanProblem} />}
+        {isReady && <BanPage changeBanProblem={changeBanProblem} />} 
         {isBanWait && <WaitOtherBanPage />}
         {isSelected && <SelectedProblemPage problemnumber={problemNumber} />}
-        {isSelected && <SolvingPage />}
+        {isSolving && <SolvingPage />}
         {isSolved && <ResultPage />}
       </div>
     </div>
