@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { RecoilRoot } from "recoil";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { RecoilRoot, useRecoilValue } from "recoil";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
@@ -25,12 +25,18 @@ import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
 
 import { Layout } from "antd";
+import { LoginState } from "./states/LoginState";
 
 // // import { render } from "@testing-library/react";
 
 const { Content } = Layout;
 
 function App() {
+  // 로그인 상태 확인
+  const isLoggedIn = useRecoilValue(LoginState);
+  console.log(isLoggedIn);
+  console.log(localStorage);
+
   return (
     <RecoilRoot>
       <Layout>
@@ -45,7 +51,10 @@ function App() {
             <Route exact path="/" component={HomePage} />
 
             {/* 로그인 페이지 */}
-            <Route exact path="/login" component={LoginPage} />
+            <Route
+              path="/login"
+              render={() => (isLoggedIn ? <Redirect to="/" /> : <LoginPage />)}
+            />
 
             {/* 모드 선택 페이지 */}
             <Route path="/mode" component={ModeSelectPage} />
