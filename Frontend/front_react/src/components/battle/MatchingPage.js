@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row } from "antd";
 import "./MatchingPage.css";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function UserInfo() {
@@ -28,14 +28,17 @@ function App() {
   const history = useHistory();
 
   function hanleHistoryMatchCancle() {
+    setMode("-1");
+    setLanguage("-1");
     history.push("/");
   }
 
   //atoms에 저장한 mode 불러옵니다.
-  const mode = useRecoilValue(selectedMode);
-  //atoms에 저장한 mode 불러옵니다.
-  const language = useRecoilValue(selectedLanguage);
+  const [mode, setMode] = useRecoilState(selectedMode);
+  //atoms에 저장한 language 불러옵니다.
+  const [language, setLanguage] = useRecoilState(selectedLanguage);
 
+  console.log("매칭페이지");
   console.log(mode);
   console.log(language);
 

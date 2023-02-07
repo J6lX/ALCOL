@@ -175,29 +175,29 @@ function FixedText() {
 }
 
 function App() {
-  // const [mode, setMode] = React.useState("-1");
-  // const [language, setLanguage] = React.useState("-1");
   const [mode, setMode] = useRecoilState(selectedMode);
   const [language, setLanguage] = useRecoilState(selectedLanguage);
   const history = useHistory();
 
-  console.log(mode.mode);
-
   useEffect(() => {
-    console.log("모드 선택 완료! mode:" + mode);
+    if (mode !== "-1") {
+      console.log("모드 선택 완료! mode:" + mode);
+    }
   }, [mode]);
 
   useEffect(() => {
-    console.log("언어 선택 완료! language:" + language);
-    if (language.language !== "-1") {
-      history.push("/match");
+    if (language !== "-1") {
+      console.log("언어 선택 완료! language:" + language);
+      if (language !== "-1") {
+        history.push("/match");
+      }
     }
   }, [language, history]);
 
   return (
     <div className="battle_background">
       <UserInfo />
-      {mode.mode === "-1" ? (
+      {mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
         <SelectLanguage setLanguage={setLanguage} back={setMode} />
