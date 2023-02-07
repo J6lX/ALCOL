@@ -1,6 +1,7 @@
 package com.alcol.rankservice.service;
 
 import com.alcol.rankservice.dto.RankDto;
+import com.alcol.rankservice.exception.RedisOffException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -15,10 +16,15 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class RankServiceImpl implements RankService{
+//    private final RedisOffException redisOffException;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final RestTemplate restTemplate;
+    private final BattleResultService battleResultService;
     private ZSetOperations<String, Object> ranking;
     private HashOperations<String, String, Long> winLoseCount;
-    private final RestTemplate restTemplate;
+    private HashOperations<String, String, String> userInfo;
+
+
 
 
     /**
@@ -26,7 +32,7 @@ public class RankServiceImpl implements RankService{
      */
     public int getMyRank(String userId, String mode)
     {
-        // 1. 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
+        // 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
         ranking = redisTemplate.opsForZSet();
         String key = mode;
         String member = userId;
@@ -49,18 +55,29 @@ public class RankServiceImpl implements RankService{
     * */
     public RankDto.UserData getUserData(String userId)
     {
-        Map<String, String> map = new HashMap<>();
-        map.put("user_id", userId);
-//        String url = "http://localhost:9000/user-service/getUserInfo";
-        String url = "http://localhost:8080";
-        RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
+        userInfo = redisTemplate.opsForHash();
+        String key = "userInfo:" + userId;
+
+        // redis에 정보가 없다면 user-service에게 요청해 가져오고 redis에 저장한다.
+        if(!userInfo.hasKey(key, "nickname"))
+        {
+            battleResultService.recordUserData(userId);
+        }
+
+        // redis에서 유저 정보를 가져온다.
+        String nickname = userInfo.get(key, "nickname");
+        String profilePic = userInfo.get(key, "stored_file_name");
+        int level = Integer.valueOf(userInfo.get(key, "level"));
+        String speedTier = userInfo.get(key, "speed_tier");
+        String optimizationTier = userInfo.get(key, "optimization_tier");
+
 
         return RankDto.UserData.builder()
-                .nickname(userData.getNickname())
-                .stored_file_name(userData.getStored_file_name())
-                .level(userData.getLevel())
-                .speed_tier(userData.getSpeed_tier())
-                .optimization_tier(userData.getOptimization_tier())
+                .nickname(nickname)
+                .stored_file_name(profilePic)
+                .level(level)
+                .speed_tier(speedTier)
+                .optimization_tier(optimizationTier)
                 .build();
     }
 
@@ -141,8 +158,7 @@ public class RankServiceImpl implements RankService{
      * */
     public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
     {
-        Map<String, String> map = new HashMap<>();
-        map.put("nickname", nickname);
+
 //        String url = "http://localhost:9000/user-service/getUserInfo";
         String url = "http://localhost:8080/nik?nickname=킹왕짱토";
         // 닉네임으로 유저 아이디 요청해서 가져옴 (user-service)

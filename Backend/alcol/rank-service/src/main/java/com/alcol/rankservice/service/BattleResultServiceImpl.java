@@ -25,15 +25,17 @@ public class BattleResultServiceImpl implements BattleResultService
     private final RestTemplate restTemplate;
 
     /**
-     * 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
+     * 배틀이 끝난 뒤 log service에서 정보를 받아 승패 count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
      * Hash 사용
+     *
+     * key = winloseCnt:{userId}:{mode}
+     *             hashKey = win / lose
+     *             value = win 수 / lose 수
      * */
     public String recordCnt(WinLoseDto winLose)
     {
         winLoseCount = redisTemplate.opsForHash();
-        /** key = winloseCnt:{userId}:{mode}
-            hashKey = win or lose
-            value = win 수 or lose 수*/
+
         String key = "winloseCnt:"+winLose.getUserId()+":"+winLose.getMode();
         String hashKey = winLose.getWinLoseResult() == 1 ? "win" : "lose";
         long hashValue = -1;
