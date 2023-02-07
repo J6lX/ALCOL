@@ -136,4 +136,46 @@ public class RankServiceImpl implements RankService{
 
         return RankingList;
     }
+    /**
+     * 랭킹 페이지에서 유저 검색하면 유저 정보 넘기는 메소드
+     * */
+    public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
+    {
+        Map<String, String> map = new HashMap<>();
+        map.put("nickname", nickname);
+//        String url = "http://localhost:9000/user-service/getUserInfo";
+        String url = "http://localhost:8080/nik?nickname=킹왕짱토";
+        // 닉네임으로 유저 아이디 요청해서 가져옴 (user-service)
+        String searchUserId = restTemplate.getForObject(url, String.class);
+
+        // 받은 userId로 보여줄 userData 받아옴
+        RankDto.Ranking searchUserInfo = responseUserInfo(searchUserId, battleMode);
+        return searchUserInfo;
+    }
+    /**
+     * 보여줄 개인유저 데이터
+     * */
+    public RankDto.Ranking responseUserInfo(String userId, String battleMode)
+    {
+        RankDto.UserData userData = getUserData(userId);
+        RankDto.WinLoseCount winLoseCount = getWinLoseCount(userId, battleMode);
+        RankDto.RankingAndMMR rankingAndMMR = getRankingAndMMR(userId, battleMode);
+
+        // battleMode가 스피드전이라면 스피드전 티어를, 최적화전이라면 최적화전 티어를 보내줘야함
+        String tier = "";
+        if(battleMode.equals("speed")) tier = userData.getSpeed_tier();
+        else tier = userData.getOptimization_tier();
+
+        RankDto.Ranking rank = RankDto.Ranking.builder()
+                .nickname(userData.getNickname())
+                .profile_pic(userData.getStored_file_name())
+                .level(userData.getLevel())
+                .tier(tier)
+                .mmr(rankingAndMMR.getMMR())
+                .record(winLoseCount)
+                .grade(rankingAndMMR.getGrade() + 1)
+                .build();
+
+        return rank;
+    }
 }
