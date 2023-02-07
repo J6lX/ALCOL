@@ -24,17 +24,17 @@ public class BattleLogEntity
     private String battleMode;
 
     @Column(nullable = false)
-    private int probNo;
+    private Long probNo;
 
     @Column(nullable = false)
     private int battleResult;
-
-    @Column(nullable = false)
-    private LocalDateTime endTime;
 
     @Column(nullable = false)
     private int upDownMmr;
 
     @Column(nullable = false)
     private int nowMmr;
+
+    @Column(nullable = false)
+    private LocalDateTime endTime;
 }

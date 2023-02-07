@@ -1,9 +1,6 @@
 package com.alcol.logservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,12 +12,13 @@ public class LogDto
     @NoArgsConstructor
     public static class UserPlayDto
     {
-        private String level;
-        private String speedTier;
-        private String optimizationTier;
+        private int exp;
+        private int speedMmr;
+        private int optimizationMmr;
     }
 
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -30,7 +28,7 @@ public class LogDto
         private String battleMode;
         private String otherUserId;
         private String otherUserNickname;
-        private int probNo;
+        private Long probNo;
         private String probName;
         private String probTier;
         private LocalDateTime endTime;
@@ -42,7 +40,7 @@ public class LogDto
     @AllArgsConstructor
     public static class ProbDetailDto
     {
-        private int probNo;
+        private Long probNo;
         private String probName;
         private String probTier;
     }
