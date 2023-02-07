@@ -18,13 +18,5 @@ public interface UserService extends UserDetailsService
 
     UserDto.UserInfoDto getUserInfo(String userId) throws URISyntaxException;
 
-    UserDto.UserPlayDto getLevelAndTier(
-            String curExp,
-            String nowMmrBySpeed,
-            String nowMmrByOptimization
-    );
-
     List<UserDto.UserBattleLogDto> getBattleLog(String userId) throws URISyntaxException;
-
-    List<String> getNicknameList(List<String> userIdList);
 }

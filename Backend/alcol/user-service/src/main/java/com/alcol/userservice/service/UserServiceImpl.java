@@ -15,6 +15,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.http.*;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +46,7 @@ public class UserServiceImpl implements UserService
     private final TokenProvider tokenProvider;
     private final FileHandler fileHandler;
     private final RestTemplateUtils restTemplateUtils;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -51,7 +55,8 @@ public class UserServiceImpl implements UserService
             BCryptPasswordEncoder bCryptPasswordEncoder,
             TokenProvider tokenProvider,
             FileHandler fileHandler,
-            RestTemplateUtils restTemplateUtils
+            RestTemplateUtils restTemplateUtils,
+            RedisTemplate<String, Object> redisTemplate
     )
     {
         this.userRepository = userRepository;
@@ -61,12 +66,13 @@ public class UserServiceImpl implements UserService
         this.tokenProvider = tokenProvider;
         this.fileHandler = fileHandler;
         this.restTemplateUtils = restTemplateUtils;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
      * DB 에 입력받은 이메일의 사용자가 저장되어 있는 지 확인
      * @param username 로그인 시 넘어오는 사용자 이메일
-     * @return
+     * @return 사용자 정보
      * @throws UsernameNotFoundException
      */
     @Override
@@ -89,7 +95,7 @@ public class UserServiceImpl implements UserService
     }
 
     /**
-     * 회원 가입 메소드
+     * 회원 가입
      * @param signUpDto 회원가입 정보
      * @param file      유저 프로필 사진
      * @return 성공 시 사용자의 유저 아이디
@@ -101,6 +107,8 @@ public class UserServiceImpl implements UserService
             @RequestPart MultipartFile file
     )
     {
+        log.info("UserServiceImpl 의 createUser 메소드 실행");
+
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
@@ -132,8 +140,19 @@ public class UserServiceImpl implements UserService
             }
         }
 
+        // redis 에 사용자 경험치를 0 으로 저장, mmr 은 1200 으로 저장
+        ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
+        ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
+        redisExp.set("levelExp:" + userEntity.getUserId(), "0");
+        redisMmr.add("speed", userEntity.getUserId(), 1200);
+        redisMmr.add("optimization", userEntity.getUserId(), 1200);
+
+        log.info("UserServiceImpl 의 createUser 메소드에서 redis 에 사용자 경험치=0, mmr=1200 으로 저장");
+
         // 회원가입 정보 저장
         userRepository.save(userEntity);
+        log.info("UserServiceImpl 의 createUser 메소드에서 회원가입 성공");
+
         return userEntity.getUserId();
     }
 
@@ -158,9 +177,8 @@ public class UserServiceImpl implements UserService
     }
 
     /**
-     * 새로운 access token 발급
      * @param userId
-     * @return
+     * @return 새로운 access token 발급
      */
     @Override
     public String getNewAccessToken(String userId)
@@ -169,106 +187,104 @@ public class UserServiceImpl implements UserService
     }
 
     /**
-     * user_id 를 받아서 해당 유저의 레벨, 티어를 반환
      * @param userId
-     * @return
+     * @return 해당 유저의 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
      * @throws URISyntaxException
      */
     @Override
     public UserDto.UserInfoDto getUserInfo(String userId)
             throws URISyntaxException
     {
-        // 닉네임, 사진 정보는 가져옴
+        log.info("UserServiceImpl 의 getUserInfo 메소드 실행");
+
+        // 닉네임, 사진 정보 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        // 레디스에서 mmr, 경험치 정보를 가져와서 레벨, 티어를 추출
-        // 레디스에 정보가 없으면 log-service 로 mmr, 경험치 받아오기
+        int curExp;
+        int curSpeedMmr;
+        int curOptimizationMmr;
 
-        boolean redisHasData = false;
-        ResponseEntity<UserDto.UserPlayDto> response = null;
-
-        // 레디스에 mmr, 경험치 정보가 없을 때 요청
-        if (!redisHasData)
-        {
+        try {
+            // redis 에서 해당 유저의 경험치, 스피드전 mmr, 효율성전 mmr 을 가져옴
+            ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
+            ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
+            curExp = Integer.parseInt(redisExp.get("levelExp:" + userId) + "");
+            curSpeedMmr = (int)Math.round(redisMmr.score("speed", userId));
+            curOptimizationMmr = (int)Math.round(redisMmr.score("optimization", userId));
+            throw new NullPointerException();
+        }
+        catch(NullPointerException e) {
+            // redis 에 정보가 없을 때 log-service 로 요청
             // user-service -> log-service
-            // log-service 에게 user_id 를 보내서
-            // 해당 유저의 레벨, 스피드전 티어, 효율성전 티어를 리턴받음
+            // param : user_id
+            // return : 해당 유저의 경험치, 스피드전 mmr, 효율성전 mmr 을 리턴
+            log.info("UserServiceImpl 의 getUserInfo 메소드에서 user_id 에 대한 경험치, mmr 정보가 " +
+                    "redis 에 없어서 log-service 에서 가져옵니다.");
             MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
             bodyData.add("user_id", userId);
-
-            response = restTemplateUtils.sendRequest(
+            ResponseEntity<UserDto.UserPlayDto> response = restTemplateUtils.sendRequest(
                     bodyData,
-                    "http://localhost:9005/log-service/getLevelAndTier",
+                    "http://localhost:9005/log-service/getExpAndMmr",
                     new ParameterizedTypeReference<UserDto.UserPlayDto>() {}
             );
+            curExp = response.getBody().getExp();
+            curSpeedMmr = response.getBody().getSpeedMmr();
+            curOptimizationMmr = response.getBody().getOptimizationMmr();
         }
 
-        return UserDto.UserInfoDto.builder()
-                .nickname(userEntity.getNickname())
-                .storedFileName(userEntity.getStoredFileName())
-                .level(String.valueOf(response.getBody().getLevel()))
-                .speedTier(String.valueOf(response.getBody().getSpeedTier()))
-                .optimizationTier(String.valueOf(response.getBody().getOptimizationTier()))
-                .build();
-    }
-
-    @Override
-    public UserDto.UserPlayDto getLevelAndTier(String curExp, String nowMmrBySpeed, String nowMmrByOptimization)
-    {
         UserLevelEntity userLevelEntity =
-                userLevelRepository.findTopBySumExpLessThanEqualOrderByLevelDesc(Integer.parseInt(curExp));
+                userLevelRepository.findTopBySumExpLessThanEqualOrderByLevelDesc(curExp);
 
         UserTierEntity userTierEntityBySpeed =
                 userTierRepository.findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(
-                        Integer.parseInt(nowMmrBySpeed),
-                        Integer.parseInt(nowMmrBySpeed)
+                        curSpeedMmr, curSpeedMmr
                 );
 
         UserTierEntity userTierEntityByOptimization =
                 userTierRepository.findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(
-                        Integer.parseInt(nowMmrByOptimization),
-                        Integer.parseInt(nowMmrByOptimization)
+                        curOptimizationMmr, curOptimizationMmr
                 );
 
         int level = userLevelEntity.getLevel();
-        String tierBySpeed = userTierEntityBySpeed.getTier();
-        String tierByOptimization = userTierEntityByOptimization.getTier();
+        String speedTier = userTierEntityBySpeed.getTier();
+        String optimizationTier = userTierEntityByOptimization.getTier();
 
-        return UserDto.UserPlayDto.builder()
-                .level(level + "")
-                .speedTier(tierBySpeed)
-                .optimizationTier(tierByOptimization)
+        log.info("UserServiceImpl 의 getUserInfo 메소드에서 사용자 레벨, 티어 정보 가져오기 성공");
+
+        return UserDto.UserInfoDto.builder()
+                .nickname(userEntity.getNickname())
+                .storedFileName(userEntity.getStoredFileName())
+                .level(level)
+                .speedTier(speedTier)
+                .optimizationTier(optimizationTier)
                 .build();
     }
 
+    /**
+     * @param userId
+     * @return 해당 유저의 배틀 로그 리스트를 리턴
+     */
     @Override
     public List<UserDto.UserBattleLogDto> getBattleLog(String userId)
             throws URISyntaxException
     {
+        log.info("UserServiceImpl 메소드의 getBattleLog 메소드 실행");
+
         MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
         bodyData.add("user_id", userId);
-
         ResponseEntity<List<UserDto.UserBattleLogDto>> response = restTemplateUtils.sendRequest(
                 bodyData,
                 "http://localhost:9005/log-service/getBattleLog",
                 new ParameterizedTypeReference<List<UserDto.UserBattleLogDto>>() {}
         );
 
-        return response.getBody();
-    }
-
-    @Override
-    public List<String> getNicknameList(List<String> userIdList)
-    {
-        List<String> nicknameList = new ArrayList<>();
-
-        for (String userId : userIdList)
+        List<UserDto.UserBattleLogDto> list = response.getBody();
+        for (UserDto.UserBattleLogDto userBattleLogDto : list)
         {
-            userId = userId.replaceAll("\\[|\\]", "");
-            UserEntity userEntity = userRepository.findByUserId(userId);
-            nicknameList.add(userEntity.getNickname());
+            UserEntity userEntity = userRepository.findByUserId(userBattleLogDto.getOtherUserId());
+            userBattleLogDto.setOtherUserNickname(userEntity.getNickname());
         }
 
-        return nicknameList;
+        return list;
     }
 }
