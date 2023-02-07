@@ -16,16 +16,12 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class RankServiceImpl implements RankService{
-//    private final RedisOffException redisOffException;
     private final RedisTemplate<String, Object> redisTemplate;
     private final RestTemplate restTemplate;
     private final BattleResultService battleResultService;
     private ZSetOperations<String, Object> ranking;
-    private HashOperations<String, String, Long> winLoseCount;
+    private HashOperations<String, String, String> winLoseCount;
     private HashOperations<String, String, String> userInfo;
-
-
-
 
     /**
      * 스피드전 개인 랭킹 가져오기
@@ -50,13 +46,14 @@ public class RankServiceImpl implements RankService{
 
         return mmr;
     }
+
     /**
     * 랭킹 페이지에 보여주기 위해 유저 정보를 가져오는 메소드
     * */
     public RankDto.UserData getUserData(String userId)
     {
         userInfo = redisTemplate.opsForHash();
-        String key = "userInfo:" + userId;
+        String key = "userInfo:" + "userId1";
 
         // redis에 정보가 없다면 user-service에게 요청해 가져오고 redis에 저장한다.
         if(!userInfo.hasKey(key, "nickname"))
@@ -65,6 +62,7 @@ public class RankServiceImpl implements RankService{
         }
 
         // redis에서 유저 정보를 가져온다.
+
         String nickname = userInfo.get(key, "nickname");
         String profilePic = userInfo.get(key, "stored_file_name");
         int level = Integer.valueOf(userInfo.get(key, "level"));
@@ -88,8 +86,8 @@ public class RankServiceImpl implements RankService{
     {
         winLoseCount = redisTemplate.opsForHash();
         String key = "winloseCnt:" + userId + ":" + battleMode;
-        long win = winLoseCount.get(key, "win");
-        long lose = winLoseCount.get(key, "lose");
+        int win = Integer.parseInt(winLoseCount.get(key, "win"));
+        int lose = Integer.parseInt(winLoseCount.get(key, "lose"));
         long winningRate = win / (win + lose) * 100;
 
         return RankDto.WinLoseCount.builder()

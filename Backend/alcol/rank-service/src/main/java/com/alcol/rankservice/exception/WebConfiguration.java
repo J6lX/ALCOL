@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer
 {
 //    @Autowired
-    private static RedisOffException redisOffException;
+//    private static RedisOffException redisOffException;
 //
     @Override
     public void addInterceptors(InterceptorRegistry interceptorRegistry)

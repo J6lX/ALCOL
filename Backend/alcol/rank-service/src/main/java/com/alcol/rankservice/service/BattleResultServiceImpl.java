@@ -19,7 +19,7 @@ import java.util.Map;
 public class BattleResultServiceImpl implements BattleResultService
 {
     private final RedisTemplate<String, Object> redisTemplate;
-    private HashOperations<String, String, Long> winLoseCount;
+    private HashOperations<String, String, String> winLoseCount;
     private HashOperations<String, String, String> userInfo;
     private ZSetOperations<String, Object> ranking;
     private final RestTemplate restTemplate;
@@ -44,14 +44,14 @@ public class BattleResultServiceImpl implements BattleResultService
         if(winLoseCount.get(key, hashKey) == null)
         {
             // 승패에 관한 데이터를 0으로 넣어준다.
-            winLoseCount.put(key, "win", (long)0);
-            winLoseCount.put(key, "lose", (long)0);
+            winLoseCount.put(key, "win", "0");
+            winLoseCount.put(key, "lose", "0");
         }
 
         // 승패 여부에 따라 count+=1
-        hashValue = winLoseCount.get(key, hashKey) + 1;
+        hashValue = Integer.valueOf(winLoseCount.get(key, hashKey)) + 1;
         // redis update
-        winLoseCount.put(key, hashKey, hashValue);
+        winLoseCount.put(key, hashKey, String.valueOf(hashValue));
 
         return "OK";
     }

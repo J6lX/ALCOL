@@ -3,7 +3,8 @@ package com.alcol.rankservice.dto;
 import lombok.Getter;
 
 @Getter
-public class RedisOffDto {
+public class RedisOffDto
+{
     private String userId;
     private int speed_win;
     private int speed_lose;
