@@ -8,12 +8,12 @@ import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
-// import BanPage from "./components/battle/BanPage";
+import BanPage from "./components/battle/BanPage";
 import ReadyPage from "./components/battle/ReadyPage";
 import ContinuousBattlePage from "./components/battle/ContinuousBattlePage";
-// import ResultPage from "./components/battle/ResultPage";
+import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
-// import SolvingPage from "./components/battle/SolvingPage";
+import SolvingPage from "./components/battle/SolvingPage";
 import PracticeSolvingPage from "./components/battle/PracticeSolvingPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
@@ -53,7 +53,7 @@ function App() {
             <Route path="/match" component={MatchingPage} />
 
             {/* 밴픽 페이지 */}
-            {/* <Route path="/ban" component={BanPage} /> */}
+            <Route path="/ban" component={BanPage} />
 
             {/* 매칭 후 소켓 연결 대기 페이지 */}
             <Route path="/ready" component={ReadyPage} />
@@ -71,10 +71,10 @@ function App() {
             <Route path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
-            {/* <Route path="/solve" exact={true} component={SolvingPage} /> */}
+            <Route path="/solve" exact={true} component={SolvingPage} />
 
             {/* 배틀 결과 페이지 */}
-            {/* <Route path="/result" exact={true} component={ResultPage} /> */}
+            <Route path="/result" exact={true} component={ResultPage} />
 
             {/* 배틀 상세 결과 페이지 */}
             <Route path="/resultList" exact={true} component={ResultListPage} />
