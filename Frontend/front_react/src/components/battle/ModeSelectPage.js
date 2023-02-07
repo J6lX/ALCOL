@@ -27,7 +27,7 @@ function UserInfo() {
           style={{ width: "80%", marginTop: "5px", marginLeft: "5px" }}
           onClick={handlePageBack}></img>
       </Col>
-      <Col span={17} style={{ lineHeight: "50px" }}></Col>
+      <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
         멋진 티어
       </Col>
@@ -36,7 +36,12 @@ function UserInfo() {
       </Col>
       <Col
         span={3}
-        style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "1.5vw",
+          paddingLeft: "10px",
+          lineHeight: "50px",
+        }}
         className="battle_user_info_contents">
         멋진 닉네임
       </Col>
@@ -176,7 +181,7 @@ function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setM
 function FixedText() {
   return (
     <h1
-      style={{ color: "white", fontSize: "80px", marginLeft: "30px" }}
+      style={{ fontFamily: "NanumSquareNeo", color: "white", fontSize: "80px", marginLeft: "45px" }}
       className="battle_fixed_text">
       경쟁전
     </h1>
