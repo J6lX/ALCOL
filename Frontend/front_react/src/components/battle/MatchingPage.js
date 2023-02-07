@@ -25,29 +25,11 @@ function UserInfo() {
 }
 
 function App() {
-  const history = useHistory();
-
-  function hanleHistoryMatchCancle() {
-    setMode("-1");
-    setLanguage("-1");
-    history.push("/");
-  }
-
-  //atoms에 저장한 mode 불러옵니다.
-  const [mode, setMode] = useRecoilState(selectedMode);
-  //atoms에 저장한 language 불러옵니다.
-  const [language, setLanguage] = useRecoilState(selectedLanguage);
-
-  console.log("매칭페이지");
-  console.log(mode);
-  console.log(language);
-
   //websocket 관련 전체 코드는 여기...
   //https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
   //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
-  //${window.location.host} = 어디에 인터넷 주소가 위치해 있는지 알려주는 코드
   const socket = new WebSocket(`ws://${window.location.host}`);
-  console.log(socket);
+  const [state, setState] = React.useState("상대를 찾는중..");
 
   function makeMessage(type, payload) {
     const msg = { type, payload };
@@ -65,8 +47,9 @@ function App() {
   //message를 받을 때 발생
   socket.addEventListener("message", (message) => {
     console.log("서버로 부터 받은 메세지 : " + message.data);
-    if (message.data === "connected") {
+    if (message.data === "success") {
       console.log("매칭되었습니다!");
+      setState("매칭 완료.. 상대를 기다리는 중..");
     }
   });
 
@@ -75,11 +58,28 @@ function App() {
     console.log("---서버와 연결 끊김---");
   });
 
+  //페이지 이동 관련
+  const history = useHistory();
+
+  function hanleHistoryMatchCancle() {
+    setMode("-1");
+    setLanguage("-1");
+    history.push("/");
+  }
+
+  //mode 선택 관련
+  const [mode, setMode] = useRecoilState(selectedMode);
+  const [language, setLanguage] = useRecoilState(selectedLanguage);
+
+  console.log("매칭페이지");
+  console.log(mode);
+  console.log(language);
+
   return (
     <div className="matching_background">
       <UserInfo />
       <div style={{ color: "white", textAlign: "center", marginTop: "25vh" }}>
-        상대를 찾는중..
+        {state}
         <div className="wrapper" style={{ marginTop: "-30px" }}>
           <svg
             className="hourglass"
