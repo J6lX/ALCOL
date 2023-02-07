@@ -7,6 +7,7 @@ import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
 import iconBack from "../../assets/left-arrow.png";
+import iconBackSmall from "../../assets/left-arrow-small.png";
 
 function UserInfo() {
   const history = useHistory();
@@ -83,7 +84,7 @@ function SelectMode({ setMode }) {
   );
 }
 
-function SelectLanguage({ setLanguage }) {
+function SelectLanguage({ setLanguage, back }) {
   return (
     <div
       style={{
@@ -104,6 +105,11 @@ function SelectLanguage({ setLanguage }) {
         언어를 선택하세요
       </h1>
       <div className="battle_mode_row">
+        <img
+          src={iconBackSmall}
+          alt="back icon"
+          onClick={() => back("-1")}
+          style={{ width: "10%", height: "10%", marginLeft: "-10%", marginTop: "130px" }}></img>
         <SelectBox
           gameMode={"자바"}
           gameModeIcon={iconJava}
@@ -188,7 +194,7 @@ function App() {
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
-        <SelectLanguage setLanguage={setLanguage} />
+        <SelectLanguage setLanguage={setLanguage} back={setMode} />
       )}
       <FixedText />
     </div>
