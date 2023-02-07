@@ -56,9 +56,11 @@ function SelectMode({ setMode }) {
       }}>
       <h1
         style={{
+          fontFamily: "NanumSquareNeo",
           color: "white",
           fontSize: "40px",
           textAlign: "center",
+          marginTop: "-10vh",
           marginBottom: "10px",
           textShadow: "0px 0px 1rem white",
         }}>
@@ -98,9 +100,11 @@ function SelectLanguage({ setLanguage, back }) {
       }}>
       <h1
         style={{
+          fontFamily: "NanumSquareNeo",
           color: "white",
           fontSize: "40px",
           textAlign: "center",
+          marginTop: "-10vh",
           marginBottom: "10px",
           textShadow: "0px 0px 1rem white",
         }}>
@@ -148,6 +152,7 @@ function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setM
               color: "white",
               fontSize: "10px",
               textAlign: "center",
+              fontFamily: "NanumSquareNeo",
             }}>
             {gameInfo1}
           </p>
@@ -156,6 +161,7 @@ function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setM
               color: "white",
               fontSize: "10px",
               textAlign: "center",
+              fontFamily: "NanumSquareNeo",
             }}>
             {gameInfo2}
           </p>
@@ -217,11 +223,7 @@ function App() {
       ) : (
         <SelectLanguage setLanguage={setLanguage} back={setMode} />
       )}
-      {mode !== "-1" && language !== "-1" ? (
-        <HandleFinishSelectButton />
-      ) : (
-        <div style={{ color: "white" }}>아직 선택 덜 됐다</div>
-      )}
+      {mode !== "-1" && language !== "-1" ? <HandleFinishSelectButton /> : <div></div>}
 
       <FixedText />
     </div>
