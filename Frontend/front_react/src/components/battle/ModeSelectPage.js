@@ -110,7 +110,10 @@ function SelectLanguage({ setLanguage, back }) {
         <img
           src={iconBackSmall}
           alt="back icon"
-          onClick={() => back("-1")}
+          onClick={() => {
+            back("-1");
+            setLanguage("-1");
+          }}
           style={{ width: "10%", height: "10%", marginLeft: "-10%", marginTop: "130px" }}></img>
         <SelectBox
           gameMode={"자바"}
@@ -174,6 +177,18 @@ function FixedText() {
   );
 }
 
+function HandleFinishSelectButton() {
+  const history = useHistory();
+  const hanleHistoryMatch = () => {
+    history.push("/match");
+  };
+  return (
+    <div className="modeButton" onClick={hanleHistoryMatch}>
+      매칭 시작
+    </div>
+  );
+}
+
 function App() {
   const [mode, setMode] = useRecoilState(selectedMode);
   const [language, setLanguage] = useRecoilState(selectedLanguage);
@@ -189,7 +204,7 @@ function App() {
     if (language !== "-1") {
       console.log("언어 선택 완료! language:" + language);
       if (language !== "-1") {
-        history.push("/match");
+        // history.push("/match");
       }
     }
   }, [language, history]);
@@ -202,6 +217,12 @@ function App() {
       ) : (
         <SelectLanguage setLanguage={setLanguage} back={setMode} />
       )}
+      {mode !== "-1" && language !== "-1" ? (
+        <HandleFinishSelectButton />
+      ) : (
+        <div style={{ color: "white" }}>아직 선택 덜 됐다</div>
+      )}
+
       <FixedText />
     </div>
   );
