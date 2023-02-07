@@ -1,11 +1,18 @@
-import React from "react";
+import { React } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import loginBg from "../../assets/loginbg.jpg";
 import "./LoginPage.css";
 import axios from "axios";
+import { useSetRecoilState, useRecoilState } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 function LoginPage() {
+  // 로그인 상태 관리(LoginState의 데이터를 변경)
+  const setIsLoggedIn = useSetRecoilState(LoginState); // 로그인 상태 변경
+  const [accessTokenData, setAccessTokenData] = useRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
+  const [refreshTokenData, setRefreshTokenData] = useRecoilState(RefreshTokenInfo);
+
   // Login을 제출하면 실행되는 함수
   // 성공 시 localstorage에 토큰 발급
   // 아니면 에러 알림, 로그인 입력창 지워주기
@@ -35,6 +42,20 @@ function LoginPage() {
           console.log("access_token: " + accessToken);
           console.log("refresh_token: " + refreshToken);
           console.log("user_id: " + userId);
+
+          // 사용자 ID는 로컬스토리지에 저장
+          localStorage.setItem("userId", userId);
+          // 토큰 정보는 recoil에 저장
+          setAccessTokenData(accessToken);
+          setRefreshTokenData(refreshToken);
+
+          // 토큰이 잘 저장되었는지 체크용(정상 작동 시 주석 처리 or 삭제)
+          console.log(accessToken);
+          console.log(refreshToken);
+
+          // 토큰 정보와 사용자명이 저장되었으면 로그인 상태를 true로 변경
+          if (localStorage.getItem("userId") && accessTokenData && refreshTokenData)
+            setIsLoggedIn(true);
         }
       })
       //로그인 실패 시
