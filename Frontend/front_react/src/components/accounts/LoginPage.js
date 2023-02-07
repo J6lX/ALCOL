@@ -4,14 +4,15 @@ import { Button, Form, Input } from "antd";
 import loginBg from "../../assets/loginbg.jpg";
 import "./LoginPage.css";
 import axios from "axios";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilState } from "recoil";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 function LoginPage() {
   // 로그인 상태 관리(LoginState의 데이터를 변경)
   const setIsLoggedIn = useSetRecoilState(LoginState); // 로그인 상태 변경
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
-  const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
+  // const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
+  const [refreshTokenData, setRefreshTokenData] = useRecoilState(RefreshTokenInfo);
 
   // Login을 제출하면 실행되는 함수
   // 성공 시 localstorage에 토큰 발급
@@ -43,18 +44,19 @@ function LoginPage() {
           // console.log("user_id: " + userId);
 
           // 사용자 ID는 로컬스토리지에 저장
-          localStorage.setItem("userId", userId);
+          // localStorage.setItem("userId", userId);
           // 토큰 정보는 recoil에 저장
           setAccessTokenData(accessToken);
           setRefreshTokenData(refreshToken);
 
           // 토큰 정보와 사용자명이 저장되었으면 로그인 상태를 true로 변경
           setIsLoggedIn(true);
+          setRefreshTokenData(refreshToken);
 
           // 테스트용 코드
           // console.log(refreshToken);
           console.log(AccessTokenInfo);
-          console.log(RefreshTokenInfo);
+          console.log(refreshTokenData);
 
           // 로그인 시 메인 화면으로 리다이렉트(임시)
           // window.location.href = "http://localhost:3000/";
