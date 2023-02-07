@@ -14,11 +14,11 @@ export const LoginState = atom({
 // 액세스 토큰 정보 저장
 export const AccessTokenInfo = atom({
   key: "AccessToken",
-  default: null,
+  default: [],
 });
 
 // 리프레시 토큰 정보 저장
 export const RefreshTokenInfo = atom({
   key: "RefreshToken",
-  default: null,
+  default: [],
 });

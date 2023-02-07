@@ -52,9 +52,12 @@ function LoginPage() {
           setIsLoggedIn(true);
 
           // 테스트용 코드
+          // console.log(refreshToken);
+          console.log(AccessTokenInfo);
+          console.log(RefreshTokenInfo);
 
           // 로그인 시 메인 화면으로 리다이렉트(임시)
-          window.location.href = "http://localhost:3000/";
+          // window.location.href = "http://localhost:3000/";
           // window.location.href = "http://i8b303.p.ssafy.io:8000/";
         }
       })

@@ -25,6 +25,8 @@ function LoginTag(props) {
     setIsLoggedIn(false);
     setAccessTokenData(null);
     setRefreshTokenData(null);
+
+    // 메인 화면으로 리다이렉트
     window.location.href = "http://localhost:3000/";
     // window.location.href = "http://i8b303.p.ssafy.io:8000/";
   };
@@ -153,7 +155,6 @@ function HeaderData() {
   const browser = ResizedComponent();
 
   // 큰 화면에서 표시하는 데이터
-  // console.log(browser.width);
   if (browser.width >= 640) {
     return (
       <Header

@@ -25,17 +25,30 @@ import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
 
 import { Layout } from "antd";
-import { LoginState } from "./states/LoginState";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "./states/LoginState";
 
 // // import { render } from "@testing-library/react";
 
 const { Content } = Layout;
 
+// 로그인 상태 확인
+export function LoginInfo() {
+  const userData = useRecoilValue(LoginState);
+  const AccToken = useRecoilValue(AccessTokenInfo);
+  const RefToken = useRecoilValue(RefreshTokenInfo);
+
+  return {
+    UserName: userData,
+    AccessToken: AccToken,
+    RefreshToken: RefToken,
+  };
+}
+
 function App() {
   // 로그인 상태 확인
   const isLoggedIn = useRecoilValue(LoginState);
-  console.log(isLoggedIn);
-  console.log(localStorage);
+  // console.log(isLoggedIn);
+  // console.log(localStorage);
 
   return (
     <RecoilRoot>
