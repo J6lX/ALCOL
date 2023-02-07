@@ -38,6 +38,29 @@
   filter: drop-shadow(0 0 15px #f7bd63) contrast(3);
   transform: scale(1.05);
   border: 3px solid #f7bd63;
+  animation: box-move 1.5s infinite linear;
+}
+
+@keyframes box-move {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, -10px);
+    box-shadow: 0 0 30px rgba(221, 224, 11, 1);
+  }
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 200px;
+  border: 2px solid black;
+  background-color: rgba(255, 255, 0, 0.7);
+  animation: box-ani 1s linear forwards; /* 애니메이션 적용 */
 }
 
 .battle_mode_row > :not(last-child) > div {

@@ -3,36 +3,6 @@ import { useHistory } from "react-router-dom";
 import { Col, Row } from "antd";
 import "./MatchingPage.css";
 
-//프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
-//${window.location.host} = 어디에 인터넷 주소가 위치해 있는지 알려주는 코드
-//websocket 관련 전체 코드는 여기...
-//https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
-const socket = new WebSocket(`ws://${window.location.host}`);
-console.log(socket);
-
-function makeMessage(type, payload) {
-  const msg = { type, payload };
-  return JSON.stringify(msg);
-}
-
-//socket이 connection을 open했을때 발생
-socket.addEventListener("open", () => {
-  console.log("---서버와 연결 됨---");
-  //서버로 뭔가를 보내기
-  const input = "서버로 메세지를 보냅니다";
-  socket.send(makeMessage("new_Message", input));
-});
-
-//message를 받을 때 발생
-socket.addEventListener("message", (message) => {
-  console.log("서버로 부터 받은 메세지 : " + message.data);
-});
-
-//서버가 오프라인일때 발생하는 코드
-socket.addEventListener("close", () => {
-  console.log("---서버와 연결 끊김---");
-});
-
 function UserInfo() {
   return (
     <Row justify="end" className="battle_user_info_row">
@@ -58,6 +28,36 @@ function App() {
   function hanleHistoryMatchCancle() {
     history.push("/");
   }
+
+  //websocket 관련 전체 코드는 여기...
+  //https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
+  //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
+  //${window.location.host} = 어디에 인터넷 주소가 위치해 있는지 알려주는 코드
+  const socket = new WebSocket(`ws://${window.location.host}`);
+  console.log(socket);
+
+  function makeMessage(type, payload) {
+    const msg = { type, payload };
+    return JSON.stringify(msg);
+  }
+
+  //socket이 connection을 open했을때 발생
+  socket.addEventListener("open", () => {
+    console.log("---서버와 연결 됨---");
+    //서버로 뭔가를 보내기
+    const input = "서버로 메세지를 보냅니다";
+    socket.send(makeMessage("new_Message", input));
+  });
+
+  //message를 받을 때 발생
+  socket.addEventListener("message", (message) => {
+    console.log("서버로 부터 받은 메세지 : " + message.data);
+  });
+
+  //서버가 오프라인일때 발생하는 코드
+  socket.addEventListener("close", () => {
+    console.log("---서버와 연결 끊김---");
+  });
 
   return (
     <div className="matching_background">

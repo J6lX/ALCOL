@@ -6,10 +6,25 @@ import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
+import iconBack from "../../assets/left-arrow.png";
 
 function UserInfo() {
+  const history = useHistory();
+
+  const handlePageBack = () => {
+    history.push("/");
+  };
+
   return (
-    <Row justify="end" className="battle_user_info_row">
+    <Row justify="space-between" className="battle_user_info_row">
+      <Col span={1} style={{ lineHeight: "50px" }}>
+        <img
+          src={iconBack}
+          alt="back icon"
+          style={{ width: "80%", marginTop: "5px", marginLeft: "5px" }}
+          onClick={handlePageBack}></img>
+      </Col>
+      <Col span={17} style={{ lineHeight: "50px" }}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
         멋진 티어
       </Col>
