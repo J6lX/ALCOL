@@ -1,7 +1,7 @@
-import { Button, Row, Col, Input, Table, ConfigProvider, theme } from "antd";
+import { Button, Row, Col, Input, Table, ConfigProvider, theme, Form } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState } from "react";
 
 // 연습 문제 구분 설명
@@ -44,26 +44,29 @@ const problemData = [
 
 // 페이지 렌더링
 function Ranking() {
-  // 검색 기능 사용 시
-  const urlSrc = useLocation();
-  let query = urlSrc.search;
+  // 데이터 상태 관리
+  const [refinedData, setRefinedData] = useState(problemData);
 
   // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");
 
   // 검색어 입력 시 value(search)가 실시간으로 변경되도록 적용
-  const inputChange = ({ target: { value } }) => setSearch(value);
+  const inputChange = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  };
 
-  const refinedData = problemData.filter((problem) => problem.problemName.includes(query));
-
-  // 검색 버튼을 누르면 query가 추가되고, 데이터가 필터링됨
-  const querySubmit = (event) => {
-    if (search.trim()) {
-      // console.log(search);
-      query = search;
-      console.log(query);
+  // const refinedData = problemData.filter((problem) => problem.problemName.includes(query));
+  const onSearch = (values) => {
+    const searchInput = values.query;
+    console.log(problemData);
+    if (searchInput.trim()) {
+      const filteredData = problemData.filter((problem) =>
+        problem.problemName.includes(searchInput)
+      );
+      setRefinedData(filteredData);
     } else {
-      alert("검색어를 입력하세요.");
+      setRefinedData(problemData);
     }
   };
 
@@ -88,20 +91,22 @@ function Ranking() {
           {/* 검색 상자 */}
           <Row justify="end">
             <Col xs={12} sm={8} justify="end">
-              <form onSubmit={querySubmit}>
+              <Form onFinish={onSearch}>
                 <Row>
                   <Col xs={12} lg={16}>
-                    <Input
-                      placeholder="유형 이름 검색"
-                      allowClear
-                      size="middle"
-                      type="text"
-                      value={search}
-                      onChange={inputChange}
-                      style={{
-                        margin: "5px",
-                      }}
-                    />
+                    <Form.Item name="query">
+                      <Input
+                        placeholder="문제 이름으로 검색"
+                        allowClear
+                        size="middle"
+                        type="text"
+                        value={search}
+                        onChange={inputChange}
+                        style={{
+                          margin: "5px",
+                        }}
+                      />
+                    </Form.Item>
                   </Col>
                   <Col
                     style={{
@@ -110,10 +115,12 @@ function Ranking() {
                     }}
                     xs={3}
                     lg={6}>
-                    <Button onClick={querySubmit}>검색</Button>
+                    <Form.Item>
+                      <Button htmlType="submit">검색</Button>
+                    </Form.Item>
                   </Col>
                 </Row>
-              </form>
+              </Form>
             </Col>
           </Row>
 
