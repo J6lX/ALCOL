@@ -1,66 +1,50 @@
-import { Button, Row, Col, Input } from "antd";
+import { Button, Row, Col, Input, Table, ConfigProvider, theme } from "antd";
 import "./Ranking.css";
 import rankingHeader from "../../assets/ranking_header.png";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Pagination from "@mui/material/Pagination";
-import { DataGrid } from "@mui/x-data-grid";
-import { styled } from "@mui/system";
 
-// 랭커 목록 다크 모드 적용
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
-
-// 데이터 그리드 컬럼 가리기 옵션
-const HideColumn = styled(DataGrid)(({ theme }) => ({
-  "& .MuiDataGrid-columnHeaders": { display: "none" },
-  "& .MuiDataGrid-virtualScroller": { marginTop: "0!important" },
-}));
-
-// 연습 문제 구분 설명
+// 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const problemLabel = [
   {
-    field: "id",
-    headerName: "순위",
-    width: 100,
-    flex: 0.6,
+    dataIndex: "id",
+    key: "id",
+    title: "순위",
     align: "center",
-    headerAlign: "center",
-  },
-  { field: "name", headerName: "ID", width: 200, flex: 1, align: "center", headerAlign: "center" },
-  {
-    field: "level",
-    headerName: "LEVEL",
-    width: 150,
-    flex: 1,
-    align: "center",
-    headerAlign: "center",
+    hidden: true,
   },
   {
-    field: "mmr",
-    headerName: "MMR",
-    width: 150,
-    flex: 0.7,
+    dataIndex: "name",
+    key: "name",
+    title: "닉네임",
     align: "center",
-    headerAlign: "center",
+    hidden: true,
   },
   {
-    field: "tier",
-    headerName: "시즌 티어",
-    width: 190,
-    flex: 1,
+    dataIndex: "level",
+    key: "level",
+    title: "LEVEL",
     align: "center",
-    headerAlign: "center",
+    hidden: true,
   },
   {
-    field: "record",
-    headerName: "시즌 전적",
-    width: 200,
-    flex: 1.3,
+    dataIndex: "mmr",
+    key: "mmr",
+    title: "MMR",
     align: "center",
-    headerAlign: "center",
+    hidden: true,
+  },
+  {
+    dataIndex: "tier",
+    key: "tier",
+    title: "시즌 티어",
+    align: "center",
+    hidden: true,
+  },
+  {
+    dataIndex: "record",
+    key: "record",
+    title: "시즌 전적",
+    align: "center",
+    hidden: true,
   },
 ];
 
@@ -73,12 +57,51 @@ const problemData = [
   { id: 5, name: "고량주", record: "22승 17패(56%)", tier: "Diamond" },
 ];
 
-// 커스텀 페이지네이션
-function CustomPagination() {
-  return <Pagination defaultCurrent={1} total={50} responsive="true" />;
-}
-
 function Ranking() {
+  // // innerRow = 클릭 시 확장되어 추가 정보를 표시하는 용도
+  // const innerRow = () => {
+  //   const columns = [
+  //     {
+  //       title: "스피드전",
+  //       dataIndex: "speedTier",
+  //       key: "speedTier",
+  //     },
+  //     {
+  //       title: "효율성전",
+  //       dataIndex: "efficiencyTier",
+  //       key: "efficiencyTier",
+  //     },
+  //   ];
+  //   const data = [
+  //     {
+  //       id: 1,
+  //       speedTier: "Diamond",
+  //       efficiencyTier: "Diamond",
+  //     },
+  //     {
+  //       id: 2,
+  //       speedTier: "Diamond",
+  //       efficiencyTier: "Diamond",
+  //     },
+  //     {
+  //       id: 3,
+  //       speedTier: "Diamond",
+  //       efficiencyTier: "Diamond",
+  //     },
+  //     {
+  //       id: 4,
+  //       speedTier: "Diamond",
+  //       efficiencyTier: "Diamond",
+  //     },
+  //     {
+  //       id: 5,
+  //       speedTier: "Diamond",
+  //       efficiencyTier: "Diamond",
+  //     },
+  //   ];
+  //   return <Table columns={columns} dataSource={data} pagination={false} />;
+  // };
+
   return (
     <>
       <div>
@@ -178,44 +201,36 @@ function Ranking() {
                     <Row justify="center">
                       <Col justify="center" span={24}>
                         {/* 랭커 정보 표시 */}
-                        <ThemeProvider theme={darkTheme}>
-                          <HideColumn
-                            rows={problemData}
-                            columns={problemLabel}
-                            pageSize={8}
-                            disableColumnSelector
-                            disableColumnMenu
-                            disableColumnFilter
-                            autoHeight={true}
-                            autoPageSize={true}
-                            justify="center"
-                            components={{
-                              Pagination: CustomPagination,
-                            }}
+                        <ConfigProvider
+                          theme={{
+                            // algorithm : AntD에서 기본적으로 제공하는 다크 모드 테마
+                            algorithm: theme.darkAlgorithm,
+                            // token : AntD의 기본 색상 테마 설정(기존 : 파란색)
+                            token: {
+                              colorPrimary: "#FAC557",
+                            },
+                          }}>
+                          <Table
                             style={{
-                              borderBottomLeftRadius: "7%",
-                              borderBottomRightRadius: "7%",
+                              padding: "3px",
+                            }}
+                            dataSource={problemData}
+                            columns={problemLabel}
+                            showHeader={false}
+                            // expandable={{
+                            //   innerRow,
+                            //   defaultExpandedRowKeys: ["0"],
+                            // }}
+                            pagination={{
+                              position: ["bottomCenter"],
+                              defaultPageSize: 10,
                             }}
                           />
-                        </ThemeProvider>
+                        </ConfigProvider>
                       </Col>
                     </Row>
                   </Col>
                 </Row>
-
-                {/* 페이지네이션 표시 */}
-                {/* <Row justify="center">
-                  <Col align="center">
-                    <ThemeProvider theme={darkTheme}>
-                      <Pagination
-                        defaultCurrent={1}
-                        total={50}
-                        responsive="true"
-                        className="pagiNation"
-                      />
-                    </ThemeProvider>
-                  </Col>
-                </Row> */}
               </Col>
             </Row>
           </Col>

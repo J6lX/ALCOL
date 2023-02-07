@@ -1,71 +1,74 @@
-import { Button, Row, Col, Input } from "antd";
+import { Button, Row, Col, Input, Table, ConfigProvider, theme } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
-// MaterialUI(MUI) 사용: 프레임워크 다운로드 필요
-// npm install @mui/x-data-grid 입력하여 다운로드
-import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Pagination from "@mui/material/Pagination";
-import { DataGrid } from "@mui/x-data-grid";
-
-// 문제 목록 다크 모드 적용
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 // 연습 문제 구분 설명
 const problemLabel = [
   {
-    field: "id",
-    headerName: "문제 번호",
-    width: 200,
-    flex: 0.5,
+    title: "문제 번호",
+    dataIndex: "problemNo",
+    key: "problemNo",
     align: "center",
-    headerAlign: "center",
+    render: (text, record) => <Link to={"/solveprac/" + record.key}>{text}</Link>,
   },
   {
-    field: "name",
-    headerName: "문제 이름",
-    width: 320,
-    flex: 1,
+    title: "문제 이름",
+    dataIndex: "problemName",
+    key: "problemNo",
     align: "center",
-    headerAlign: "center",
   },
   {
-    field: "type",
-    headerName: "문제 유형",
-    width: 210,
-    flex: 0.7,
+    title: "문제 유형",
+    dataIndex: "problemType",
+    key: "problemNo",
     align: "center",
-    headerAlign: "center",
   },
   {
-    field: "tier",
-    headerName: "난이도",
-    width: 180,
-    flex: 0.6,
+    title: "문제 난이도",
+    dataIndex: "problemDifficulty",
+    key: "problemNo",
     align: "center",
-    headerAlign: "center",
   },
 ];
 
 // 연습 문제 데이터
 const problemData = [
-  { id: 1, name: "문제1", type: "DFS", tier: "Gold" },
-  { id: 2, name: "문제2", type: "BFS", tier: "Gold" },
-  { id: 3, name: "문제3", type: "Greedy", tier: "Gold" },
-  { id: 4, name: "문제4", type: "DFS", tier: "Gold" },
-  { id: 5, name: "문제5", type: "DP", tier: "Gold" },
+  { key: 1, problemNo: "1", problemName: "문제1", problemType: "DFS", problemDifficulty: "Gold" },
+  { key: 2, problemNo: "2", problemName: "문제2", problemType: "DFS", problemDifficulty: "Gold" },
+  { key: 3, problemNo: "3", problemName: "문제3", problemType: "DFS", problemDifficulty: "Gold" },
+  { key: 4, problemNo: "4", problemName: "문제4", problemType: "DFS", problemDifficulty: "Gold" },
+  { key: 5, problemNo: "5", problemName: "문제5", problemType: "DFS", problemDifficulty: "Gold" },
 ];
-
-// 커스텀 페이지네이션
-function CustomPagination() {
-  return <Pagination defaultCurrent={1} total={50} responsive="true" />;
-}
 
 // 페이지 렌더링
 function Ranking() {
+  // 검색 기능 사용 시
+  const urlSrc = useLocation();
+  const query = urlSrc.search;
+
+  // // URL에 검색어가 있는 경우
+  // if (query) {
+  //   // (대충 연습 문제 중에서 필터링해야 한다는 뜻)
+  // } else {
+  //   // (대충 모든 문제 보여주면 된다는 뜻)
+  // }
+
+  console.log(query);
+
+  // 문제 검색 시
+  const [search, setSearch] = useState("");
+
+  const onSearch = (e) => {
+    console.log("검색 버튼 누름");
+  };
+
+  const onChangeSearch = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+  };
+
   return (
     <div>
       {/* 페이지 제목(이미지 위에 띄우기) */}
@@ -87,14 +90,19 @@ function Ranking() {
           {/* 검색 상자 */}
           <Row justify="end">
             <Col xs={0} sm={8} lg={5}>
-              <Input
-                placeholder="유형 이름 검색"
-                allowClear
-                size="middle"
-                style={{
-                  margin: "5px",
-                }}
-              />
+              <form onSubmit={(e) => onSearch(e)}>
+                <Input
+                  placeholder="유형 이름 검색"
+                  allowClear
+                  size="middle"
+                  type="text"
+                  value={search}
+                  onChangeSearch={onChangeSearch}
+                  style={{
+                    margin: "5px",
+                  }}
+                />
+              </form>
             </Col>
             <Col
               style={{
@@ -110,24 +118,27 @@ function Ranking() {
           {/* 연습 문제 목록 블록(페이지네이션 포함) */}
           <Row className="block" justify="center" align="center">
             <Col className="problems" span={24} justify="center">
-              <ThemeProvider theme={darkTheme}>
-                <DataGrid
-                  rows={problemData}
-                  columns={problemLabel}
-                  pageSize={10}
-                  disableColumnSelector
-                  disableColumnMenu
-                  disableColumnFilter
-                  autoHeight={true}
-                  autoPageSize={true}
+              <ConfigProvider
+                theme={{
+                  // algorithm : AntD에서 기본적으로 제공하는 다크 모드 테마
+                  algorithm: theme.darkAlgorithm,
+                  // token : AntD의 기본 색상 테마 설정(기존 : 파란색)
+                  token: {
+                    colorPrimary: "#FAC557",
+                  },
+                }}>
+                <Table
                   style={{
-                    borderRadius: "5%",
+                    padding: "3px",
                   }}
-                  components={{
-                    Pagination: CustomPagination,
+                  dataSource={problemData}
+                  columns={problemLabel}
+                  pagination={{
+                    position: ["bottomCenter"],
+                    defaultPageSize: 10,
                   }}
                 />
-              </ThemeProvider>
+              </ConfigProvider>
             </Col>
           </Row>
         </Col>

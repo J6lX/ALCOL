@@ -5,6 +5,7 @@ import alcol from "../assets/alcol_empty_white.png";
 
 import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
 
 const { Header } = Layout;
 
@@ -74,49 +75,93 @@ function LoginTag(props) {
 }
 
 // 작은 화면에 표시할 메뉴
-function getItem(label, key) {
+function getItem(label, key, icon, children, type) {
   return {
     key,
+    icon,
+    children,
     label,
+    type,
   };
 }
 const miniItems = [
-  getItem("Navigation One", "sub1", [
-    getItem("Option 1", "1"),
-    getItem("Option 2", "2"),
-    getItem("Option 3", "3"),
-    getItem("Option 4", "4"),
+  getItem("MENU", "sub1", null, [
+    getItem(
+      <Link to="/practice" className="textDark">
+        Problem
+      </Link>,
+      "1"
+    ),
+    getItem(
+      <Link to="/ranking" className="textDark">
+        Ranking
+      </Link>,
+      "2"
+    ),
+    getItem(
+      <Link to="/mode" className="textDark">
+        Battle
+      </Link>,
+      "3"
+    ),
   ]),
 ];
 
-// App.js에 반환할 값
-function AppHeader() {
-  const locationNow = useLocation(); // 현재 접속 중인 URL 확인
+// 브라우저 창 크기 실시간으로 반영
+const ResizedComponent = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
-  // 배틀 페이지에서는 헤더/푸터 제외하고 표시
-  if (
-    locationNow.pathname !== "/match" &&
-    locationNow.pathname !== "/ban" &&
-    locationNow.pathname !== "/mode" &&
-    locationNow.pathname !== "/solve" &&
-    locationNow.pathname !== "/solveprac" &&
-    locationNow.pathname !== "/battle"
-  )
+  const handleResize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return windowSize;
+};
+
+// 헤더 데이터
+function HeaderData() {
+  // browser = 실시간으로 브라우저 화면 크기 계산한 결과(너비, 높이)
+  const browser = ResizedComponent();
+
+  // 큰 화면에서 표시하는 데이터
+  console.log(browser.width);
+  if (browser.width >= 640) {
     return (
       <Header
         style={{
           backgroundColor: "#17181c",
+          height: "100%",
         }}>
-        <Row gutter={16} justify="space-between">
+        <Row gutter={16} justify="space-between" align="middle">
           {/* 로고 표시 구역 */}
-          <Col span={4} align="center">
+          <Col span={4} justify="center" align="end">
             <Link to="/">
-              <img src={alcol} alt="logo" className="logo" />
+              <img
+                src={alcol}
+                alt="logo"
+                className="logo"
+                style={{
+                  transform: "translate(0, 25%)",
+                }}
+              />
             </Link>
           </Col>
 
           {/* 메뉴(Problem, Ranking, Battle) */}
-          <Col xs={0} md={6} lg={11} xl={12} justify="center" align="middle">
+          <Col xs={4} md={6} lg={11} xl={12} justify="center" align="middle">
             <Link to="/practice" className="textDark menus">
               Problem
             </Link>
@@ -128,18 +173,78 @@ function AppHeader() {
             </Link>
           </Col>
 
-          {/* 작은 화면용 메뉴(collapse) */}
-          <Col xs={12} md={0} align="middle">
-            <Menu items={miniItems} />
-          </Col>
-
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col xs={8} lg={4} justify="center">
+          <Col xs={7} lg={4} justify="center">
             <LoginTag />
           </Col>
         </Row>
       </Header>
     );
+  }
+  // 작은 화면에서 표시하는 데이터
+  else {
+    return (
+      <Header
+        style={{
+          backgroundColor: "#17181c",
+          width: "600",
+          height: "100%",
+        }}>
+        <Row align="middle">
+          {/* 로고 표시 구역 */}
+          <Col span={6} align="center">
+            <Link to="/">
+              <img
+                src={alcol}
+                alt="logo"
+                className="logo"
+                style={{
+                  width: "100%",
+                  transform: "translate(0, 25%)",
+                }}
+              />
+            </Link>
+          </Col>
+
+          {/* 작은 화면용 메뉴(collapse) */}
+          <Col span={8} align="middle">
+            <Menu
+              mode="inline"
+              items={miniItems}
+              theme={{
+                token: {
+                  colorPrimary: "#FAC557",
+                },
+              }}
+              style={{
+                backgroundColor: "#16171b",
+                color: "white",
+              }}
+            />
+          </Col>
+          {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
+          <Col xs={10} justify="center">
+            <LoginTag />
+          </Col>
+        </Row>
+      </Header>
+    );
+  }
+}
+
+// 헤더를 표시해야 하는 URL에서만 헤더 데이터 반환
+function AppHeader() {
+  const locationNow = useLocation(); // 현재 접속 중인 URL 확인
+
+  // 배틀 페이지에서는 헤더/푸터 제외하고 표시
+  if (
+    locationNow.pathname !== "/match" &&
+    locationNow.pathname !== "/ban" &&
+    locationNow.pathname !== "/mode" &&
+    locationNow.pathname !== "/solve" &&
+    locationNow.pathname !== "/solveprac"
+  )
+    return <HeaderData />;
 }
 
 export default AppHeader;

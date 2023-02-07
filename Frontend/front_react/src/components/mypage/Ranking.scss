@@ -77,15 +77,6 @@ body {
   color: $text-default;
 }
 
-// 페이지네이션 가운데로
-.css-n830jf-MuiDataGrid-footerContainer {
-  display: flex;
-  justify-content: center !important;
-  align-items: center;
-  min-height: 52px;
-  border-top: 1px solid rgba(81, 81, 81, 1);
-}
-
 // 유저 랭킹 정보 표시 창
 .profileBox {
   width: 90%;

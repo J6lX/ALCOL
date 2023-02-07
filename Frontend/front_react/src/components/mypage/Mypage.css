@@ -78,5 +78,13 @@
   padding: 5px;
 }
 
-@media (max-length: 500px) {
+/* 페이지네이션 커스텀 */
+.ant-pagination .ant-pagination-item-active {
+  border: none;
+  background-color: #1d1e22;
+}
+
+/* 페이지네이션 가운데 고정 */
+.ant-table-wrapper .ant-table-pagination-right {
+  justify-content: center !important;
 }
