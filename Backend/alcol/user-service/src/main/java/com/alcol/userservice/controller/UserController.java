@@ -45,18 +45,12 @@ public class UserController
         this.restTemplateUtils = restTemplateUtils;
     }
 
-    @GetMapping("/hello")
-    public String hello()
-    {
-        log.info("hello 호출 완료!!");
-        return "Hello, this is msa";
-    }
-
     /**
      * 회원 가입 요청
+     * 로컬 환경에서는 사진 저장이 되지 않음
      * @param signUpDto
      * @param file
-     * @return
+     * @return ResponseEntity<UserDto.ResponseDto<?>>
      * @throws Exception
      */
     @PostMapping(value = "/", consumes = {
@@ -69,9 +63,9 @@ public class UserController
     )
             throws Exception
     {
-        String retVal = userService.createUser(signUpDto, file);
+        log.info("UserController 의 createUser 메소드 실행");
 
-        log.info("request : " + signUpDto.getEmail());
+        String retVal = userService.createUser(signUpDto, file);
 
         if (retVal.equals("DUPLICATE_EMAIL"))
         {
@@ -80,16 +74,12 @@ public class UserController
             );
         }
 
-        log.info("request2 : " + signUpDto.getEmail());
-
         if (retVal.equals("DUPLICATE_NICKNAME"))
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(
                     ApiUtils.error(CustomStatusCode.DUPLICATE_USER_NICKNAME)
             );
         }
-
-        log.info("request3 : " + signUpDto.getEmail());
 
         if (retVal.equals("PICTURE_UPLOAD_FAILURE"))
         {
@@ -98,22 +88,22 @@ public class UserController
             );
         }
 
-        log.info("request4 : " + signUpDto.getEmail());
+        log.info("UserController 의 createUser 메소드에서 회원가입 성공");
 
-        // 회원가입은 상태가 성공이지만 body 에 담을 것이 없음
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiUtils.success(null, CustomStatusCode.CREATE_USER_SUCCESS)
         );
     }
 
     /**
-     * 새로운 access token 발급 요청
      * @param request
-     * @return
+     * @return 새로운 access token 발급
      */
     @PostMapping("/refresh")
-    public ResponseEntity<UserDto.ResponseDto<?>> createUser(HttpServletRequest request)
+    public ResponseEntity<UserDto.ResponseDto<?>> refresh(HttpServletRequest request)
     {
+        log.info("UserController 의 refresh 메소드 실행");
+
         String authorizationHeader = request.getHeaders(HttpHeaders.AUTHORIZATION).nextElement();
         String jwt = authorizationHeader.replace("Bearer", "");
         String userId = Jwts.parser()
@@ -124,62 +114,36 @@ public class UserController
         Map<String, String> map = new HashMap<>();
         map.put("new_access_token", newAccessToken);
 
+        log.info("UserController 의 refresh 메소드에서 새로운 access token 발급 성공");
+
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiUtils.success(map, CustomStatusCode.CREATE_NEW_ACCESS_TOKEN)
         );
     }
 
     /**
-     * user_id 를 받아서 해당 유저의 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
      * @param userId
-     * @return
+     * @return 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
      * @throws URISyntaxException
      */
     @PostMapping("/getUserInfo")
     public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
             throws URISyntaxException
     {
+        log.info("UserController 의 getUserInfo 메소드 실행");
         return userService.getUserInfo(userId);
     }
 
     /**
-     * 현재 경험치, 스피드전 mmr, 효율성전 mmr 을 받아서
-     * 현재 레벨, 스피드전 티어, 효율성전 티어를 리턴
-     * @param curExp
-     * @param nowMmrBySpeed
-     * @param nowMmrByOptimization
-     * @return
-     */
-    @PostMapping("/getLevelAndTier")
-    public UserDto.UserPlayDto getLevelAndTier
-    (
-            @RequestParam(value="cur_exp") String curExp,
-            @RequestParam(value="now_mmr_by_speed") String nowMmrBySpeed,
-            @RequestParam(value="now_mmr_by_optimization") String nowMmrByOptimization
-    )
-    {
-        return userService.getLevelAndTier(curExp, nowMmrBySpeed, nowMmrByOptimization);
-    }
-
-    /**
-     * user_id 를 받아서 해당 유저의 배틀 로그를 리턴
      * @param userId
-     * @return
+     * @return 배틀 로그 리스트를 리턴
      */
     @PostMapping("/getBattleLog")
     public List<UserDto.UserBattleLogDto> getBattleLog(@RequestParam(value="user_id") String userId)
             throws URISyntaxException
     {
+        log.info("UserController 의 getBattleLog 메소드 실행");
         return userService.getBattleLog(userId);
-    }
-
-    @PostMapping("/getNicknameList")
-    public ResponseEntity<List<String>> getNicknameList(
-            @RequestParam(value="user_id_list") List<String> userIdList
-    )
-    {
-        List<String> list = userService.getNicknameList(userIdList);
-        return restTemplateUtils.sendResponse(list);
     }
 
 }

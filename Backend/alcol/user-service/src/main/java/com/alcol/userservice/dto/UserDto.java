@@ -29,7 +29,7 @@ public class UserDto
     public static class UserInfoDto
     {
         private String nickname;
-        private String level;
+        private int level;
         private String speedTier;
         private String optimizationTier;
         private String storedFileName;
@@ -41,9 +41,9 @@ public class UserDto
     @NoArgsConstructor
     public static class UserPlayDto
     {
-        private String level;
-        private String speedTier;
-        private String optimizationTier;
+        private int exp;
+        private int speedMmr;
+        private int optimizationMmr;
     }
 
     @Getter
@@ -68,6 +68,7 @@ public class UserDto
     }
 
     @Getter
+    @Setter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
@@ -77,7 +78,7 @@ public class UserDto
         private String battleMode;
         private String otherUserId;
         private String otherUserNickname;
-        private int probNo;
+        private Long probNo;
         private String probName;
         private String probTier;
         private LocalDateTime endTime;

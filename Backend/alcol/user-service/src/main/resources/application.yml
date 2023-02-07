@@ -12,10 +12,14 @@ spring:
   jpa:
     show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
+  redis:
+    host: i8b303.p.ssafy.io
+    port: 6000
+    password: ehgud
 
 eureka:
   client:
@@ -25,9 +29,9 @@ eureka:
       defaultZone: http://localhost:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
 
 access-token:
-  expiration_time: 60000 # milliseconds
+  expiration_time: 1000000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
 
 refresh-token:
-  expiration_time: 1200000 # milliseconds
+  expiration_time: 3000000 # milliseconds
   secret: poipoipoipoipoipoipoipoiqweqweqweqwepoipoipoiqweqwepoiqwpeoiqpwoeipqowiepqoiwepoiqwpeiqpweipqwieoqweiqwpeiowi
