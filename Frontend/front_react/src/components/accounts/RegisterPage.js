@@ -99,16 +99,16 @@ function App() {
       })
       .then(function (response) {
         console.log("회원 가입 성공 1 :" + response);
-        if (response.data.customCode === "000") {
+        if (response.data.custom_code === "000") {
           console.log("회원 가입 성공 2 :" + response);
           alert("회원가입 성공");
         }
       })
       .catch((error) => {
         console.log("회원 가입 실패 1 :" + error);
-        if (error.response.data.customCode === "003") {
+        if (error.response.data.custom_code === "003") {
           alert("이메일 중복");
-        } else if (error.response.data.customCode === "004") {
+        } else if (error.response.data.custom_code === "004") {
           alert("닉네임 중복");
         }
       });
