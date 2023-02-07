@@ -43,6 +43,11 @@ const problemData = [
 ];
 
 // 데이터 필터링
+function refinery(standard) {
+  const refinedResult = problemData.filter((problem) => problem.problemName.includes(standard));
+
+  return refinedResult;
+}
 
 // 페이지 렌더링
 function Ranking() {
@@ -56,12 +61,12 @@ function Ranking() {
   // 검색어 입력 시 value(search)가 실시간으로 변경되도록 적용
   const inputChange = ({ target: { value } }) => setSearch(value);
 
+  let refinedData = refinery(query);
   // 검색 버튼을 누르면 query가 추가되고, 데이터가 필터링됨
   const querySubmit = (event) => {
     event.preventDefault();
-    const refinedData = problemData.filter((problem) => problem.problemName.includes(query));
+    refinedData = refinery(query);
     window.history.pushState("", "ALCOL", `/practice?search=${search}`);
-    console.log(refinedData);
     console.log(query);
   };
 
@@ -131,7 +136,7 @@ function Ranking() {
                   style={{
                     padding: "3px",
                   }}
-                  dataSource={problemData}
+                  dataSource={refinedData}
                   columns={problemLabel}
                   pagination={{
                     position: ["bottomCenter"],
