@@ -42,18 +42,11 @@ const problemData = [
   { key: 5, problemNo: "5", problemName: "문제5", problemType: "DFS", problemDifficulty: "Gold" },
 ];
 
-// 데이터 필터링
-function refinery(standard) {
-  const refinedResult = problemData.filter((problem) => problem.problemName.includes(standard));
-
-  return refinedResult;
-}
-
 // 페이지 렌더링
 function Ranking() {
   // 검색 기능 사용 시
   const urlSrc = useLocation();
-  const query = urlSrc.search;
+  let query = urlSrc.search;
 
   // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");
@@ -61,13 +54,17 @@ function Ranking() {
   // 검색어 입력 시 value(search)가 실시간으로 변경되도록 적용
   const inputChange = ({ target: { value } }) => setSearch(value);
 
-  let refinedData = refinery(query);
+  const refinedData = problemData.filter((problem) => problem.problemName.includes(query));
+
   // 검색 버튼을 누르면 query가 추가되고, 데이터가 필터링됨
   const querySubmit = (event) => {
-    event.preventDefault();
-    refinedData = refinery(query);
-    window.history.pushState("", "ALCOL", `/practice?search=${search}`);
-    console.log(query);
+    if (search.trim()) {
+      // console.log(search);
+      query = search;
+      console.log(query);
+    } else {
+      alert("검색어를 입력하세요.");
+    }
   };
 
   return (
