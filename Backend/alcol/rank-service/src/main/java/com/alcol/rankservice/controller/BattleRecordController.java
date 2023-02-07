@@ -26,7 +26,7 @@ public class BattleRecordController
     private final BattleResultService battleResultService;
     private final RankService rankService;
 
-    @PostMapping("/BattleResult")
+    @PostMapping("/battleResult")
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
     {
         // 승패 count를 세기 위해 redis에 저장하는 작업
@@ -71,33 +71,21 @@ public class BattleRecordController
             return ResponseEntity.status(HttpStatus.OK).body(rank);
         }
         // mmr이 -1이 아니라면 배틀을 진행한 적이 있는 유저이다.
-        // 그렇다면 ranking에서 순위, mmr값을 가져오고 win/lose count도 가져와야 한다.
+        RankDto.Ranking myRank = rankService.responseUserInfo(userId, battleMode);
 
-        RankDto.UserData userData = rankService.getUserData(userId);
-        RankDto.WinLoseCount winLoseCount = rankService.getWinLoseCount(userId, battleMode);
-        RankDto.RankingAndMMR rankingAndMMR = rankService.getRankingAndMMR(userId, battleMode);
-
-        // battleMode가 스피드전이라면 스피드전 티어를, 최적화전이라면 최적화전 티어를 보내줘야함
-        String tier = "";
-        if(battleMode.equals("speed")) tier = userData.getSpeed_tier();
-        else tier = userData.getOptimization_tier();
-
-        RankDto.Ranking rank = RankDto.Ranking.builder()
-                .nickname(userData.getNickname())
-                .profile_pic(userData.getStored_file_name())
-                .level(userData.getLevel())
-                .tier(tier)
-                .mmr(rankingAndMMR.getMMR())
-                .record(winLoseCount)
-                .grade(rankingAndMMR.getGrade() + 1)
-                .build();
-
-        return ResponseEntity.status(HttpStatus.OK).body(rank);
+        return ResponseEntity.status(HttpStatus.OK).body(myRank);
     }
 
-    @GetMapping("/RankList")
+    @GetMapping("/rankList")
     public ResponseEntity<List<RankDto.Ranking>> requestAllRankingList(@RequestParam String battle_mode, int page)
     {
         return ResponseEntity.status(HttpStatus.OK).body(rankService.getAllRankingList(battle_mode, page));
+    }
+
+    @GetMapping("/searchUser")
+    public ResponseEntity<RankDto.Ranking> requestSearchUser(@RequestParam String battle_mode, String nickname)
+    {
+        RankDto.Ranking searchUser = rankService.getSearchUserInfo(battle_mode, nickname);
+        return ResponseEntity.status(HttpStatus.OK).body(searchUser);
     }
 }
