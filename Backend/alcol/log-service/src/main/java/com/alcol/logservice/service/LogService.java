@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LogService
 {
-    LogDto.UserPlayDto getLevelAndTier(String userId) throws URISyntaxException;
-
     List<LogDto.UserBattleLogDto> getBattleLog(String userId) throws URISyntaxException;
+
+    LogDto.UserPlayDto getExpAndMmr(String userId);
 }
