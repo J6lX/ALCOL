@@ -13,7 +13,7 @@ public class ProblemDto
     @AllArgsConstructor
     public static class ProbDetailDto
     {
-        private int probNo;
+        private Long probNo;
         private String probName;
         private String probTier;
     }
