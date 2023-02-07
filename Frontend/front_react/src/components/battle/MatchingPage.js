@@ -16,7 +16,12 @@ function UserInfo() {
       </Col>
       <Col
         span={3}
-        style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "1.5vw",
+          paddingLeft: "10px",
+          lineHeight: "50px",
+        }}
         className="battle_user_info_contents">
         멋진 닉네임
       </Col>
@@ -78,7 +83,14 @@ function App() {
   return (
     <div className="matching_background">
       <UserInfo />
-      <div style={{ color: "white", textAlign: "center", marginTop: "25vh" }}>
+      <div
+        style={{
+          color: "white",
+          fontFamily: "NanumSquareNeo",
+          fontWeight: "lighter",
+          textAlign: "center",
+          marginTop: "25vh",
+        }}>
         {state}
         <div className="wrapper" style={{ marginTop: "-30px" }}>
           <svg
@@ -98,8 +110,8 @@ function App() {
         </div>
       </div>
       <div className="matching_helper">
-        <div style={{ color: "white", fontWeight: "bold" }}>그거 아셨나요?</div>
-        <div style={{ color: "white" }}>
+        <div style={{ color: "white", fontFamily: "NanumSquareNeo" }}>그거 아셨나요?</div>
+        <div style={{ color: "white", fontFamily: "NanumSquareNeo", fontWeight: "lighter" }}>
           이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..
         </div>
       </div>
