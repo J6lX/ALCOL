@@ -9,9 +9,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -102,10 +100,40 @@ public class RankServiceImpl implements RankService{
     /**
      * 모드에 따라 모든 유저의 랭킹 정보를 가져오는 메소드
      * */
-    public void getAllRankingList(String battleMode, int pageNum)
+    public List<RankDto.Ranking> getAllRankingList(String battleMode, int pageNum)
     {
+        List<RankDto.Ranking> RankingList = new ArrayList<>();
         ranking = redisTemplate.opsForZSet();
-        System.out.println(ranking.range("speed", 0 ,2));
-    }
+        // 랭킹을 정렬된 Set 형태로 받아온다.
+        Set<Object> rankUserIds= ranking.range(battleMode, (pageNum-1) * 50 ,50 * pageNum - 1);
+        // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
+        if(rankUserIds.isEmpty()){
+            log.warn(battleMode + " 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            return RankingList;
+        }
 
+        // Set 타입이라서 iterator 사용해서 읽는다.
+        Iterator<Object> iterator = rankUserIds.iterator();
+
+        int grade = (pageNum-1) * 50 + 1;
+        while(iterator.hasNext()){
+            String userId = String.valueOf(iterator.next());
+            int mmr = ranking.score(battleMode, userId).intValue();
+            RankDto.WinLoseCount winLose = getWinLoseCount(userId, battleMode);
+            RankDto.UserData userData = getUserData(userId);
+            String tier = battleMode.equals("speed") ? userData.getSpeed_tier() : userData.getOptimization_tier();
+
+            RankingList.add(RankDto.Ranking.builder()
+                            .nickname(userData.getNickname())
+                            .profile_pic(userData.getStored_file_name())
+                            .level(userData.getLevel())
+                            .tier(tier)
+                            .mmr(mmr)
+                            .grade(grade++)
+                            .record(winLose)
+                            .build());
+        }
+
+        return RankingList;
+    }
 }

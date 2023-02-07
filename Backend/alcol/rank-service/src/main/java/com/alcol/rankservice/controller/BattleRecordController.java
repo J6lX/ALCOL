@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -95,8 +96,8 @@ public class BattleRecordController
     }
 
     @GetMapping("/RankList")
-    public void requestAllRankingList(@RequestParam String battle_mode, int page)
+    public ResponseEntity<List<RankDto.Ranking>> requestAllRankingList(@RequestParam String battle_mode, int page)
     {
-        rankService.getAllRankingList(battle_mode, page);
+        return ResponseEntity.status(HttpStatus.OK).body(rankService.getAllRankingList(battle_mode, page));
     }
 }
