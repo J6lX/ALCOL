@@ -45,7 +45,7 @@ function Top() {
           랜덤하게 출제됩니다.
         </div>
         <div>
-          <CountDownTimer />
+          <CountDownTimer className="timer" />
         </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
@@ -66,7 +66,6 @@ function Mid({ problems, onClick }) {
   useEffect(() => {
     $(".ban_algo_box").click(function () {
       $(".ban_algo_box").not(this).removeClass("active");
-      // $(this).toggleClass("active");
       $(this).addClass("active");
     });
   });

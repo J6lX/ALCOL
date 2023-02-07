@@ -2,6 +2,7 @@
   height: 100vh;
   background: url(/src/assets/background_login.png);
   background-size: cover;
+  padding-top: 3%;
 }
 
 .contents_gradient {
@@ -11,7 +12,7 @@
   justify-content: center;
   width: 555px;
   height: 395px;
-  margin: 80px auto;
+  margin: auto;
   background: linear-gradient(to right bottom, #00a3ff, #fac557);
   border-radius: 13px;
 }

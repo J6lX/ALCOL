@@ -4,11 +4,21 @@ import axios from "axios";
 import "./RegisterPage.css";
 
 function TextTitle({ text }) {
-  return <h1 style={{ color: "white", textAlign: "center", marginBottom: 20 }}>{text}</h1>;
+  return (
+    <h1
+      style={{
+        color: "white",
+        textAlign: "center",
+        fontFamily: "NanumSquareNeo",
+        marginBottom: 20,
+      }}>
+      {text}
+    </h1>
+  );
 }
 
 function TextInfo({ text }) {
-  return <h4 style={{ color: "white" }}>{text}</h4>;
+  return <h4 style={{ color: "white", fontFamily: "NanumSquareNeo" }}>{text}</h4>;
 }
 
 function ProfileImage({ setImage }) {
