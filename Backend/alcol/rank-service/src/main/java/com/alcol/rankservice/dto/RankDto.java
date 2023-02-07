@@ -9,13 +9,14 @@ public class RankDto
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
         @AllArgsConstructor
         static public class Ranking {
+                private long grade;
                 private String nickname;
                 private String profile_pic;
                 private int level;
                 private String tier;
                 private int mmr;
                 private WinLoseCount record;
-                private long grade;
+
         }
 
         @Getter
