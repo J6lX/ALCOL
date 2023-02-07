@@ -1,11 +1,11 @@
-import { React, useRef } from "react";
+import { React } from "react";
 import BanPage from "./BanPage";
 // import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import ResultPage from "./ResultPage";
 // import ResultListPage from "./ResultListPage";
 import io from "socket.io-client";
-import { atom, useRecoilState } from "recoil";
+import { atom, useRecoilValue } from "recoil";
 
 const personIdState = atom({
   key: "personIdState",
@@ -21,67 +21,71 @@ let isConnected = false;
 let isBanned = false;
 let isSolved = false;
 
-
 const userId = "personA";
 let socketaddress;
 
-
 const Ban = () => {
   if (isConnected) {
-    return <BanPage />
+    return <BanPage />;
   }
-}
+};
 
 const Solving = () => {
   if (isBanned) {
-    return <SolvingPage />
+    return <SolvingPage />;
   }
-}
+};
 
 const Result = () => {
   if (isSolved) {
-    return <ResultPage />
+    return <ResultPage />;
   }
-}
-
+};
 
 const ContinuousBattlePage = () => {
   // 매치에서 받은 상대방 id 정보
-  const [personId, setPersonId] = useRecoilState(personIdState);
-  const [problemId, setProblemId] = useRecoilState(problemIdState);
+  const personId = useRecoilValue(personIdState);
+  const problemId = useRecoilValue(problemIdState);
+  let msgsend = document.querySelector("#msgg").value;
   // setPersonId("personB")
   // setProblemId("")
+  console.log(problemId);
 
-  const wsurl = useRef("wss://" + window.location.host + window.location.pathname);
+  // const wsurl = useRef("wss://" + window.location.host + window.location.pathname);
   if (userId > personId) {
-    socketaddress = userId + personId
+    socketaddress = userId + personId;
   } else {
-    socketaddress = personId + userId
+    socketaddress = personId + userId;
   }
-  const socket = io('http://localhost:5000')
-
+  const socket = io("http://localhost:5000");
 
   if (isConnected === false) {
     socket.emit("join_room", socketaddress, () => {
-      console.log(1)
-      isConnected = true
-      isBanned = false
-      isSolved = false
-      console.log("connected!!")
-    })
+      console.log(1);
+      isConnected = true;
+      isBanned = false;
+      isSolved = false;
+      console.log("connected!!");
+    });
 
     socket.on("welcome", async () => {
-      isConnected = true
-      isBanned = false
-      isSolved = false
-      console.log("connected!!")
-    })
-  } else {
-
+      isConnected = true;
+      isBanned = false;
+      isSolved = false;
+      console.log("welcome!!");
+    });
   }
 
-
-
+  async function sendData() {
+    if (isConnected === true) {
+      socket.on("sendData", msgsend, () => {
+        let chat = document.appendChild("#chatroom");
+        let chatdata = chat.appendChild("p");
+        chatdata.value = msgsend;
+        console.log("receivemsg!!");
+      });
+    }
+  }
   // console.log("주소", window.location.host, window.location.pathname);
   // const wsurl = useRef("wss://" + window.location.host + window.location.pathname);
   // const vdo = useRef(null);
@@ -212,6 +216,9 @@ const ContinuousBattlePage = () => {
   return (
     <div>
       <div>
+        <input id="msgg" type="text" value={msgsend} />
+        <button onClick={sendData}>SEND</button>
+        <div id="chatroom"></div>
         <Ban />
         {/* <SelectedProblemPage /> */}
         <Solving />
