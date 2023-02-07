@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import "./ResultPage.css";
 import img_victory from "../../assets/result_victory.gif";

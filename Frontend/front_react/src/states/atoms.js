@@ -5,6 +5,20 @@ export const userCode = atom({
   default: "",
 });
 
+export const selectedMode = atom({
+  key: "selectedMode",
+  default: {
+    mode: "-1",
+  },
+});
+
+export const selectedLanguage = atom({
+  key: "selectedLanguage",
+  default: {
+    language: "-1",
+  },
+});
+
 export const resultListPlayerInfo = atom({
   key: "resultListPlayerInfo",
   default: {

@@ -8,6 +8,8 @@ import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
 import iconBack from "../../assets/left-arrow.png";
 import iconBackSmall from "../../assets/left-arrow-small.png";
+import { useRecoilState } from "recoil";
+import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function UserInfo() {
   const history = useHistory();
@@ -173,9 +175,13 @@ function FixedText() {
 }
 
 function App() {
-  const [mode, setMode] = React.useState("-1");
-  const [language, setLanguage] = React.useState("-1");
+  // const [mode, setMode] = React.useState("-1");
+  // const [language, setLanguage] = React.useState("-1");
+  const [mode, setMode] = useRecoilState(selectedMode);
+  const [language, setLanguage] = useRecoilState(selectedLanguage);
   const history = useHistory();
+
+  console.log(mode.mode);
 
   useEffect(() => {
     console.log("모드 선택 완료! mode:" + mode);
@@ -183,7 +189,7 @@ function App() {
 
   useEffect(() => {
     console.log("언어 선택 완료! language:" + language);
-    if (language !== "-1") {
+    if (language.language !== "-1") {
       history.push("/match");
     }
   }, [language, history]);
@@ -191,7 +197,7 @@ function App() {
   return (
     <div className="battle_background">
       <UserInfo />
-      {mode === "-1" ? (
+      {mode.mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
         <SelectLanguage setLanguage={setLanguage} back={setMode} />

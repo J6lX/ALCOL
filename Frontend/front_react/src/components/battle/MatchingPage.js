@@ -2,6 +2,8 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row } from "antd";
 import "./MatchingPage.css";
+import { useRecoilValue } from "recoil";
+import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function UserInfo() {
   return (
@@ -29,6 +31,14 @@ function App() {
     history.push("/");
   }
 
+  //atoms에 저장한 mode 불러옵니다.
+  const mode = useRecoilValue(selectedMode);
+  //atoms에 저장한 mode 불러옵니다.
+  const language = useRecoilValue(selectedLanguage);
+
+  console.log(mode);
+  console.log(language);
+
   //websocket 관련 전체 코드는 여기...
   //https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
   //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
@@ -52,6 +62,9 @@ function App() {
   //message를 받을 때 발생
   socket.addEventListener("message", (message) => {
     console.log("서버로 부터 받은 메세지 : " + message.data);
+    if (message.data === "connected") {
+      console.log("매칭되었습니다!");
+    }
   });
 
   //서버가 오프라인일때 발생하는 코드
