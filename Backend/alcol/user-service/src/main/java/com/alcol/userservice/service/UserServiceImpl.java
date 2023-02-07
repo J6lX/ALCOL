@@ -144,8 +144,8 @@ public class UserServiceImpl implements UserService
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
         redisExp.set("levelExp:" + userEntity.getUserId(), "0");
-        redisMmr.add("speed", userEntity.getUserId(), 1200);
-        redisMmr.add("optimization", userEntity.getUserId(), 1200);
+        redisMmr.add("speed", userEntity.getUserId(), 1000);
+        redisMmr.add("optimization", userEntity.getUserId(), 1000);
 
         log.info("UserServiceImpl 의 createUser 메소드에서 redis 에 사용자 경험치=0, mmr=1200 으로 저장");
 
@@ -211,9 +211,8 @@ public class UserServiceImpl implements UserService
             curExp = Integer.parseInt(redisExp.get("levelExp:" + userId) + "");
             curSpeedMmr = (int)Math.round(redisMmr.score("speed", userId));
             curOptimizationMmr = (int)Math.round(redisMmr.score("optimization", userId));
-            throw new NullPointerException();
         }
-        catch(NullPointerException e) {
+        catch (NullPointerException e) {
             // redis 에 정보가 없을 때 log-service 로 요청
             // user-service -> log-service
             // param : user_id
