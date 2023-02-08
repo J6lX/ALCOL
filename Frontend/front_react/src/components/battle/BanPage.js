@@ -5,6 +5,8 @@ import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
 import CountDownTimer from "./CountDownTimer";
+import { useRecoilValue } from "recoil";
+import { matchingPlayerInfo } from "../../states/atoms";
 
 function UserInfo() {
   return (
@@ -113,6 +115,8 @@ function Bottom() {
 
 function App() {
   const [choose, setChoose] = React.useState("-1");
+  var playerInfo = useRecoilValue(matchingPlayerInfo);
+  console.log(playerInfo.otherId);
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);

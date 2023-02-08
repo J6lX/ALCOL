@@ -5,16 +5,19 @@ export const userCode = atom({
   default: "",
 });
 
+//---------모드선택
 export const selectedMode = atom({
   key: "selectedMode",
   default: "-1",
 });
 
+//---------언어선택
 export const selectedLanguage = atom({
   key: "selectedLanguage",
   default: "-1",
 });
 
+//---------배틀 결과) 유저 정보
 export const resultListPlayerInfo = atom({
   key: "resultListPlayerInfo",
   default: {
@@ -27,6 +30,7 @@ export const resultListPlayerInfo = atom({
   },
 });
 
+//---------배틀 결과) 게임 정보
 export const resultListModeInfo = atom({
   key: "resultListModeInfo",
   default: {
@@ -37,6 +41,7 @@ export const resultListModeInfo = atom({
   },
 });
 
+//---------배틀 결과) 게임 결과 정보
 export const resultListResultInfo = atom({
   key: "resultListResultInfo",
   default: [
@@ -69,4 +74,13 @@ export const resultListResultInfo = atom({
       time: "00:30",
     },
   ],
+});
+
+//---------매칭 결과) 플레이어 정보
+export const matchingPlayerInfo = atom({
+  key: "matchingPlayerInfo",
+  default: {
+    userId: "",
+    otherId: "",
+  },
 });
