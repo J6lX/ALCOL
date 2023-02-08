@@ -6,6 +6,7 @@ import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
 import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
+import ChangePWPage from "./components/accounts/ChangePWPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
@@ -45,6 +46,9 @@ function App() {
 
             {/* 로그인 페이지 */}
             <Route exact path="/login" component={LoginPage} />
+
+            {/* 비밀번호 찾기 페이지 */}
+            <Route exact path="/changePW" component={ChangePWPage} />
 
             {/* 모드 선택 페이지 */}
             <Route path="/mode" component={ModeSelectPage} />
