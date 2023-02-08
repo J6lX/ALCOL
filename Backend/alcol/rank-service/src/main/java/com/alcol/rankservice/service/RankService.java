@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RankService
 {
-    public int getMyRank(String userId, String mode);
+    public int confirmUserRanking(String userId, String mode);
     public RankDto.Ranking responseUserInfo(String userId, String battleMode);
     public RankDto.UserData getUserData(String userId);
     public RankDto.WinLoseCount getWinLoseCount(String userId, String battleMode);

@@ -1,5 +1,6 @@
-package com.alcol.rankservice.exception;
+package com.alcol.rankservice.config;
 
+import com.alcol.rankservice.Interceptor.RedisOffInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -9,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer
 {
     @Autowired
-    private RedisOffException redisOffException;
+    private RedisOffInterceptor redisOffException;
 
     @Override
     public void addInterceptors(InterceptorRegistry interceptorRegistry)
