@@ -167,19 +167,22 @@ function HeaderData() {
     return (
       <Header
         style={{
+          position: "fixed",
+          zIndex: "10",
           backgroundColor: "#17181c",
-          height: "100%",
+          width: "100vw",
+          height: "auto",
         }}>
         <Row gutter={16} justify="space-between" align="middle">
           {/* 로고 표시 구역 */}
-          <Col span={4} justify="center" align="end">
+          <Col span={3} justify="center" align="end">
             <Link to="/">
               <img
                 src={alcol}
                 alt="logo"
                 className="logo"
                 style={{
-                  transform: "translate(0, 25%)",
+                  transform: "translate(0%, 35%)",
                 }}
               />
             </Link>
@@ -211,6 +214,8 @@ function HeaderData() {
     return (
       <Header
         style={{
+          position: "fixed",
+          zIndex: "10",
           backgroundColor: "#17181c",
           width: "600",
           height: "100%",
@@ -267,7 +272,8 @@ function AppHeader() {
     locationNow.pathname !== "/ban" &&
     locationNow.pathname !== "/mode" &&
     locationNow.pathname !== "/solve" &&
-    locationNow.pathname !== "/solveprac"
+    locationNow.pathname !== "/solveprac" &&
+    locationNow.pathname !== "/battle"
   )
     return <HeaderData />;
 }

@@ -1,228 +1,140 @@
-import { React } from "react";
+import { React, useState } from "react";
+import ReadyPage from "./ReadyPage";
 import BanPage from "./BanPage";
-// import SelectedProblemPage from "./SelectedProblemPage";
+import WaitOtherBanPage from "./WaitOtherBanPage";
+import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import ResultPage from "./ResultPage";
-// import ResultListPage from "./ResultListPage";
-import io from "socket.io-client";
-import { atom, useRecoilValue } from "recoil";
 
-const personIdState = atom({
-  key: "personIdState",
-  default: "",
-});
+let submitResult = "";
 
-const problemIdState = atom({
-  key: "problemIdState",
-  default: "",
-});
-
-let isConnected = false;
-let isBanned = false;
-let isSolved = false;
-
-const userId = "personA";
-let socketaddress;
-
-const Ban = () => {
-  if (isConnected) {
-    return <BanPage />;
-  }
-};
-
-const Solving = () => {
-  if (isBanned) {
-    return <SolvingPage />;
-  }
-};
-
-const Result = () => {
-  if (isSolved) {
-    return <ResultPage />;
-  }
-};
+const usernamedata = "personA";
+const personnamedata = "personB";
+const serverAddress = "localhost:3000";
+const websocketAddress = "ws://" + serverAddress + "/battle";
+let socket = null;
+console.log(usernamedata, personnamedata);
 
 const ContinuousBattlePage = () => {
-  // 매치에서 받은 상대방 id 정보
-  const personId = useRecoilValue(personIdState);
-  const problemId = useRecoilValue(problemIdState);
-  let msgsend = document.querySelector("#msgg").value;
-  // setPersonId("personB")
-  // setProblemId("")
-  console.log(problemId);
+  const [isConnected, setIsConnected] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [isBanWait, setIsBanWait] = useState(false);
+  const [isSelected, setIsSelected] = useState(false);
+  const [isSolving, setIsSolving] = useState(false);
+  const [isSolved, setIsSolved] = useState(false);
+  const [problemNumber, setProblemNumber] = useState("-1");
 
-  // const wsurl = useRef("wss://" + window.location.host + window.location.pathname);
-  if (userId > personId) {
-    socketaddress = userId + personId;
-  } else {
-    socketaddress = personId + userId;
-  }
-  const socket = io("http://localhost:5000");
-
-  if (isConnected === false) {
-    socket.emit("join_room", socketaddress, () => {
-      console.log(1);
-      isConnected = true;
-      isBanned = false;
-      isSolved = false;
-      console.log("connected!!");
-    });
-
-    socket.on("welcome", async () => {
-      isConnected = true;
-      isBanned = false;
-      isSolved = false;
-      console.log("welcome!!");
-    });
-  }
-
-  async function sendData() {
-    if (isConnected === true) {
-      socket.on("sendData", msgsend, () => {
-        let chat = document.appendChild("#chatroom");
-        let chatdata = chat.appendChild("p");
-        chatdata.value = msgsend;
-        console.log("receivemsg!!");
+  window.onload = async function () {
+    socket = new WebSocket(websocketAddress);
+    console.log("socket", socket);
+    socket.onopen = () => {
+      const messageType = "connect";
+      const username = usernamedata;
+      const personname = personnamedata;
+      const data = JSON.stringify({
+        messageType: messageType,
+        username: username,
+        personname: personname,
       });
-    }
-  }
-  // console.log("주소", window.location.host, window.location.pathname);
-  // const wsurl = useRef("wss://" + window.location.host + window.location.pathname);
-  // const vdo = useRef(null);
-  // // const message = useRef('')
-  // console.log(wsurl.current);
+      socket.send(data);
+    };
 
-  // // const [myStream, setMyStream] = useState(null)
-  // const socket = new WebSocket(wsurl.current);
+    socket.onmessage = (servermessage) => {
+      const data = JSON.parse(servermessage);
+      if (data.messageType === "connect_success") {
+        console.log("연결 완료!");
+        const personURL = data.personURL;
+        console.log(personURL);
+        setTimeout(() => {
+          setIsConnected(true);
+          setIsReady(true);
+        }, 5000);
+      } else if (data.messageType === "ban_success") {
+        console.log("문제 선택 완료!");
+        setTimeout(() => {
+          setIsBanWait(true);
+          setIsReady(false);
+        }, 5000);
+      } else if (data.messageType === "select_success") {
+        setTimeout(() => {
+          setIsBanWait(false);
+          setIsSelected(true);
+          setTimeout(() => {
+            setIsSelected(false);
+            setIsSolving(true);
+          }, 15000);
+        }, 5000);
+      } else if (data.messageType === "submit_success") {
+        submitResult = data.submitResult;
+        console.log(submitResult);
+        if (submitResult === "success") {
+          setIsSolved(true);
+        }
+      } else if (data.messageType === "close") {
+        socket.onclose();
+      } else {
+        console.log("뭐가 오긴 왔는데...");
+        console.log(data);
+      }
+    };
 
-  // //STUN 서버에서 내 정보 가져오기
-  // let configuration = {
-  //   iceServers: [
-  //     {
-  //       urls: "stun:stun.l.google.com:19302",
-  //     },
-  //   ],
-  // };
+    socket.onclose = (message) => {
+      console.log("closed!", message);
+    };
+    socket.onerror = (message) => {
+      console.log("error", message);
+    };
+  };
 
-  // //Peer 생성
-  // const myPeerConnection = new RTCPeerConnection(configuration);
+  const changeBanProblem = (data) => {
+    setProblemNumber(data);
+    // socket.send(JSON.stringify({ method: "ban", data: data }));
+    setIsReady(false);
+    setIsBanWait(true);
+    setTimeout(() => {
+      setIsBanWait(false);
+      setIsSelected(true);
+      setTimeout(() => {
+        setIsSelected(false);
+        setIsSolving(true);
+      }, 10000);
+    }, 10000);
+  };
 
-  // let channel = myPeerConnection.createDataChannel("sendData", null);
+  const goResultPage = () => {};
 
-  // // 소켓 연결 콜백함수
-  // socket.onopen = () => {
-  //   console.log("Connect WebSocket");
-  // };
-
-  // channel.onopen = function (e) {
-  //   console.log("Connect dataChannel");
-  // };
-
-  // // 소켓에서 메세지를 받아왔을 때 콜백함수
-  // socket.onmessage = async (msg) => {
-  //   let content = JSON.parse(msg.data);
-
-  //   if (content.event === "offer") {
-  //     // offer가 오면 가장먼저 그 오퍼를 리모트 디스크립션으로 등록
-  //     let offer = content.data;
-  //     myPeerConnection.setRemoteDescription(offer);
-
-  //     // 받는 쪽에서도 자신의 미디어를 켠다.
-  //     const myDisplay = await getMedia();
-  //     myPeerConnection.addTrack(myDisplay.getTracks()[0]);
-  //     // myPeerConnection.
-  //     // send answer
-  //     let answer = await myPeerConnection.createAnswer();
-  //     myPeerConnection.setLocalDescription(answer);
-
-  //     send({
-  //       event: "answer",
-  //       data: answer,
-  //     });
-  //   } else if (content.event === "answer") {
-  //     let answer = content.data;
-  //     myPeerConnection.setRemoteDescription(answer);
-  //   } else if (content.event === "candidate") {
-  //     //리모트 디스크립션에 설정되어있는 피어와의 연결방식을 결정
-  //     myPeerConnection.addIceCandidate(content.data);
-  //   }
-  // };
-
-  // channel.onmessage = function (e) {
-  //   console.log(e.data);
-  // };
-
-  // // 미디어와 관련된 변수를 선언.
-  // // myFace는 element를 받고 myStream엔 영상 내용을 담음.
-  // //미디어 내용 받기
-  // async function getMedia() {
-  //   try {
-  //     const Stream = await navigator.mediaDevices.getDisplayMedia({
-  //       audio: false,
-  //       video: true,
-  //     });
-  //     return Stream;
-  //   } catch (e) {
-  //     console.log(e);
-  //     console.log("미디어를 가져오는 중 에러 발생");
-  //   }
-  //   return null;
-  // }
-
-  // async function createOffer() {
-  //   // '오퍼를 생성' 버튼 클릭
-  //   // 카메라를 키면서 myStream에도 미디어 정보를 담기
-  //   const myDisplay = await getMedia();
-
-  //   vdo.current.srcObject = myDisplay;
-  //   // console.log(myDisplay)
-  //   // getMedia에서 가져온 audio, video 트랙을 myPeerConnection에 등록
-
-  //   myPeerConnection.addTrack(myDisplay.getTracks()[0]);
-
-  //   // 오퍼 생성
-  //   let offer = await myPeerConnection.createOffer();
-  //   // console.log("오퍼", offer)
-
-  //   // 나의 offer 전송
-  //   await send({
-  //     event: "offer",
-  //     data: offer,
-  //   });
-
-  //   myPeerConnection.setLocalDescription(offer);
-  //   // console.log(myPeerConnection)
-  // }
-
-  // async function createConnect() {
-  //   const msg = document.querySelector("#message").value;
-  //   // console.log(msg);
-  //   channel.send(msg);
-  // }
-
-  // async function send(message) {
-  //   // 소켓으로 메세지 보내기
-  //   socket.send(JSON.stringify(message));
-  //   console.log("메세지", message);
-  //   console.log(vdo);
-  // }
-
-  // function sendCandidate(event) {
-  //     send({
-  //       event: "candidate",
-  //       data: event.candidate,
-  //     });
-  //   }
+  //확인용 함수들
+  const changeConnectTrue = () => {
+    setTimeout(() => {
+      setIsConnected(true);
+      setIsReady(true);
+    }, 5000);
+  };
+  const changeSelectedTrue = () => {
+    setTimeout(() => {
+      setIsSelected(true);
+      setIsReady(false);
+    }, 5000);
+  };
+  const changeSolvedTrue = () => {
+    setTimeout(() => {
+      setIsSolved(true);
+      setIsSelected(false);
+    }, 5000);
+  };
   return (
     <div>
       <div>
-        <input id="msgg" type="text" value={msgsend} />
-        <button onClick={sendData}>SEND</button>
-        <div id="chatroom"></div>
-        <Ban />
-        {/* <SelectedProblemPage /> */}
-        <Solving />
-        <Result />
+        <button onClick={changeConnectTrue}>connect</button>
+        <button onClick={changeSelectedTrue}>banselect</button>
+        <button>submit_resultfail</button>
+        <button onClick={changeSolvedTrue}>submit_resultsuccess</button>
+        {!isConnected && <ReadyPage />}
+        {isReady && <BanPage changeBanProblem={changeBanProblem} />}
+        {isBanWait && <WaitOtherBanPage />}
+        {isSelected && <SelectedProblemPage problemnumber={problemNumber} />}
+        {isSolving && <SolvingPage goResultPage={goResultPage} />}
+        {isSolved && <ResultPage />}
       </div>
     </div>
   );
