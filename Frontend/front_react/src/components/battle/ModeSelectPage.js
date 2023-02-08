@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { Col, Row } from "antd";
+import { Col, Row, Button, Modal } from "antd";
 import "./ModeSelectPage.css";
 import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
@@ -188,14 +188,49 @@ function FixedText() {
   );
 }
 
-function HandleFinishSelectButton() {
+function HandleFinishSelectButton({ mode, language, setMode, setLanguage }) {
   const history = useHistory();
   const hanleHistoryMatch = () => {
-    history.push("/match");
+    showModal();
+    // history.push("/match");
   };
+  //Modal 선택 관련
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    history.push("/match");
+    setIsModalOpen(false);
+  };
+  const handleCancle = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className="modeButton" onClick={hanleHistoryMatch}>
-      매칭 시작
+    <div>
+      <div className="modeButton" onClick={hanleHistoryMatch}>
+        매칭 시작
+      </div>
+      <Modal
+        title="게임을 시작할까요?"
+        open={isModalOpen}
+        closable={false}
+        width={300}
+        centered
+        footer={null}
+        style={{ textAlign: "center" }}>
+        <p style={{ textAlign: "center" }}>선택한 모드 : {mode}</p>
+        <p style={{ textAlign: "center" }}>선택한 언어 : {language}</p>
+        <div style={{ marginTop: "10px" }}>
+          <Button onClick={handleCancle} style={{ marginRight: "10px" }}>
+            다시선택
+          </Button>
+          <Button style={{ background: "#FEF662" }} onClick={handleOk}>
+            게임시작
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
@@ -214,9 +249,6 @@ function App() {
   useEffect(() => {
     if (language !== "-1") {
       console.log("언어 선택 완료! language:" + language);
-      if (language !== "-1") {
-        // history.push("/match");
-      }
     }
   }, [language, history]);
 
@@ -228,7 +260,16 @@ function App() {
       ) : (
         <SelectLanguage setLanguage={setLanguage} back={setMode} />
       )}
-      {mode !== "-1" && language !== "-1" ? <HandleFinishSelectButton /> : <div></div>}
+      {mode !== "-1" && language !== "-1" ? (
+        <HandleFinishSelectButton
+          mode={mode}
+          language={language}
+          setMode={setMode}
+          setLanguage={setLanguage}
+        />
+      ) : (
+        <div></div>
+      )}
 
       <FixedText />
     </div>
