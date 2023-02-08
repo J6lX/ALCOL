@@ -56,7 +56,7 @@ const ContinuousBattlePage = () => {
           setIsReady(false);
         }, 5000);
       } else if (data.messageType === "select_success") {
-        setTimeout (() => {
+        setTimeout(() => {
           setIsBanWait(false);
           setIsSelected(true);
           setTimeout(() => {
@@ -89,13 +89,19 @@ const ContinuousBattlePage = () => {
   const changeBanProblem = (data) => {
     setProblemNumber(data);
     // socket.send(JSON.stringify({ method: "ban", data: data }));
-    setIsReady(false)
-    setIsBanWait(true)
+    setIsReady(false);
+    setIsBanWait(true);
     setTimeout(() => {
-        setIsBanWait(false)
-        setIsSelected(true)
-    }, 10000)
+      setIsBanWait(false);
+      setIsSelected(true);
+      setTimeout(() => {
+        setIsSelected(false);
+        setIsSolving(true);
+      }, 10000);
+    }, 10000);
   };
+
+  const goResultPage = () => {};
 
   //확인용 함수들
   const changeConnectTrue = () => {
@@ -124,10 +130,10 @@ const ContinuousBattlePage = () => {
         <button>submit_resultfail</button>
         <button onClick={changeSolvedTrue}>submit_resultsuccess</button>
         {!isConnected && <ReadyPage />}
-        {isReady && <BanPage changeBanProblem={changeBanProblem} />} 
+        {isReady && <BanPage changeBanProblem={changeBanProblem} />}
         {isBanWait && <WaitOtherBanPage />}
         {isSelected && <SelectedProblemPage problemnumber={problemNumber} />}
-        {isSolving && <SolvingPage />}
+        {isSolving && <SolvingPage goResultPage={goResultPage} />}
         {isSolved && <ResultPage />}
       </div>
     </div>

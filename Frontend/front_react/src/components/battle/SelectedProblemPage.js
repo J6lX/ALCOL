@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Row } from "antd";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
@@ -14,11 +14,8 @@ function Top() {
         {/* <img src={img_leftHand} alt="hand" className="ban_hands_left" /> */}
       </Col>
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
-        <div className="ban_title">금지할 문제를 선택해주세요</div>
-        <div className="ban_info">
-          선택된 문제는 이번 게임에서 출제되지 않습니다. 만약 같은 문제를 금지했다면 남은 문제 중
-          랜덤하게 출제됩니다.
-        </div>
+        <div className="ban_title">이 문제 유형이 선택되었습니다.</div>
+        <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
         <div>
           <CountDownTimer className="timer" />
         </div>
@@ -37,19 +34,24 @@ function Mid({ props, problems }) {
     }
     return result;
   };
-  const box1 = document.querySelector("#algo_box1")
-  const box2 = document.querySelector("#algo_box2")
-  const box3 = document.querySelector("#algo_box3")
-  if (props === "1") {
-    box2.className = "ban_algo_box active"
-    box3.className = "ban_algo_box active"
-  } else if (props === "2") {
-    box1.className = "ban_algo_box active"
-    box3.className = "ban_algo_box active"
-  } else if (props === "3") {
-    box1.className = "ban_algo_box active"
-    box2.className = "ban_algo_box active"
-  }
+
+  useEffect(() => {
+    const box1 = document.getElementById("algo_box1");
+    const box2 = document.getElementById("algo_box2");
+    const box3 = document.getElementById("algo_box3");
+
+    if (props.problemnumber === "1") {
+      box2.classList.add("active");
+      box3.classList.add("active");
+    } else if (props.problemnumber === "2") {
+      box1.classList.add("active");
+      box3.classList.add("active");
+    } else if (props.problemnumber === "3") {
+      box1.classList.add("active");
+      box2.classList.add("active");
+    }
+  }, [props.problemnumber]);
+
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
@@ -92,7 +94,8 @@ function Bottom() {
 }
 
 const SelectedProblemPage = (props) => {
-  const [problem, setProblem] = React.useState([
+  const [problem, setProblem] = React.useState([]);
+  setProblem([
     {
       problem_no: 1001,
       problem_category: ["구현", "그래프 이론", "그래프 탐색"],
@@ -106,6 +109,7 @@ const SelectedProblemPage = (props) => {
       problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
     },
   ]);
+
   return (
     <div className="backgroundimg">
       <Top />

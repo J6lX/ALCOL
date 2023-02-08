@@ -140,13 +140,13 @@ function App({ changeBanProblem }) {
   useEffect(() => {
     if (choose === "1") {
       console.log("선택한 문제 번호는:" + problem[0].problem_no);
-      setChoose(problem[0].problem_no);
+      setChoose("1");
     } else if (choose === "2") {
       console.log("선택한 문제 번호는:" + problem[1].problem_no);
-      setChoose(problem[1].problem_no);
+      setChoose("2");
     } else if (choose === "3") {
       console.log("선택한 문제 번호는:" + problem[2].problem_no);
-      setChoose(problem[2].problem_no);
+      setChoose("3");
     }
   }, [choose, problem]);
 
