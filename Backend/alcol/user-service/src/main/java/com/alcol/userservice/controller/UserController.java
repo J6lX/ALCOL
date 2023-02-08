@@ -127,11 +127,12 @@ public class UserController
      * @throws URISyntaxException
      */
     @PostMapping("/getUserInfo")
-    public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
+//    public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
+    public UserDto.UserInfoDto getUserInfo(@RequestBody HashMap<String, Object> param)
             throws URISyntaxException
     {
         log.info("UserController 의 getUserInfo 메소드 실행");
-        return userService.getUserInfo(userId);
+        return userService.getUserInfo(param.get("user_id") + "");
     }
 
     /**
@@ -146,4 +147,22 @@ public class UserController
         return userService.getBattleLog(userId);
     }
 
+    /**
+     * @param nickName
+     * @return userId
+     */
+    @GetMapping("/getUserId")
+    public String getUserId(@RequestParam(value = "nickname") String nickName)
+    {
+        log.info("UserController 의 getUserId 메소드 실행");
+        return userService.getUserId(nickName);
+    }
+
+    @PostMapping("/getAllUserId")
+    public ResponseEntity<List<String>> getAllUserId()
+    {
+        log.info("UserController 의 getAllUserId 메소드 실행");
+        List<String> list = userService.getAllUserId();
+        return restTemplateUtils.sendResponse(list);
+    }
 }

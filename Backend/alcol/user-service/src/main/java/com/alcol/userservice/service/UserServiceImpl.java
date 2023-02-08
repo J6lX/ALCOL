@@ -140,14 +140,14 @@ public class UserServiceImpl implements UserService
             }
         }
 
-        // redis 에 사용자 경험치를 0 으로 저장, mmr 은 1200 으로 저장
+        // redis 에 사용자 경험치를 1 으로 저장, mmr 은 1000 으로 저장
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
-        redisExp.set("levelExp:" + userEntity.getUserId(), "0");
+        redisExp.set("levelExp:" + userEntity.getUserId(), "1");
         redisMmr.add("speed", userEntity.getUserId(), 1000);
         redisMmr.add("optimization", userEntity.getUserId(), 1000);
 
-        log.info("UserServiceImpl 의 createUser 메소드에서 redis 에 사용자 경험치=0, mmr=1200 으로 저장");
+        log.info("UserServiceImpl 의 createUser 메소드에서 redis 에 사용자 경험치=1, mmr=1000 으로 저장");
 
         // 회원가입 정보 저장
         userRepository.save(userEntity);
@@ -200,25 +200,26 @@ public class UserServiceImpl implements UserService
         // 닉네임, 사진 정보 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        int curExp;
-        int curSpeedMmr;
-        int curOptimizationMmr;
+        int curExp, curSpeedMmr, curOptimizationMmr;
+        ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
+        ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
 
         try {
             // redis 에서 해당 유저의 경험치, 스피드전 mmr, 효율성전 mmr 을 가져옴
-            ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
-            ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
-            curExp = Integer.parseInt(redisExp.get("levelExp:" + userId) + "");
+            curExp = (int)redisExp.get("levelExp:" + userId);
             curSpeedMmr = (int)Math.round(redisMmr.score("speed", userId));
             curOptimizationMmr = (int)Math.round(redisMmr.score("optimization", userId));
         }
         catch (NullPointerException e) {
+
             // redis 에 정보가 없을 때 log-service 로 요청
             // user-service -> log-service
             // param : user_id
             // return : 해당 유저의 경험치, 스피드전 mmr, 효율성전 mmr 을 리턴
+
             log.info("UserServiceImpl 의 getUserInfo 메소드에서 user_id 에 대한 경험치, mmr 정보가 " +
                     "redis 에 없어서 log-service 에서 가져옵니다.");
+
             MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
             bodyData.add("user_id", userId);
             ResponseEntity<UserDto.UserPlayDto> response = restTemplateUtils.sendRequest(
@@ -226,9 +227,15 @@ public class UserServiceImpl implements UserService
                     "http://localhost:9005/log-service/getExpAndMmr",
                     new ParameterizedTypeReference<UserDto.UserPlayDto>() {}
             );
+
             curExp = response.getBody().getExp();
             curSpeedMmr = response.getBody().getSpeedMmr();
             curOptimizationMmr = response.getBody().getOptimizationMmr();
+
+            // 데이터를 redis 에 저장
+            redisExp.set("levelExp:" + userEntity.getUserId(), curExp);
+            redisMmr.add("speed", userEntity.getUserId(), curSpeedMmr);
+            redisMmr.add("optimization", userEntity.getUserId(), curOptimizationMmr);
         }
 
         UserLevelEntity userLevelEntity =
@@ -284,6 +291,27 @@ public class UserServiceImpl implements UserService
             userBattleLogDto.setOtherUserNickname(userEntity.getNickname());
         }
 
+        return list;
+    }
+
+    @Override
+    public String getUserId(String nickName)
+    {
+        log.info("UserServiceImpl 메소드의 getUserId 메소드 실행");
+        UserEntity userEntity = userRepository.findByNickname(nickName);
+        return userEntity.getUserId();
+    }
+
+    @Override
+    public List<String> getAllUserId()
+    {
+        log.info("UserServiceImpl 메소드의 getAllUserId 메소드 실행");
+        List<String> list = new ArrayList<>();
+        List<UserEntity> userEntityList = userRepository.findAll();
+        for (UserEntity userEntity : userEntityList)
+        {
+            list.add(userEntity.getUserId());
+        }
         return list;
     }
 }
