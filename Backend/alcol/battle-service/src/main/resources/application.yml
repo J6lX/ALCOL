@@ -13,7 +13,10 @@ spring:
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:testdb
-
+  redis:
+    host: i8b303.p.ssafy.io
+    port: 6000
+    password: ehgud
 eureka:
   client:
     register-with-eureka: true
