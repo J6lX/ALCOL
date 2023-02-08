@@ -47,8 +47,9 @@ export function LoginInfo() {
 function App() {
   // 로그인 상태 확인
   const isLoggedIn = useRecoilValue(LoginState);
-  // console.log(isLoggedIn);
-  // console.log(localStorage);
+  // useEffect(() => {
+  //   console.log(isLoggedIn);
+  // });
 
   return (
     <RecoilRoot>
@@ -64,10 +65,10 @@ function App() {
             <Route exact path="/" component={HomePage} />
 
             {/* 로그인 페이지 */}
-            <Route
-              path="/login"
-              render={() => (isLoggedIn ? <Redirect to="/" /> : <LoginPage />)}
-            />
+            <Route exact path="/login">
+              {isLoggedIn ? <Redirect to="/" /> : <Route component={LoginPage} />}
+            </Route>
+            {/* 로그아웃 페이지(로그아웃 기능 구현용) */}
 
             {/* 모드 선택 페이지 */}
             <Route path="/mode" component={ModeSelectPage} />
