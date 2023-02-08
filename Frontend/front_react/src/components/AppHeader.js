@@ -6,16 +6,31 @@ import alcol from "../assets/alcol_empty_white.png";
 import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../states/LoginState";
 
 const { Header } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
-  // isLoggedIn === 로그인 상태 체크(임시 변수)
-  const isLoggedIn = true;
-  // 로그인 페이지에서 세션에 인증 정보를 저장한 후sessionStorage 또는 localStorage에서 사용자 인증 여부 가져오기
-  // console.log(sessionStorage);
-  // console.log(localStorage);
+  // isLoggedIn === 로그인 상태 체크
+  const isLoggedIn = useRecoilValue(LoginState);
+
+  // 로그아웃 정보 반영
+  const setIsLoggedIn = useSetRecoilState(LoginState);
+  const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
+  const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
+
+  const logoutRequest = () => {
+    setIsLoggedIn(false);
+    setAccessTokenData("");
+    setRefreshTokenData("");
+
+    // 메인 화면으로 리다이렉트
+    window.location.reload();
+    // window.location.href = "http://localhost:3000/";
+    // window.location.href = "http://i8b303.p.ssafy.io:8000/";
+  };
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
@@ -49,7 +64,7 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Link to="/" className="textDark">
+          <Link to="/" onClick={logoutRequest} className="textDark">
             Logout
           </Link>
         </Col>
@@ -137,24 +152,26 @@ function HeaderData() {
   const browser = ResizedComponent();
 
   // 큰 화면에서 표시하는 데이터
-  // console.log(browser.width);
   if (browser.width >= 640) {
     return (
       <Header
         style={{
+          position: "fixed",
+          zIndex: "10",
           backgroundColor: "#17181c",
-          height: "100%",
+          width: "100vw",
+          height: "auto",
         }}>
         <Row gutter={16} justify="space-between" align="middle">
           {/* 로고 표시 구역 */}
-          <Col span={4} justify="center" align="end">
+          <Col span={3} justify="center" align="end">
             <Link to="/">
               <img
                 src={alcol}
                 alt="logo"
                 className="logo"
                 style={{
-                  transform: "translate(0, 25%)",
+                  transform: "translate(0%, 35%)",
                 }}
               />
             </Link>
@@ -174,7 +191,7 @@ function HeaderData() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col xs={7} lg={4} justify="center">
+          <Col xs={8} lg={6} justify="center">
             <LoginTag />
           </Col>
         </Row>
@@ -186,6 +203,8 @@ function HeaderData() {
     return (
       <Header
         style={{
+          position: "fixed",
+          zIndex: "10",
           backgroundColor: "#17181c",
           width: "600",
           height: "100%",
@@ -242,7 +261,8 @@ function AppHeader() {
     locationNow.pathname !== "/ban" &&
     locationNow.pathname !== "/mode" &&
     locationNow.pathname !== "/solve" &&
-    locationNow.pathname !== "/solveprac"
+    locationNow.pathname !== "/solveprac" &&
+    locationNow.pathname !== "/battle"
   )
     return <HeaderData />;
 }

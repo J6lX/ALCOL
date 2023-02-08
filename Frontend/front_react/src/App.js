@@ -1,6 +1,6 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { RecoilRoot } from "recoil";
+import { Route, Switch, Redirect } from "react-router-dom";
+import { RecoilRoot, useRecoilValue } from "recoil";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
@@ -8,12 +8,12 @@ import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
-// import BanPage from "./components/battle/BanPage";
+import BanPage from "./components/battle/BanPage";
 import ReadyPage from "./components/battle/ReadyPage";
 import ContinuousBattlePage from "./components/battle/ContinuousBattlePage";
-// import ResultPage from "./components/battle/ResultPage";
+import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
-// import SolvingPage from "./components/battle/SolvingPage";
+import SolvingPage from "./components/battle/SolvingPage";
 import PracticeSolvingPage from "./components/battle/PracticeSolvingPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
@@ -25,11 +25,32 @@ import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
 
 import { Layout } from "antd";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "./states/LoginState";
+
 // // import { render } from "@testing-library/react";
 
 const { Content } = Layout;
 
+// 로그인 상태 확인
+export function LoginInfo() {
+  const userData = useRecoilValue(LoginState);
+  const AccToken = useRecoilValue(AccessTokenInfo);
+  const RefToken = useRecoilValue(RefreshTokenInfo);
+
+  return {
+    UserName: userData,
+    AccessToken: AccToken,
+    RefreshToken: RefToken,
+  };
+}
+
 function App() {
+  // 로그인 상태 확인
+  const isLoggedIn = useRecoilValue(LoginState);
+  // useEffect(() => {
+  //   console.log(isLoggedIn);
+  // });
+
   return (
     <RecoilRoot>
       <Layout>
@@ -44,7 +65,10 @@ function App() {
             <Route exact path="/" component={HomePage} />
 
             {/* 로그인 페이지 */}
-            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/login">
+              {isLoggedIn ? <Redirect to="/" /> : <Route component={LoginPage} />}
+            </Route>
+            {/* 로그아웃 페이지(로그아웃 기능 구현용) */}
 
             {/* 모드 선택 페이지 */}
             <Route path="/mode" component={ModeSelectPage} />
@@ -53,7 +77,7 @@ function App() {
             <Route path="/match" component={MatchingPage} />
 
             {/* 밴픽 페이지 */}
-            {/* <Route path="/ban" component={BanPage} /> */}
+            <Route path="/ban" component={BanPage} />
 
             {/* 매칭 후 소켓 연결 대기 페이지 */}
             <Route path="/ready" component={ReadyPage} />
@@ -71,10 +95,10 @@ function App() {
             <Route path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
-            {/* <Route path="/solve" exact={true} component={SolvingPage} /> */}
+            <Route path="/solve" exact={true} component={SolvingPage} />
 
             {/* 배틀 결과 페이지 */}
-            {/* <Route path="/result" exact={true} component={ResultPage} /> */}
+            <Route path="/result" exact={true} component={ResultPage} />
 
             {/* 배틀 상세 결과 페이지 */}
             <Route path="/resultList" exact={true} component={ResultListPage} />

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Col, Row } from "antd";
+import { Button, Col, Row } from "antd";
 import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
@@ -71,7 +71,7 @@ function Mid({ problems, onClick }) {
   });
 
   return (
-    <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
+    <Row justify="space-between" style={{ marginTop: "50px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
         <div className="ban_algo_problem_title">알고리즘 유형</div>
@@ -98,7 +98,7 @@ function Mid({ problems, onClick }) {
 
 function Bottom() {
   return (
-    <Row style={{ marginTop: "60px" }}>
+    <Row style={{ marginTop: "10px" }}>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "100px" }}></Col>
       <Col xs={12} sm={10} md={8} xl={6}>
@@ -111,11 +111,15 @@ function Bottom() {
   );
 }
 
-function App() {
+function App({ changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);
+  };
+
+  const selected = () => {
+    changeBanProblem(choose);
   };
 
   const [problem, setProblem] = React.useState([
@@ -136,13 +140,13 @@ function App() {
   useEffect(() => {
     if (choose === "1") {
       console.log("선택한 문제 번호는:" + problem[0].problem_no);
-      setChoose(problem[0].problem_no);
+      setChoose("1");
     } else if (choose === "2") {
       console.log("선택한 문제 번호는:" + problem[1].problem_no);
-      setChoose(problem[1].problem_no);
+      setChoose("2");
     } else if (choose === "3") {
       console.log("선택한 문제 번호는:" + problem[2].problem_no);
-      setChoose(problem[2].problem_no);
+      setChoose("3");
     }
   }, [choose, problem]);
 
@@ -151,6 +155,14 @@ function App() {
       <UserInfo />
       <Top />
       <Mid problems={problem} onClick={onClick} setProblem={setProblem} />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <Button
+          className="NanumSquare"
+          style={{ width: "100px", marginTop: "10px" }}
+          onClick={selected}>
+          확정
+        </Button>
+      </div>
       <Bottom />
     </div>
   );

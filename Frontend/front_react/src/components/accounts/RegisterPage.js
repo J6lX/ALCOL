@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { Button, Form, Input, Avatar, Col, Row } from "antd";
+import { useHistory } from "react-router-dom";
+import { Button, Form, Input, Avatar, Col, Row, Modal } from "antd";
 import axios from "axios";
 import "./RegisterPage.css";
 
@@ -71,22 +72,10 @@ function ProfileImage({ setImage }) {
 }
 
 function App() {
-  // const [userInfo, setValues] = useState({
-  //   email: "",
-  //   pwd: "",
-  //   nickname: "",
-  // });
   const [img, setImage] = useState(null);
   const onFinish = (values) => {
-    //-----이미지 처리-----
-    console.log("받은 이미지:", img);
-    //formData를 만들어 img라는 이름의 객체로 현재 img 상태를 서버로 요청 보냅니다.
     const formData = new FormData();
     formData.append("file", img);
-    console.log("보낼 이미지:", formData);
-    //-----이미지 처리 끝-----
-    // setValues({ ...values });
-    // console.log("입력한 회원 정보 : ", values.email, values.pwd, values.nickname);
     const userData = JSON.stringify({
       email: values.email,
       pwd: values.pwd,
@@ -98,20 +87,39 @@ function App() {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(function (response) {
+        hanleHistoryMatch();
         console.log("회원 가입 성공 1 :" + response);
-        if (response.data.customCode === "000") {
+        console.log(response);
+        if (response.data.custom_code === "000") {
           console.log("회원 가입 성공 2 :" + response);
           alert("회원가입 성공");
         }
       })
       .catch((error) => {
         console.log("회원 가입 실패 1 :" + error);
-        if (error.response.data.customCode === "003") {
+        if (error.response.data.custom_code === "003") {
           alert("이메일 중복");
-        } else if (error.response.data.customCode === "004") {
+        } else if (error.response.data.custom_code === "004") {
           alert("닉네임 중복");
         }
       });
+  };
+  const history = useHistory();
+  const hanleHistoryMatch = () => {
+    showModal();
+  };
+  //Modal 선택 관련
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  // const [result, setResult] = React.useState();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    history.push("/match");
+    setIsModalOpen(false);
+  };
+  const handleCancle = () => {
+    setIsModalOpen(false);
   };
   return (
     <div className="contents_background">
@@ -187,6 +195,24 @@ function App() {
               </Button>
             </Form.Item>
           </Form>
+          <Modal
+            title="😮"
+            open={isModalOpen}
+            closable={false}
+            width={300}
+            centered
+            footer={null}
+            style={{ textAlign: "center" }}>
+            <p style={{ textAlign: "center" }}>{}</p>
+            <div style={{ marginTop: "10px" }}>
+              <Button onClick={handleCancle} style={{ marginRight: "10px" }}>
+                다시선택
+              </Button>
+              <Button style={{ background: "#FEF662" }} onClick={handleOk}>
+                게임시작
+              </Button>
+            </div>
+          </Modal>
         </div>
       </div>
     </div>

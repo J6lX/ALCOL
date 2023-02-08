@@ -1,11 +1,18 @@
-import React from "react";
+import { React } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import loginBg from "../../assets/loginbg.jpg";
 import "./LoginPage.css";
 import axios from "axios";
+import { useSetRecoilState } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 function LoginPage() {
+  // 로그인 상태 관리(LoginState의 데이터를 변경)
+  const setIsLoggedIn = useSetRecoilState(LoginState);
+  const setAccessTokenData = useSetRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
+  const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
+
   // Login을 제출하면 실행되는 함수
   // 성공 시 localstorage에 토큰 발급
   // 아니면 에러 알림, 로그인 입력창 지워주기
@@ -23,24 +30,31 @@ function LoginPage() {
       .post("http://i8b303.p.ssafy.io:8000/user-service/login", userData)
       // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
-        console.log("로그인 성공1 : " + response);
-        if (response.data.customCode === "001") {
-          console.log("로그인 성공2 : " + response);
+        // console.log(response.data);
+        if (response.data.custom_code === "001") {
           alert(response.data.description);
           //access-token, refresh-token, userId 저장
           // 이 데이터들을 리코일에 저장하면 됨
-          const accessToken = response.data.bodyData.access_token;
-          const refreshToken = response.data.bodyData.refresh_token;
-          const userId = response.data.bodyData.user_id;
-          console.log("access_token: " + accessToken);
-          console.log("refresh_token: " + refreshToken);
-          console.log("user_id: " + userId);
+          const accessToken = response.data.body_data.access_token;
+          const refreshToken = response.data.body_data.refresh_token;
+          const userId = response.data.body_data.user_id;
+          // console.log("access_token: " + accessToken);
+          // console.log("refresh_token: " + refreshToken);
+          // console.log("user_id: " + userId);
+
+          // 로그인 상태를 true로 변경하고, 토큰 정보를 저장
+          setIsLoggedIn(userId);
+          setRefreshTokenData(refreshToken);
+          setAccessTokenData(accessToken);
+
+          // 로그인에 성공하면 메인 화면으로 리다이렉트 시켜줄 수단이 필요
+          window.location.reload();
         }
       })
       //로그인 실패 시
       .catch((error) => {
         console.log("로그인 실패1 : " + error);
-        if (error.response.data.customCode === "006") {
+        if (error.response.data.custom_code === "006") {
           console.log("로그인 실패2 : " + error);
           // 로그인 실패 시 표시하는 내용
           alert(error.response.data.description);
