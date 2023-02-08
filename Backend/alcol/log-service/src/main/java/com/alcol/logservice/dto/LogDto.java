@@ -44,4 +44,19 @@ public class LogDto
         private String probName;
         private String probTier;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserResultAndMmrDto
+    {
+        private String userId;
+        private int speedMmr;
+        private int speedWin;
+        private int speedLose;
+        private int optimizationMmr;
+        private int optimizationWin;
+        private int optimizationLose;
+    }
 }

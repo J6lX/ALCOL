@@ -10,4 +10,6 @@ public interface LogService
     List<LogDto.UserBattleLogDto> getBattleLog(String userId) throws URISyntaxException;
 
     LogDto.UserPlayDto getExpAndMmr(String userId);
+
+    List<LogDto.UserResultAndMmrDto> getAllResultAndMmr() throws URISyntaxException;
 }
