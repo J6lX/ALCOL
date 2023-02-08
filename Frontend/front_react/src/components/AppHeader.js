@@ -15,6 +15,14 @@ const { Header } = Layout;
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크(임시 변수)
   const isLoggedIn = useRecoilValue(LoginState);
+  const refToken = useRecoilValue(RefreshTokenInfo);
+  const accToken = useRecoilValue(AccessTokenInfo);
+
+  useEffect(() => {
+    console.log("header :", isLoggedIn);
+    console.log("HeaderAcc :", accToken);
+    console.log("HeaderRef :", refToken);
+  });
 
   // 로그아웃 정보 반영
   const setIsLoggedIn = useSetRecoilState(LoginState);
@@ -23,8 +31,8 @@ function LoginTag(props) {
 
   const logoutRequest = () => {
     setIsLoggedIn(false);
-    setAccessTokenData(null);
-    setRefreshTokenData(null);
+    setAccessTokenData("");
+    setRefreshTokenData("");
 
     // 메인 화면으로 리다이렉트
     window.location.href = "http://localhost:3000/";
