@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.constraints.Null;
 import java.util.*;
 
 @Service
@@ -24,7 +25,7 @@ public class RankServiceImpl implements RankService{
     private HashOperations<String, String, String> userInfo;
 
     /**
-     * 스피드전 개인 랭킹 가져오기
+     * 모드별 개인 랭킹 가져오기
      */
     public int getMyRank(String userId, String mode)
     {
@@ -62,7 +63,6 @@ public class RankServiceImpl implements RankService{
         }
 
         // redis에서 유저 정보를 가져온다.
-
         String nickname = userInfo.get(key, "nickname");
         String profilePic = userInfo.get(key, "stored_file_name");
         int level = Integer.valueOf(userInfo.get(key, "level"));
@@ -86,9 +86,20 @@ public class RankServiceImpl implements RankService{
     {
         winLoseCount = redisTemplate.opsForHash();
         String key = "winloseCnt:" + userId + ":" + battleMode;
-        int win = Integer.parseInt(winLoseCount.get(key, "win"));
-        int lose = Integer.parseInt(winLoseCount.get(key, "lose"));
-        long winningRate = win / (win + lose) * 100;
+
+        int win = -1;
+        int lose = -1;
+        long winningRate = -1;
+        try
+        {
+            win = Integer.parseInt(winLoseCount.get(key, "win"));
+            lose = Integer.parseInt(winLoseCount.get(key, "lose"));
+            winningRate = win / (win + lose) * 100;
+        }
+        catch (NullPointerException nullPointerException)
+        {
+            log.warn("해당 유저의 승패 정보가 존재하지 않음");
+        }
 
         return RankDto.WinLoseCount.builder()
                 .win(win)
@@ -103,8 +114,18 @@ public class RankServiceImpl implements RankService{
     public RankDto.RankingAndMMR getRankingAndMMR(String userId, String battleMode)
     {
         ranking = redisTemplate.opsForZSet();
-        long grade = ranking.rank(battleMode, userId);
-        int MMR = ranking.score(battleMode, userId).intValue();
+
+        long grade = -1;
+        int MMR = -1;
+        try
+        {
+            grade = ranking.rank(battleMode, userId);
+            MMR = ranking.score(battleMode, userId).intValue();
+        }
+        catch (NullPointerException nullPointerException)
+        {
+            log.warn("해당 유저의 랭킹 정보가 존재하지 않음");
+        }
 
         return RankDto.RankingAndMMR.builder()
                 .grade(grade)
