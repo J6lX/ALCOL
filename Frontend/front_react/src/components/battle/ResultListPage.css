@@ -1,5 +1,5 @@
 .resultList_background {
-  /* height: 100vh; */
+  height: 100vh;
   background: url(/src/assets/result_background.png);
   background-size: cover;
   background-repeat: no-repeat;

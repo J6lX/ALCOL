@@ -1,37 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Col, Row } from "antd";
+import { Col, Row, Button, Modal } from "antd";
 import "./MatchingPage.css";
-
-//프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
-//${window.location.host} = 어디에 인터넷 주소가 위치해 있는지 알려주는 코드
-//websocket 관련 전체 코드는 여기...
-//https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
-const socket = new WebSocket(`ws://${window.location.host}`);
-console.log(socket);
-
-function makeMessage(type, payload) {
-  const msg = { type, payload };
-  return JSON.stringify(msg);
-}
-
-//socket이 connection을 open했을때 발생
-socket.addEventListener("open", () => {
-  console.log("---서버와 연결 됨---");
-  //서버로 뭔가를 보내기
-  const input = "서버로 메세지를 보냅니다";
-  socket.send(makeMessage("new_Message", input));
-});
-
-//message를 받을 때 발생
-socket.addEventListener("message", (message) => {
-  console.log("서버로 부터 받은 메세지 : " + message.data);
-});
-
-//서버가 오프라인일때 발생하는 코드
-socket.addEventListener("close", () => {
-  console.log("---서버와 연결 끊김---");
-});
+import { useRecoilState } from "recoil";
+import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function UserInfo() {
   return (
@@ -44,7 +16,12 @@ function UserInfo() {
       </Col>
       <Col
         span={3}
-        style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
+        style={{
+          fontFamily: "NanumSquareNeo",
+          fontSize: "1.5vw",
+          paddingLeft: "10px",
+          lineHeight: "50px",
+        }}
         className="battle_user_info_contents">
         멋진 닉네임
       </Col>
@@ -53,17 +30,81 @@ function UserInfo() {
 }
 
 function App() {
+  //websocket 관련 전체 코드는 여기...
+  //https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
+  //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
+  const socket = new WebSocket(`ws://${window.location.host}`);
+  const [state, setState] = React.useState("상대를 찾는중..");
+
+  function makeMessage(type, payload) {
+    const msg = { type, payload };
+    return JSON.stringify(msg);
+  }
+
+  //socket이 connection을 open했을때 발생
+  socket.addEventListener("open", () => {
+    console.log("---서버와 연결 됨---");
+    //서버로 뭔가를 보내기
+    const input = "서버로 메세지를 보냅니다";
+    socket.send(makeMessage("new_Message", input));
+  });
+
+  //message를 받을 때 발생
+  socket.addEventListener("message", (message) => {
+    console.log("서버로 부터 받은 메세지 : " + message.data);
+    if (message.data === "success") {
+      console.log("매칭되었습니다!");
+      setState("매칭 완료.. 상대를 기다리는 중..");
+    }
+  });
+
+  //서버가 오프라인일때 발생하는 코드
+  socket.addEventListener("close", () => {
+    console.log("---서버와 연결 끊김---");
+  });
+
+  //Modal 선택 관련
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancle = () => {
+    setMode("-1");
+    setLanguage("-1");
+    history.push("/");
+    setIsModalOpen(false);
+  };
+
+  //페이지 이동 관련
   const history = useHistory();
 
   function hanleHistoryMatchCancle() {
-    history.push("/");
+    showModal();
   }
+
+  //mode 선택 관련
+  const [mode, setMode] = useRecoilState(selectedMode);
+  const [language, setLanguage] = useRecoilState(selectedLanguage);
+
+  console.log("매칭페이지");
+  console.log(mode);
+  console.log(language);
 
   return (
     <div className="matching_background">
       <UserInfo />
-      <div style={{ color: "white", textAlign: "center", marginTop: "25vh" }}>
-        상대를 찾는중..
+      <div
+        style={{
+          color: "white",
+          fontFamily: "NanumSquareNeo",
+          fontWeight: "lighter",
+          textAlign: "center",
+          marginTop: "25vh",
+        }}>
+        {state}
         <div className="wrapper" style={{ marginTop: "-30px" }}>
           <svg
             className="hourglass"
@@ -82,14 +123,33 @@ function App() {
         </div>
       </div>
       <div className="matching_helper">
-        <div style={{ color: "white", fontWeight: "bold" }}>그거 아셨나요?</div>
-        <div style={{ color: "white" }}>
+        <div style={{ color: "white", fontFamily: "NanumSquareNeo" }}>그거 아셨나요?</div>
+        <div style={{ color: "white", fontFamily: "NanumSquareNeo", fontWeight: "lighter" }}>
           이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..
         </div>
       </div>
       <div className="matchingButton" onClick={hanleHistoryMatchCancle}>
         취소
       </div>
+      <Modal
+        title="😂"
+        open={isModalOpen}
+        closable={false}
+        width={300}
+        centered
+        footer={null}
+        style={{ textAlign: "center" }}>
+        <p style={{ textAlign: "center" }}>상대방을 열심히 찾는 중입니다</p>
+        <p style={{ textAlign: "center" }}>매칭을 정말 취소할까요..?</p>
+        <div style={{ marginTop: "10px" }}>
+          <Button onClick={handleCancle} style={{ marginRight: "10px" }}>
+            취소할게요
+          </Button>
+          <Button style={{ background: "#FEF662" }} onClick={handleOk}>
+            아니요
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
