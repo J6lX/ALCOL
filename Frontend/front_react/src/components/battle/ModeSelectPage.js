@@ -11,10 +11,12 @@ import iconBackSmall from "../../assets/left-arrow-small.png";
 import { useRecoilState } from "recoil";
 import { selectedMode, selectedLanguage } from "../../states/atoms";
 
-function UserInfo() {
+function UserInfo({ setMode, setLanguage }) {
   const history = useHistory();
 
   const handlePageBack = () => {
+    setMode("-1");
+    setLanguage("-1");
     history.push("/");
   };
 
@@ -188,11 +190,10 @@ function FixedText() {
   );
 }
 
-function HandleFinishSelectButton({ mode, language, setMode, setLanguage }) {
+function HandleFinishSelectButton({ mode, language }) {
   const history = useHistory();
   const hanleHistoryMatch = () => {
     showModal();
-    // history.push("/match");
   };
   //Modal 선택 관련
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -254,19 +255,14 @@ function App() {
 
   return (
     <div className="battle_background">
-      <UserInfo />
+      <UserInfo setMode={setMode} setLanguage={setLanguage} />
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
         <SelectLanguage setLanguage={setLanguage} back={setMode} />
       )}
       {mode !== "-1" && language !== "-1" ? (
-        <HandleFinishSelectButton
-          mode={mode}
-          language={language}
-          setMode={setMode}
-          setLanguage={setLanguage}
-        />
+        <HandleFinishSelectButton mode={mode} language={language} />
       ) : (
         <div></div>
       )}
