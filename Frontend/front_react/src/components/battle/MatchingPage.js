@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Col, Row } from "antd";
+import { Col, Row, Button, Modal } from "antd";
 import "./MatchingPage.css";
 import { useRecoilState } from "recoil";
 import { selectedMode, selectedLanguage } from "../../states/atoms";
@@ -63,13 +63,26 @@ function App() {
     console.log("---서버와 연결 끊김---");
   });
 
+  //Modal 선택 관련
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancle = () => {
+    setMode("-1");
+    setLanguage("-1");
+    history.push("/");
+    setIsModalOpen(false);
+  };
+
   //페이지 이동 관련
   const history = useHistory();
 
   function hanleHistoryMatchCancle() {
-    setMode("-1");
-    setLanguage("-1");
-    history.push("/");
+    showModal();
   }
 
   //mode 선택 관련
@@ -118,6 +131,25 @@ function App() {
       <div className="matchingButton" onClick={hanleHistoryMatchCancle}>
         취소
       </div>
+      <Modal
+        title="😂"
+        open={isModalOpen}
+        closable={false}
+        width={300}
+        centered
+        footer={null}
+        style={{ textAlign: "center" }}>
+        <p style={{ textAlign: "center" }}>상대방을 열심히 찾는 중입니다</p>
+        <p style={{ textAlign: "center" }}>매칭을 정말 취소할까요..?</p>
+        <div style={{ marginTop: "10px" }}>
+          <Button onClick={handleCancle} style={{ marginRight: "10px" }}>
+            취소할게요
+          </Button>
+          <Button style={{ background: "#FEF662" }} onClick={handleOk}>
+            아니요
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
