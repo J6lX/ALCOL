@@ -23,13 +23,15 @@ public class RankDto
         @Builder
         @AllArgsConstructor
         @NoArgsConstructor(access = AccessLevel.PROTECTED)
-        static public class UserData {
+        static public class UserData
+        {
                 private String nickname;
-                private String stored_file_name;
                 private int level;
-                private String speed_tier;
-                private String optimization_tier;
+                private String speedTier;
+                private String optimizationTier;
+                private String storedFileName;
         }
+
         @Getter
         @Builder
         @AllArgsConstructor

@@ -82,7 +82,7 @@ public class RankingController
         if(mmr == -1){
             RankDto.Ranking rank = RankDto.Ranking.builder()
                     .nickname(userData.getNickname())
-                    .profile_pic(userData.getStored_file_name())
+                    .profile_pic(userData.getStoredFileName())
                     .level(userData.getLevel())
                     .tier("none")
                     .mmr(-1)

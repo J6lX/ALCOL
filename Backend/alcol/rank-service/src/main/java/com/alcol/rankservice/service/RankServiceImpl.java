@@ -70,10 +70,10 @@ public class RankServiceImpl implements RankService{
 
         return RankDto.UserData.builder()
                 .nickname(nickname)
-                .stored_file_name(profilePic)
+                .storedFileName(profilePic)
                 .level(level)
-                .speed_tier(speedTier)
-                .optimization_tier(optimizationTier)
+                .speedTier(speedTier)
+                .optimizationTier(optimizationTier)
                 .build();
     }
 
@@ -155,11 +155,11 @@ public class RankServiceImpl implements RankService{
             int mmr = ranking.score(battleMode, userId).intValue();
             RankDto.WinLoseCount winLose = getWinLoseCount(userId, battleMode);
             RankDto.UserData userData = getUserData(userId);
-            String tier = battleMode.equals("speed") ? userData.getSpeed_tier() : userData.getOptimization_tier();
+            String tier = battleMode.equals("speed") ? userData.getSpeedTier() : userData.getOptimizationTier();
 
             RankingList.add(RankDto.Ranking.builder()
                             .nickname(userData.getNickname())
-                            .profile_pic(userData.getStored_file_name())
+                            .profile_pic(userData.getStoredFileName())
                             .level(userData.getLevel())
                             .tier(tier)
                             .mmr(mmr)
@@ -196,12 +196,12 @@ public class RankServiceImpl implements RankService{
 
         // battleMode가 스피드전이라면 스피드전 티어를, 최적화전이라면 최적화전 티어를 보내줘야함
         String tier = "";
-        if(battleMode.equals("speed")) tier = userData.getSpeed_tier();
-        else tier = userData.getOptimization_tier();
+        if(battleMode.equals("speed")) tier = userData.getSpeedTier();
+        else tier = userData.getOptimizationTier();
 
         RankDto.Ranking rank = RankDto.Ranking.builder()
                 .nickname(userData.getNickname())
-                .profile_pic(userData.getStored_file_name())
+                .profile_pic(userData.getStoredFileName())
                 .level(userData.getLevel())
                 .tier(tier)
                 .mmr(rankingAndMMR.getMMR())

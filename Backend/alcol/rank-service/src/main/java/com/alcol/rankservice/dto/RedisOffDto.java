@@ -1,16 +1,21 @@
 package com.alcol.rankservice.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RedisOffDto
 {
     private String userId;
-    private int speed_win;
-    private int speed_lose;
-    private int speed_mmr;
-    private int optimizatoin_win;
-    private int optimization_lose;
-    private int optimization_mmr;
-
+    private int speedMmr;
+    private int speedWin;
+    private int speedLose;
+    private int optimizationMmr;
+    private int optimizationWin;
+    private int optimizationLose;
 }
