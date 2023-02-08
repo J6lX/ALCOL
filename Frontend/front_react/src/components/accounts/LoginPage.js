@@ -4,14 +4,16 @@ import { Button, Form, Input } from "antd";
 import loginBg from "../../assets/loginbg.jpg";
 import "./LoginPage.css";
 import axios from "axios";
-import { useSetRecoilState, useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 function LoginPage() {
+  // 사용자 정보가 잘 저장되고 있는지 테스트하는 코드
+
   // 로그인 상태 관리(LoginState의 데이터를 변경)
-  const setIsLoggedIn = useSetRecoilState(LoginState); // 로그인 상태 변경
-  const [accessTokenData, setAccessTokenData] = useRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
-  const [refreshTokenData, setRefreshTokenData] = useRecoilState(RefreshTokenInfo);
+  const setIsLoggedIn = useSetRecoilState(LoginState);
+  const setAccessTokenData = useSetRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
+  const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
 
   // Login을 제출하면 실행되는 함수
   // 성공 시 localstorage에 토큰 발급
@@ -30,38 +32,32 @@ function LoginPage() {
       .post("http://i8b303.p.ssafy.io:8000/user-service/login", userData)
       // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
-        console.log("로그인 성공1 : " + response);
-        if (response.data.customCode === "001") {
-          console.log("로그인 성공2 : " + response);
+        // console.log(response.data);
+        if (response.data.custom_code === "001") {
           alert(response.data.description);
           //access-token, refresh-token, userId 저장
           // 이 데이터들을 리코일에 저장하면 됨
-          const accessToken = response.data.bodyData.access_token;
-          const refreshToken = response.data.bodyData.refresh_token;
-          const userId = response.data.bodyData.user_id;
-          console.log("access_token: " + accessToken);
-          console.log("refresh_token: " + refreshToken);
-          console.log("user_id: " + userId);
+          const accessToken = response.data.body_data.access_token;
+          const refreshToken = response.data.body_data.refresh_token;
+          const userId = response.data.body_data.user_id;
+          // console.log("access_token: " + accessToken);
+          // console.log("refresh_token: " + refreshToken);
+          // console.log("user_id: " + userId);
 
-          // 사용자 ID는 로컬스토리지에 저장
-          localStorage.setItem("userId", userId);
-          // 토큰 정보는 recoil에 저장
-          setAccessTokenData(accessToken);
+          // 로그인 상태를 true로 변경하고, 토큰 정보를 저장
+          setIsLoggedIn(userId);
           setRefreshTokenData(refreshToken);
+          setAccessTokenData(accessToken);
 
-          // 토큰이 잘 저장되었는지 체크용(정상 작동 시 주석 처리 or 삭제)
-          console.log(accessToken);
-          console.log(refreshToken);
-
-          // 토큰 정보와 사용자명이 저장되었으면 로그인 상태를 true로 변경
-          if (localStorage.getItem("userId") && accessTokenData && refreshTokenData)
-            setIsLoggedIn(true);
+          // 로그인 시 메인 화면으로 리다이렉트(임시)
+          window.location.href = "http://localhost:3000/";
+          // window.location.href = "http://i8b303.p.ssafy.io:8000/";
         }
       })
       //로그인 실패 시
       .catch((error) => {
         console.log("로그인 실패1 : " + error);
-        if (error.response.data.customCode === "006") {
+        if (error.response.data.custom_code === "006") {
           console.log("로그인 실패2 : " + error);
           // 로그인 실패 시 표시하는 내용
           alert(error.response.data.description);

@@ -7,18 +7,20 @@ const { persistAtom } = recoilPersist();
 // 로그인 여부 저장
 export const LoginState = atom({
   key: "LoginState",
-  default: false,
+  default: "",
   effects_UNSTABLE: [persistAtom],
 });
 
 // 액세스 토큰 정보 저장
 export const AccessTokenInfo = atom({
   key: "AccessToken",
-  default: null,
+  default: "",
+  effects_UNSTABLE: [persistAtom],
 });
 
 // 리프레시 토큰 정보 저장
 export const RefreshTokenInfo = atom({
   key: "RefreshToken",
-  default: null,
+  default: "",
+  effects_UNSTABLE: [persistAtom],
 });

@@ -3,11 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import "./HeaderFooter.css";
 import alcol from "../assets/alcol_empty_white.png";
 
-import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
+import { Layout, Button, Row, Col, Avatar, Menu, Form } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
-import { LoginState } from "../states/LoginState";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../states/LoginState";
 
 const { Header } = Layout;
 
@@ -15,9 +15,29 @@ const { Header } = Layout;
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크(임시 변수)
   const isLoggedIn = useRecoilValue(LoginState);
-  // 로그인 페이지에서 세션에 인증 정보를 저장한 후sessionStorage 또는 localStorage에서 사용자 인증 여부 가져오기
-  console.log(sessionStorage);
-  console.log(localStorage);
+  const refToken = useRecoilValue(RefreshTokenInfo);
+  const accToken = useRecoilValue(AccessTokenInfo);
+
+  useEffect(() => {
+    console.log("header :", isLoggedIn);
+    console.log("HeaderAcc :", accToken);
+    console.log("HeaderRef :", refToken);
+  });
+
+  // 로그아웃 정보 반영
+  const setIsLoggedIn = useSetRecoilState(LoginState);
+  const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
+  const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
+
+  const logoutRequest = () => {
+    setIsLoggedIn(false);
+    setAccessTokenData("");
+    setRefreshTokenData("");
+
+    // 메인 화면으로 리다이렉트
+    window.location.href = "http://localhost:3000/";
+    // window.location.href = "http://i8b303.p.ssafy.io:8000/";
+  };
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
   if (isLoggedIn) {
@@ -51,9 +71,13 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Link to="/" className="textDark">
-            Logout
-          </Link>
+          <Form onFinish={logoutRequest}>
+            <Form.Item>
+              <Button htmlType="submit" className="textDark">
+                Logout
+              </Button>
+            </Form.Item>
+          </Form>
         </Col>
       </Row>
     );
@@ -139,7 +163,6 @@ function HeaderData() {
   const browser = ResizedComponent();
 
   // 큰 화면에서 표시하는 데이터
-  console.log(browser.width);
   if (browser.width >= 640) {
     return (
       <Header
