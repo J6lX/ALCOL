@@ -1,5 +1,6 @@
 package com.alcol.rankservice.exception;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -9,11 +10,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfiguration implements WebMvcConfigurer
 {
 //    @Autowired
-//    private static RedisOffException redisOffException;
+    private static RedisOffException redisOffException;
 //
     @Override
     public void addInterceptors(InterceptorRegistry interceptorRegistry)
     {
-        interceptorRegistry.addInterceptor(new RedisOffException()).addPathPatterns("/**");
+        interceptorRegistry.addInterceptor(redisOffException).addPathPatterns("/**");
     }
 }
