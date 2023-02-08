@@ -157,7 +157,7 @@ function HeaderData() {
     return (
       <Header
         style={{
-          position: "fixed",
+          position: "relative",
           zIndex: "10",
           backgroundColor: "#17181c",
           width: "100vw",
