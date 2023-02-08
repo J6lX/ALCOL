@@ -18,10 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/rank-service")
 @RequiredArgsConstructor
 @Slf4j
-public class BattleRecordController
+public class RankingController
 {
     private final BattleResultService battleResultService;
     private final RankService rankService;
