@@ -52,28 +52,29 @@ public class WebSocket {
         if (session != null) {
             String sessionId = session.getId();
             sessionSet.add(sessionId);
+            System.out.println("이것은 세션 아이디이다."+sessionId);
             sessionMap.put(sessionId, session);
             printInfo();
 
-            if (!runCheck) {
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        LocalTime now = LocalTime.now();
-                        System.out.println(now);  // 06:20:57.008731300
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH시 mm분 ss초");
-                        String formatedNow = now.format(formatter);
-
-                        int randInt = Math.abs(random.nextInt()) % 100;
-                        String msg = String.format("{%s} : [{%d}]{%s}", formatedNow, randInt, "서버에서 보내는 랜덤메세지 입니다.");
-                        sendMessageToAll(msg);
-                    }
-                };
-                runCheck = true;
-                Timer timer = new Timer(true);
-                timer.scheduleAtFixedRate(task, 0, 15000);
-
-            }
+//            if (!runCheck) {
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        LocalTime now = LocalTime.now();
+//                        System.out.println(now);  // 06:20:57.008731300
+//                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH시 mm분 ss초");
+//                        String formatedNow = now.format(formatter);
+//
+//                        int randInt = Math.abs(random.nextInt()) % 100;
+//                        String msg = String.format("{%s} : [{%d}]{%s}", formatedNow, randInt, "서버에서 보내는 랜덤메세지 입니다.");
+//                        sendMessageToAll(msg);
+//                    }
+//                };
+//                runCheck = true;
+//                Timer timer = new Timer(true);
+//                timer.scheduleAtFixedRate(task, 0, 15000);
+//
+//            }
             ;
         }
     }
@@ -269,23 +270,23 @@ public class WebSocket {
         return true;
     }
 
-    private void goBattle(String sId, String cId) {
+    private void goBattle(String player1Id, String player2Id) {
         Session session = null;
         for (String sessionId : sessionId2Obj.keySet()) {
             Object obj = sessionId2Obj.get(sessionId);
-            if ((obj instanceof User && ((User) obj).getId().equals(cId)) || (obj instanceof User && ((User) obj).getId().equals(sId))) {
-                System.out.println(sId);
-                System.out.println(cId);
+            if ((obj instanceof User && ((User) obj).getId().equals(player2Id)) || (obj instanceof User && ((User) obj).getId().equals(player1Id))) {
+                System.out.println("이건 뭐고 ? : "+player1Id);
+                System.out.println("저건 뭐고 ? : "+player2Id);
                 session = sessionMap.get(sessionId);
                 System.out.println(session);
                 JSONObject send = new JSONObject();
-                if(((User) obj).getId().equals(cId)){
-                    send.put("userId", cId);
-                    send.put("otherId", sId);
+                if(((User) obj).getId().equals(player2Id)){
+                    send.put("userId", player2Id);
+                    send.put("otherId", player1Id);
                 }
                 else{
-                    send.put("userId", sId);
-                    send.put("otherId", cId);
+                    send.put("userId", player1Id);
+                    send.put("otherId", player2Id);
                 }
                 session.getAsyncRemote().sendText(send.toJSONString());
             }
