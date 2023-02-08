@@ -37,6 +37,7 @@ function LoginTag(props) {
     return (
       <Row
         align="center"
+        justify="end"
         style={{
           height: "64px",
         }}>
@@ -73,7 +74,7 @@ function LoginTag(props) {
     // 로그인 정보가 없는 경우 로그인 및 회원가입 버튼 표시
   } else {
     return (
-      <Row style={{ height: "64px" }}>
+      <Row align="center" justify="end" style={{ height: "64px" }}>
         <Col>
           <Link to="/login">
             <Button className="loginButton">LOGIN</Button>
@@ -191,7 +192,7 @@ function HeaderData() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col xs={8} lg={6} justify="center">
+          <Col xs={8} lg={6} justify="end">
             <LoginTag />
           </Col>
         </Row>
@@ -206,12 +207,12 @@ function HeaderData() {
           position: "fixed",
           zIndex: "10",
           backgroundColor: "#17181c",
-          width: "600",
-          height: "100%",
+          width: "100%",
+          height: "auto",
         }}>
         <Row align="middle">
           {/* 로고 표시 구역 */}
-          <Col span={6} align="center">
+          <Col span={5} align="center">
             <Link to="/">
               <img
                 src={alcol}
@@ -242,7 +243,7 @@ function HeaderData() {
             />
           </Col>
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col xs={10} justify="center">
+          <Col xs={11} justify="center">
             <LoginTag />
           </Col>
         </Row>
