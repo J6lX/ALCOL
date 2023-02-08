@@ -55,25 +55,25 @@ public class WebSocket {
             sessionMap.put(sessionId, session);
             printInfo();
 
-            if (!runCheck) {
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        LocalTime now = LocalTime.now();
-                        System.out.println(now);  // 06:20:57.008731300
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH시 mm분 ss초");
-                        String formatedNow = now.format(formatter);
-
-                        int randInt = Math.abs(random.nextInt()) % 100;
-                        String msg = String.format("{%s} : [{%d}]{%s}", formatedNow, randInt, "서버에서 보내는 랜덤메세지 입니다.");
-                        sendMessageToAll(msg);
-                    }
-                };
-                runCheck = true;
-                Timer timer = new Timer(true);
-                timer.scheduleAtFixedRate(task, 0, 15000);
-
-            }
+//            if (!runCheck) {
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        LocalTime now = LocalTime.now();
+//                        System.out.println(now);  // 06:20:57.008731300
+//                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH시 mm분 ss초");
+//                        String formatedNow = now.format(formatter);
+//
+//                        int randInt = Math.abs(random.nextInt()) % 100;
+//                        String msg = String.format("{%s} : [{%d}]{%s}", formatedNow, randInt, "서버에서 보내는 랜덤메세지 입니다.");
+//                        sendMessageToAll(msg);
+//                    }
+//                };
+//                runCheck = true;
+//                Timer timer = new Timer(true);
+//                timer.scheduleAtFixedRate(task, 0, 15000);
+//
+//            }
             ;
         }
     }
@@ -98,19 +98,19 @@ public class WebSocket {
             {
                 System.out.println("이닛으로는 들어옴 ?");
                 String id = obj.get("id").toString();
-                String name = obj.get("name").toString();
+
                 String mode = obj.get("Mode").toString();
                 String language = obj.get("Language").toString();
                 System.out.println("redis : "+redisTemplate);
                 ranking = redisTemplate.opsForZSet();
                 try
                 {
-                    mmr = ranking.score("speed", name).intValue();
+                    mmr = ranking.score("speed", id).intValue();
                 }
                 catch (Exception e)
                 {
                     MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
-                    bodyData.add("user_id",name);
+                    bodyData.add("user_id",id);
                     bodyData.add("mode",mode);
                     System.out.println("this is restTempalte : "+ restTemplate);
                     String url = "http://localhost:9005/log-service/getLevelAndTier";
@@ -126,23 +126,23 @@ public class WebSocket {
 //                mmr = getMMR(id);
 //
 //                System.out.println(MMRs);
-                System.out.println(id +" "+ name+" "+ mode+" "+ mmr);
+                System.out.println(id +" "+ id+" "+ mode+" "+ mmr);
                 if (refreshMap.containsKey(id + "고객"))
                 {
-                    LocalTime first = refreshMap.get(id + "고객");
-                    LocalTime second = LocalTime.now();
-                    if (Duration.between(first, second).getSeconds() <= 1)
-                    {
-                        sendMessageToAll("[고객/" + name + "] 님이 새로고침 하셨어요~~");
-                    }
-                    else
-                    {
-                        sendMessageToAll("[고객/" + name + "] 님이 다시 들어오셨어요~~");
-                    }
+//                    LocalTime first = refreshMap.get(id + "고객");
+//                    LocalTime second = LocalTime.now();
+//                    if (Duration.between(first, second).getSeconds() <= 1)
+//                    {
+//                        sendMessageToAll("[고객/" + name + "] 님이 새로고침 하셨어요~~");
+//                    }
+//                    else
+//                    {
+//                        sendMessageToAll("[고객/" + name + "] 님이 다시 들어오셨어요~~");
+//                    }
                 }
 
                 System.out.println("유저 입장");
-                User user = User.builder().id(id).name(name).mode(mode).mmr(mmr).language(language).build();
+                User user = User.builder().id(id).mode(mode).mmr(mmr).language(language).build();
 
                 userSet.add(id);
                 userMap.put(id, user);
@@ -165,7 +165,7 @@ public class WebSocket {
                         System.out.println(id);
                         if(!sessionId2Obj.get(i+"").id.equals(id))
                         {
-                            goWebRTC(sessionId2Obj.get(i+"").id, id);
+                            goBattle(sessionId2Obj.get(i+"").id, id);
                         break;
                         }
                     }
@@ -269,17 +269,7 @@ public class WebSocket {
         return true;
     }
 
-    private int getMMR(String userId){
-        System.out.println("getMMR 첫부분");
-
-        System.out.println("getMMR 두번째 부분");
-//        int mmr = Integer.parseInt(ranking.score("speed", userId).toString());
-//        int mmr = Integer.parseInt(obj.get("MMR").toString());
-
-        return mmr;
-    }
-
-    private void goWebRTC(String sId, String cId) {
+    private void goBattle(String sId, String cId) {
         Session session = null;
         for (String sessionId : sessionId2Obj.keySet()) {
             Object obj = sessionId2Obj.get(sessionId);
@@ -289,9 +279,16 @@ public class WebSocket {
                 session = sessionMap.get(sessionId);
                 System.out.println(session);
                 JSONObject send = new JSONObject();
-                send.put("method", "go");
-                send.put("link", "gogogo");
+                if(((User) obj).getId().equals(cId)){
+                    send.put("userId", cId);
+                    send.put("otherId", sId);
+                }
+                else{
+                    send.put("userId", sId);
+                    send.put("otherId", cId);
+                }
                 session.getAsyncRemote().sendText(send.toJSONString());
+
             }
         }
     }
