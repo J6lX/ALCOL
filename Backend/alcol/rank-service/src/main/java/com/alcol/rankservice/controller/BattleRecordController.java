@@ -30,20 +30,41 @@ public class BattleRecordController
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
     {
         // 승패 count를 세기 위해 redis에 저장하는 작업
-        WinLoseDto winLose = new WinLoseDto(battleResult.getUser_id_1(), battleResult.getBattle_mode(), battleResult.getWin_1());
-        battleResultService.recordCnt(winLose);
-        winLose = new WinLoseDto(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWin_2());
-        battleResultService.recordCnt(winLose);
+
+        WinLoseDto winLose = new WinLoseDto(battleResult.getUser_id_1(), battleResult.getBattle_mode(), battleResult.getWinner());
+        // 승패수를 기록하는 과정에서 오류가 발생했을 시
+        if(!battleResultService.recordCnt(winLose))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("WIN/LOSE COUNT ERROR");
+        }
+        winLose = new WinLoseDto(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWinner());
+        if(!battleResultService.recordCnt(winLose))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("WIN/LOSE COUNT ERROR");
+        }
+
 
         // ranking 순위를 바꾸기 위해 mmr 값으로 sort하는 작업
-        battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_1(), battleResult.getUser_id_1());
-        battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_2(), battleResult.getUser_id_2());
+        if(!battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_1(), battleResult.getUser_id_1()))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("RANKING UPDATE ERROR");
+        }
+        if(!battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_2(), battleResult.getUser_id_2()))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("RANKING UPDATE ERROR");
+        }
 
         // 랭킹 페이지에서 유저 정보를 보여주기 위해 사용자 정보를 저장해놓는 작업
-        battleResultService.recordUserData(battleResult.getUser_id_1());
-        battleResultService.recordUserData(battleResult.getUser_id_2());
+        if(!battleResultService.recordUserData(battleResult.getUser_id_1()))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("ADD USERINFO IN REDIS ERROR");
+        }
+        if(!battleResultService.recordUserData(battleResult.getUser_id_2()))
+        {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("ADD USERINFO IN REDIS ERROR");
+        }
 
-        return ResponseEntity.status(HttpStatus.OK).body("OK");
+        return ResponseEntity.status(HttpStatus.OK).body("SUCCESS");
     }
 
     @PostMapping("/myRank")
@@ -53,11 +74,12 @@ public class BattleRecordController
         String battleMode = requestMap.get("battle_mode");
 
         // redis의 랭킹 부분에서 해당 유저의 mmr값이 존재하는지 확인
-        int mmr = rankService.getMyRank(userId, battleMode);
+        int mmr = rankService.confirmUserRanking(userId, battleMode);
+        // 해당 유저 데이터 가져오기
+        RankDto.UserData userData = rankService.getUserData(userId);
 
         // mmr이 -1이면 해당 유저는 배틀을 진행한 적이 없는 유저이다.
         if(mmr == -1){
-            RankDto.UserData userData = rankService.getUserData(userId);
             RankDto.Ranking rank = RankDto.Ranking.builder()
                     .nickname(userData.getNickname())
                     .profile_pic(userData.getStored_file_name())

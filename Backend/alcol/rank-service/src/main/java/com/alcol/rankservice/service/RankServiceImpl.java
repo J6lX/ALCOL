@@ -1,7 +1,6 @@
 package com.alcol.rankservice.service;
 
 import com.alcol.rankservice.dto.RankDto;
-import com.alcol.rankservice.exception.RedisOffException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -10,7 +9,6 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.validation.constraints.Null;
 import java.util.*;
 
 @Service
@@ -25,9 +23,9 @@ public class RankServiceImpl implements RankService{
     private HashOperations<String, String, String> userInfo;
 
     /**
-     * 모드별 개인 랭킹 가져오기
+     * 모드별 개인 랭킹이 존재하는지 확인
      */
-    public int getMyRank(String userId, String mode)
+    public int confirmUserRanking(String userId, String mode)
     {
         // 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
         ranking = redisTemplate.opsForZSet();
