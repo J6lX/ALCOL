@@ -25,7 +25,6 @@ public class UserDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserInfoDto
     {
         private String nickname;

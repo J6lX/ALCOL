@@ -19,4 +19,8 @@ public interface UserService extends UserDetailsService
     UserDto.UserInfoDto getUserInfo(String userId) throws URISyntaxException;
 
     List<UserDto.UserBattleLogDto> getBattleLog(String userId) throws URISyntaxException;
+
+    String getUserId(String nickName);
+
+    List<String> getAllUserId();
 }
