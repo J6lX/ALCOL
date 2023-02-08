@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./HeaderFooter.css";
 import alcol from "../assets/alcol_empty_white.png";
 
-import { Layout, Button, Row, Col, Avatar, Menu, Form } from "antd";
+import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -13,16 +13,8 @@ const { Header } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
-  // isLoggedIn === 로그인 상태 체크(임시 변수)
+  // isLoggedIn === 로그인 상태 체크
   const isLoggedIn = useRecoilValue(LoginState);
-  const refToken = useRecoilValue(RefreshTokenInfo);
-  const accToken = useRecoilValue(AccessTokenInfo);
-
-  useEffect(() => {
-    console.log("header :", isLoggedIn);
-    console.log("HeaderAcc :", accToken);
-    console.log("HeaderRef :", refToken);
-  });
 
   // 로그아웃 정보 반영
   const setIsLoggedIn = useSetRecoilState(LoginState);
@@ -35,7 +27,8 @@ function LoginTag(props) {
     setRefreshTokenData("");
 
     // 메인 화면으로 리다이렉트
-    window.location.href = "http://localhost:3000/";
+    window.location.reload();
+    // window.location.href = "http://localhost:3000/";
     // window.location.href = "http://i8b303.p.ssafy.io:8000/";
   };
 
@@ -71,13 +64,9 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Form onFinish={logoutRequest}>
-            <Form.Item>
-              <Button htmlType="submit" className="textDark">
-                Logout
-              </Button>
-            </Form.Item>
-          </Form>
+          <Link to="/" onClick={logoutRequest} className="textDark">
+            Logout
+          </Link>
         </Col>
       </Row>
     );
@@ -199,7 +188,7 @@ function HeaderData() {
           </Col>
 
           {/* 로그인 여부에 따라 프로필 또는 로그인 버튼 표시 */}
-          <Col xs={7} lg={4} justify="center">
+          <Col xs={8} lg={6} justify="center">
             <LoginTag />
           </Col>
         </Row>

@@ -8,8 +8,6 @@ import { useSetRecoilState } from "recoil";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 function LoginPage() {
-  // 사용자 정보가 잘 저장되고 있는지 테스트하는 코드
-
   // 로그인 상태 관리(LoginState의 데이터를 변경)
   const setIsLoggedIn = useSetRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
@@ -49,9 +47,8 @@ function LoginPage() {
           setRefreshTokenData(refreshToken);
           setAccessTokenData(accessToken);
 
-          // 로그인 시 메인 화면으로 리다이렉트(임시)
-          window.location.href = "http://localhost:3000/";
-          // window.location.href = "http://i8b303.p.ssafy.io:8000/";
+          // 로그인에 성공하면 메인 화면으로 리다이렉트 시켜줄 수단이 필요
+          window.location.reload();
         }
       })
       //로그인 실패 시
