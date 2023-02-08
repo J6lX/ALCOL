@@ -88,28 +88,28 @@ public class BattleResultServiceImpl implements BattleResultService
 
         return true;
     }
+
     /**
      * 배틀이 끝난 뒤 redis에 랭킹에 필요한 사용자 데이터 저장하는 메서드
      * Hash 사용
      * */
-    public boolean recordUserData(String userId){
-
+    public boolean recordUserData(String userId)
+    {
         userInfo = redisTemplate.opsForHash();
         String key = "userInfo:" + userId;
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
-//        String url = "http://localhost:9000/user-service/getUserInfo";
-        String url = "http://localhost:8080";
+        String url = "http://localhost:9000/user-service/getUserInfo";
         RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
 
         try {
             // 유저 정보 redis update
             userInfo.put(key, "nickname", userData.getNickname());
-            userInfo.put(key, "stored_file_name", userData.getStored_file_name());
+            userInfo.put(key, "stored_file_name", userData.getStoredFileName());
             userInfo.put(key, "level", String.valueOf(userData.getLevel()));
-            userInfo.put(key, "speed_tier", userData.getSpeed_tier());
-            userInfo.put(key, "optimization_tier", userData.getOptimization_tier());
+            userInfo.put(key, "speed_tier", userData.getSpeedTier());
+            userInfo.put(key, "optimization_tier", userData.getOptimizationTier());
         }
         catch (Exception e)
         {
