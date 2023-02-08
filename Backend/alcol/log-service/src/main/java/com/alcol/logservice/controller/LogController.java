@@ -49,4 +49,23 @@ public class LogController
         List<LogDto.UserBattleLogDto> list = logService.getBattleLog(userId);
         return restTemplateUtils.sendResponse(list);
     }
+
+//    @GetMapping("/getAllResultAndMmr")
+//    public ResponseEntity<List<LogDto.UserResultAndMmrDto>> getAllResultAndMmr()
+//            throws URISyntaxException
+//    {
+//        log.info("LogController 의 getAllResultAndMmr 메소드 실행");
+//        List<LogDto.UserResultAndMmrDto> list = logService.getAllResultAndMmr();
+//        return restTemplateUtils.sendResponse(list);
+//    }
+
+    @GetMapping("/getAllResultAndMmr")
+    public List<LogDto.UserResultAndMmrDto> getAllResultAndMmr()
+            throws URISyntaxException
+    {
+        log.info("LogController 의 getAllResultAndMmr 메소드 실행");
+        List<LogDto.UserResultAndMmrDto> list = logService.getAllResultAndMmr();
+        return list;
+    }
+
 }

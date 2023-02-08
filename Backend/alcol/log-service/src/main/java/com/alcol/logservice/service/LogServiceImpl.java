@@ -5,7 +5,6 @@ import com.alcol.logservice.entity.BattleLogEntity;
 import com.alcol.logservice.entity.ExpLogEntity;
 import com.alcol.logservice.repository.BattleLogRepository;
 import com.alcol.logservice.repository.ExpLogRepository;
-import com.alcol.logservice.repository.TestProbSubmitLogRepository;
 import com.alcol.logservice.util.RestTemplateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -61,9 +60,11 @@ public class LogServiceImpl implements LogService
                 );
 
         return LogDto.UserPlayDto.builder()
-                .exp(expLogEntity.getCurExp())
-                .speedMmr(battleLogEntityBySpeed.getNowMmr())
-                .optimizationMmr(battleLogEntityByOptimization.getNowMmr())
+                .exp(expLogEntity == null ? 1 : expLogEntity.getCurExp())
+                .speedMmr(battleLogEntityBySpeed == null ? 1000 : battleLogEntityBySpeed.getNowMmr())
+                .optimizationMmr(
+                        battleLogEntityByOptimization == null ? 1000 : battleLogEntityByOptimization.getNowMmr()
+                )
                 .build();
     }
 
@@ -115,4 +116,64 @@ public class LogServiceImpl implements LogService
 
         return battleLogDtoList;
     }
+
+    /**
+     *
+     * @return 모든 유저의 모드별 mmr, 승리수
+     * @throws URISyntaxException
+     */
+    @Override
+    public List<LogDto.UserResultAndMmrDto> getAllResultAndMmr() throws URISyntaxException
+    {
+        log.info("LogServiceImpl 의 getAllResultANdMmr 메소드 실행");
+
+        // log-service -> user-service
+        // return : 모든 user_id 리스트
+        ResponseEntity<List<String>> userIdList = restTemplateUtils.sendRequest(
+                null,
+                "http://localhost:9000/user-service/getAllUserId",
+                new ParameterizedTypeReference<List<String>>() {}
+        );
+
+        List<LogDto.UserResultAndMmrDto> list = new ArrayList<>();
+
+        for (String userId : userIdList.getBody())
+        {
+            BattleLogEntity entityForSpeedMmr = battleLogRepository
+                    .findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(userId, "speed");
+
+            BattleLogEntity entityForOptimizationMmr = battleLogRepository
+                    .findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(userId, "optimization");
+
+            Long speedWinCnt = battleLogRepository
+                    .countByMyUserIdAndBattleModeAndBattleResult(userId, "speed", 1);
+
+            Long speedLoseCnt = battleLogRepository
+                    .countByMyUserIdAndBattleModeAndBattleResult(userId, "speed", 0);
+
+            Long optimizationWinCnt = battleLogRepository
+                    .countByMyUserIdAndBattleModeAndBattleResult(userId, "optimization", 1);
+
+            Long optimizationLoseCnt = battleLogRepository
+                    .countByMyUserIdAndBattleModeAndBattleResult(userId, "optimization", 0);
+
+            LogDto.UserResultAndMmrDto userResultAndMmrDto =
+                    LogDto.UserResultAndMmrDto.builder()
+                            .userId(userId)
+                            .speedMmr(entityForSpeedMmr == null ? 1000 : entityForSpeedMmr.getNowMmr())
+                            .speedWin(speedWinCnt == null ? 0 : speedWinCnt.intValue())
+                            .speedLose(speedLoseCnt == null ? 0 : speedLoseCnt.intValue())
+                            .optimizationMmr(
+                                    entityForOptimizationMmr == null ? 1000 : entityForOptimizationMmr.getNowMmr()
+                            )
+                            .optimizationWin(optimizationWinCnt == null ? 0 : optimizationWinCnt.intValue())
+                            .optimizationLose(optimizationLoseCnt == null ? 0 : optimizationLoseCnt.intValue())
+                            .build();
+
+            list.add(userResultAndMmrDto);
+        }
+
+        return list;
+    }
+
 }
