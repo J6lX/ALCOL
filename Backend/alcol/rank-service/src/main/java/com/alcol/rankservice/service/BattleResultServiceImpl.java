@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -19,21 +20,23 @@ import java.util.Map;
 public class BattleResultServiceImpl implements BattleResultService
 {
     private final RedisTemplate<String, Object> redisTemplate;
-    private HashOperations<String, String, Long> winLoseCount;
+    private HashOperations<String, String, String> winLoseCount;
     private HashOperations<String, String, String> userInfo;
     private ZSetOperations<String, Object> ranking;
     private final RestTemplate restTemplate;
 
     /**
-     * 배틀이 끝난 뒤 log service에서 정보를 받아 승패count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
+     * 배틀이 끝난 뒤 log service에서 정보를 받아 승패 count, 랭킹 집계에 사용하기 위해 redis에 저장하는 메서드
      * Hash 사용
+     *
+     * key = winloseCnt:{userId}:{mode}
+     *             hashKey = win / lose
+     *             value = win 수 / lose 수
      * */
     public String recordCnt(WinLoseDto winLose)
     {
         winLoseCount = redisTemplate.opsForHash();
-        /** key = winloseCnt:{userId}:{mode}
-            hashKey = win or lose
-            value = win 수 or lose 수*/
+
         String key = "winloseCnt:"+winLose.getUserId()+":"+winLose.getMode();
         String hashKey = winLose.getWinLoseResult() == 1 ? "win" : "lose";
         long hashValue = -1;
@@ -42,14 +45,14 @@ public class BattleResultServiceImpl implements BattleResultService
         if(winLoseCount.get(key, hashKey) == null)
         {
             // 승패에 관한 데이터를 0으로 넣어준다.
-            winLoseCount.put(key, "win", (long)0);
-            winLoseCount.put(key, "lose", (long)0);
+            winLoseCount.put(key, "win", "0");
+            winLoseCount.put(key, "lose", "0");
         }
 
         // 승패 여부에 따라 count+=1
-        hashValue = winLoseCount.get(key, hashKey) + 1;
+        hashValue = Integer.valueOf(winLoseCount.get(key, hashKey)) + 1;
         // redis update
-        winLoseCount.put(key, hashKey, hashValue);
+        winLoseCount.put(key, hashKey, String.valueOf(hashValue));
 
         return "OK";
     }

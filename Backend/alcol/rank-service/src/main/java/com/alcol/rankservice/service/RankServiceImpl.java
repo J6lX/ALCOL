@@ -1,6 +1,7 @@
 package com.alcol.rankservice.service;
 
 import com.alcol.rankservice.dto.RankDto;
+import com.alcol.rankservice.exception.RedisOffException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
@@ -9,6 +10,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.constraints.Null;
 import java.util.*;
 
 @Service
@@ -16,17 +18,18 @@ import java.util.*;
 @Slf4j
 public class RankServiceImpl implements RankService{
     private final RedisTemplate<String, Object> redisTemplate;
-    private ZSetOperations<String, Object> ranking;
-    private HashOperations<String, String, Long> winLoseCount;
     private final RestTemplate restTemplate;
-
+    private final BattleResultService battleResultService;
+    private ZSetOperations<String, Object> ranking;
+    private HashOperations<String, String, String> winLoseCount;
+    private HashOperations<String, String, String> userInfo;
 
     /**
-     * 스피드전 개인 랭킹 가져오기
+     * 모드별 개인 랭킹 가져오기
      */
     public int getMyRank(String userId, String mode)
     {
-        // 1. 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
+        // 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
         ranking = redisTemplate.opsForZSet();
         String key = mode;
         String member = userId;
@@ -44,23 +47,35 @@ public class RankServiceImpl implements RankService{
 
         return mmr;
     }
+
     /**
     * 랭킹 페이지에 보여주기 위해 유저 정보를 가져오는 메소드
     * */
     public RankDto.UserData getUserData(String userId)
     {
-        Map<String, String> map = new HashMap<>();
-        map.put("user_id", userId);
-//        String url = "http://localhost:9000/user-service/getUserInfo";
-        String url = "http://localhost:8080";
-        RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
+        userInfo = redisTemplate.opsForHash();
+        String key = "userInfo:" + "userId1";
+
+        // redis에 정보가 없다면 user-service에게 요청해 가져오고 redis에 저장한다.
+        if(!userInfo.hasKey(key, "nickname"))
+        {
+            battleResultService.recordUserData(userId);
+        }
+
+        // redis에서 유저 정보를 가져온다.
+        String nickname = userInfo.get(key, "nickname");
+        String profilePic = userInfo.get(key, "stored_file_name");
+        int level = Integer.valueOf(userInfo.get(key, "level"));
+        String speedTier = userInfo.get(key, "speed_tier");
+        String optimizationTier = userInfo.get(key, "optimization_tier");
+
 
         return RankDto.UserData.builder()
-                .nickname(userData.getNickname())
-                .stored_file_name(userData.getStored_file_name())
-                .level(userData.getLevel())
-                .speed_tier(userData.getSpeed_tier())
-                .optimization_tier(userData.getOptimization_tier())
+                .nickname(nickname)
+                .stored_file_name(profilePic)
+                .level(level)
+                .speed_tier(speedTier)
+                .optimization_tier(optimizationTier)
                 .build();
     }
 
@@ -71,9 +86,20 @@ public class RankServiceImpl implements RankService{
     {
         winLoseCount = redisTemplate.opsForHash();
         String key = "winloseCnt:" + userId + ":" + battleMode;
-        long win = winLoseCount.get(key, "win");
-        long lose = winLoseCount.get(key, "lose");
-        long winningRate = win / (win + lose) * 100;
+
+        int win = -1;
+        int lose = -1;
+        long winningRate = -1;
+        try
+        {
+            win = Integer.parseInt(winLoseCount.get(key, "win"));
+            lose = Integer.parseInt(winLoseCount.get(key, "lose"));
+            winningRate = win / (win + lose) * 100;
+        }
+        catch (NullPointerException nullPointerException)
+        {
+            log.warn("해당 유저의 승패 정보가 존재하지 않음");
+        }
 
         return RankDto.WinLoseCount.builder()
                 .win(win)
@@ -88,8 +114,18 @@ public class RankServiceImpl implements RankService{
     public RankDto.RankingAndMMR getRankingAndMMR(String userId, String battleMode)
     {
         ranking = redisTemplate.opsForZSet();
-        long grade = ranking.rank(battleMode, userId);
-        int MMR = ranking.score(battleMode, userId).intValue();
+
+        long grade = -1;
+        int MMR = -1;
+        try
+        {
+            grade = ranking.rank(battleMode, userId);
+            MMR = ranking.score(battleMode, userId).intValue();
+        }
+        catch (NullPointerException nullPointerException)
+        {
+            log.warn("해당 유저의 랭킹 정보가 존재하지 않음");
+        }
 
         return RankDto.RankingAndMMR.builder()
                 .grade(grade)
@@ -141,8 +177,7 @@ public class RankServiceImpl implements RankService{
      * */
     public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
     {
-        Map<String, String> map = new HashMap<>();
-        map.put("nickname", nickname);
+
 //        String url = "http://localhost:9000/user-service/getUserInfo";
         String url = "http://localhost:8080/nik?nickname=킹왕짱토";
         // 닉네임으로 유저 아이디 요청해서 가져옴 (user-service)
