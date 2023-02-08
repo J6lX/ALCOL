@@ -26,6 +26,7 @@ body {
 
 // 헤더 이미지
 .headerImg {
+  position: relative;
   width: 100%;
 }
 
@@ -36,26 +37,32 @@ body {
 
 // 이미지 안에 들어갈 제목
 .title {
+  z-index: 10;
   position: absolute;
+  top: 50%;
   left: 50%;
   font-size: 30px;
-  transform: translate(-50%, 100px);
+  transform: translate(-50%, -50%);
 
   //페이지 크기 별 css 디자인 수정
   // 작은 크기
   @media (max-width: 720px) {
+    z-index: 10;
     position: absolute;
+    top: 50%;
     left: 50%;
     font-size: 20px;
-    transform: translate(-50%, 45px);
+    transform: translate(-50%, -50%);
   }
 
   // 큰 크기
   @media (min-width: 980px) {
+    z-index: 10;
     position: absolute;
-    top: 0%;
+    top: 50%;
+    left: 50%;
     font-size: 50px;
-    transform: translate(-50%, 200px);
+    transform: translate(-50%, -50%);
   }
 }
 

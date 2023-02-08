@@ -17,6 +17,7 @@ body {
 }
 
 .headerImg {
+  position: relative;
   width: 100%;
 }
 
@@ -25,25 +26,31 @@ body {
 }
 
 .title {
+  z-index: 10;
   position: absolute;
+  top: 50%;
   left: 50%;
   font-size: 30px;
-  transform: translate(-50%, 100px);
+  transform: translate(-50%, -50%);
 }
 @media (max-width: 720px) {
   .title {
+    z-index: 10;
     position: absolute;
+    top: 50%;
     left: 50%;
     font-size: 20px;
-    transform: translate(-50%, 45px);
+    transform: translate(-50%, -50%);
   }
 }
 @media (min-width: 980px) {
   .title {
+    z-index: 10;
     position: absolute;
-    top: 0%;
+    top: 50%;
+    left: 50%;
     font-size: 50px;
-    transform: translate(-50%, 200px);
+    transform: translate(-50%, -50%);
   }
 }
 
