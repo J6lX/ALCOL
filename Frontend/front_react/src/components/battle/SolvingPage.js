@@ -3,6 +3,7 @@ import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } f
 // import axios from "axios";
 import Logo from "../../assets/alcol_empty_black.png";
 import Dots from "../../assets/dots.png";
+import CountDownTimer from "./CountDownTimer";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
@@ -51,9 +52,9 @@ const ResultMessage = () => {
 };
 
 const BattleNav = () => {
-  let now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
+  // let now = new Date();
+  // let hours = now.getHours();
+  // let minutes = now.getMinutes();
 
   return (
     <div className="BattleNav">
@@ -75,9 +76,7 @@ const BattleNav = () => {
         </p>
         <ResultMessage className="MessageToast" />
       </div>
-      <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh", marginRight: "20px" }}>
-        {hours} : {minutes}
-      </p>
+      <CountDownTimer className="timer" />
     </div>
   );
 };
@@ -148,18 +147,17 @@ const Problem = () => {
   );
 };
 
-const CodingPlace = (submit) => {
+const CodingPlace = ({ submitcode }) => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
-
   const [code, setCode] = useState("");
   const setSubmitMessage = useSetRecoilState(submitMessageState);
   const problem_number = 1;
 
   const onChange = (newValue) => {
     setCode(newValue);
-    console.log("code ", code);
+    // console.log("code ", code);
   };
 
   document.addEventListener("mouseup", (e) => {
@@ -210,7 +208,7 @@ const CodingPlace = (submit) => {
 
       console.log(solving_data, header);
       setSubmitMessage("뭔가 제출 했음");
-      submit();
+      submitcode();
       // axios
       //   .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
       //   .then((response) => {
@@ -335,17 +333,18 @@ const Console = () => {
   );
 };
 
-const SolvingPage = () => {
+const SolvingPage = ({ goResultPage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
     setIsModalOpen(false);
+    goResultPage();
   };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
 
   return (
     <div id="allconsole">
@@ -364,7 +363,7 @@ const SolvingPage = () => {
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace submit={showModal} />
+                <CodingPlace submitcode={showModal} goResultPage={goResultPage} />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />
@@ -372,10 +371,12 @@ const SolvingPage = () => {
             </div>
           </div>
         </div>
-        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+        <Modal title="제출 결과" open={isModalOpen} onOk={handleOk}>
+          <p>당신은 알고리즘의 신!</p>
+          <p>모든 정답을 맞췄습니다!</p>
+          <p>
+            <small>테스트 케이스 50/50</small>
+          </p>
         </Modal>
       </RecoilRoot>
     </div>

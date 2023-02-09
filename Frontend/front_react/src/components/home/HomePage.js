@@ -9,7 +9,7 @@ import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
-
+import "animate.css";
 // const speedRankingState = atom({
 //   key: "speedRankingState",
 //   default: "",
@@ -43,7 +43,7 @@ const MainPage = () => {
               borderRadius: "0.7vw",
             }}>
             <p
-              className="NanumSquare"
+              className="NanumSquare animate__animated animate__flash"
               style={{ fontSize: "1.8vw", color: "#E51C29", fontWeight: "bold", margin: "auto" }}>
               Battle Start!
             </p>

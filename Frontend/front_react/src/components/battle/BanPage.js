@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Progress } from "antd";
 import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
@@ -34,6 +34,18 @@ function UserInfo() {
 }
 
 function Top() {
+  const [secs, setTime] = React.useState(100);
+
+  const tick = () => {
+    setTime(secs - 1);
+  };
+
+  React.useEffect(() => {
+    //1초
+    const timerId = setInterval(() => tick(), 1000);
+    return () => clearInterval(timerId);
+  });
+
   return (
     <Row>
       <Col xs={12} sm={10} md={8} xl={6}>
@@ -48,6 +60,7 @@ function Top() {
         </div>
         <div>
           <CountDownTimer className="timer" />
+          <Progress percent={secs / 300} showInfo={false} />
         </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
@@ -55,7 +68,9 @@ function Top() {
   );
 }
 
-function Mid({ problems, onClick }) {
+function Mid({ props, onClick }) {
+  const problems = props;
+  console.log("뭐야 이거", props);
   const printProblems = (problems) => {
     const result = [];
 
@@ -113,7 +128,7 @@ function Bottom() {
   );
 }
 
-function App({ changeBanProblem }) {
+function App({ props, changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
   var playerInfo = useRecoilValue(matchingPlayerInfo);
   console.log(playerInfo.otherId);
@@ -125,22 +140,11 @@ function App({ changeBanProblem }) {
   const selected = () => {
     changeBanProblem(choose);
   };
-
-  const [problem, setProblem] = React.useState([
-    {
-      problem_no: 1001,
-      problem_category: ["구현", "그래프 이론", "그래프 탐색"],
-    },
-    {
-      problem_no: 1002,
-      problem_category: ["수학", "브르투포스 알고리즘"],
-    },
-    {
-      problem_no: 1003,
-      problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
-    },
-  ]);
-
+  console.log(props);
+  const [problem, setProblem] = React.useState();
+  useEffect(() => {
+    setProblem(props);
+  }, [props]);
   useEffect(() => {
     if (choose === "1") {
       console.log("선택한 문제 번호는:" + problem[0].problem_no);
@@ -158,7 +162,7 @@ function App({ changeBanProblem }) {
     <div className="matching_background">
       <UserInfo />
       <Top />
-      <Mid problems={problem} onClick={onClick} setProblem={setProblem} />
+      <Mid props={props} onClick={onClick} setProblem={setProblem} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Button
           className="NanumSquare"

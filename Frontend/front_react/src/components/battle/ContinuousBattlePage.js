@@ -1,19 +1,21 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
+// import axios from "axios";
 import ReadyPage from "./ReadyPage";
 import BanPage from "./BanPage";
 import WaitOtherBanPage from "./WaitOtherBanPage";
 import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import ResultPage from "./ResultPage";
+// import { useRecoilState } from "recoil";
 
 let submitResult = "";
 
-const usernamedata = "personA";
-const personnamedata = "personB";
+const userNamedata = "personA";
+const opponentNamedata = "personB";
 const serverAddress = "localhost:3000";
 const websocketAddress = "ws://" + serverAddress + "/battle";
 let socket = null;
-console.log(usernamedata, personnamedata);
+console.log(userNamedata, opponentNamedata);
 
 const ContinuousBattlePage = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -23,18 +25,36 @@ const ContinuousBattlePage = () => {
   const [isSolving, setIsSolving] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
   const [problemNumber, setProblemNumber] = useState("-1");
+  const [problems, setProblems] = useState([]);
+
+  useEffect(() => {
+    setProblems([
+      {
+        problem_no: 1001,
+        problem_category: ["구현", "그래프 이론", "그래프 탐색"],
+      },
+      {
+        problem_no: 1002,
+        problem_category: ["수학", "브르투포스 알고리즘"],
+      },
+      {
+        problem_no: 1003,
+        problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
+      },
+    ]);
+  }, []);
 
   window.onload = async function () {
     socket = new WebSocket(websocketAddress);
     console.log("socket", socket);
     socket.onopen = () => {
       const messageType = "connect";
-      const username = usernamedata;
-      const personname = personnamedata;
+      const userName = userNamedata;
+      const opponentName = opponentNamedata;
       const data = JSON.stringify({
         messageType: messageType,
-        username: username,
-        personname: personname,
+        userName: userName,
+        opponentName: opponentName,
       });
       socket.send(data);
     };
@@ -43,8 +63,24 @@ const ContinuousBattlePage = () => {
       const data = JSON.parse(servermessage);
       if (data.messageType === "connect_success") {
         console.log("연결 완료!");
-        const personURL = data.personURL;
-        console.log(personURL);
+        console.log(data);
+        const header = {
+          headers: {
+            access_token: "access_token",
+            refresh_token: "refresh_token",
+            user_id: "user_id",
+          },
+        };
+        console.log(header);
+
+        // axios
+        //   .get("http://i8b303.p.ssafy.io/problemList", header)
+        //   .then((response) => {
+        //     setProblems(response.data.problems);
+        //   })
+        //   .catch((error) => {
+        //     console.log(error);
+        //   });
         setTimeout(() => {
           setIsConnected(true);
           setIsReady(true);
@@ -52,8 +88,8 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "ban_success") {
         console.log("문제 선택 완료!");
         setTimeout(() => {
-          setIsBanWait(true);
           setIsReady(false);
+          setIsBanWait(true);
         }, 5000);
       } else if (data.messageType === "select_success") {
         setTimeout(() => {
@@ -101,7 +137,11 @@ const ContinuousBattlePage = () => {
     }, 10000);
   };
 
-  const goResultPage = () => {};
+  const goResultPage = () => {
+    setIsSolving(false);
+    setIsSolved(true);
+    // socket.onclose();
+  };
 
   //확인용 함수들
   const changeConnectTrue = () => {
@@ -130,10 +170,12 @@ const ContinuousBattlePage = () => {
         <button>submit_resultfail</button>
         <button onClick={changeSolvedTrue}>submit_resultsuccess</button>
         {!isConnected && <ReadyPage />}
-        {isReady && <BanPage changeBanProblem={changeBanProblem} />}
-        {isBanWait && <WaitOtherBanPage />}
-        {isSelected && <SelectedProblemPage problemnumber={problemNumber} />}
-        {isSolving && <SolvingPage goResultPage={goResultPage} />}
+        {isConnected && isReady && <BanPage props={problems} changeBanProblem={changeBanProblem} />}
+        {isConnected && isBanWait && <WaitOtherBanPage />}
+        {isConnected && isSelected && (
+          <SelectedProblemPage problemNumber={problemNumber} problems={problems} />
+        )}
+        {isConnected && isSolving && <SolvingPage goResultPage={goResultPage} />}
         {isSolved && <ResultPage />}
       </div>
     </div>

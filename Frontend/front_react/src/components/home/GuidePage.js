@@ -430,7 +430,7 @@ const Guide5 = () => {
 
 const Guide6 = () => {
   return (
-    <div id="Guide6" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide6" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "17%" }}>
       <div
         style={{
           display: "flex",
@@ -547,7 +547,7 @@ const GuidePage = () => {
       </div>
       <Guide6 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
       </div>
     </div>
   );
