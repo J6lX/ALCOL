@@ -109,7 +109,7 @@ public class WebSocket {
 
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
-                String url = "http://i8b303.p.ssafy.com:9001/problem-service/getThreeProblem?="+mmrAvg;
+                String url = "http://i8b303.p.ssafy.com:8000/problem-service/getThreeProblem?="+mmrAvg;
 
                 ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
                 System.out.println(problems);
