@@ -1,16 +1,20 @@
 package com.alcol.problemservice.controller;
 
+import com.alcol.problemservice.dto.Cate;
 import com.alcol.problemservice.dto.ProblemDto;
+import com.alcol.problemservice.dto.Wait;
 import com.alcol.problemservice.service.ProblemService;
 import com.alcol.problemservice.util.RestTemplateUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -38,5 +42,41 @@ public class ProblemController
         log.info("ProblemController 의 getProbDetail 메소드 실행");
         List<ProblemDto.ProbDetailDto> list = problemService.getProbDetailList(probNoList);
         return restTemplateUtils.sendResponse(list);
+    }
+
+    @GetMapping("/getThreeProblem")
+    public ResponseEntity<Map<String, List<Wait>>> example(@RequestParam int mmr)
+    {
+        Map<String, List<Wait>> map = new HashMap<>();
+        List<Wait> list = new ArrayList<>();
+        List<String> cate = new ArrayList<>();
+        cate.add("dfs");
+        cate.add("dddd");
+        cate.add("aaaa");
+
+        List<String> cate1 = new ArrayList<>();
+        cate1.add("안뇽");
+        cate1.add("댜쟈");
+        cate1.add("비타민조하");
+
+        List<String> cate2 = new ArrayList<>();
+        cate2.add("히힛");
+        cate2.add("화이땡!!");
+        cate2.add("유유유형");
+
+        Wait wait1 = new Wait(1001, cate);
+        Wait wait2 = new Wait(1005, cate1);
+        Wait wait3 = new Wait(1007, cate2);
+
+
+        list.add(wait1);
+        list.add(wait2);
+        list.add(wait3);
+
+
+        map.put("problems", list);
+
+        return ResponseEntity.status(HttpStatus.OK).body(map);
+        
     }
 }
