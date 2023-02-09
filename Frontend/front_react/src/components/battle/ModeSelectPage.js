@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage } from "../../states/atoms";
-import { LoginState, AccessTokenInfo } from "../../states/LoginState";
+import { LoginState } from "../../states/LoginState";
 import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
@@ -249,16 +249,26 @@ function App() {
   const ID = JSON.stringify({
     user_id: userId,
   });
-  const headers = { access_tocken: AccessTokenInfo };
+  // const headers = { access_tocken: AccessTokenInfo };
 
   axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", ID, { headers: headers })
+    .post("http://i8b303.p.ssafy.io:9000/user-service/getUserInfo", ID)
     .then(function (response) {
       console.log(response.data);
     })
     .catch((error) => {
-      console.log("error!");
-      console.log(error);
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        // 로그인 실패 시 표시하는 내용
+        alert(error.response.data.description);
+      }
     });
 
   useEffect(() => {
