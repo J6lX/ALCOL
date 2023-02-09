@@ -41,23 +41,23 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
                 .antMatchers("/**").permitAll()
 //                .hasIpAddress("127.0.0.1")
                 .and()
-                .addFilter(getAuthenticationFilter());
-//                .cors();
+                .addFilter(getAuthenticationFilter())
+                .cors();
     }
 
-//    @Bean
-//    public CorsConfigurationSource corsConfigurationSource()
-//    {
-//        CorsConfiguration corsConfiguration = new CorsConfiguration();
-//        corsConfiguration.addAllowedOriginPattern("*");
-//        corsConfiguration.addAllowedHeader("*");
-//        corsConfiguration.addAllowedMethod("*");
-////        corsConfiguration.setAllowCredentials(true);
-//        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
-//                new UrlBasedCorsConfigurationSource();
-//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-//        return urlBasedCorsConfigurationSource;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource()
+    {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
+                new UrlBasedCorsConfigurationSource();
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return urlBasedCorsConfigurationSource;
+    }
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception
     {
