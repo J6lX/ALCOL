@@ -51,4 +51,16 @@ public class RankDto
                 private long grade;
                 private int MMR;
         }
+
+        @Getter
+        @Builder
+        @AllArgsConstructor
+        public static class ResponseDto<T>
+        {
+                private final boolean success;
+                private final T bodyData;
+                private final String customCode;
+                private final String description;
+        }
+
 }
