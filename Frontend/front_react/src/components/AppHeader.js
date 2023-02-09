@@ -109,7 +109,7 @@ const miniItems = [
       "1"
     ),
     getItem(
-      <Link to="/ranking" className="textDark">
+      <Link to="/ranking?mode=speed&page=1" className="textDark">
         Ranking
       </Link>,
       "2"
@@ -183,7 +183,7 @@ function HeaderData() {
             <Link to="/practice" className="textDark menus">
               Problem
             </Link>
-            <Link to="/ranking" className="textDark menus">
+            <Link to="/ranking?mode=speed&page=1" className="textDark menus">
               Ranking
             </Link>
             <Link to="/mode" className="textDark menus">
