@@ -5,17 +5,45 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
 import { LoginState } from "../../states/LoginState";
 import "./MatchingPage.css";
-// import axios from "axios";
+import axios from "axios";
 
 function UserInfo() {
+  const [nickname, setNickname] = React.useState("a");
+  const [speedTier, setSpeedTier] = React.useState("a");
+  const [optTier, setOptTier] = React.useState("a");
   var userId = useRecoilValue(LoginState);
+  useEffect(() => {}, [nickname, speedTier, optTier]);
+
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+      user_id: userId,
+    })
+    .then(function (response) {
+      setNickname(response.data.nickname);
+      setSpeedTier(response.data.speedTier);
+      setOptTier(response.data.optimizationTier);
+    })
+    .catch((error) => {
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        // 로그인 실패 시 표시하는 내용
+        alert(error.response.data.description);
+      }
+    });
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        멋진 티어
+        {speedTier}
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        멋진 티어
+        {optTier}
       </Col>
       <Col
         span={3}
@@ -26,7 +54,7 @@ function UserInfo() {
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
-        {userId}
+        {nickname}
       </Col>
     </Row>
   );
@@ -120,6 +148,7 @@ function App() {
       setPlayerInfo(obj);
       console.log("플레이어 정보를 저장했다");
       console.log(playerInfo);
+      socket.close(); //소켓을 닫는다
     } else {
       console.log("player가 null이 아니야");
     }
