@@ -159,17 +159,17 @@ function Ranking() {
                   <Row className="select">
                     <Col span={8}>
                       <Link to="/ranking?mode=level&page=1" style={levelColor}>
-                        <span>레벨</span>
+                        <span className="filterText">레벨</span>
                       </Link>
                     </Col>
                     <Col span={8}>
                       <Link to="/ranking?mode=speed&page=1" style={speedColor}>
-                        <span>스피드</span>
+                        <span className="filterText">스피드</span>
                       </Link>
                     </Col>
                     <Col span={8}>
                       <Link to="/ranking?mode=efficiency&page=1" style={efficiencyColor}>
-                        <span>최적화</span>
+                        <span className="filterText">최적화</span>
                       </Link>
                     </Col>
                   </Row>
