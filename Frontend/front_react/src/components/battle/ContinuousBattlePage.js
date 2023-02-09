@@ -11,8 +11,8 @@ import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states
 
 let submitResult = "";
 
-const serverAddress = "localhost:3000";
-const websocketAddress = "ws://" + serverAddress + "/battle";
+const serverAddress = "i8b303.p.ssafy.io:9002";
+const websocketAddress = "ws://" + serverAddress + "/websocket";
 let socket = null;
 
 const ContinuousBattlePage = () => {
