@@ -33,7 +33,8 @@ public class WebSocket {
     private RestTemplate restTemplate;
 
     private ZSetOperations<String, Object> ranking;
-    private int mmr;
+    private int userMmr;
+    private int otherMmr;
     private static Set<String> sessionSet = new HashSet<String>();
     private static Map<String, Session> sessionMap = new HashMap<>();
     private static Map<String, BattleRoom> sessionId2Obj = new HashMap<>();
@@ -87,28 +88,32 @@ public class WebSocket {
             // 처음 입장할 때
             if (method.equals("connect"))
             {
+                int mmrMod;
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
                 String battleMode = obj.get("battleMode").toString();
                 ranking = redisTemplate.opsForZSet();
                 try
                 {
-                    mmr = ranking.score("speed", userId).intValue();
+                    userMmr = ranking.score(battleMode, userId).intValue();
+                    otherMmr = ranking.score(battleMode,otherUserId).intValue();
+                    mmrMod = (userMmr+otherMmr)/2;
                 }
+
                 catch (Exception e)
                 {
                     MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
                     bodyData.add("user_id",userId);
                     bodyData.add("mode",battleMode);
                     System.out.println("this is restTempalte : "+ restTemplate);
-                    String url = "http://i8b303.p.ssafy.com:9005/log-service/getLevelAndTier";
-                    ResponseEntity<List> MMRs = restTemplate.postForEntity(
+                    String url = "http://i8b303.p.ssafy.com:9005/log-service/getThreeProblem?=";
+                    ResponseEntity<List> problems = restTemplate.postForEntity(
                             url,
                             bodyData,
                             List.class
                     );
                 }
-                User user = User.builder().session(session).userId(userId).prevMmr(mmr).battleMode(battleMode).build();
+                User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
                 if(sessionMap.containsKey(otherUserId))
                 {
                     sessionId2Obj.get(otherUserId).user2 = user;
@@ -123,6 +128,10 @@ public class WebSocket {
                     sessionId2Obj.put(userId, battleRoom);
                     userId2Session.put(userId, session);
                     System.out.println("이번에 만들어짐 : " + sessionMap);
+                    System.out.println("this is restTempalte : "+ restTemplate);
+                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
+                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
+                    System.out.println(problems);
                 }
                 System.out.println();
                 session.getAsyncRemote().sendText("connect_success");
@@ -133,9 +142,7 @@ public class WebSocket {
             else if (method.equals("getProblem"))
             {
                 String userId = obj.get("userId").toString();
-                System.out.println("this is restTempalte : "+ restTemplate);
-                String url = "http://localhost:9005/log-service/getLevelAndTier";
-                ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
+
 //                System.out.println(problems.toString());
                 JSONObject problems_json = new JSONObject();
 //                problems_json.put()
