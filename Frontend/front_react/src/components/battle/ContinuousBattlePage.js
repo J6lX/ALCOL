@@ -45,90 +45,80 @@ const ContinuousBattlePage = () => {
       },
     ]);
   }, []);
+  const messageType = "connect";
+  const userId = idInfo.userId;
+  const otherId = idInfo.otherId;
+  const battleMode = battleModeInfo;
+  console.log(battleModeInfo[0]);
 
-  window.onload = async function () {
-    socket = new WebSocket(websocketAddress);
-    console.log("socket", socket);
-    socket.addEventListener("open", () => {
-      const messageType = "connect";
-      const userId = idInfo.userId;
-      const otherId = idInfo.otherId;
-      const battleMode = battleModeInfo;
-      const data = JSON.stringify({
-        messageType: messageType,
-        userId: userId,
-        otherId: otherId,
-        battleMode: battleMode,
-      });
-      socket.send(data);
-    });
-    // socket.onopen = () => {
-    //   const messageType = "connect";
-    //   const userId = idInfo.userId;
-    //   const otherId = idInfo.otherId;
-    //   const battleMode = battleModeInfo;
-    //   const data = JSON.stringify({
-    //     messageType: messageType,
-    //     userId: userId,
-    //     otherId: otherId,
-    //     battleMode: battleMode,
-    //   });
-    //   socket.send(data);
-    // };
+  socket = new WebSocket(websocketAddress);
+  console.log("socket", socket);
 
-    socket.onmessage = (servermessage) => {
-      const data = JSON.parse(servermessage);
-      if (data.messageType === "connect_success") {
-        console.log("연결 완료!");
-        console.log(data);
+  socket.onopen = () =>
+    setTimeout(
+      socket.send(
+        JSON.stringify({
+          messageType: messageType,
+          userId: userId,
+          otherId: otherId,
+          battleMode: battleMode,
+        })
+      ),
+      2000
+    );
 
-        // axios
-        //   .get("http://i8b303.p.ssafy.io/problemList", header)
-        //   .then((response) => {
-        //     setProblems(response.data.problems);
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+  socket.onmessage = (servermessage) => {
+    const data = JSON.parse(servermessage);
+    if (data.messageType === "connect_success") {
+      console.log("연결 완료!");
+      console.log(data);
+
+      // axios
+      //   .get("http://i8b303.p.ssafy.io/problemList", header)
+      //   .then((response) => {
+      //     setProblems(response.data.problems);
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
+      setTimeout(() => {
+        setIsConnected(true);
+        setIsReady(true);
+      }, 3000);
+    } else if (data.messageType === "ban_success") {
+      console.log("문제 선택 완료!");
+      setTimeout(() => {
+        setIsReady(false);
+        setIsBanWait(true);
+      }, 5000);
+    } else if (data.messageType === "select_success") {
+      setTimeout(() => {
+        setIsBanWait(false);
+        setIsSelected(true);
         setTimeout(() => {
-          setIsConnected(true);
-          setIsReady(true);
-        }, 3000);
-      } else if (data.messageType === "ban_success") {
-        console.log("문제 선택 완료!");
-        setTimeout(() => {
-          setIsReady(false);
-          setIsBanWait(true);
-        }, 5000);
-      } else if (data.messageType === "select_success") {
-        setTimeout(() => {
-          setIsBanWait(false);
-          setIsSelected(true);
-          setTimeout(() => {
-            setIsSelected(false);
-            setIsSolving(true);
-          }, 15000);
-        }, 5000);
-      } else if (data.messageType === "submit_success") {
-        submitResult = data.submitResult;
-        console.log(submitResult);
-        if (submitResult === "success") {
-          setIsSolved(true);
-        }
-      } else if (data.messageType === "close") {
-        socket.onclose();
-      } else {
-        console.log("뭐가 오긴 왔는데...");
-        console.log(data);
+          setIsSelected(false);
+          setIsSolving(true);
+        }, 15000);
+      }, 5000);
+    } else if (data.messageType === "submit_success") {
+      submitResult = data.submitResult;
+      console.log(submitResult);
+      if (submitResult === "success") {
+        setIsSolved(true);
       }
-    };
+    } else if (data.messageType === "close") {
+      socket.onclose();
+    } else {
+      console.log("뭐가 오긴 왔는데...");
+      console.log(data);
+    }
+  };
 
-    socket.onclose = (message) => {
-      console.log("closed!", message);
-    };
-    socket.onerror = (message) => {
-      console.log("error", message);
-    };
+  socket.onclose = (message) => {
+    console.log("closed!", message);
+  };
+  socket.onerror = (message) => {
+    console.log("error", message);
   };
 
   const changeBanProblem = (data) => {
