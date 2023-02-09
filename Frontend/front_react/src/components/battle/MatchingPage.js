@@ -54,7 +54,7 @@ function UserInfo() {
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
-        {userId}
+        {nickname}
       </Col>
     </Row>
   );
