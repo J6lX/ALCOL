@@ -1,6 +1,7 @@
 /*  페이지 크기 조절 */
 .pageBody {
   height: 60vh;
+  margin-top: 60px;
 }
 
 /* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
@@ -57,13 +58,15 @@
 
 /* 페이지 기본 텍스트 */
 .text {
-  color: white;
+  text-decoration-color: white;
   padding: 5px;
+  font-size: 15px;
 }
 
-/* 스트릭 박스용 텍스트 */
-.streakText {
-  font-size: 8px;
+/* 중간 제목(스피드, 효율성) */
+.miniTitle {
+  color: white;
+  font-size: 20px;
 }
 
 /* 최근 20전 승률 그래프 */

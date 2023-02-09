@@ -363,7 +363,7 @@ function Mypage() {
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
-                      <p>스피드</p>
+                      <p className="miniTitle">스피드</p>
                       <PieChart
                         data={speedData}
                         reveal={speedData[0].value}
@@ -389,13 +389,13 @@ function Mypage() {
                       <span className="tierNo">1</span>
                     </Col>
                     {/* 스피드전 데이터 요약 */}
-                    <Col xs={24} md={8} lg={8} xl={5}>
+                    <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>티어명</p>
                       <p>MMR</p>
                       <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
-                    <Col xs={24} md={8} lg={8} xl={5}>
+                    <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>티어명</p>
                       <p>MMR</p>
                       <p>1000위(상위 20%)</p>
@@ -410,7 +410,7 @@ function Mypage() {
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
-                      <p>최적화</p>
+                      <p className="miniTitle">최적화</p>
                       <PieChart
                         data={efficiencyData}
                         reveal={efficiencyData[0].value}
