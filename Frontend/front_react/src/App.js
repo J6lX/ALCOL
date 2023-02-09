@@ -9,6 +9,7 @@ import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
 import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
+import BanPageAnimTest from "./components/battle/BanPageAnimTest";
 import ReadyPage from "./components/battle/ReadyPage";
 import ContinuousBattlePage from "./components/battle/ContinuousBattlePage";
 import ResultPage from "./components/battle/ResultPage";
@@ -77,6 +78,7 @@ function App() {
 
             {/* 밴픽 페이지 */}
             <PrivateRoute path="/ban" component={BanPage} />
+            <PrivateRoute path="/banAnim" component={BanPageAnimTest} />
 
             {/* 매칭 후 소켓 연결 대기 페이지 */}
             <PrivateRoute path="/ready" component={ReadyPage} />

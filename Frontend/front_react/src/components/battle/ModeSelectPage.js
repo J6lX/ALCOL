@@ -246,13 +246,15 @@ function App() {
 
   console.log("여기는 모드 선택화면의 유저 정보 부분!");
   console.log(userId);
-  const ID = JSON.stringify({
-    user_id: userId,
-  });
+  // const ID = JSON.stringify({
+  //   user_id: userId,
+  // });
   // const headers = { access_tocken: AccessTokenInfo };
 
   axios
-    .post("http://i8b303.p.ssafy.io:9000/user-service/getUserInfo", ID)
+    .post("http://i8b303.p.ssafy.io:9000/user-service/getUserInfo", {
+      user_id: userId,
+    })
     .then(function (response) {
       console.log(response.data);
     })
@@ -286,9 +288,6 @@ function App() {
   return (
     <div className="battle_background animate__animated animate__fadeIn">
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
-      <a href="https://codepen.io" data-title="Awesome Button">
-        테스트
-      </a>
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
