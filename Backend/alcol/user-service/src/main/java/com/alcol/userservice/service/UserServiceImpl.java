@@ -299,7 +299,14 @@ public class UserServiceImpl implements UserService
     {
         log.info("UserServiceImpl 메소드의 getUserId 메소드 실행");
         UserEntity userEntity = userRepository.findByNickname(nickName);
-        return userEntity.getUserId();
+        if (userEntity == null)
+        {
+            return "noneUserId";
+        }
+        else
+        {
+            return userEntity.getUserId();
+        }
     }
 
     @Override
