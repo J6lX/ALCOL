@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage } from "../../states/atoms";
-import { LoginState } from "../../states/LoginState";
+import { LoginState, AccessTokenInfo } from "../../states/LoginState";
 import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
@@ -212,7 +212,7 @@ function HandleFinishSelectButton({ mode, language }) {
 
   return (
     <div>
-      <div className="modeButton" onClick={hanleHistoryMatch}>
+      <div className="modeButton" data-title="Awesome Button" onClick={hanleHistoryMatch}>
         매칭 시작
       </div>
       <Modal
@@ -246,8 +246,13 @@ function App() {
 
   console.log("여기는 모드 선택화면의 유저 정보 부분!");
   console.log(userId);
+  const ID = JSON.stringify({
+    user_id: userId,
+  });
+  const headers = { access_tocken: AccessTokenInfo };
+
   axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", ID, { headers: headers })
     .then(function (response) {
       console.log(response.data);
     })
@@ -268,9 +273,47 @@ function App() {
     }
   }, [language, history]);
 
+  //-------- 흔들리는 효과
+  const docStyle = document.documentElement.style;
+  const aElem = document.querySelector("a");
+  const boundingClientRect = aElem.getBoundingClientRect();
+
+  aElem.onmousemove = function (e) {
+    const x = e.clientX - boundingClientRect.left;
+    const y = e.clientY - boundingClientRect.top;
+
+    const xc = boundingClientRect.width / 2;
+    const yc = boundingClientRect.height / 2;
+
+    const dx = x - xc;
+    const dy = y - yc;
+
+    docStyle.setProperty("--rx", `${dy / -1}deg`);
+    docStyle.setProperty("--ry", `${dx / 10}deg`);
+  };
+
+  aElem.onmouseleave = function (e) {
+    docStyle.setProperty("--ty", "0");
+    docStyle.setProperty("--rx", "0");
+    docStyle.setProperty("--ry", "0");
+  };
+
+  aElem.onmousedown = function (e) {
+    docStyle.setProperty("--tz", "-25px");
+  };
+
+  document.body.onmouseup = function (e) {
+    docStyle.setProperty("--tz", "-12px");
+  };
+
+  //---- 흔들 효과 끝
+
   return (
     <div className="battle_background">
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
+      <a href="https://codepen.io" data-title="Awesome Button">
+        테스트
+      </a>
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
