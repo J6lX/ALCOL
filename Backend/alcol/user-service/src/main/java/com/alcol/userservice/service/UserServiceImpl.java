@@ -224,7 +224,7 @@ public class UserServiceImpl implements UserService
             bodyData.add("user_id", userId);
             ResponseEntity<UserDto.UserPlayDto> response = restTemplateUtils.sendRequest(
                     bodyData,
-                    "http://localhost:9005/log-service/getExpAndMmr",
+                    "http://i8b303.p.ssafy.io:9005/log-service/getExpAndMmr",
                     new ParameterizedTypeReference<UserDto.UserPlayDto>() {}
             );
 
@@ -280,7 +280,7 @@ public class UserServiceImpl implements UserService
         bodyData.add("user_id", userId);
         ResponseEntity<List<UserDto.UserBattleLogDto>> response = restTemplateUtils.sendRequest(
                 bodyData,
-                "http://localhost:9005/log-service/getBattleLog",
+                "http://i8b303.p.ssafy.io:9005/log-service/getBattleLog",
                 new ParameterizedTypeReference<List<UserDto.UserBattleLogDto>>() {}
         );
 
