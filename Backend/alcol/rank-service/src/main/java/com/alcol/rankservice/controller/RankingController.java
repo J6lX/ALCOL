@@ -104,6 +104,7 @@ public class RankingController
     public ResponseEntity<RankDto.ResponseDto<?>> requestSearchUser(@RequestParam String battle_mode, String nickname)
     {
         RankDto.Ranking searchUser = rankService.getSearchUserInfo(battle_mode, nickname);
+
         if(searchUser == null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SEARCH_USER_NOT_EXIST));
         }
