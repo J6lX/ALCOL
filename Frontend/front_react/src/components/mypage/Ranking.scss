@@ -42,21 +42,21 @@ body {
   top: 50%;
   left: 50%;
   font-size: 30px;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -150%);
 
   //페이지 크기 별 css 디자인 수정
   // 작은 크기
-  @media (max-width: 720px) {
+  @media (max-width: 750px) {
     z-index: 10;
     position: absolute;
     top: 50%;
     left: 50%;
     font-size: 20px;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -480%);
   }
 
   // 큰 크기
-  @media (min-width: 980px) {
+  @media (min-width: 1050px) {
     z-index: 10;
     position: absolute;
     top: 50%;
@@ -70,7 +70,7 @@ body {
 .bodyblock {
   position: relative;
   top: 30%;
-  transform: translate(0%, -30%);
+  transform: translate(0%, -10%);
 }
 
 // 모드 선택 및 랭킹 표시 블록
