@@ -26,7 +26,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
+      defaultZone: http://i8b303.p.ssafy.io:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
 
 access-token:
   expiration_time: 1000000 # milliseconds
