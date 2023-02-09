@@ -11,6 +11,7 @@ import MatchingPage from "./components/battle/MatchingPage";
 import BanPage from "./components/battle/BanPage";
 import BanPageAnimTest from "./components/battle/BanPageAnimTest";
 import ReadyPage from "./components/battle/ReadyPage";
+import SelectedProblemPage from "./components/battle/SelectedProblemPage";
 import ContinuousBattlePage from "./components/battle/ContinuousBattlePage";
 import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
@@ -85,6 +86,9 @@ function App() {
 
             {/* 배틀 페이지 */}
             <PrivateRoute path="/battle" component={ContinuousBattlePage} />
+
+            {/* 선택된 배틀 정보들 요약해주는 페이지 */}
+            <Route path="/testselect" component={SelectedProblemPage} />
 
             {/* 랭킹 조회 페이지 */}
             <Route path="/ranking" component={Ranking} />

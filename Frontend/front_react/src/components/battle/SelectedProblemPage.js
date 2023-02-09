@@ -20,7 +20,7 @@ function Top() {
 function SelectedProblem({ problem }) {
   return (
     <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
-      <div>
+      <div style={{ backgroundColor: "white" }}>
         <h1>Ready!!!</h1>
         <p>문제 {problem.problem_no} 번</p>
         <p>{problem.problem_title}</p>
