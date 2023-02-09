@@ -26,6 +26,7 @@ import AppFooter from "./components/AppFooter";
 
 import { Layout } from "antd";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "./states/LoginState";
+import PrivateRoute from "./PrivateRoute";
 
 // // import { render } from "@testing-library/react";
 
@@ -45,16 +46,14 @@ export function LoginInfo() {
 }
 
 function App() {
-  // 로그인 상태 확인
-  const isLoggedIn = useRecoilValue(LoginState);
-  // useEffect(() => {
-  //   console.log(isLoggedIn);
-  // });
+  // 인증(로그인) 상태 확인
+  const isAuthenticated = useRecoilValue(LoginState);
 
   return (
     <RecoilRoot>
       <Layout>
         <AppHeader />
+        <hr style={{ color: "white" }} />
         <Content
           style={{
             backgroundColor: "#16171B",
@@ -66,54 +65,54 @@ function App() {
 
             {/* 로그인 페이지 */}
             <Route exact path="/login">
-              {isLoggedIn ? <Redirect to="/" /> : <Route component={LoginPage} />}
+              {isAuthenticated ? <Redirect to="/" /> : <Route component={LoginPage} />}
             </Route>
             {/* 로그아웃 페이지(로그아웃 기능 구현용) */}
 
             {/* 모드 선택 페이지 */}
-            <Route path="/mode" component={ModeSelectPage} />
+            <PrivateRoute path="/mode" component={ModeSelectPage} />
 
             {/* 매칭 페이지 */}
-            <Route path="/match" component={MatchingPage} />
+            <PrivateRoute path="/match" component={MatchingPage} />
 
             {/* 밴픽 페이지 */}
-            <Route path="/ban" component={BanPage} />
+            <PrivateRoute path="/ban" component={BanPage} />
 
             {/* 매칭 후 소켓 연결 대기 페이지 */}
-            <Route path="/ready" component={ReadyPage} />
+            <PrivateRoute path="/ready" component={ReadyPage} />
 
             {/* 배틀 페이지 */}
-            <Route path="/battle" component={ContinuousBattlePage} />
+            <PrivateRoute path="/battle" component={ContinuousBattlePage} />
 
             {/* 랭킹 조회 페이지 */}
             <Route path="/ranking" component={Ranking} />
 
             {/* 회원가입 페이지 */}
-            <Route path="/register" exact={true} component={RegisterPage} />
+            <PrivateRoute path="/register" exact={true} component={RegisterPage} />
 
             {/* 회원정보 수정 페이지 */}
-            <Route path="/modify" exact={true} component={ModifyPage} />
+            <PrivateRoute path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
-            <Route path="/solve" exact={true} component={SolvingPage} />
+            <PrivateRoute path="/solve" exact={true} component={SolvingPage} />
 
             {/* 배틀 결과 페이지 */}
-            <Route path="/result" exact={true} component={ResultPage} />
+            <PrivateRoute path="/result" exact={true} component={ResultPage} />
 
             {/* 배틀 상세 결과 페이지 */}
-            <Route path="/resultList" exact={true} component={ResultListPage} />
+            <PrivateRoute path="/resultList" exact={true} component={ResultListPage} />
 
             {/* 문제 페이지(연습모드 진입) */}
             <Route path="/practice" component={PracticePage} />
 
             {/* 혼자 문제 푸는 페이지 */}
-            <Route path="/solveprac" exact={true} component={PracticeSolvingPage} />
+            <PrivateRoute path="/solveprac" exact={true} component={PracticeSolvingPage} />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
             <Route path="/mypage/:username" exact={true} component={Mypage} />
 
             {/* 지난 시즌 정보 조회 페이지 */}
-            <Route path="/season/:username" exact={true} component={LastSeason} />
+            <PrivateRoute path="/season/:username" exact={true} component={LastSeason} />
 
             {/* 404 페이지 */}
             <Route component={NotFound404} />
