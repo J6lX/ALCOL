@@ -106,16 +106,14 @@ public class WebSocket {
                     MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
                     bodyData.add("user_id",userId);
                     bodyData.add("mode",battleMode);
-                    System.out.println("this is restTempalte : "+ restTemplate);
-                    String url = "http://i8b303.p.ssafy.com:9005/log-service/getThreeProblem?="+mmrAvg;
 
-                    ResponseEntity<List> problems = restTemplate.postForEntity(
-                            url,
-                            bodyData,
-                            List.class
-                    );
-                    System.out.println(problems);
                 }
+                System.out.println("this is restTempalte : "+ restTemplate);
+                String url = "http://i8b303.p.ssafy.com:9005/log-service/getThreeProblem?="+mmrAvg;
+
+                ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
+                System.out.println(problems);
+
                 User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
                 if(sessionMap.containsKey(otherUserId))
                 {
