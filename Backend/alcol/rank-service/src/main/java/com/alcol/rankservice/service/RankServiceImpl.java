@@ -185,6 +185,12 @@ public class RankServiceImpl implements RankService{
         String url = "http://localhost:9000/user-service/getUserId";
         String searchUserId = restTemplate.postForObject(url, map, String.class);
 
+        // 해당 닉네임이 존재하지 않을 경우
+        if(searchUserId.equals("noneUserId"))
+        {
+            return null;
+        }
+
         // 받은 userId로 보여줄 userData 받아옴
         RankDto.Ranking searchUserInfo = responseUserInfo(searchUserId, battleMode);
         return searchUserInfo;

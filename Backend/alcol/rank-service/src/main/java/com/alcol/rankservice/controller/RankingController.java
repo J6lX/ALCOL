@@ -5,12 +5,14 @@ import com.alcol.rankservice.dto.RankDto;
 import com.alcol.rankservice.dto.WinLoseDto;
 import com.alcol.rankservice.service.BattleResultService;
 import com.alcol.rankservice.service.RankService;
+import error.CustomStatusCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import util.ApiUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -68,7 +70,7 @@ public class RankingController
     }
 
     @PostMapping("/myRank")
-    public ResponseEntity<RankDto.Ranking> requestMyRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
+    public ResponseEntity<RankDto.ResponseDto<?>> requestMyRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
         // header에 있는 user_id값 가져옴
         String userId = requestHeader.getHeaders("user_id").nextElement();
         String battleMode = requestMap.get("battle_mode");
@@ -80,34 +82,32 @@ public class RankingController
 
         // mmr이 -1이면 해당 유저는 배틀을 진행한 적이 없는 유저이다.
         if(mmr == -1){
-            RankDto.Ranking rank = RankDto.Ranking.builder()
-                    .nickname(userData.getNickname())
-                    .profile_pic(userData.getStoredFileName())
-                    .level(userData.getLevel())
-                    .tier("none")
-                    .mmr(-1)
-                    .record(new RankDto.WinLoseCount(-1, -1, -1))
-                    .grade(-1)
-                    .build();
-
-            return ResponseEntity.status(HttpStatus.OK).body(rank);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.BATTLE_RECORD_NOT_EXIST));
         }
         // mmr이 -1이 아니라면 배틀을 진행한 적이 있는 유저이다.
         RankDto.Ranking myRank = rankService.responseUserInfo(userId, battleMode);
 
-        return ResponseEntity.status(HttpStatus.OK).body(myRank);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(myRank, CustomStatusCode.BATTLE_RECORD_EXIST));
     }
 
     @GetMapping("/rankList")
-    public ResponseEntity<List<RankDto.Ranking>> requestAllRankingList(@RequestParam String battle_mode, int page)
+    public ResponseEntity<RankDto.ResponseDto<?>> requestAllRankingList(@RequestParam String battle_mode, int page)
     {
-        return ResponseEntity.status(HttpStatus.OK).body(rankService.getAllRankingList(battle_mode, page));
+        List<RankDto.Ranking> RankingList = rankService.getAllRankingList(battle_mode, page);
+        if(RankingList.size() == 0)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.ALL_USER_BATTLE_RANKING_NOT_EXIST));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(RankingList, CustomStatusCode.ALL_USER_BATTLE_RANKING_EXIST));
     }
 
     @GetMapping("/searchUser")
-    public ResponseEntity<RankDto.Ranking> requestSearchUser(@RequestParam String battle_mode, String nickname)
+    public ResponseEntity<RankDto.ResponseDto<?>> requestSearchUser(@RequestParam String battle_mode, String nickname)
     {
         RankDto.Ranking searchUser = rankService.getSearchUserInfo(battle_mode, nickname);
-        return ResponseEntity.status(HttpStatus.OK).body(searchUser);
+        if(searchUser == null){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SEARCH_USER_NOT_EXIST));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(searchUser, CustomStatusCode.SEARCH_USER_EXIST));
     }
 }
