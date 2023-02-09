@@ -23,30 +23,6 @@ public class RankServiceImpl implements RankService{
     private HashOperations<String, String, String> userInfo;
 
     /**
-     * 모드별 개인 랭킹이 존재하는지 확인
-     */
-    public int confirmUserRanking(String userId, String mode)
-    {
-        // 해당 userId가 redis에 있는 ranking에 MMR 값이 존재하는지 확인
-        ranking = redisTemplate.opsForZSet();
-        String key = mode;
-        String member = userId;
-        int mmr = -1;
-
-        try {
-            mmr = ranking.score(key, member).intValue();
-        } catch(NullPointerException e){
-            log.debug("mmr값이 존재하지 않음!!!!!!!!");
-            return -1;
-        } catch (Exception e){
-            log.error("개인 스피드전 랭킹을 조회하기 위해 MMR값이 존재하는지 확인하는 과정에서 에러 발생");
-            return -1;
-        }
-
-        return mmr;
-    }
-
-    /**
     * 랭킹 페이지에 보여주기 위해 유저 정보를 가져오는 메소드
     * */
     public RankDto.UserData getUserData(String userId)

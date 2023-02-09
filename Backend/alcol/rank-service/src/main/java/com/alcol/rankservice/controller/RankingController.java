@@ -76,16 +76,14 @@ public class RankingController
         String userId = requestHeader.getHeaders("user_id").nextElement();
         String battleMode = requestMap.get("battle_mode");
 
-        // redis의 랭킹 부분에서 해당 유저의 mmr값이 존재하는지 확인
-        int mmr = rankService.confirmUserRanking(userId, battleMode);
-        // 해당 유저 데이터 가져오기
-        RankDto.UserData userData = rankService.getUserData(userId);
+        // redis의 랭킹 부분에서 해당 유저가 승패 기록이 있는지 확인
+        RankDto.WinLoseCount confirmUserRecord = rankService.getWinLoseCount(userId, battleMode);
 
-        // mmr이 -1이면 해당 유저는 배틀을 진행한 적이 없는 유저이다.
-        if(mmr == -1){
+        // confirmUserRecord값이 null이면 해당 유저는 배틀을 진행한 적이 없는 유저이다.
+        if(confirmUserRecord == null){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.BATTLE_RECORD_NOT_EXIST));
         }
-        // mmr이 -1이 아니라면 배틀을 진행한 적이 있는 유저이다.
+        // confirmUserRecord값이 null이 아니라면 배틀을 진행한 적이 있는 유저이다.
         RankDto.Ranking myRank = rankService.responseUserInfo(userId, battleMode);
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(myRank, CustomStatusCode.BATTLE_RECORD_EXIST));

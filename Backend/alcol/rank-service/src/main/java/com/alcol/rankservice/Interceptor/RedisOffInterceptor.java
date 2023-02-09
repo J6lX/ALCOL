@@ -28,11 +28,7 @@ public class RedisOffInterceptor extends HandlerInterceptorAdapter
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
     {
-        if(redisTemplate.hasKey("dummy"))
-        {
-            log.info("redis 내려가지 않음");
-        }
-        else
+        if(!redisTemplate.hasKey("dummy"))
         {
             log.warn("redis 내려감");
 
