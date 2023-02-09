@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Button, Form, Input, Avatar, Col, Row, Modal } from "antd";
 import axios from "axios";
@@ -87,40 +87,49 @@ function App() {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then(function (response) {
-        hanleHistoryMatch();
+        hanleResigerWarning();
         console.log("회원 가입 성공 1 :" + response);
         console.log(response);
         if (response.data.custom_code === "000") {
           console.log("회원 가입 성공 2 :" + response);
           alert("회원가입 성공");
+          setResult(response.data.description);
         }
       })
       .catch((error) => {
+        hanleResigerWarning();
         console.log("회원 가입 실패 1 :" + error);
         if (error.response.data.custom_code === "003") {
-          alert("이메일 중복");
+          setResult(error.response.data.description);
+          // alert("이메일 중복");
         } else if (error.response.data.custom_code === "004") {
-          alert("닉네임 중복");
+          // alert("닉네임 중복");
+          setResult(error.response.data.description);
         }
       });
   };
   const history = useHistory();
-  const hanleHistoryMatch = () => {
+  const hanleResigerWarning = () => {
     showModal();
   };
   //Modal 선택 관련
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  // const [result, setResult] = React.useState();
+  const [result, setResult] = React.useState();
   const showModal = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    history.push("/match");
+    if (result === "회원가입에 성공하였습니다.") {
+      history.push("/");
+    }
     setIsModalOpen(false);
   };
-  const handleCancle = () => {
-    setIsModalOpen(false);
-  };
+
+  useEffect(() => {
+    console.log("나는 useEffect");
+    console.log(result);
+  }, [result]);
+
   return (
     <div className="contents_background">
       <div className="contents_gradient">
@@ -203,13 +212,10 @@ function App() {
             centered
             footer={null}
             style={{ textAlign: "center" }}>
-            <p style={{ textAlign: "center" }}>{}</p>
+            <p style={{ textAlign: "center" }}>{result}</p>
             <div style={{ marginTop: "10px" }}>
-              <Button onClick={handleCancle} style={{ marginRight: "10px" }}>
-                다시선택
-              </Button>
               <Button style={{ background: "#FEF662" }} onClick={handleOk}>
-                게임시작
+                확인
               </Button>
             </div>
           </Modal>

@@ -1,9 +1,11 @@
-import React from "react";
+// import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
 import "./MatchingPage.css";
-import { useRecoilState } from "recoil";
-import { selectedMode, selectedLanguage } from "../../states/atoms";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
+import { LoginState } from "../../states/LoginState";
 
 function UserInfo() {
   return (
@@ -29,40 +31,9 @@ function UserInfo() {
   );
 }
 
+// var socket = null;
+
 function App() {
-  //websocket 관련 전체 코드는 여기...
-  //https://github.com/Garden1298/ZoomClone/blob/master/src/public/js/app.js
-  //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
-  const socket = new WebSocket(`ws://${window.location.host}`);
-  const [state, setState] = React.useState("상대를 찾는중..");
-
-  function makeMessage(type, payload) {
-    const msg = { type, payload };
-    return JSON.stringify(msg);
-  }
-
-  //socket이 connection을 open했을때 발생
-  socket.addEventListener("open", () => {
-    console.log("---서버와 연결 됨---");
-    //서버로 뭔가를 보내기
-    const input = "서버로 메세지를 보냅니다";
-    socket.send(makeMessage("new_Message", input));
-  });
-
-  //message를 받을 때 발생
-  socket.addEventListener("message", (message) => {
-    console.log("서버로 부터 받은 메세지 : " + message.data);
-    if (message.data === "success") {
-      console.log("매칭되었습니다!");
-      setState("매칭 완료.. 상대를 기다리는 중..");
-    }
-  });
-
-  //서버가 오프라인일때 발생하는 코드
-  socket.addEventListener("close", () => {
-    console.log("---서버와 연결 끊김---");
-  });
-
   //Modal 선택 관련
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const showModal = () => {
@@ -72,26 +43,111 @@ function App() {
     setIsModalOpen(false);
   };
   const handleCancle = () => {
-    setMode("-1");
-    setLanguage("-1");
+    //초기화
+    socket.close();
+    setuserSelectedMode("-1");
+    setuserSelectLanguage("-1");
+    setPlayerInfo({ userId: "", otherId: "" });
     history.push("/");
     setIsModalOpen(false);
   };
 
   //페이지 이동 관련
-  const history = useHistory();
 
   function hanleHistoryMatchCancle() {
     showModal();
   }
 
   //mode 선택 관련
-  const [mode, setMode] = useRecoilState(selectedMode);
-  const [language, setLanguage] = useRecoilState(selectedLanguage);
+  const [userSelectedMode, setuserSelectedMode] = useRecoilState(selectedMode);
+  const [userSelectLanguage, setuserSelectLanguage] = useRecoilState(selectedLanguage);
+  //matching 관련
+  var userId = useRecoilValue(LoginState);
+  const [playerInfo, setPlayerInfo] = useRecoilState(matchingPlayerInfo);
 
-  console.log("매칭페이지");
-  console.log(mode);
-  console.log(language);
+  useEffect(() => {
+    if (playerInfo.otherId !== "") {
+      console.log("나는 useEffect playerInfo를 바꿔요");
+      console.log(playerInfo);
+      console.log(playerInfo.otherId);
+    }
+  }, [playerInfo]);
+
+  console.log("<< 매칭페이지 >>");
+  console.log(userSelectedMode);
+  console.log(userSelectLanguage);
+
+  //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
+  var socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`);
+  socket.onclose = (event) => {
+    console.log("닫혔습니다");
+  };
+
+  //socket이 connection을 open했을때 발생
+  // socket.onopen = () =>{
+
+  // }
+  var obj;
+
+  socket.addEventListener("open", () => {
+    console.log("---서버와 연결 됨---");
+    const mode = userSelectedMode;
+    const mmr = "1200";
+    const id = userId;
+    const language = userSelectLanguage;
+    const type = "1";
+    const data = JSON.stringify({
+      method: "init",
+      // 'name': name,
+      type: type,
+      Mode: mode,
+      MMR: mmr,
+      id: id,
+      Language: language,
+    });
+    socket.send(data);
+  });
+
+  //message를 받을 때 발생
+  socket.addEventListener("message", (message) => {
+    //"otherId":"34720d92-b25b-4b45-acbb-3a0fb3913483"
+    //"userId":"3812ed0e-9c08-46eb-ac5d-de574d697e60"
+    // message.preventDefault();
+    console.log("서버로 부터 메세지를 받았습니다");
+    console.log(message);
+
+    obj = JSON.parse(message.data);
+
+    console.log(obj);
+    console.log("otherId:" + obj.otherId);
+    console.log("userId:" + obj.userId);
+
+    console.log(playerInfo);
+
+    if (obj !== null) {
+      onHandlePlayerGet();
+    }
+  });
+
+  const history = useHistory();
+
+  const onHandlePlayerGet = () => {
+    history.push("/ban");
+
+    if (playerInfo.otherId === "" && playerInfo.userId === "") {
+      setPlayerInfo(obj);
+      console.log("플레이어 정보를 저장했다");
+      console.log(playerInfo);
+    } else {
+      console.log("player가 null이 아니야");
+    }
+  };
+
+  //서버가 오프라인일때 발생하는 코드
+  socket.addEventListener("close", () => {
+    console.log("---서버와 연결 끊김---");
+    socket.send(JSON.stringify("끊어주세요"));
+  });
 
   return (
     <div className="matching_background">
@@ -104,7 +160,7 @@ function App() {
           textAlign: "center",
           marginTop: "25vh",
         }}>
-        {state}
+        상대를 찾는중...
         <div className="wrapper" style={{ marginTop: "-30px" }}>
           <svg
             className="hourglass"
