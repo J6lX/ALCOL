@@ -26,14 +26,9 @@ function UserInfo({ setMode, setLanguage }) {
       user_id: userId,
     })
     .then(function (response) {
-      console.log("받아와요");
-      console.log(response.data);
-      console.log("닉네임");
       setNickname(response.data.nickname);
-      console.log("스피드");
-      setSpeedTier(response.data.speed_tier);
-      console.log("효율성");
-      setOptTier(response.data.optimization_tier);
+      setSpeedTier(response.data.speedTier);
+      setOptTier(response.data.optimizationTier);
     })
     .catch((error) => {
       let customCode = error.response.data.custom_code;
