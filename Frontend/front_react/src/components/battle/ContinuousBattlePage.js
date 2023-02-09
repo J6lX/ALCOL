@@ -46,10 +46,10 @@ const ContinuousBattlePage = () => {
     ]);
   }, []);
   const messageType = "connect";
-  const userId = idInfo.userId;
-  const otherId = idInfo.otherId;
+  const userId = idInfo[0].userId;
+  const otherId = idInfo[0].otherId;
   const battleMode = battleModeInfo[0];
-  console.log(battleModeInfo[0]);
+  console.log(messageType, userId, otherId, battleMode);
 
   socket = new WebSocket(websocketAddress);
   console.log("socket", socket);
@@ -66,6 +66,13 @@ const ContinuousBattlePage = () => {
       ),
       2000
     );
+
+  useEffect(() => {
+    return () => {
+      console.log("배틀을 나가서 소켓 연결 끊김");
+      socket.onclose();
+    };
+  }, []);
 
   socket.onmessage = (servermessage) => {
     const data = JSON.parse(servermessage);
