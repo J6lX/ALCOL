@@ -247,7 +247,7 @@ function App() {
   console.log("여기는 모드 선택화면의 유저 정보 부분!");
   console.log(userId);
   axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo/" + userId)
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
     .then(function (response) {
       console.log(response.data);
     })
