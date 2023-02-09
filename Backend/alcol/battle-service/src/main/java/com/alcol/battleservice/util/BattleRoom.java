@@ -17,4 +17,5 @@ public class BattleRoom {
     User user2;
     HashMap<String, Boolean> problemList = new HashMap<>();
     int problemNum;
+    List<Problem> problems = new ArrayList<>();
 }
