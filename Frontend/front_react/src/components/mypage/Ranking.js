@@ -4,6 +4,7 @@ import rankingHeader from "../../assets/ranking_header.png";
 import qs from "query-string";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const problemLabel = [
@@ -66,9 +67,29 @@ function Ranking() {
   const modeName = paramInfo.mode;
   const pageNo = paramInfo.page;
 
-  console.log(modeName, pageNo);
-
   // 탭 선택 여부에 따라 스타일링
+  const [speedColor, setSpeedColor] = useState({ color: "white" });
+  const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
+  const [levelColor, setLevelColor] = useState({ color: "white" });
+
+  // 탭 스타일 변경
+  useEffect(() => {
+    if (modeName === "speed") {
+      setSpeedColor({ color: "#94D6FB" });
+      setEfficiencyColor({ color: "white" });
+      setLevelColor({ color: "white" });
+    } else if (modeName === "efficiency") {
+      setEfficiencyColor({ color: "#94d6f8" });
+      setSpeedColor({ color: "white" });
+      setLevelColor({ color: "white" });
+    } else if (modeName === "level") {
+      setSpeedColor({ color: "white" });
+      setEfficiencyColor({ color: "white" });
+      setLevelColor({ color: "#94d6f8" });
+    }
+  }, [modeName]);
+
+  console.log(modeName);
 
   // 파라미터를 바탕으로 서버에 랭커 정보 요청
   // axios 통신 진행
@@ -137,18 +158,18 @@ function Ranking() {
                   {/* 토글 버튼 목록 */}
                   <Row className="select">
                     <Col span={8}>
-                      <Link to="/ranking?mode=level&page=1" className="textDefault">
-                        레벨
+                      <Link to="/ranking?mode=level&page=1" style={levelColor}>
+                        <span>레벨</span>
                       </Link>
                     </Col>
                     <Col span={8}>
-                      <Link to="/ranking?mode=speed&page=1" className="textDefault">
-                        스피드
+                      <Link to="/ranking?mode=speed&page=1" style={speedColor}>
+                        <span>스피드</span>
                       </Link>
                     </Col>
                     <Col span={8}>
-                      <Link to="/ranking?mode=efficiency&page=1" className="textDefault">
-                        효율성
+                      <Link to="/ranking?mode=efficiency&page=1" style={efficiencyColor}>
+                        <span>최적화</span>
                       </Link>
                     </Col>
                   </Row>
@@ -208,14 +229,15 @@ function Ranking() {
                           dataSource={problemData}
                           columns={problemLabel}
                           showHeader={false}
+                          pagination={false}
                           // expandable={{
                           //   innerRow,
                           //   defaultExpandedRowKeys: ["0"],
                           // }}
-                          pagination={{
-                            position: ["bottomCenter"],
-                            defaultPageSize: 10,
-                          }}
+                          // pagination={{
+                          //   position: ["bottomCenter"],
+                          //   defaultPageSize: 10,
+                          // }}
                         />
                       </ConfigProvider>
                     </Col>
