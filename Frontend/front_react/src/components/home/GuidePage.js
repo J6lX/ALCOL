@@ -19,7 +19,7 @@ const returnColor = (event) => {
 
 const Guide1 = () => {
   return (
-    <div id="Guide1" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide1" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "17%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={12}>
           <div className="right">
@@ -90,7 +90,7 @@ const Guide1 = () => {
         smooth={true}
         onMouseEnter={changeColor}
         onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "13vw" }}>
+        style={{ color: "white", marginTop: "10vw" }}>
         다음
       </ScrollLink>
     </div>
@@ -99,8 +99,8 @@ const Guide1 = () => {
 
 const Guide2 = () => {
   return (
-    <div id="Guide2" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
-      <div className="usernameBox" style={{ left: "0%", top: "0%", justifyContent: "right" }}>
+    <div id="Guide2" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "14%" }}>
+      <div className="usernameBox" style={{ left: "0%", top: "20%", justifyContent: "right" }}>
         <h1
           className="NanumSquare"
           style={{
@@ -166,7 +166,7 @@ const Guide2 = () => {
 
 const Guide3 = () => {
   return (
-    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", padding: "4%" }}>
+    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "12%" }}>
       <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
         <div className="consoleBox">
           <div className="ver"></div>
@@ -191,7 +191,7 @@ const Guide3 = () => {
         smooth={true}
         onMouseEnter={changeColor}
         onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "1vw" }}>
+        style={{ color: "white", marginTop: "0.6vw" }}>
         다음
       </ScrollLink>
     </div>
@@ -200,7 +200,7 @@ const Guide3 = () => {
 
 const Guide4 = () => {
   return (
-    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "16%" }}>
       <div className="grayBackground">
         <Col span={1}></Col>
         <Col
@@ -321,7 +321,7 @@ const Guide4 = () => {
 
 const Guide5 = () => {
   return (
-    <div id="Guide5" className="middle" style={{ backgroundColor: "#16171B", padding: "7%" }}>
+    <div id="Guide5" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "15%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={2}></Col>
         <Col
@@ -515,7 +515,7 @@ const Guide6 = () => {
         smooth={true}
         onMouseEnter={changeColor}
         onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "1vw" }}>
+        style={{ color: "white", marginTop: "7.5vw" }}>
         맨 위로
       </ScrollLink>
     </div>
@@ -527,7 +527,7 @@ const GuidePage = () => {
     <div className="fullmiddle">
       <Guide1 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "40vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide2 />
       <div>

@@ -76,7 +76,9 @@ const BattleNav = () => {
         </p>
         <ResultMessage className="MessageToast" />
       </div>
-      <CountDownTimer className="timer" />
+      <div style={{ width: "200px", height: "auto" }}>
+        <CountDownTimer className="timer" />
+      </div>
     </div>
   );
 };
@@ -156,7 +158,10 @@ const CodingPlace = ({ submitcode }) => {
   const problem_number = 1;
 
   const onChange = (newValue) => {
+    console.log(newValue);
+
     setCode(newValue);
+    // console.log(newValue);
     // console.log("code ", code);
   };
 
@@ -192,6 +197,13 @@ const CodingPlace = ({ submitcode }) => {
     if (code.trim() === "") {
       setSubmitMessage("코드를 입력해주세요.");
     } else {
+      let codedata;
+      code.forEach((item) => {
+        if (item === " ") {
+          codedata += "ㄱ";
+        }
+      });
+      console.log(codedata);
       const solving_data = {
         problem_id: problem_number,
         language: "python3",

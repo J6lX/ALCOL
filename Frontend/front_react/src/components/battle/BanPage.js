@@ -4,7 +4,7 @@ import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-import CountDownTimer from "./CountDownTimer";
+// import CountDownTimer from "./CountDownTimer";
 import { useRecoilValue } from "recoil";
 import { matchingPlayerInfo } from "../../states/atoms";
 
@@ -33,14 +33,18 @@ function UserInfo() {
   );
 }
 
-function Top() {
-  const [secs, setTime] = React.useState(100);
+function Top({ timeOut }) {
+  const [secs, setTime] = React.useState(0);
 
   const tick = () => {
-    setTime(secs - 1);
+    if (secs < 180) {
+      setTime(secs + 1);
+    } else {
+      timeOut("timeout");
+    }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     //1초
     const timerId = setInterval(() => tick(), 1000);
     return () => clearInterval(timerId);
@@ -53,14 +57,20 @@ function Top() {
         <img src={img_leftHand} alt="hand" className="ban_hands_left" />
       </Col>
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
-        <div className="ban_title">금지할 문제를 선택해주세요</div>
-        <div className="ban_info">
-          선택된 문제는 이번 게임에서 출제되지 않습니다. 만약 같은 문제를 금지했다면 남은 문제 중
-          랜덤하게 출제됩니다.
-        </div>
-        <div>
-          <CountDownTimer className="timer" />
-          <Progress percent={secs / 300} showInfo={false} />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div className="ban_title">금지할 문제를 선택해주세요</div>
+          <div className="ban_info">선택된 문제는 이번 게임에서 출제되지 않습니다.</div>
+          <div style={{ width: "25vw" }}>
+            <Progress
+              style={{ zIndex: "10" }}
+              percent={(secs / 181) * 100}
+              showInfo={false}
+              strokeColor={{
+                "0%": "#5CFDFD",
+                "100%": "#FEF15D",
+              }}
+            />
+          </div>
         </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
@@ -140,6 +150,10 @@ function App({ props, changeBanProblem }) {
   const selected = () => {
     changeBanProblem(choose);
   };
+
+  const timeOut = (data) => {
+    changeBanProblem(data);
+  };
   console.log(props);
   const [problem, setProblem] = React.useState();
   useEffect(() => {
@@ -161,7 +175,7 @@ function App({ props, changeBanProblem }) {
   return (
     <div className="matching_background">
       <UserInfo />
-      <Top />
+      <Top timeOut={timeOut} />
       <Mid props={props} onClick={onClick} setProblem={setProblem} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Button

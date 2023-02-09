@@ -254,7 +254,7 @@ function App() {
   }, [language, history]);
 
   return (
-    <div className="battle_background">
+    <div className="battle_background animate__animated animate__fadeIn">
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />

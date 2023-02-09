@@ -136,3 +136,11 @@
 .modeButton:hover {
   filter: drop-shadow(0 0 15px #f7bd63) contrast(3);
 }
+
+.animate__animated.animate__fadeIn {
+  --animate-duration: 3s;
+}
+
+.animate__animated.animate__fadeInRight {
+  --animate-duration: 2s;
+}
