@@ -19,6 +19,7 @@ public class User {
     int nowMmr;
     String battleMode;
     String battleTime;
+    int banProblemNum;
     List<BattleLog> battleLog = new ArrayList<>();
 
 
