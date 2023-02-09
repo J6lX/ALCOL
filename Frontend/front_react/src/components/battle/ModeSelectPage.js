@@ -252,7 +252,7 @@ function App() {
   // const headers = { access_tocken: AccessTokenInfo };
 
   axios
-    .post("http://i8b303.p.ssafy.io:9000/user-service/getUserInfo", {
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
       user_id: userId,
     })
     .then(function (response) {
