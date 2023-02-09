@@ -71,6 +71,15 @@ spring:
             - RemoveRequestHeader=Cookie
 #            - AccessTokenFilter
 
+        # problem-service request
+        - id: problem-service
+          uri: http://i8b303.p.ssafy.io:9001/
+          predicates:
+            - Path=/problem-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - AccessTokenFilter
+
 access-token:
   expiration_time: 1000000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
