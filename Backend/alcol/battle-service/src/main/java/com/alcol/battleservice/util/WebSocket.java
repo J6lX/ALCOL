@@ -35,6 +35,7 @@ public class WebSocket {
     private ZSetOperations<String, Object> ranking;
     private int userMmr;
     private int otherMmr;
+    int mmrAvg;
     private static Set<String> sessionSet = new HashSet<String>();
     private static Map<String, Session> sessionMap = new HashMap<>();
     private static Map<String, BattleRoom> sessionId2Obj = new HashMap<>();
@@ -88,7 +89,7 @@ public class WebSocket {
             // 처음 입장할 때
             if (method.equals("connect"))
             {
-                int mmrMod;
+
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
                 String battleMode = obj.get("battleMode").toString();
@@ -97,7 +98,7 @@ public class WebSocket {
                 {
                     userMmr = ranking.score(battleMode, userId).intValue();
                     otherMmr = ranking.score(battleMode,otherUserId).intValue();
-                    mmrMod = (userMmr+otherMmr)/2;
+                    mmrAvg = (userMmr+otherMmr)/2;
                 }
 
                 catch (Exception e)
@@ -106,12 +107,14 @@ public class WebSocket {
                     bodyData.add("user_id",userId);
                     bodyData.add("mode",battleMode);
                     System.out.println("this is restTempalte : "+ restTemplate);
-                    String url = "http://i8b303.p.ssafy.com:9005/log-service/getThreeProblem?=";
+                    String url = "http://i8b303.p.ssafy.com:9005/log-service/getThreeProblem?="+mmrAvg;
+
                     ResponseEntity<List> problems = restTemplate.postForEntity(
                             url,
                             bodyData,
                             List.class
                     );
+                    System.out.println(problems);
                 }
                 User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
                 if(sessionMap.containsKey(otherUserId))
@@ -121,9 +124,9 @@ public class WebSocket {
                     System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
                     session.getAsyncRemote().sendText("connect_success");
                     userId2Session.get(otherUserId).getAsyncRemote().sendText("connect_success");
-                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
-                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
-                    System.out.println(problems);
+//                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
+//                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
+//                    System.out.println(problems);
                 }
                 else
                 {
