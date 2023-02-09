@@ -257,8 +257,18 @@ function App() {
       console.log(response.data);
     })
     .catch((error) => {
-      console.log("error!");
-      console.log(error);
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        // 로그인 실패 시 표시하는 내용
+        alert(error.response.data.description);
+      }
     });
 
   useEffect(() => {
