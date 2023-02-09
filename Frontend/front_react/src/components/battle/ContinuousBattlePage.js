@@ -49,7 +49,7 @@ const ContinuousBattlePage = () => {
   window.onload = async function () {
     socket = new WebSocket(websocketAddress);
     console.log("socket", socket);
-    socket.onopen = () => {
+    socket.addEventListener("open", () => {
       const messageType = "connect";
       const userId = idInfo.userId;
       const otherId = idInfo.otherId;
@@ -61,7 +61,20 @@ const ContinuousBattlePage = () => {
         battleMode: battleMode,
       });
       socket.send(data);
-    };
+    });
+    // socket.onopen = () => {
+    //   const messageType = "connect";
+    //   const userId = idInfo.userId;
+    //   const otherId = idInfo.otherId;
+    //   const battleMode = battleModeInfo;
+    //   const data = JSON.stringify({
+    //     messageType: messageType,
+    //     userId: userId,
+    //     otherId: otherId,
+    //     battleMode: battleMode,
+    //   });
+    //   socket.send(data);
+    // };
 
     socket.onmessage = (servermessage) => {
       const data = JSON.parse(servermessage);
