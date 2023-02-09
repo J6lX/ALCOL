@@ -20,7 +20,7 @@ public class PreFlightCorsConfiguration
     private static final String ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type";
     private static final String ALLOWED_METHODS = "GET, PUT, POST, DELETE, OPTIONS";
     private static final String MAX_AGE = "3600";
-    private static final String ALLOWED_CREDENTIALS = "true";
+    private static final String ALLOWED_CREDENTIALS = "false";
 
     @Bean
     public WebFilter corsFilter()
