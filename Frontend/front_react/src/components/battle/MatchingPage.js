@@ -1,13 +1,14 @@
-// import React from "react";
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
-import "./MatchingPage.css";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
 import { LoginState } from "../../states/LoginState";
+import "./MatchingPage.css";
+// import axios from "axios";
 
 function UserInfo() {
+  var userId = useRecoilValue(LoginState);
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
@@ -25,13 +26,11 @@ function UserInfo() {
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
-        멋진 닉네임
+        {userId}
       </Col>
     </Row>
   );
 }
-
-// var socket = null;
 
 function App() {
   //Modal 선택 관련
@@ -51,8 +50,6 @@ function App() {
     history.push("/");
     setIsModalOpen(false);
   };
-
-  //페이지 이동 관련
 
   function hanleHistoryMatchCancle() {
     showModal();
@@ -80,13 +77,9 @@ function App() {
   //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
   var socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`);
   socket.onclose = (event) => {
-    console.log("닫혔습니다");
+    console.log("서버로 닫기 요청");
   };
 
-  //socket이 connection을 open했을때 발생
-  // socket.onopen = () =>{
-
-  // }
   var obj;
 
   socket.addEventListener("open", () => {
@@ -110,19 +103,8 @@ function App() {
 
   //message를 받을 때 발생
   socket.addEventListener("message", (message) => {
-    //"otherId":"34720d92-b25b-4b45-acbb-3a0fb3913483"
-    //"userId":"3812ed0e-9c08-46eb-ac5d-de574d697e60"
-    // message.preventDefault();
     console.log("서버로 부터 메세지를 받았습니다");
-    console.log(message);
-
     obj = JSON.parse(message.data);
-
-    console.log(obj);
-    console.log("otherId:" + obj.otherId);
-    console.log("userId:" + obj.userId);
-
-    console.log(playerInfo);
 
     if (obj !== null) {
       onHandlePlayerGet();

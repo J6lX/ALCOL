@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
-import "./ModeSelectPage.css";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { selectedMode, selectedLanguage } from "../../states/atoms";
+import { LoginState } from "../../states/LoginState";
 import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
 import iconBack from "../../assets/left-arrow.png";
 import iconBackSmall from "../../assets/left-arrow-small.png";
-import { useRecoilState } from "recoil";
-import { selectedMode, selectedLanguage } from "../../states/atoms";
+import "./ModeSelectPage.css";
+import axios from "axios";
 
 function UserInfo({ setMode, setLanguage }) {
   const history = useHistory();
@@ -239,7 +241,20 @@ function HandleFinishSelectButton({ mode, language }) {
 function App() {
   const [mode, setMode] = useRecoilState(selectedMode);
   const [language, setLanguage] = useRecoilState(selectedLanguage);
+  var userId = useRecoilValue(LoginState);
   const history = useHistory();
+
+  console.log("여기는 모드 선택화면의 유저 정보 부분!");
+  console.log(userId);
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo/" + userId)
+    .then(function (response) {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log("error!");
+      console.log(error);
+    });
 
   useEffect(() => {
     if (mode !== "-1") {
