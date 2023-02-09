@@ -119,6 +119,11 @@ public class WebSocket {
                     sessionId2Obj.get(otherUserId).user2 = user;
                     userId2Session.put(userId, userId2Session.get(otherUserId));
                     System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
+                    session.getAsyncRemote().sendText("connect_success");
+                    userId2Session.get(otherUserId).getAsyncRemote().sendText("connect_success");
+                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
+                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
+                    System.out.println(problems);
                 }
                 else
                 {
@@ -129,12 +134,9 @@ public class WebSocket {
                     userId2Session.put(userId, session);
                     System.out.println("이번에 만들어짐 : " + sessionMap);
                     System.out.println("this is restTempalte : "+ restTemplate);
-                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
-                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
-                    System.out.println(problems);
                 }
                 System.out.println();
-                session.getAsyncRemote().sendText("connect_success");
+//                session.getAsyncRemote().sendText("connect_success");
 
 
             }
