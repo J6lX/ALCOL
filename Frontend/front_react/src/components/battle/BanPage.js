@@ -7,27 +7,59 @@ import img_rightHand from "../../assets/rightHand.png";
 // import CountDownTimer from "./CountDownTimer";
 import { useRecoilValue } from "recoil";
 import { matchingPlayerInfo } from "../../states/atoms";
+import { LoginState } from "../../states/LoginState";
+import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
+import axios from "axios";
 
 function UserInfo() {
+  const [nickname, setNickname] = React.useState("a");
+  const [speedTier, setSpeedTier] = React.useState("a");
+  const [optTier, setOptTier] = React.useState("a");
+  var userId = useRecoilValue(LoginState);
+  useEffect(() => {}, [nickname, speedTier, optTier]);
+
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+      user_id: userId,
+    })
+    .then(function (response) {
+      setNickname(response.data.nickname);
+      setSpeedTier(response.data.speedTier);
+      setOptTier(response.data.optimizationTier);
+    })
+    .catch((error) => {
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        // 로그인 실패 시 표시하는 내용
+        alert(error.response.data.description);
+      }
+    });
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col
         span={1}
         style={{ fontSize: "1vw", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        멋진 티어
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={1}
         style={{ fontSize: "1vw", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        멋진 티어
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={3}
         style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        멋진 닉네임
+        {nickname}
       </Col>
     </Row>
   );

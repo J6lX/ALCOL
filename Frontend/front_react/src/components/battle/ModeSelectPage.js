@@ -3,17 +3,49 @@ import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage } from "../../states/atoms";
-import { LoginState, AccessTokenInfo } from "../../states/LoginState";
+import { LoginState } from "../../states/LoginState";
 import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
 import iconBack from "../../assets/left-arrow.png";
 import iconBackSmall from "../../assets/left-arrow-small.png";
+import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 import "./ModeSelectPage.css";
 import axios from "axios";
 
 function UserInfo({ setMode, setLanguage }) {
+  const [nickname, setNickname] = React.useState("a");
+  const [speedTier, setSpeedTier] = React.useState("a");
+  const [optTier, setOptTier] = React.useState("a");
+  var userId = useRecoilValue(LoginState);
+
+  useEffect(() => {}, [nickname, speedTier, optTier]);
+
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+      user_id: userId,
+    })
+    .then(function (response) {
+      setNickname(response.data.nickname);
+      setSpeedTier(response.data.speedTier);
+      setOptTier(response.data.optimizationTier);
+    })
+    .catch((error) => {
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        // 로그인 실패 시 표시하는 내용
+        alert(error.response.data.description);
+      }
+    });
+
   const history = useHistory();
 
   const handlePageBack = () => {
@@ -33,10 +65,10 @@ function UserInfo({ setMode, setLanguage }) {
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        멋진 티어
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        멋진 티어
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={3}
@@ -47,7 +79,7 @@ function UserInfo({ setMode, setLanguage }) {
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
-        멋진 닉네임
+        {nickname}
       </Col>
     </Row>
   );
@@ -83,6 +115,7 @@ function SelectMode({ setMode }) {
           gameInfo2={"정답을 맞추세요!"}
           avgTime={"5"}
           setMode={setMode}
+          setText={"speed"}
         />
         <SelectBox
           gameMode={"최적화"}
@@ -91,6 +124,7 @@ function SelectMode({ setMode }) {
           gameInfo2={"코드를 짜세요!"}
           avgTime={"5"}
           setMode={setMode}
+          setText={"optimization"}
         />
       </div>
     </div>
@@ -135,6 +169,7 @@ function SelectLanguage({ setLanguage, back }) {
           gameInfo2={"문제를 풉니다"}
           avgTime={"5"}
           setMode={setLanguage}
+          setText={"java"}
         />
         <SelectBox
           gameMode={"파이썬"}
@@ -143,16 +178,17 @@ function SelectLanguage({ setLanguage, back }) {
           gameInfo2={"문제를 풉니다"}
           avgTime={"5"}
           setMode={setLanguage}
+          setText={"python"}
         />
       </div>
     </div>
   );
 }
 
-function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setMode }) {
+function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setMode, setText }) {
   return (
     <div>
-      <div className="battle_mode_box" onClick={() => setMode(gameMode)}>
+      <div className="battle_mode_box" onClick={() => setMode(setText)}>
         <img src={gameModeIcon} alt="mode icon" className="img_mode" />
         <div className="text_Mode">{gameMode}</div>
         <div className="battle_info_box">
@@ -241,25 +277,7 @@ function HandleFinishSelectButton({ mode, language }) {
 function App() {
   const [mode, setMode] = useRecoilState(selectedMode);
   const [language, setLanguage] = useRecoilState(selectedLanguage);
-  var userId = useRecoilValue(LoginState);
   const history = useHistory();
-
-  console.log("여기는 모드 선택화면의 유저 정보 부분!");
-  console.log(userId);
-  const ID = JSON.stringify({
-    user_id: userId,
-  });
-  const headers = { access_tocken: AccessTokenInfo };
-
-  axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", ID, { headers: headers })
-    .then(function (response) {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log("error!");
-      console.log(error);
-    });
 
   useEffect(() => {
     if (mode !== "-1") {
@@ -273,47 +291,9 @@ function App() {
     }
   }, [language, history]);
 
-  //-------- 흔들리는 효과
-  const docStyle = document.documentElement.style;
-  const aElem = document.querySelector("a");
-  const boundingClientRect = aElem.getBoundingClientRect();
-
-  aElem.onmousemove = function (e) {
-    const x = e.clientX - boundingClientRect.left;
-    const y = e.clientY - boundingClientRect.top;
-
-    const xc = boundingClientRect.width / 2;
-    const yc = boundingClientRect.height / 2;
-
-    const dx = x - xc;
-    const dy = y - yc;
-
-    docStyle.setProperty("--rx", `${dy / -1}deg`);
-    docStyle.setProperty("--ry", `${dx / 10}deg`);
-  };
-
-  aElem.onmouseleave = function (e) {
-    docStyle.setProperty("--ty", "0");
-    docStyle.setProperty("--rx", "0");
-    docStyle.setProperty("--ry", "0");
-  };
-
-  aElem.onmousedown = function (e) {
-    docStyle.setProperty("--tz", "-25px");
-  };
-
-  document.body.onmouseup = function (e) {
-    docStyle.setProperty("--tz", "-12px");
-  };
-
-  //---- 흔들 효과 끝
-
   return (
     <div className="battle_background animate__animated animate__fadeIn">
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
-      <a href="https://codepen.io" data-title="Awesome Button">
-        테스트
-      </a>
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
       ) : (
