@@ -100,7 +100,7 @@ public class BattleResultServiceImpl implements BattleResultService
 
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
-        String url = "http://http://i8b303.p.ssafy.io:8000/user-service/getUserInfo";
+        String url = "http://i8b303.p.ssafy.io:8000/user-service/getUserInfo";
         RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
 
         try {
