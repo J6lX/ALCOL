@@ -122,12 +122,11 @@ public class UserController
     }
 
     /**
-     * @param userId
+     * @param param
      * @return 닉네임, 레벨, 스피드전 티어, 효율성전 티어, 프로필 사진 저장 경로를 리턴
      * @throws URISyntaxException
      */
     @PostMapping("/getUserInfo")
-//    public UserDto.UserInfoDto getUserInfo(@RequestParam(value="user_id") String userId)
     public UserDto.UserInfoDto getUserInfo(@RequestBody HashMap<String, Object> param)
             throws URISyntaxException
     {
@@ -148,16 +147,19 @@ public class UserController
     }
 
     /**
-     * @param nickName
-     * @return userId
+     * @param param
+     * @return nickname
      */
-    @GetMapping("/getUserId")
-    public String getUserId(@RequestParam(value = "nickname") String nickName)
+    @PostMapping("/getUserId")
+    public String getUserId(@RequestBody HashMap<String, Object> param)
     {
         log.info("UserController 의 getUserId 메소드 실행");
-        return userService.getUserId(nickName);
+        return userService.getUserId(param.get("nickname") + "");
     }
 
+    /**
+     * @return 모든 사용자의 승패수, mmr 을 리턴
+     */
     @PostMapping("/getAllUserId")
     public ResponseEntity<List<String>> getAllUserId()
     {
