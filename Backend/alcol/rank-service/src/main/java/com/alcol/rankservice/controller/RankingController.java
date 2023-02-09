@@ -23,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/rank-service")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RankingController
 {
     private final BattleResultService battleResultService;
