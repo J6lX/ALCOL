@@ -30,6 +30,15 @@
   margin-bottom: 10px;
 }
 
+.icon_tier {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 85%;
+}
+
 .ban_title {
   color: white;
   text-align: center;
