@@ -423,7 +423,7 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => dataEntry}
+                        label={({ dataEntry }) => "G1"}
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",

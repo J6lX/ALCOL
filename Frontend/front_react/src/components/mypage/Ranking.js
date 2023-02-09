@@ -7,7 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
-const problemLabel = [
+const rankingLabel = [
   {
     dataIndex: "id",
     key: "id",
@@ -16,8 +16,8 @@ const problemLabel = [
     hidden: true,
   },
   {
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "nickname",
+    key: "nickname",
     title: "닉네임",
     align: "center",
     hidden: true,
@@ -52,14 +52,8 @@ const problemLabel = [
   },
 ];
 
-// 연습 문제 데이터
-const problemData = [
-  { id: 1, name: "맥주", record: "22승 17패(56%)", tier: "Diamond" },
-  { id: 2, name: "소주", record: "22승 17패(56%)", tier: "Diamond" },
-  { id: 3, name: "막걸리", record: "22승 17패(56%)", tier: "Diamond" },
-  { id: 4, name: "와인", record: "22승 17패(56%)", tier: "Diamond" },
-  { id: 5, name: "고량주", record: "22승 17패(56%)", tier: "Diamond" },
-];
+// 랭커 정보 기록
+let rankerData = [];
 
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
@@ -98,6 +92,20 @@ function Ranking() {
     // 응답 성공 시
     .then(function (response) {
       console.log(response.data);
+      // 랭킹 정보가 존재하는 경우
+      if (response.data.customCode === "002") {
+        // (대충 데이터 저장 후 화면에 표시해준다는 내용)
+        const originData = response.data.bodyData;
+        rankerData = originData.map((data) => {
+          console.log(data);
+          return (data.record = `${data.record.win}승 ${data.record.lose}패 (${data.record.winrate}%)`);
+        });
+
+        console.log(rankerData);
+      } else if (response.data.customCode === "003") {
+        // 랭킹 정보가 없는 경우
+        alert("등록된 정보가 없습니다.");
+      }
 
       // // 화면 새로고침(선택 사항)
       // window.location.reload();
@@ -231,8 +239,8 @@ function Ranking() {
                           style={{
                             padding: "3px",
                           }}
-                          dataSource={problemData}
-                          columns={problemLabel}
+                          dataSource={rankerData}
+                          columns={rankingLabel}
                           showHeader={false}
                           pagination={false}
                           // expandable={{
