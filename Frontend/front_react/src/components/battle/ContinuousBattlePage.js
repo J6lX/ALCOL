@@ -11,6 +11,7 @@ import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states
 
 let submitResult = "";
 
+// const serverAddress = "localhost:3000";
 const serverAddress = "i8b303.p.ssafy.io:9002";
 const websocketAddress = "ws://" + serverAddress + "/websocket";
 let socket = null;
@@ -75,8 +76,8 @@ const ContinuousBattlePage = () => {
   }, []);
 
   socket.onmessage = (servermessage) => {
-    const data = JSON.parse(servermessage);
-    if (data.messageType === "connect_success") {
+    const data = servermessage;
+    if (data === "connect_success") {
       console.log("연결 완료!");
       console.log(data);
 
