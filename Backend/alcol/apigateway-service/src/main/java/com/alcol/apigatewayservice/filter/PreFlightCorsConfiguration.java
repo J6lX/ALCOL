@@ -16,9 +16,9 @@ import reactor.core.publisher.Mono;
 @Configuration
 public class PreFlightCorsConfiguration
 {
+    private static final String ALLOWED_ORIGIN = "http://i8b303.p.ssafy.io/";
     private static final String ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type";
     private static final String ALLOWED_METHODS = "GET, PUT, POST, DELETE, OPTIONS";
-    private static final String ALLOWED_ORIGIN = "http://localhost:3000";
     private static final String ALLOWED_CREDENTIALS = "true";
     private static final String MAX_AGE = "3600";
 
@@ -35,8 +35,8 @@ public class PreFlightCorsConfiguration
                 headers.add("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
                 headers.add("Access-Control-Allow-Headers", ALLOWED_HEADERS);
                 headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
-                headers.add("Access-Control-Max-Age", MAX_AGE);
                 headers.add("Access-Control-Allow-Credentials", ALLOWED_CREDENTIALS);
+                headers.add("Access-Control-Max-Age", MAX_AGE);
 
                 if (request.getMethod() == HttpMethod.OPTIONS)
                 {
