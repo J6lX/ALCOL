@@ -103,7 +103,7 @@ public class LogServiceImpl implements LogService
         bodyData.add("prob_no_list", probNoList);
         ResponseEntity<List<LogDto.ProbDetailDto>> probDetailList = restTemplateUtils.sendRequest(
                 bodyData,
-                "http://localhost:9001/problem-service/getProbDetail",
+                "http://i8b303.p.ssafy.io:9001/problem-service/getProbDetail",
                 new ParameterizedTypeReference<List<LogDto.ProbDetailDto>>() {}
         );
 
@@ -131,7 +131,7 @@ public class LogServiceImpl implements LogService
         // return : 모든 user_id 리스트
         ResponseEntity<List<String>> userIdList = restTemplateUtils.sendRequest(
                 null,
-                "http://localhost:9000/user-service/getAllUserId",
+                "http://i8b303.p.ssafy.io:9000/user-service/getAllUserId",
                 new ParameterizedTypeReference<List<String>>() {}
         );
 

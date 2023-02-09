@@ -40,9 +40,7 @@ public class LogController
      * @return 해당 유저의 배틀 로그 리스트를 리턴
      */
     @PostMapping("/getBattleLog")
-    public ResponseEntity<List<LogDto.UserBattleLogDto>> getBattleLog(
-            @RequestParam(value="user_id") String userId
-    )
+    public ResponseEntity<List<LogDto.UserBattleLogDto>> getBattleLog(@RequestParam(value="user_id") String userId)
             throws URISyntaxException
     {
         log.info("LogController 의 getBattleLog 메소드 실행");
@@ -50,15 +48,10 @@ public class LogController
         return restTemplateUtils.sendResponse(list);
     }
 
-//    @GetMapping("/getAllResultAndMmr")
-//    public ResponseEntity<List<LogDto.UserResultAndMmrDto>> getAllResultAndMmr()
-//            throws URISyntaxException
-//    {
-//        log.info("LogController 의 getAllResultAndMmr 메소드 실행");
-//        List<LogDto.UserResultAndMmrDto> list = logService.getAllResultAndMmr();
-//        return restTemplateUtils.sendResponse(list);
-//    }
-
+    /**
+     * @return 모든 유저의 승패정보와 mmr 을 리턴
+     * @throws URISyntaxException
+     */
     @GetMapping("/getAllResultAndMmr")
     public List<LogDto.UserResultAndMmrDto> getAllResultAndMmr()
             throws URISyntaxException
