@@ -82,7 +82,7 @@ public class WebSocket {
             JSONParser parser = new JSONParser();
             JSONObject obj = (JSONObject) parser.parse(jsonMessage);
             System.out.println(jsonMessage);
-            String method = obj.get("method").toString();
+            String method = obj.get("messageType").toString();
             Object object = null;
             // 처음 입장할 때
             if (method.equals("connect"))
@@ -101,7 +101,7 @@ public class WebSocket {
                     bodyData.add("user_id",userId);
                     bodyData.add("mode",battleMode);
                     System.out.println("this is restTempalte : "+ restTemplate);
-                    String url = "http://localhost:9005/log-service/getLevelAndTier";
+                    String url = "http://i8b303.p.ssafy.com:9005/log-service/getLevelAndTier";
                     ResponseEntity<List> MMRs = restTemplate.postForEntity(
                             url,
                             bodyData,
