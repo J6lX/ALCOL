@@ -48,7 +48,7 @@ const ContinuousBattlePage = () => {
   const messageType = "connect";
   const userId = idInfo.userId;
   const otherId = idInfo.otherId;
-  const battleMode = battleModeInfo;
+  const battleMode = battleModeInfo[0];
   console.log(battleModeInfo[0]);
 
   socket = new WebSocket(websocketAddress);
