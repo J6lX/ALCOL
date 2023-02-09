@@ -41,8 +41,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
                 .antMatchers("/**").permitAll()
 //                .hasIpAddress("127.0.0.1")
                 .and()
-                .addFilter(getAuthenticationFilter());
-//                .cors();
+                .addFilter(getAuthenticationFilter())
+                .cors();
     }
 
     @Bean

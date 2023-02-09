@@ -26,7 +26,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/user-service")
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Slf4j
 public class UserController
 {
