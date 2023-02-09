@@ -3,6 +3,14 @@ import styles from "./LastSeason.module.css";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+import noBadge from "../../assets/ALCOL tiers/background.png";
+import bronzeBadge from "../../assets/ALCOL tiers/bigtier_bronze.png";
+import silverBadge from "../../assets/ALCOL tiers/bigtier_silver.png";
+import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
+import platinumBadge from "../../assets/ALCOL tiers/bigtier_platinum.png";
+import diamondBadge from "../../assets/ALCOL tiers/bigtier_diamond.png";
+import alcolBadge from "../../assets/ALCOL tiers/bigtier_alcol.png";
+
 function getItem(label, key, icon, children) {
   return {
     key,
@@ -64,6 +72,25 @@ function LastSeason() {
     },
   ];
 
+  // 뱃지 정보 추가
+  const badgeMap = dummy.map((data) => {
+    if (data.tierName === "Bronze") {
+      return { ...data, badge: bronzeBadge };
+    } else if (data.tierName === "Silver") {
+      return { ...data, badge: silverBadge };
+    } else if (data.tierName === "Gold") {
+      return { ...data, badge: goldBadge };
+    } else if (data.tierName === "Platinum") {
+      return { ...data, badge: platinumBadge };
+    } else if (data.tierName === "Diamond") {
+      return { ...data, badge: diamondBadge };
+    } else if (data.tierName === "Alcol") {
+      return { ...data, badge: alcolBadge };
+    } else {
+      return { ...data, badge: noBadge };
+    }
+  });
+
   return (
     <div>
       {userInfo ? (
@@ -116,11 +143,18 @@ function LastSeason() {
             <Col xs={16} lg={18} className={styles.block}>
               <Row style={{ padding: "10px" }}>
                 {/* 한 줄에 3개씩 표시 */}
-                {dummy.map((seasonData, key) => (
+                {badgeMap.map((seasonData, key) => (
                   <Col xs={24} lg={12} xl={8} align="middle" className={styles.seasonGrid}>
                     <Row align="middle">
                       <Col span={8} className={styles.text}>
-                        Tiergraph
+                        <img
+                          src={seasonData.badge}
+                          alt="badge"
+                          style={{
+                            width: "80px",
+                            height: "80px",
+                          }}
+                        />
                       </Col>
                       <Col span={8} className={styles.text}>
                         Winrategraph

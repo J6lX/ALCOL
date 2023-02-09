@@ -4,16 +4,13 @@ import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
-import React, { Component, useState, useEffect } from "react";
-import Chart from "react-apexcharts";
+import React, { useState, useEffect } from "react";
+import { PieChart } from "react-minimal-pie-chart";
+
+import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
 
 // 현재 로그인한 사용자 정보
 const userData = {
-  dongjun: {
-    name: "Dongjun", // 이름
-    battleRec: {}, // 전적
-    friends: {}, // 친구 목록
-  },
   tester: {
     name: "tester",
     battleRec: {},
@@ -201,44 +198,22 @@ const matchData = [
 ];
 
 // 스피드전 데이터
-class ApexChart extends Component {
-  constructor(props) {
-    super(props);
+const speedData = [
+  {
+    value: 20,
+    color: "#F6CB44",
+    name: "name1",
+  },
+];
 
-    this.state = {
-      options: {
-        width: 50,
-        chart: {
-          type: "donut",
-        },
-        size: "65%",
-        plotOptions: {
-          pie: {
-            startAngle: -180,
-            endAngle: 180,
-          },
-        },
-        legend: {
-          show: false,
-        },
-        dataLabels: {
-          enabled: false,
-        },
-      },
-      series: [44, 56],
-      labels: ["A", "B"],
-    };
-  }
-
-  render() {
-    return (
-      <div className="donut">
-        <Chart options={this.state.options} series={this.state.series} type="donut" width="380" />
-      </div>
-    );
-  }
-}
 // 효율성전 데이터
+const efficiencyData = [
+  {
+    value: 30,
+    color: "#F6CB44",
+    name: "name1",
+  },
+];
 
 // 최근 20전 표시 데이터(임시)
 const recentRecord = [
@@ -342,7 +317,7 @@ function Mypage() {
       style={{
         backgroundColor: "#16171B",
         padding: "30px",
-        minHeight: "150vh",
+        height: "100%",
       }}>
       {profile ? (
         <div>
@@ -373,23 +348,90 @@ function Mypage() {
             </Col>
 
             {/* 스트릭 및 티어 정보 표시 블록*/}
-            <Col xs={16} lg={18} className="textHighlight block">
+            <Col xs={16} lg={18} className="block">
               <Row>
                 {/* 티어 정보 표시 블록 */}
                 <Col span={24} justify="center" align="middle">
-                  <Row justify="center">
+                  <Row justify="center" align="middle">
                     {/* 스피드전 티어 뱃지 */}
                     <Col
-                      span={6}
+                      xs={12}
+                      md={8}
+                      xl={6}
                       justify="center"
                       style={{
                         margin: "15px",
+                        maxHeight: "240px",
                       }}>
-                      <ApexChart />
+                      <p>스피드</p>
+                      <PieChart
+                        data={speedData}
+                        reveal={speedData[0].value}
+                        lineWidth={16}
+                        lengthAngle={300}
+                        background="#f3f3f3"
+                        rounded
+                        animate
+                        startAngle={120}
+                        style={{
+                          width: "80%",
+                          height: "80%",
+                          whiteSpace: "pre-wrap",
+                        }}
+                        // label={({ dataEntry }) => "Gold"}
+                        labelStyle={{
+                          fontSize: "10px",
+                          fill: "#f3f3f3",
+                        }}
+                        labelPosition={0}
+                      />
+                      <img src={goldBadge} alt="Badge" className="tierBadge" />
+                      <span className="tierNo">1</span>
+                    </Col>
+                    {/* 스피드전 데이터 요약 */}
+                    <Col xs={24} md={8} lg={8} xl={5}>
+                      <p>티어명</p>
+                      <p>MMR</p>
+                      <p>1000위(상위 20%)</p>
+                    </Col>
+                    {/* 최적화전 데이터 요약 */}
+                    <Col xs={24} md={8} lg={8} xl={5}>
+                      <p>티어명</p>
+                      <p>MMR</p>
+                      <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
-                    <Col span={6} justify="center">
-                      <img src={tempImg} alt="프사" className="userImg"></img>
+                    <Col
+                      xs={12}
+                      md={8}
+                      xl={6}
+                      justify="center"
+                      style={{
+                        margin: "15px",
+                        maxHeight: "240px",
+                      }}>
+                      <p>최적화</p>
+                      <PieChart
+                        data={efficiencyData}
+                        reveal={efficiencyData[0].value}
+                        lineWidth={16}
+                        lengthAngle={300}
+                        background="#f3f3f3"
+                        rounded
+                        animate
+                        startAngle={120}
+                        style={{
+                          width: "80%",
+                          height: "80%",
+                        }}
+                        // label={({ dataEntry }) => "티어 진척도" + dataEntry.value + "%"}
+                        labelStyle={{
+                          fontSize: "10px",
+                          fill: "#f3f3f3",
+                        }}
+                        labelPosition={0}
+                      />
+                      <img src={goldBadge} alt="Badge" className="tierBadge" />
                     </Col>
                   </Row>
                 </Col>

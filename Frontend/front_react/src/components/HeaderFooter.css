@@ -10,7 +10,8 @@ body {
 /* 로고 CSS */
 .logo {
   width: 120px;
-  height: 38px;
+  height: 30px;
+  margin: 1%;
 }
 
 /* 메뉴 항목 버튼 */
@@ -30,7 +31,6 @@ body {
 .loginButton {
   color: #e51c29;
   background-color: #fff0dc;
-  margin: 5px;
 }
 
 /* 회원가입 버튼 */
@@ -38,7 +38,6 @@ body {
   color: #a0a0a0;
   background-color: #17181c;
   border-color: #17181c;
-  margin: 5px;
 }
 
 .J6IX {

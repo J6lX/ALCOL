@@ -1,8 +1,9 @@
 import { React, useState } from "react";
 import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import axios from "axios";
+// import axios from "axios";
 import Logo from "../../assets/alcol_empty_black.png";
 import Dots from "../../assets/dots.png";
+import CountDownTimer from "./CountDownTimer";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
@@ -20,6 +21,11 @@ const isClickState = atom({
 const solvingHeightState = atom({
   key: "solvingHeightState",
   default: allheight * 0.46,
+});
+
+const consoleHeightState = atom({
+  key: "consoleHeightState",
+  default: allheight * 0.35,
 });
 
 const submitMessageState = atom({
@@ -46,9 +52,9 @@ const ResultMessage = () => {
 };
 
 const BattleNav = () => {
-  let now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
+  // let now = new Date();
+  // let hours = now.getHours();
+  // let minutes = now.getMinutes();
 
   return (
     <div className="BattleNav">
@@ -70,9 +76,7 @@ const BattleNav = () => {
         </p>
         <ResultMessage className="MessageToast" />
       </div>
-      <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh", marginRight: "20px" }}>
-        {hours} : {minutes}
-      </p>
+      <CountDownTimer className="timer" />
     </div>
   );
 };
@@ -143,17 +147,17 @@ const Problem = () => {
   );
 };
 
-const CodingPlace = () => {
+const CodingPlace = ({ submitcode }) => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
-
+  const setConsoleHeight = useSetRecoilState(consoleHeightState);
   const [code, setCode] = useState("");
   const setSubmitMessage = useSetRecoilState(submitMessageState);
   const problem_number = 1;
 
   const onChange = (newValue) => {
     setCode(newValue);
-    console.log("code ", code);
+    // console.log("code ", code);
   };
 
   document.addEventListener("mouseup", (e) => {
@@ -172,6 +176,7 @@ const CodingPlace = () => {
   const moveMouse = (event) => {
     if (isClick === true) {
       let y = event.clientY - allheight * 0.13;
+      setConsoleHeight(y);
       if (solvingHeight < y && solvingHeight < allheight * 0.6) {
         setHeight(solvingHeight + 3);
       } else if (solvingHeight > y && solvingHeight > allheight * 0.2) {
@@ -201,14 +206,17 @@ const CodingPlace = () => {
         },
       };
 
-      axios
-        .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
-        .then((response) => {
-          setSubmitMessage(response);
-        })
-        .catch((error) => {
-          setSubmitMessage(error);
-        });
+      console.log(solving_data, header);
+      setSubmitMessage("뭔가 제출 했음");
+      submitcode();
+      // axios
+      //   .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
+      //   .then((response) => {
+      //     setSubmitMessage(response);
+      //   })
+      //   .catch((error) => {
+      //     setSubmitMessage(error);
+      //   });
     }
   };
 
@@ -225,7 +233,7 @@ const CodingPlace = () => {
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
-      <div style={{ width: "70vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
+      <div style={{ width: "69vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2vh", height: "100%", padding: "2%" }}>
@@ -235,13 +243,13 @@ const CodingPlace = () => {
       <div
         id="console"
         style={{
-          width: "69.5vw",
+          width: "69vw",
           height: `${solvingHeight}px`,
           verticalAlign: "top",
         }}>
         <CodeMirror
           value={code}
-          width="70vw"
+          width="69vw"
           height={`${solvingHeight}px`}
           extensions={[python({ jsx: true })]}
           onChange={onChange}
@@ -253,7 +261,7 @@ const CodingPlace = () => {
         onMouseDown={downMouse}
         onMouseMove={moveMouse}
         onMouseUp={upMouse}
-        style={{ position: "relative", width: "70vw", height: "1vh", background: "gray" }}>
+        style={{ position: "relative", width: "69vw", height: "1vh", background: "gray" }}>
         <img
           onMouseDown={downMouse}
           onMouseMove={moveMouse}
@@ -271,7 +279,7 @@ const CodingPlace = () => {
       </div>
       <div
         style={{
-          width: "70vw",
+          width: "69vw",
           height: "5.3vh",
           border: "0.1px solid gray",
         }}>
@@ -306,14 +314,38 @@ const CodingPlace = () => {
 
 const Console = () => {
   const submitMessage = useRecoilValue(submitMessageState);
+  // const solvingHeight = useRecoilValue(solvingHeightState);
+  const consoleHeight = useRecoilValue(consoleHeightState);
+  window.onload();
+
   return (
-    <div style={{ backgroundColor: "#1D1E22" }}>
-      <div>{submitMessage}</div>
+    <div
+      className="scrollDesign"
+      style={{
+        backgroundColor: "#16171b",
+        height: `${consoleHeight}px`,
+        overflowY: "scroll",
+      }}>
+      <p className="NanumSquare" style={{ color: "white", padding: "15px" }}>
+        &gt;&gt; {submitMessage}
+      </p>
     </div>
   );
 };
 
-const SolvingPage = () => {
+const SolvingPage = ({ goResultPage }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+    goResultPage();
+  };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  // };
+
   return (
     <div id="allconsole">
       <RecoilRoot>
@@ -330,15 +362,22 @@ const SolvingPage = () => {
               <Problem />
             </div>
             <div>
-              <div style={{ width: "70vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace />
+              <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
+                <CodingPlace submitcode={showModal} goResultPage={goResultPage} />
               </div>
-              <div style={{ width: "70vw", height: "auto" }}>
+              <div style={{ width: "69vw", height: "auto" }}>
                 <Console />
               </div>
             </div>
           </div>
         </div>
+        <Modal title="제출 결과" open={isModalOpen} onOk={handleOk}>
+          <p>당신은 알고리즘의 신!</p>
+          <p>모든 정답을 맞췄습니다!</p>
+          <p>
+            <small>테스트 케이스 50/50</small>
+          </p>
+        </Modal>
       </RecoilRoot>
     </div>
   );
