@@ -114,7 +114,7 @@ function App() {
   const history = useHistory();
 
   const onHandlePlayerGet = () => {
-    history.push("/ban");
+    history.push("/battle");
 
     if (playerInfo.otherId === "" && playerInfo.userId === "") {
       setPlayerInfo(obj);

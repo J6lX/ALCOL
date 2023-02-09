@@ -309,7 +309,7 @@ function App() {
   //---- 흔들 효과 끝
 
   return (
-    <div className="battle_background">
+    <div className="battle_background animate__animated animate__fadeIn">
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
       <a href="https://codepen.io" data-title="Awesome Button">
         테스트

@@ -6,7 +6,8 @@ import WaitOtherBanPage from "./WaitOtherBanPage";
 import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import ResultPage from "./ResultPage";
-// import { useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
+import { matchingPlayerInfo } from "../../states/atoms";
 
 let submitResult = "";
 
@@ -26,6 +27,7 @@ const ContinuousBattlePage = () => {
   const [isSolved, setIsSolved] = useState(false);
   const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
+  const idInfo = useRecoilState(matchingPlayerInfo);
 
   useEffect(() => {
     setProblems([
@@ -49,12 +51,12 @@ const ContinuousBattlePage = () => {
     console.log("socket", socket);
     socket.onopen = () => {
       const messageType = "connect";
-      const userName = userNamedata;
-      const opponentName = opponentNamedata;
+      const userId = idInfo.userId;
+      const otherId = idInfo.otherId;
       const data = JSON.stringify({
         messageType: messageType,
-        userName: userName,
-        opponentName: opponentName,
+        userId: userId,
+        otherId: otherId,
       });
       socket.send(data);
     };
@@ -64,14 +66,6 @@ const ContinuousBattlePage = () => {
       if (data.messageType === "connect_success") {
         console.log("연결 완료!");
         console.log(data);
-        const header = {
-          headers: {
-            access_token: "access_token",
-            refresh_token: "refresh_token",
-            user_id: "user_id",
-          },
-        };
-        console.log(header);
 
         // axios
         //   .get("http://i8b303.p.ssafy.io/problemList", header)
@@ -150,25 +144,25 @@ const ContinuousBattlePage = () => {
       setIsReady(true);
     }, 5000);
   };
-  const changeSelectedTrue = () => {
-    setTimeout(() => {
-      setIsSelected(true);
-      setIsReady(false);
-    }, 5000);
-  };
-  const changeSolvedTrue = () => {
-    setTimeout(() => {
-      setIsSolved(true);
-      setIsSelected(false);
-    }, 5000);
-  };
+  // const changeSelectedTrue = () => {
+  //   setTimeout(() => {
+  //     setIsSelected(true);
+  //     setIsReady(false);
+  //   }, 5000);
+  // };
+  // const changeSolvedTrue = () => {
+  //   setTimeout(() => {
+  //     setIsSolved(true);
+  //     setIsSelected(false);
+  //   }, 5000);
+  // };
   return (
     <div>
       <div>
         <button onClick={changeConnectTrue}>connect</button>
-        <button onClick={changeSelectedTrue}>banselect</button>
+        {/* <button onClick={changeSelectedTrue}>banselect</button>
         <button>submit_resultfail</button>
-        <button onClick={changeSolvedTrue}>submit_resultsuccess</button>
+        <button onClick={changeSolvedTrue}>submit_resultsuccess</button> */}
         {!isConnected && <ReadyPage />}
         {isConnected && isReady && <BanPage props={problems} changeBanProblem={changeBanProblem} />}
         {isConnected && isBanWait && <WaitOtherBanPage />}
