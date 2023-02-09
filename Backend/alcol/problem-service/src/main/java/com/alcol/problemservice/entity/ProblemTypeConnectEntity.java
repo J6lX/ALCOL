@@ -1,13 +1,13 @@
 package com.alcol.problemservice.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "prob_category_pivot_tb")
 public class ProblemTypeConnectEntity {
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
     int probCategoryPivotNumber;
 
+    int problemNumber;
+    String categoryName;
 }

@@ -45,9 +45,8 @@ public class ProblemController
     }
 
     @GetMapping("/getThreeProblem")
-    public ResponseEntity<Map<String, List<Wait>>> example(@RequestParam int mmr)
+    public ResponseEntity<List<Wait>> example(@RequestParam int mmr)
     {
-        Map<String, List<Wait>> map = new HashMap<>();
         List<Wait> list = new ArrayList<>();
         List<String> cate = new ArrayList<>();
         cate.add("dfs");
@@ -74,9 +73,7 @@ public class ProblemController
         list.add(wait3);
 
 
-        map.put("problems", list);
-
-        return ResponseEntity.status(HttpStatus.OK).body(map);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
         
     }
 }
