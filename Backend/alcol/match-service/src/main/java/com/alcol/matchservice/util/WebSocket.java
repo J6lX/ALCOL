@@ -285,8 +285,8 @@ public class WebSocket {
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
                 }
-                else{send.put("us\n" +
-                            "                    erId", player1Id);
+                else{
+                    send.put("userId", player1Id);
                     send.put("otherId", player2Id);
                 }
                 handleClose(session);
