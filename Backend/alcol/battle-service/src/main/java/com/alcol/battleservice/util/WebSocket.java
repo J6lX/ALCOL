@@ -109,7 +109,7 @@ public class WebSocket {
 
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
-                String url = "http://i8b303.p.ssafy.com:9005/log-service/getThreeProblem?="+mmrAvg;
+                String url = "http://i8b303.p.ssafy.com:9001/problem-service/getThreeProblem?="+mmrAvg;
 
                 ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
                 System.out.println(problems);
@@ -173,10 +173,10 @@ public class WebSocket {
                         int randomIndex = random.nextInt(randomProblemList.size());
                         int selectProblemNum = randomProblemList.get(randomIndex);
                         sessionId2Obj.get(sessionId).problemNum = selectProblemNum;
-                        String url = "http://localhost:9005/getProblem/"+selectProblemNum;
-                        ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
-                        banResult_json.put("messageType","select_sucess");
-                        banResult_json.put("problemNum",selectProblemNum);
+//                        String url = "http://localhost:9005/getProblem/"+selectProblemNum;
+//                        ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
+//                        banResult_json.put("messageType","select_sucess");
+//                        banResult_json.put("problemNum",selectProblemNum);
                         //문제 이름, 번호같은 디테일 넣어야 함.
 //                        banResult_json.put("problemName",)
                     }
