@@ -289,7 +289,7 @@ public class WebSocket {
                     send.put("userId", player1Id);
                     send.put("otherId", player2Id);
                 }
-                handleClose(session);
+//                handleClose(session);
                 session.getAsyncRemote().sendText(send.toJSONString());
             }
         }
