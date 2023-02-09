@@ -10,6 +10,7 @@ import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
 import iconBack from "../../assets/left-arrow.png";
 import iconBackSmall from "../../assets/left-arrow-small.png";
+import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 import "./ModeSelectPage.css";
 import axios from "axios";
 
@@ -64,10 +65,10 @@ function UserInfo({ setMode, setLanguage }) {
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {speedTier}
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {optTier}
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={3}

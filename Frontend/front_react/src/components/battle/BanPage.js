@@ -8,6 +8,7 @@ import img_rightHand from "../../assets/rightHand.png";
 import { useRecoilValue } from "recoil";
 import { matchingPlayerInfo } from "../../states/atoms";
 import { LoginState } from "../../states/LoginState";
+import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 import axios from "axios";
 
 function UserInfo() {
@@ -46,13 +47,13 @@ function UserInfo() {
         span={1}
         style={{ fontSize: "1vw", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        {speedTier}
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={1}
         style={{ fontSize: "1vw", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        {optTier}
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={3}
