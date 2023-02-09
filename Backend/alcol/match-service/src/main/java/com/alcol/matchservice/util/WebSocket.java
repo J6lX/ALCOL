@@ -148,28 +148,29 @@ public class WebSocket {
                 userSet.add(id);
                 userMap.put(id, user);
                 sessionId2Obj.put(session.getId(), user);
-                for(int i=0; i< sessionMap.size(); i++)
+                for(String i : sessionMap.keySet())
                 {
 //                    System.out.println("언어가 같은지?" + sessionId2Obj.get(i+"").language.equals(language));
 //                    System.out.println("모드가 같은지?" + sessionId2Obj.get(i+"").mode.equals(mode));
                     if(
                             (sessionId2Obj.size()>1 && sessionId2Obj.containsKey(i+"")) &&
-                            ((sessionId2Obj.get(i+"").mode.equals(mode)) &&
-                            (sessionId2Obj.get(i+"").language.equals(language))&&
+                            ((sessionId2Obj.get(i).mode.equals(mode)) &&
+                            (sessionId2Obj.get(i).language.equals(language))&&
                             (
-                                    (sessionId2Obj.get(i+"").mmr - 30 <= mmr) &&
-                                    (mmr <= sessionId2Obj.get(i+"").mmr + 30 )
+                                    (sessionId2Obj.get(i).mmr - 30 <= mmr) &&
+                                    (mmr <= sessionId2Obj.get(i).mmr + 30 )
                             )
                     ))
                     {
-                        System.out.println(sessionId2Obj.get(i+"").id);
+                        System.out.println(sessionId2Obj.get(i).id);
                         System.out.println(id);
-                        if(!sessionId2Obj.get(i+"").id.equals(id))
+                        if(!sessionId2Obj.get(i).id.equals(id))
                         {
-                            goBattle(sessionId2Obj.get(i+"").id, id);
-                        break;
+                            goBattle(sessionId2Obj.get(i).id, id);
+                            break;
                         }
                     }
+                    System.out.println("세션 아이디 : "+sessionId2Obj.get(i).id);
                 }
             }
             else if (method.equals("msg"))
