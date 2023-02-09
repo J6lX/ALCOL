@@ -202,6 +202,7 @@ public class WebSocket {
             sessionSet.remove(sessionId);
 
             User user = sessionId2Obj.get(sessionId);
+            sessionMap.remove(sessionId);
             sessionId2Obj.remove(sessionId);
             String type = null;
             String id = null;
@@ -211,7 +212,7 @@ public class WebSocket {
             userSet.remove(id);
             userMap.remove(id);
 
-            refreshMap.put(id + type, LocalTime.now());
+//            refreshMap.put(id + type, LocalTime.now());
             printInfo();
         }
     }
@@ -284,8 +285,8 @@ public class WebSocket {
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
                 }
-                else{
-                    send.put("userId", player1Id);
+                else{send.put("us\n" +
+                            "                    erId", player1Id);
                     send.put("otherId", player2Id);
                 }
                 session.getAsyncRemote().sendText(send.toJSONString());
