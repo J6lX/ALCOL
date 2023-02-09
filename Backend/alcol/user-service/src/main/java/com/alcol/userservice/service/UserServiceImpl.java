@@ -200,7 +200,8 @@ public class UserServiceImpl implements UserService
         // 닉네임, 사진 정보 가져옴
         UserEntity userEntity = userRepository.findByUserId(userId);
 
-        int curExp, curSpeedMmr, curOptimizationMmr;
+        int curExp, curSpeedMmr, curOptimizationMmr, level;
+        String speedTier, optimizationTier;
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
 
@@ -251,9 +252,16 @@ public class UserServiceImpl implements UserService
                         curOptimizationMmr, curOptimizationMmr
                 );
 
-        int level = userLevelEntity.getLevel();
-        String speedTier = userTierEntityBySpeed.getTier();
-        String optimizationTier = userTierEntityByOptimization.getTier();
+        try {
+            level = userLevelEntity.getLevel();
+            speedTier = userTierEntityBySpeed.getTier();
+            optimizationTier = userTierEntityByOptimization.getTier();
+        }
+        catch (NullPointerException e) {
+            level = 0;
+            speedTier = "BRONZE5";
+            optimizationTier = "BRONZE5";
+        }
 
         log.info("UserServiceImpl 의 getUserInfo 메소드에서 사용자 레벨, 티어 정보 가져오기 성공");
 
