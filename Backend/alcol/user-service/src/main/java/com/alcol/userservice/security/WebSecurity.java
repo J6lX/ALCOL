@@ -49,10 +49,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter
     public CorsConfigurationSource corsConfigurationSource()
     {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
+        corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
-        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowCredentials(false);
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource =
                 new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
