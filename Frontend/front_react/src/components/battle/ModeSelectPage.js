@@ -239,17 +239,25 @@ function HandleFinishSelectButton({ mode, language }) {
 }
 
 function App() {
+  // {
+  //   "nickname": "kim",
+  //   "level": "6",
+  //   "speed_tier": "BRONZE5",
+  //   "optimization_tier": "BRONZE1",
+  //   "stored_file_name": "722072393185400.jpg"
+  // }
+
   const [mode, setMode] = useRecoilState(selectedMode);
   const [language, setLanguage] = useRecoilState(selectedLanguage);
+  const [nickname, setNickname] = React.useState("a");
+  const [speedTier, setSpeedTier] = React.useState("a");
+  const [optTier, setOptTier] = React.useState("a");
   var userId = useRecoilValue(LoginState);
   const history = useHistory();
 
-  console.log("여기는 모드 선택화면의 유저 정보 부분!");
-  console.log(userId);
-  // const ID = JSON.stringify({
-  //   user_id: userId,
-  // });
-  // const headers = { access_tocken: AccessTokenInfo };
+  useEffect(() => {
+    // console.log(nickname, speedTier, optTier);
+  }, [nickname, speedTier, optTier]);
 
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
@@ -257,6 +265,9 @@ function App() {
     })
     .then(function (response) {
       console.log(response.data);
+      setNickname(response.data.nickname);
+      setSpeedTier(response.data.speed_tier);
+      setOptTier(response.data.optimization_tier);
     })
     .catch((error) => {
       let customCode = error.response.data.custom_code;
