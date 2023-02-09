@@ -111,8 +111,8 @@ public class WebSocket {
                 System.out.println("this is restTempalte : "+ restTemplate);
                 String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 
-                ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
-                System.out.println(problems);
+                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
+                System.out.println(problems.toString());
 
                 User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
                 if(sessionMap.containsKey(otherUserId))
