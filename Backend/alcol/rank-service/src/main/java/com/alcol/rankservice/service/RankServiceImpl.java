@@ -60,10 +60,12 @@ public class RankServiceImpl implements RankService{
             battleResultService.recordUserData(userId);
         }
 
+        int level = 0;
         // redis에서 유저 정보를 가져온다.
         String nickname = userInfo.get(key, "nickname");
         String profilePic = userInfo.get(key, "stored_file_name");
-        int level = Integer.valueOf(userInfo.get(key, "level"));
+        if(userInfo.get(key, "level") != null)
+            level = Integer.valueOf(userInfo.get(key, "level"));
         String speedTier = userInfo.get(key, "speed_tier");
         String optimizationTier = userInfo.get(key, "optimization_tier");
 
