@@ -60,7 +60,7 @@ spring:
             - Path=/user-service/**
           filters:
             - RemoveRequestHeader=Cookie
-            - AccessTokenFilter
+#            - AccessTokenFilter
 
         # rank-service request
         - id: rank-service
