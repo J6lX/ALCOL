@@ -11,11 +11,6 @@ import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
 
 // 현재 로그인한 사용자 정보
 const userData = {
-  dongjun: {
-    name: "Dongjun", // 이름
-    battleRec: {}, // 전적
-    friends: {}, // 친구 목록
-  },
   tester: {
     name: "tester",
     battleRec: {},
@@ -322,7 +317,7 @@ function Mypage() {
       style={{
         backgroundColor: "#16171B",
         padding: "30px",
-        minHeight: "150vh",
+        height: "100%",
       }}>
       {profile ? (
         <div>
@@ -353,14 +348,16 @@ function Mypage() {
             </Col>
 
             {/* 스트릭 및 티어 정보 표시 블록*/}
-            <Col xs={16} lg={18} className="textHighlight block">
+            <Col xs={16} lg={18} className="block">
               <Row>
                 {/* 티어 정보 표시 블록 */}
                 <Col span={24} justify="center" align="middle">
                   <Row justify="center" align="middle">
                     {/* 스피드전 티어 뱃지 */}
                     <Col
-                      span={6}
+                      xs={12}
+                      md={8}
+                      xl={6}
                       justify="center"
                       style={{
                         margin: "15px",
@@ -388,19 +385,26 @@ function Mypage() {
                         }}
                         labelPosition={0}
                       />
-                      <img
-                        src={goldBadge}
-                        alt="Badge"
-                        style={{
-                          width: "60%",
-                          height: "60%",
-                          transform: "translate(0px, -120%)",
-                        }}
-                      />
+                      <img src={goldBadge} alt="Badge" className="tierBadge" />
+                      <span className="tierNo">1</span>
+                    </Col>
+                    {/* 스피드전 데이터 요약 */}
+                    <Col xs={24} md={8} lg={8} xl={5}>
+                      <p>티어명</p>
+                      <p>MMR</p>
+                      <p>1000위(상위 20%)</p>
+                    </Col>
+                    {/* 최적화전 데이터 요약 */}
+                    <Col xs={24} md={8} lg={8} xl={5}>
+                      <p>티어명</p>
+                      <p>MMR</p>
+                      <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col
-                      span={6}
+                      xs={12}
+                      md={8}
+                      xl={6}
                       justify="center"
                       style={{
                         margin: "15px",
@@ -427,15 +431,7 @@ function Mypage() {
                         }}
                         labelPosition={0}
                       />
-                      <img
-                        src={goldBadge}
-                        alt="Badge"
-                        style={{
-                          width: "60%",
-                          height: "60%",
-                          transform: "translate(0px, -120%)",
-                        }}
-                      />
+                      <img src={goldBadge} alt="Badge" className="tierBadge" />
                     </Col>
                   </Row>
                 </Col>

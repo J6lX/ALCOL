@@ -75,10 +75,7 @@ function LastSeason() {
   // 뱃지 정보 추가
   const badgeMap = dummy.map((data) => {
     if (data.tierName === "Bronze") {
-      return {
-        ...data,
-        badge: bronzeBadge,
-      };
+      return { ...data, badge: bronzeBadge };
     } else if (data.tierName === "Silver") {
       return { ...data, badge: silverBadge };
     } else if (data.tierName === "Gold") {

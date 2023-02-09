@@ -85,7 +85,7 @@ function App() {
             <PrivateRoute path="/battle" component={ContinuousBattlePage} />
 
             {/* 랭킹 조회 페이지 */}
-            <PrivateRoute path="/ranking" component={Ranking} />
+            <Route path="/ranking" component={Ranking} />
 
             {/* 회원가입 페이지 */}
             <PrivateRoute path="/register" exact={true} component={RegisterPage} />
@@ -109,7 +109,7 @@ function App() {
             <PrivateRoute path="/solveprac" exact={true} component={PracticeSolvingPage} />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
-            <PrivateRoute path="/mypage/:username" exact={true} component={Mypage} />
+            <Route path="/mypage/:username" exact={true} component={Mypage} />
 
             {/* 지난 시즌 정보 조회 페이지 */}
             <PrivateRoute path="/season/:username" exact={true} component={LastSeason} />

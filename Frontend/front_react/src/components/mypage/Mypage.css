@@ -78,6 +78,24 @@
   padding: 5px;
 }
 
+/* 티어 뱃지(스피드, 효율성) */
+.tierBadge {
+  position: relative;
+  width: 80%;
+  height: 80%;
+  transform: translate(0px, -105%);
+}
+
+/* 뱃지 안에 들어갈 숫자(세부 티어 */
+.tierNo {
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  transform: translate(-50%, -50%);
+}
+
 /* 페이지네이션 커스텀 */
 .ant-pagination .ant-pagination-item-active {
   border: none;
