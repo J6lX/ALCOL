@@ -98,6 +98,10 @@ public class RankServiceImpl implements RankService{
         {
             log.warn("해당 유저의 승패 정보가 존재하지 않음");
         }
+        catch (NumberFormatException numberFormatException)
+        {
+            log.warn("해당 유저의 승패 정보가 존재하지 않음");
+        }
 
         return RankDto.WinLoseCount.builder()
                 .win(win)
@@ -175,16 +179,17 @@ public class RankServiceImpl implements RankService{
      * */
     public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
     {
-
-//        String url = "http://localhost:9000/user-service/getUserInfo";
-        String url = "http://localhost:8080/nik?nickname=킹왕짱토";
         // 닉네임으로 유저 아이디 요청해서 가져옴 (user-service)
-        String searchUserId = restTemplate.getForObject(url, String.class);
+        Map<String, String> map = new HashMap<>();
+        map.put("nickname", nickname);
+        String url = "http://localhost:9000/user-service/getUserId";
+        String searchUserId = restTemplate.postForObject(url, map, String.class);
 
         // 받은 userId로 보여줄 userData 받아옴
         RankDto.Ranking searchUserInfo = responseUserInfo(searchUserId, battleMode);
         return searchUserInfo;
     }
+
     /**
      * 보여줄 개인유저 데이터
      * */
