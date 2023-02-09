@@ -37,6 +37,7 @@ public class WebSocket {
     private static Set<String> sessionSet = new HashSet<String>();
     private static Map<String, Session> sessionMap = new HashMap<>();
     private static Map<String, BattleRoom> sessionId2Obj = new HashMap<>();
+    private static Map<String, Session> userId2Session = new HashMap<>();
     private static Map<String, User> userMap = new HashMap<>();
     private static Set<String> userSet = new HashSet<String>();
     private static Map<String, LocalTime> refreshMap = new HashMap<>();
@@ -83,10 +84,11 @@ public class WebSocket {
             System.out.println(jsonMessage);
             String method = obj.get("method").toString();
             Object object = null;
-            if (method.equals("init"))
+            // 처음 입장할 때
+            if (method.equals("connect"))
             {
                 String userId = obj.get("userId").toString();
-                String otherUserId = obj.get("otheruserId").toString();
+                String otherUserId = obj.get("otherId").toString();
                 String battleMode = obj.get("battleMode").toString();
                 ranking = redisTemplate.opsForZSet();
                 try
@@ -110,6 +112,7 @@ public class WebSocket {
                 if(sessionMap.containsKey(otherUserId))
                 {
                     sessionId2Obj.get(otherUserId).user2 = user;
+                    userId2Session.put(userId, userId2Session.get(otherUserId));
                     System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
                 }
                 else
@@ -118,12 +121,83 @@ public class WebSocket {
                     BattleRoom battleRoom = BattleRoom.builder().user1(user).build();
                     sessionMap.put(userId, session);
                     sessionId2Obj.put(userId, battleRoom);
+                    userId2Session.put(userId, session);
                     System.out.println("이번에 만들어짐 : " + sessionMap);
                 }
                 System.out.println();
+                session.getAsyncRemote().sendText("connect_success");
 
 
             }
+            /**벤픽 시작 전 3문제 얻어오기 요청 수행 (problem Service로 요청 전달)*/
+            else if (method.equals("getProblem"))
+            {
+                String userId = obj.get("userId").toString();
+                System.out.println("this is restTempalte : "+ restTemplate);
+                String url = "http://localhost:9005/log-service/getLevelAndTier";
+                ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
+//                System.out.println(problems.toString());
+                JSONObject problems_json = new JSONObject();
+//                problems_json.put()
+                sendProblems(session, problems_json);
+
+                /****문제를 보내고 벤픽 시간을 제한해야 함****/
+
+                JSONObject banResult_json = new JSONObject();
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        String sessionId = userId2Session.get(userId).getId();
+                        int size = sessionId2Obj.get(sessionId).problemList.size();
+                        List<Integer> randomProblemList = new ArrayList<>();
+                        for (String key : sessionId2Obj.get(sessionId).problemList.keySet())
+                        {
+                            if(sessionId2Obj.get(sessionId).problemList.get(key))
+                            {
+                                randomProblemList.add(Integer.parseInt(key));
+                            }
+                        }
+
+                        /**밴픽 시간이 다 지난 후에 밴픽을 끝내는 메시지와 함께 문제 전송*/
+                        Random random = new Random();
+                        int randomIndex = random.nextInt(randomProblemList.size());
+                        int selectProblemNum = randomProblemList.get(randomIndex);
+                        sessionId2Obj.get(sessionId).problemNum = selectProblemNum;
+                        String url = "http://localhost:9005/getProblem/"+selectProblemNum;
+                        ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
+                        banResult_json.put("messageType","select_sucess");
+                        banResult_json.put("problemNum",selectProblemNum);
+                        //문제 이름, 번호같은 디테일 넣어야 함.
+//                        banResult_json.put("problemName",)
+                    }
+                };
+                runCheck = true;
+                Timer timer = new Timer(true);
+                long delay = 5000;
+                timer.schedule(task, delay);
+
+            }
+            /**사용자가 밴을 할 때 들어오는 곳, 문제를 false로 바꿈*/
+            else if (method.equals("ban"))
+            {
+                String userId = obj.get("userId").toString();
+                String problemNum = obj.get("problemNum").toString();
+                String sessionId = userId2Session.get(userId).getId();
+                sessionId2Obj.get(sessionId).problemList.put(problemNum,false);
+            }
+
+            /**문제를 제출했을 때 들어오는 곳, 채점서버로 요청 보내야 함.*/
+            else if (method.equals("submit"))
+            {
+                String userId = obj.get("userId").toString();
+                String problemNum = obj.get("problemNum").toString();
+                String submitCode = obj.get("code").toString();
+
+                String url = "http://localhost:9005/getProblem/";
+                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
+
+            }
+
             else if (method.equals("msg"))
             {
                 String msg = obj.get("msg").toString();
@@ -139,6 +213,28 @@ public class WebSocket {
                 sendMessageToAll(sb.toString());
             }
         }
+    }
+
+    private void sendProblems(Session session, JSONObject problems_json) {
+//        Session session = null;
+        session.getAsyncRemote().sendText(problems_json.toJSONString());
+//        for (String sessionId : sessionId2Obj.keySet()) {
+//            Object obj = sessionId2Obj.get(sessionId);
+//            if ((obj instanceof User && ((User) obj).getId().equals(player2Id)) || (obj instanceof User && ((User) obj).getId().equals(player1Id))) {
+//                session = sessionMap.get(sessionId);
+//                System.out.println(session);
+//                JSONObject send = new JSONObject();
+//                if(((User) obj).getId().equals(player2Id)){
+//                    send.put("userId", player2Id);
+//                    send.put("otherId", player1Id);
+//                }
+//                else{
+//                    send.put("userId", player1Id);
+//                    send.put("otherId", player2Id);
+//                }
+//                session.getAsyncRemote().sendText(send.toJSONString());
+//            }
+//        }
     }
 
 
