@@ -76,7 +76,8 @@ const ContinuousBattlePage = () => {
   }, []);
 
   socket.onmessage = (servermessage) => {
-    const data = servermessage;
+    const data = servermessage.data;
+    console.log(data);
     if (data === "connect_success") {
       console.log("연결 완료!");
       console.log(data);
@@ -93,13 +94,13 @@ const ContinuousBattlePage = () => {
         setIsConnected(true);
         setIsReady(true);
       }, 3000);
-    } else if (data.messageType === "ban_success") {
+    } else if (data === "ban_success") {
       console.log("문제 선택 완료!");
       setTimeout(() => {
         setIsReady(false);
         setIsBanWait(true);
       }, 5000);
-    } else if (data.messageType === "select_success") {
+    } else if (data === "select_success") {
       setTimeout(() => {
         setIsBanWait(false);
         setIsSelected(true);
@@ -108,13 +109,13 @@ const ContinuousBattlePage = () => {
           setIsSolving(true);
         }, 15000);
       }, 5000);
-    } else if (data.messageType === "submit_success") {
+    } else if (data === "submit_success") {
       submitResult = data.submitResult;
       console.log(submitResult);
       if (submitResult === "success") {
         setIsSolved(true);
       }
-    } else if (data.messageType === "close") {
+    } else if (data === "close") {
       socket.onclose();
     } else {
       console.log("뭐가 오긴 왔는데...");
