@@ -65,7 +65,7 @@ function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
   const modeName = paramInfo.mode;
-  const pageNo = paramInfo.page;
+  const pageNo = Number(paramInfo.page);
 
   // 탭 선택 여부에 따라 스타일링
   const [speedColor, setSpeedColor] = useState({ color: "white" });
@@ -109,8 +109,9 @@ function Ranking() {
 
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
-    console.log(page);
+    console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
     setCurrent(page);
+    window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
 
   return (
@@ -244,9 +245,9 @@ function Ranking() {
                           // }}
                         />
                         <Pagination
-                          current={current}
+                          defaultCurrent={current}
                           onChange={pageMove}
-                          total={100}
+                          total={(pageNo + 9) * 10}
                           showQuickJumper={false}
                           showSizeChanger={false}
                         />
