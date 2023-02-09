@@ -1,44 +1,35 @@
 import React, { useEffect } from "react";
-import { Col, Row } from "antd";
+// import { Row } from "antd";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
-// import img_leftHand from "../../assets/leftHand.png";
-// import img_rightHand from "../../assets/rightHand.png";
 
 function Top() {
   return (
-    <Row>
-      <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
-        <div className="ban_title">문제 유형이 선택되었습니다.</div>
-        <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
-      </Col>
-      <Col xs={0} sm={0} md={4} xl={6}></Col>
-    </Row>
+    <div className="middle_selected" style={{ paddingTop: "15%" }}>
+      <div className="ban_title">문제 유형이 선택되었습니다.</div>
+      <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
+    </div>
   );
 }
 
 function SelectedProblem({ problem }) {
   return (
-    <Row justify="space-between" style={{ marginTop: "80px" }} className="ban_algo_contents">
-      <div style={{ backgroundColor: "white" }}>
-        <h1>Ready!!!</h1>
-        <p>문제 {problem.problem_no} 번</p>
-        <p>{problem.problem_title}</p>
-        <p>문제 난이도: {problem.problem_tier}</p>
-        <p>문제 유형: {problem.problem_category}</p>
-        <p>제한 시간: 2시간(120분)</p>
-      </div>
-    </Row>
+    <div
+      className="middle_selected"
+      style={{ width: "600px", height: "400px", backgroundColor: "white" }}>
+      <h1 style={{ color: "black" }}>Ready!!!</h1>
+      <p>문제 {problem.problem_no} 번</p>
+      <p>{problem.problem_title}</p>
+      <p>문제 난이도: {problem.problem_tier}</p>
+      <p>문제 유형: {problem.problem_category}</p>
+      <p>제한 시간: 2시간(120분)</p>
+    </div>
   );
-}
-
-function Bottom() {
-  return <Row style={{ marginTop: "60px" }}></Row>;
 }
 
 const SelectedProblemPage = (props) => {
   const [problem, setProblem] = React.useState([]);
-  console.log("이건?", props);
+  // console.log("이건?", props);
   useEffect(() => {
     setProblem({
       problem_no: 1002,
@@ -55,10 +46,10 @@ const SelectedProblemPage = (props) => {
   }, []);
 
   return (
-    <div className="backgroundimg">
+    <div className="fullmiddle_selected backgroundimg">
       <Top />
+      <br />
       <SelectedProblem problem={problem} />
-      <Bottom />
     </div>
   );
 };

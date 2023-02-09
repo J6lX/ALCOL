@@ -1,13 +1,30 @@
 .backgroundimg {
-    height: 100vh;
-    background: url(/src/assets/battle_background.png);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-  
-    /* overflow-y: scroll; */
-  
-    -ms-overflow-style: none; /* 인터넷 익스플로러 */
-    scrollbar-width: none; /* 파이어폭스 */
-  }
+  height: 100vh;
+  background: url(/src/assets/battle_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  /* overflow-y: scroll; */
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.middle_selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+};
+
+.fullmiddle_selected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100vw;
+}
 
