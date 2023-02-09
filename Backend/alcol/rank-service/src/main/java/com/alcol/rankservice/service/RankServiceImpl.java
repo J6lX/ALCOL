@@ -52,7 +52,7 @@ public class RankServiceImpl implements RankService{
     public RankDto.UserData getUserData(String userId)
     {
         userInfo = redisTemplate.opsForHash();
-        String key = "userInfo:" + "userId1";
+        String key = "userInfo:" + userId;
 
         // redis에 정보가 없다면 user-service에게 요청해 가져오고 redis에 저장한다.
         if(!userInfo.hasKey(key, "nickname"))
@@ -159,7 +159,10 @@ public class RankServiceImpl implements RankService{
         while(iterator.hasNext()){
             String userId = String.valueOf(iterator.next());
             int mmr = ranking.score(battleMode, userId).intValue();
+
+            // 해당 유저의 승패수를 가져온다.
             RankDto.WinLoseCount winLose = getWinLoseCount(userId, battleMode);
+            // 해당 유저의 정보를 가져온다.
             RankDto.UserData userData = getUserData(userId);
             String tier = battleMode.equals("speed") ? userData.getSpeedTier() : userData.getOptimizationTier();
 
