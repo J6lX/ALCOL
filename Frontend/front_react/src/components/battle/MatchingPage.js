@@ -4,6 +4,7 @@ import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
 import { LoginState } from "../../states/LoginState";
+import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 import "./MatchingPage.css";
 import axios from "axios";
 
@@ -40,10 +41,10 @@ function UserInfo() {
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {speedTier}
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {optTier}
+        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
       </Col>
       <Col
         span={3}
