@@ -7,16 +7,13 @@ import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import ResultPage from "./ResultPage";
 import { useRecoilState } from "recoil";
-import { matchingPlayerInfo } from "../../states/atoms";
+import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
 
 let submitResult = "";
 
-const userNamedata = "personA";
-const opponentNamedata = "personB";
 const serverAddress = "localhost:3000";
 const websocketAddress = "ws://" + serverAddress + "/battle";
 let socket = null;
-console.log(userNamedata, opponentNamedata);
 
 const ContinuousBattlePage = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -28,6 +25,9 @@ const ContinuousBattlePage = () => {
   const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const idInfo = useRecoilState(matchingPlayerInfo);
+  const battleModeInfo = useRecoilState(selectedMode);
+  const languageMode = useRecoilState(selectedLanguage);
+  console.log(battleModeInfo, languageMode);
 
   useEffect(() => {
     setProblems([
@@ -53,10 +53,12 @@ const ContinuousBattlePage = () => {
       const messageType = "connect";
       const userId = idInfo.userId;
       const otherId = idInfo.otherId;
+      const battleMode = battleModeInfo;
       const data = JSON.stringify({
         messageType: messageType,
         userId: userId,
         otherId: otherId,
+        battleMode: battleMode,
       });
       socket.send(data);
     };
@@ -78,7 +80,7 @@ const ContinuousBattlePage = () => {
         setTimeout(() => {
           setIsConnected(true);
           setIsReady(true);
-        }, 5000);
+        }, 3000);
       } else if (data.messageType === "ban_success") {
         console.log("문제 선택 완료!");
         setTimeout(() => {
