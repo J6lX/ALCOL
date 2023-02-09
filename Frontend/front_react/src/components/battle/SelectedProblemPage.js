@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-// import { Row } from "antd";
+import { Row, Col } from "antd";
+import versus from "../../assets/versus.png";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
 
 function Top() {
   return (
-    <div className="middle_selected" style={{ paddingTop: "15%" }}>
+    <div className="middle_selected" style={{ paddingTop: "10%" }}>
       <div className="ban_title">문제 유형이 선택되었습니다.</div>
       <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
     </div>
@@ -14,15 +15,32 @@ function Top() {
 
 function SelectedProblem({ problem }) {
   return (
-    <div
-      className="middle_selected"
-      style={{ width: "600px", height: "400px", backgroundColor: "white" }}>
-      <h1 style={{ color: "black" }}>Ready!!!</h1>
-      <p>문제 {problem.problem_no} 번</p>
-      <p>{problem.problem_title}</p>
-      <p>문제 난이도: {problem.problem_tier}</p>
-      <p>문제 유형: {problem.problem_category}</p>
-      <p>제한 시간: 2시간(120분)</p>
+    <div className="middle_selected">
+      <Row className="middle_selected" style={{ flexDirection: "row", width: "600px", height: "50px" }}>
+        <Col span={9} style={{ display:"flex", alignItems: "center", justifyContent: "left", backgroundColor: "yellow", height: "50px"}}>
+          <p style={{ color: "black", fontSize: "3vh" }}>player1</p>
+        </Col>
+        <Col span={6} style={{ display:"flex", justifyContent: "center"}}>
+          <img src={versus} alt="versus" style={{ width: "60px"}} />
+        </Col>
+        <Col span={9} style={{ display:"flex", alignItems: "center", justifyContent: "right", backgroundColor: "yellow", height: "50px"}}>
+          <p style={{ color: "black", fontSize: "3vh" }}>player2</p>
+        </Col>
+      </Row>
+      <br />
+      <div
+        className="middle_selected"
+        style={{ width: "600px", height: "300px", border: "3px solid white", backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
+        <h1 style={{ color: "white" }}>Ready!!!</h1>
+        <br />
+        <br />
+        <br />
+        <p style={{ color: "white" }}>문제 {problem.problem_no} 번</p>
+        <p style={{ color: "white" }}>{problem.problem_title}</p>
+        <p style={{ color: "white" }}>문제 난이도: {problem.problem_tier}</p>
+        <p style={{ color: "white" }}>문제 유형: {problem.problem_category}</p>
+        <p style={{ color: "white" }}>제한 시간: 2시간(120분)</p>
+      </div>
     </div>
   );
 }
@@ -33,7 +51,7 @@ const SelectedProblemPage = (props) => {
   useEffect(() => {
     setProblem({
       problem_no: 1002,
-      problem_category: ["수학", "브르투포스 알고리즘"],
+      problem_category: ["수학", "브루트포스 알고리즘"],
       problem_title: "이상한 술집",
       problem_tier: "gold",
       problem_content:
