@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
   {
-    dataIndex: "id",
-    key: "id",
+    dataIndex: "grade",
+    key: "grade",
     title: "순위",
     align: "center",
     hidden: true,
@@ -21,6 +21,20 @@ const rankingLabel = [
     title: "닉네임",
     align: "center",
     hidden: true,
+  },
+  {
+    dataIndex: "profile_img",
+    title: "Image",
+    render: () => (
+      <img
+        src={`profile_img`}
+        alt="profile"
+        style={{
+          width: "32px",
+          height: "32px",
+        }}
+      />
+    ),
   },
   {
     dataIndex: "level",
@@ -98,7 +112,15 @@ function Ranking() {
         const originData = response.data.bodyData;
         rankerData = originData.map((data) => {
           console.log(data);
-          return (data.record = `${data.record.win}승 ${data.record.lose}패 (${data.record.winrate}%)`);
+          return {
+            grade: data.grade,
+            nickname: data.nickname,
+            profile_img: data.profile_pic,
+            mmr: data.MMR,
+            level: data.level,
+            tier: data.tier,
+            record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+          };
         });
 
         console.log(rankerData);
@@ -115,6 +137,50 @@ function Ranking() {
       console.log("응답 실패 : " + error);
     });
 
+  // const dummyData = [
+  //   {
+  //     grade: 1,
+  //     nickname: "seoyoung",
+  //     profile_pic: "",
+  //     level: 25,
+  //     MMR: 153,
+  //     tier: "gold",
+  //     record: {
+  //       win: 22,
+  //       lose: 17,
+  //       winningRate: 69,
+  //     },
+  //   },
+  //   {
+  //     grade: 2,
+  //     nickname: "seyoung",
+  //     profile_pic: "",
+  //     level: 39,
+  //     MMR: 150,
+  //     tier: "gold",
+  //     record: {
+  //       win: 22,
+  //       lose: 17,
+  //       winningRate: 69,
+  //     },
+  //   },
+  // ];
+
+  // // map 구현용 테스트 코드(성공 시 삭제)
+  // const extractedData = dummyData.map((data) => {
+  //   return {
+  //     grade: data.grade,
+  //     nickname: data.nickname,
+  //     profile_img: data.profile_pic,
+  //     mmr: data.MMR,
+  //     level: data.level,
+  //     tier: data.tier,
+  //     record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+  //   };
+  // });
+  // console.log(extractedData);
+
+  // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
     console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
