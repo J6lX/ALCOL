@@ -106,19 +106,22 @@ public class WebSocket {
                     MultiValueMap<String, String> bodyData = new LinkedMultiValueMap<>();
                     bodyData.add("user_id",userId);
                     bodyData.add("mode",battleMode);
-
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
-                String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
-
-//                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
-                List<Map<String,String>> problems = restTemplate.getForObject(url,List.class);
-                for(int i=0; i<problems.size(); i++)
+                if(sessionId2Obj.get(session.getId()).problemList.isEmpty())
                 {
-                    Map<String,String> prob = problems.get(i);
-                    System.out.println(prob.toString());
-
+                    String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
+//                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
+                    List<Map<String,String>> problems = restTemplate.getForObject(url,List.class);
+                    for(int i=0; i<problems.size(); i++)
+                    {
+                        Map<String,String> prob = problems.get(i);
+                        System.out.println(prob.toString());
+                        Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
+                        System.out.println("넣은 문제 : "+problem.toString());
+                    }
                 }
+
 
                 User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
                 if(sessionMap.containsKey(otherUserId))
