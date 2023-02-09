@@ -4,7 +4,6 @@ import { Col, Row } from "antd";
 import "./SelectedProblemPage.css";
 // import img_leftHand from "../../assets/leftHand.png";
 // import img_rightHand from "../../assets/rightHand.png";
-import CountDownTimer from "./CountDownTimer";
 
 function Top() {
   return (
@@ -14,11 +13,8 @@ function Top() {
         {/* <img src={img_leftHand} alt="hand" className="ban_hands_left" /> */}
       </Col>
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
-        <div className="ban_title">이 문제 유형이 선택되었습니다.</div>
+        <div className="ban_title">문제 유형이 선택되었습니다.</div>
         <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
-        <div>
-          <CountDownTimer className="timer" />
-        </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
     </Row>

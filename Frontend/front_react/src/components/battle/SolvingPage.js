@@ -3,6 +3,7 @@ import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } f
 // import axios from "axios";
 import Logo from "../../assets/alcol_empty_black.png";
 import Dots from "../../assets/dots.png";
+import CountDownTimer from "./CountDownTimer";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
@@ -51,9 +52,9 @@ const ResultMessage = () => {
 };
 
 const BattleNav = () => {
-  let now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
+  // let now = new Date();
+  // let hours = now.getHours();
+  // let minutes = now.getMinutes();
 
   return (
     <div className="BattleNav">
@@ -75,9 +76,7 @@ const BattleNav = () => {
         </p>
         <ResultMessage className="MessageToast" />
       </div>
-      <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh", marginRight: "20px" }}>
-        {hours} : {minutes}
-      </p>
+      <CountDownTimer className="timer" />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, Progress } from "antd";
 import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
@@ -32,6 +32,18 @@ function UserInfo() {
 }
 
 function Top() {
+  const [secs, setTime] = React.useState(100);
+
+  const tick = () => {
+    setTime(secs - 1);
+  };
+
+  React.useEffect(() => {
+    //1초
+    const timerId = setInterval(() => tick(), 1000);
+    return () => clearInterval(timerId);
+  });
+
   return (
     <Row>
       <Col xs={12} sm={10} md={8} xl={6}>
@@ -46,6 +58,7 @@ function Top() {
         </div>
         <div>
           <CountDownTimer className="timer" />
+          <Progress percent={secs / 300} showInfo={false} />
         </div>
       </Col>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
@@ -71,7 +84,6 @@ function Mid({ props, onClick }) {
       $(this).addClass("active");
     });
   });
-
 
   return (
     <Row justify="space-between" style={{ marginTop: "50px" }} className="ban_algo_contents">
@@ -141,7 +153,6 @@ function App({ props, changeBanProblem }) {
       setChoose("3");
     }
   }, [choose, problem]);
-
 
   return (
     <div className="matching_background">
