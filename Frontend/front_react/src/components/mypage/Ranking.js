@@ -1,4 +1,4 @@
-import { Button, Row, Col, Input, Table, ConfigProvider, theme } from "antd";
+import { Button, Row, Col, Input, Table, ConfigProvider, theme, Pagination } from "antd";
 import "./Ranking.css";
 import rankingHeader from "../../assets/ranking_header.png";
 import qs from "query-string";
@@ -89,8 +89,6 @@ function Ranking() {
     }
   }, [modeName]);
 
-  console.log(modeName);
-
   // 파라미터를 바탕으로 서버에 랭커 정보 요청
   // axios 통신 진행
   axios
@@ -108,10 +106,16 @@ function Ranking() {
     .catch((error) => {
       console.log("응답 실패 : " + error);
     });
+
+  const [current, setCurrent] = useState(pageNo);
+  const pageMove = (page) => {
+    console.log(page);
+    setCurrent(page);
+  };
+
   return (
     <div>
       {/* 페이지 제목(이미지 위에 띄우기) */}
-
       <img
         src={rankingHeader}
         alt="headerImage"
@@ -238,6 +242,13 @@ function Ranking() {
                           //   position: ["bottomCenter"],
                           //   defaultPageSize: 10,
                           // }}
+                        />
+                        <Pagination
+                          current={current}
+                          onChange={pageMove}
+                          total={100}
+                          showQuickJumper={false}
+                          showSizeChanger={false}
                         />
                       </ConfigProvider>
                     </Col>
