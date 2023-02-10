@@ -286,25 +286,33 @@ public class WebSocket {
                 {
 //                    sessionId2Obj.get(sessionId).problemList
                     sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.put(Integer.parseInt(problemNum),false);
+                    System.out.println(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(problemNum)+"번 문제 밴됨");
                     if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().userId.equals(userId))
                     {
                         sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum = Integer.parseInt(problemNum);
+                        System.out.println(userId +" 유저가 " + sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum + "번 문제를 밴함");
+
                     }
                     else
                     {
                         sessionId2Obj.get(userId2SessionId.get(userId)).user2.banProblemNum = Integer.parseInt(problemNum);
+                        System.out.println(userId +" 유저가 " + sessionId2Obj.get(userId2SessionId.get(userId)).user2.banProblemNum + "번 문제를 밴함");
                     }
                     if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().banProblemNum!=0
                             && sessionId2Obj.get(userId2SessionId.get(userId)).getUser2().banProblemNum!=0)
                     {
+                        System.out.println("두 명 다 밴이 끝남");
                         JSONObject data = new JSONObject();
                         data.put("messageType","select_success");
                         userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
+                        System.out.println(" 지금 유저 : " + userId2Session.get(userId));
+                        System.out.println(" 다음 유저 : " + userId2Session.get(userId2SessionId.get(userId)));
                         userId2Session.get(userId2SessionId.get(userId)).getAsyncRemote().sendText(data.toJSONString());
 //                        session.getAsyncRemote().sendText(data.toJSONString());
                     }
                     else
                     {
+                        System.out.println("한명이 밴함");
                         JSONObject data = new JSONObject();
                         data.put("messageType","ban_success");
                     }
