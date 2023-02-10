@@ -40,6 +40,7 @@ public class WebSocket {
     private static Map<String, Session> sessionMap = new HashMap<>();
     private static Map<String, BattleRoom> sessionId2Obj = new HashMap<>();
     private static Map<String, Session> userId2Session = new HashMap<>();
+    private static Map<String, String> userId2SessionId = new HashMap<>();
     private static Map<String, User> userMap = new HashMap<>();
     private static Set<String> userSet = new HashSet<String>();
     private static Map<String, LocalTime> refreshMap = new HashMap<>();
@@ -116,6 +117,7 @@ public class WebSocket {
                 {
                     sessionId2Obj.get(otherUserId).user2 = user;
                     userId2Session.put(userId, userId2Session.get(otherUserId));
+                    userId2SessionId.put(userId, otherUserId);
                     System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
                     JSONObject data = new JSONObject();
                     data.put("messageType","connect_success");
@@ -132,6 +134,7 @@ public class WebSocket {
                     sessionMap.put(userId, session);
                     sessionId2Obj.put(userId, battleRoom);
                     userId2Session.put(userId, session);
+                    userId2SessionId.put(userId, otherUserId);
                     System.out.println("이번에 만들어짐 : " + sessionMap);
                     System.out.println("this is restTempalte : "+ restTemplate);
 
@@ -182,7 +185,15 @@ public class WebSocket {
                 TimerTask task = new TimerTask() {
                     @Override
                     public void run() {
-                        String sessionId = userId2Session.get(userId).getId();
+                        String sessionId="";
+                        if(sessionId2Obj.containsKey(userId))
+                        {
+                            sessionId = userId;
+                        }
+                        else
+                        {
+                            sessionId = userId2SessionId.get(userId);
+                        }
                         System.out.println("문제 요청 부분의 세션 아이디 : "+sessionId);
                         List<Integer> randomProblemList = new ArrayList<>();
                         for (String key : sessionId2Obj.get(sessionId).problemList.keySet())
