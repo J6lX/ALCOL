@@ -137,8 +137,8 @@ public class WebSocket {
 
                     System.out.println("내 방에 접근할 세션 ID"+userId);
                     System.out.println("방에 대한 정보" + sessionId2Obj.get(userId));
-                    if(sessionId2Obj.get(userId).problemList.isEmpty())
-                    {
+//                    if(sessionId2Obj.get(userId))
+//                    {
                         String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 //                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
                         List<Map<String,String>> problems = restTemplate.getForObject(url,List.class);
@@ -149,7 +149,7 @@ public class WebSocket {
                             Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
                             System.out.println("넣은 문제 : "+problem.toString());
                         }
-                    }
+//                    }
                 }
                 System.out.println();
 //                session.getAsyncRemote().sendText("connect_success");
