@@ -8,11 +8,11 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -44,13 +44,15 @@ public class FileHandler
 //                + File.separator + "images"
 //                + File.separator + currentDate;
 
-        String relativeFolder = FileHandler.class.getClassLoader().getResourceAsStream("myStatic").toString();
+        InputStream is = FileHandler.class.getClassLoader().getResourceAsStream("myStatic");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        String path = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 
-        log.info("relativeFolder : " + relativeFolder);
+        log.info("relativeFolder : " + path);
 
         // 경로를 지정하고 그곳에 저장
 //        String path = "images/" + currentDate;
-        File file = new File(relativeFolder);
+        File file = new File(path);
 
         // 저장할 위치의 디렉토리가 존재하지 않을 경우
         if (!file.exists())
@@ -88,7 +90,7 @@ public class FileHandler
         String new_file_name = System.nanoTime() + originalFileExtension;
 
         // 저장된 파일로 변경하여 이를 보여주기 위함
-        file = new File("/tmp/" + relativeFolder + File.separator + new_file_name);
+        file = new File("/tmp/" + path + File.separator + new_file_name);
 
         // 파일을 저장
         try {
