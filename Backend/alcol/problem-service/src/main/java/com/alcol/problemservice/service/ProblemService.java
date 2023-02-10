@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface ProblemService
 {
-    List<ProblemDto.ProbNameTierDto> getProbDetailList(List<String> probNoList);
+    List<ProblemDto.ProbNameTierDto> getProbNameTier(List<String> probNoList);
+    ProblemDto.ProbDetail getProbDetail(Long probNo);
 }
