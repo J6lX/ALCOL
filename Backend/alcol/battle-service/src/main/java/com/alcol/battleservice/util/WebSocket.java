@@ -183,7 +183,7 @@ public class WebSocket {
                     @Override
                     public void run() {
                         String sessionId = userId2Session.get(userId).getId();
-                        int size = sessionId2Obj.get(sessionId).problemList.size();
+                        System.out.println("문제 요청 부분의 세션 아이디 : "+sessionId);
                         List<Integer> randomProblemList = new ArrayList<>();
                         for (String key : sessionId2Obj.get(sessionId).problemList.keySet())
                         {
