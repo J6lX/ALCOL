@@ -109,6 +109,8 @@ public class WebSocket {
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
 
+                System.out.println("내 방에 접근할 세션 ID"+userId2Session.get(userId).getId());
+                System.out.println("방에 대한 정보" + sessionId2Obj.get(userId2Session.get(userId).getId()));
                 if(sessionId2Obj.get(userId2Session.get(userId).getId()).problemList.isEmpty())
                 {
                     String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
