@@ -121,12 +121,13 @@ public class WebSocket {
                         if(sessionMap.containsKey(otherUserId))
                         {
                             sessionId2Obj.get(otherUserId).user2 = user;
-                            userId2Session.put(userId, userId2Session.get(otherUserId));
+                            userId2Session.put(userId, session);
                             userId2SessionId.put(userId, otherUserId);
                             System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
                             JSONObject data = new JSONObject();
                             data.put("messageType","connect_success");
-                            userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
+//                            userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
+                            session.getAsyncRemote().sendText(data.toJSONString());
                             break;
                         }
                         else {
@@ -278,8 +279,37 @@ public class WebSocket {
             else if (method.equals("ban"))
             {
                 String userId = obj.get("userId").toString();
-                String problemNum = obj.get("problemNum").toString();
-                String sessionId = userId2Session.get(userId).getId();
+                String problemNum = obj.get("bannedProblem").toString();
+
+
+                if(!problemNum.equals("timeout"))
+                {
+//                    sessionId2Obj.get(sessionId).problemList
+                    sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.put(Integer.parseInt(problemNum),false);
+                    if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().userId.equals(userId))
+                    {
+                        sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum = Integer.parseInt(problemNum);
+                    }
+                    else
+                    {
+                        sessionId2Obj.get(userId2SessionId.get(userId)).user2.banProblemNum = Integer.parseInt(problemNum);
+                    }
+                    if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().banProblemNum!=0
+                            && sessionId2Obj.get(userId2SessionId.get(userId)).getUser2().banProblemNum!=0)
+                    {
+                        JSONObject data = new JSONObject();
+                        data.put("messageType","select_success");
+                        userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
+                        userId2Session.get(userId2SessionId.get(userId)).getAsyncRemote().sendText(data.toJSONString());
+//                        session.getAsyncRemote().sendText(data.toJSONString());
+                    }
+                    else
+                    {
+                        JSONObject data = new JSONObject();
+                        data.put("messageType","ban_success");
+                    }
+                }
+//                String sessionId = userId2Session.get(userId).getId();
 //                sessionId2Obj.get(sessionId).problemList.put(problemNum,false);
             }
 
