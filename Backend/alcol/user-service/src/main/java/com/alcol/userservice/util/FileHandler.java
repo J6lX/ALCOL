@@ -88,7 +88,7 @@ public class FileHandler
         String new_file_name = System.nanoTime() + originalFileExtension;
 
         // 저장된 파일로 변경하여 이를 보여주기 위함
-        file = new File(relativeFolder + File.separator + new_file_name);
+        file = new File("/tmp/" + relativeFolder + File.separator + new_file_name);
 
         // 파일을 저장
         try {
