@@ -44,7 +44,10 @@ public class FileHandler
 //                + File.separator + "images"
 //                + File.separator + currentDate;
 
-        InputStream is = FileHandler.class.getClassLoader().getResourceAsStream("myStatic");
+        String tmp = FileHandler.class.getClassLoader().getResource("myStatic").toString();
+        log.info("tmp: " + tmp);
+
+        InputStream is = FileHandler.class.getClassLoader().getResourceAsStream("cat2");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         String path = reader.lines().collect(Collectors.joining(System.lineSeparator()));
 
