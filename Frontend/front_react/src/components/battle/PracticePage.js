@@ -3,6 +3,7 @@ import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import axios from "axios";
 
 // 연습 문제 구분 설명
 const problemLabel = [
@@ -56,7 +57,18 @@ function Ranking() {
     setSearch(e.target.value);
   };
 
-  // const refinedData = problemData.filter((problem) => problem.problemName.includes(query));
+  // 서버에서 연습 문제 목록 요청
+  // 현재 구현 중(404 Not Found)
+  axios
+    .get(`http://i8b303.p.ssafy.io:8000/problemList`)
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  // 엔터키 입력 또는 검색 버튼 클릭 시 문제 제목 기준으로 필터링
   const onSearch = (values) => {
     const searchInput = values.query;
     console.log(problemData);
@@ -96,6 +108,7 @@ function Ranking() {
                   <Col xs={12} lg={16}>
                     <Form.Item name="query">
                       <Input
+                        onPressEnter={onSearch}
                         placeholder="문제 이름으로 검색"
                         allowClear
                         size="middle"
