@@ -190,7 +190,7 @@ public class WebSocket {
 //                    }
                 }
                 System.out.println();
-//                session.getAsyncRemote().sendText("connect_success");
+                session.getAsyncRemote().sendText("connect_success");
 
 
 
