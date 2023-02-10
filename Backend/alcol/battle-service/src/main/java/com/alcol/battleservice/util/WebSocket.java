@@ -109,7 +109,7 @@ public class WebSocket {
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
 
-                if(sessionId2Obj.get(userId2Session.get(userId)).problemList.isEmpty())
+                if(sessionId2Obj.get(userId2Session.get(userId).getId()).problemList.isEmpty())
                 {
                     String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 //                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
