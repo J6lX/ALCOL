@@ -109,21 +109,6 @@ public class WebSocket {
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
 
-                System.out.println("내 방에 접근할 세션 ID"+userId2Session.get(userId).getId());
-                System.out.println("방에 대한 정보" + sessionId2Obj.get(userId2Session.get(userId).getId()));
-                if(sessionId2Obj.get(userId2Session.get(userId).getId()).problemList.isEmpty())
-                {
-                    String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
-//                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
-                    List<Map<String,String>> problems = restTemplate.getForObject(url,List.class);
-                    for(int i=0; i<problems.size(); i++)
-                    {
-                        Map<String,String> prob = problems.get(i);
-                        System.out.println(prob.toString());
-                        Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
-                        System.out.println("넣은 문제 : "+problem.toString());
-                    }
-                }
 
 
                 User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
@@ -152,6 +137,22 @@ public class WebSocket {
                 }
                 System.out.println();
 //                session.getAsyncRemote().sendText("connect_success");
+
+                System.out.println("내 방에 접근할 세션 ID"+userId2Session.get(userId).getId());
+                System.out.println("방에 대한 정보" + sessionId2Obj.get(userId2Session.get(userId).getId()));
+                if(sessionId2Obj.get(userId2Session.get(userId).getId()).problemList.isEmpty())
+                {
+                    String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
+//                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
+                    List<Map<String,String>> problems = restTemplate.getForObject(url,List.class);
+                    for(int i=0; i<problems.size(); i++)
+                    {
+                        Map<String,String> prob = problems.get(i);
+                        System.out.println(prob.toString());
+                        Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
+                        System.out.println("넣은 문제 : "+problem.toString());
+                    }
+                }
 
 
             }
