@@ -15,57 +15,63 @@ function UserInfo() {
   const [nickname, setNickname] = React.useState("a");
   const [speedTier, setSpeedTier] = React.useState("a");
   const [optTier, setOptTier] = React.useState("a");
+  const [othernickname, setOtherNickname] = React.useState("b");
+  const [otherspeedTier, setOtherSpeedTier] = React.useState("b");
+  const [otheroptTier, setOtherOptTier] = React.useState("b");
   var userId = useRecoilValue(LoginState);
   const playerInfo = useRecoilValue(matchingPlayerInfo);
   let otherId = playerInfo.otherId;
   useEffect(() => {}, [nickname, speedTier, optTier]);
+  useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
 
-  axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
-      user_id: userId,
-    })
-    .then(function (response) {
-      setNickname(response.data.nickname);
-      setSpeedTier(response.data.speedTier);
-      setOptTier(response.data.optimizationTier);
-    })
-    .catch((error) => {
-      let customCode = error.response.data.custom_code;
-      if (
-        customCode === "100" ||
-        customCode === "101" ||
-        customCode === "102" ||
-        customCode === "103" ||
-        customCode === "104" ||
-        customCode === "105"
-      ) {
-        // 로그인 실패 시 표시하는 내용
-        alert(error.response.data.description);
-      }
-    });
-  axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
-      user_id: otherId,
-    })
-    .then(function (response) {
-      setNickname(response.data.nickname);
-      setSpeedTier(response.data.speedTier);
-      setOptTier(response.data.optimizationTier);
-    })
-    .catch((error) => {
-      let customCode = error.response.data.custom_code;
-      if (
-        customCode === "100" ||
-        customCode === "101" ||
-        customCode === "102" ||
-        customCode === "103" ||
-        customCode === "104" ||
-        customCode === "105"
-      ) {
-        // 로그인 실패 시 표시하는 내용
-        alert(error.response.data.description);
-      }
-    });
+  useEffect(() => {
+    axios
+      .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+        user_id: userId,
+      })
+      .then(function (response) {
+        setNickname(response.data.nickname);
+        setSpeedTier(response.data.speedTier);
+        setOptTier(response.data.optimizationTier);
+      })
+      .catch((error) => {
+        let customCode = error.response.data.custom_code;
+        if (
+          customCode === "100" ||
+          customCode === "101" ||
+          customCode === "102" ||
+          customCode === "103" ||
+          customCode === "104" ||
+          customCode === "105"
+        ) {
+          // 로그인 실패 시 표시하는 내용
+          alert(error.response.data.description);
+        }
+      });
+    axios
+      .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+        user_id: otherId,
+      })
+      .then(function (response) {
+        setOtherNickname(response.data.nickname);
+        setOtherSpeedTier(response.data.speedTier);
+        setOtherOptTier(response.data.optimizationTier);
+      })
+      .catch((error) => {
+        let customCode = error.response.data.custom_code;
+        if (
+          customCode === "100" ||
+          customCode === "101" ||
+          customCode === "102" ||
+          customCode === "103" ||
+          customCode === "104" ||
+          customCode === "105"
+        ) {
+          // 로그인 실패 시 표시하는 내용
+          alert(error.response.data.description);
+        }
+      });
+  }, [userId, otherId]);
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col
@@ -141,7 +147,6 @@ function Mid({ props, onClick }) {
   const keys = Object.keys(problems);
   console.log(keys);
   const printProblems = (number) => {
-    console.log(number);
     const result = [];
 
     for (let i = 0; i < problems[keys[number]].length; i++) {
@@ -194,8 +199,8 @@ function Bottom() {
 
 function App({ props, changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
-  var playerInfo = useRecoilValue(matchingPlayerInfo);
-  console.log(playerInfo.otherId);
+  // var playerInfo = useRecoilValue(matchingPlayerInfo);
+  // console.log(playerInfo.otherId);
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);
@@ -216,7 +221,7 @@ function App({ props, changeBanProblem }) {
   const timeOut = (data) => {
     changeBanProblem(data);
   };
-  console.log(props);
+  // console.log(props);
   const [problem, setProblem] = React.useState();
   useEffect(() => {
     setProblem(props);

@@ -143,13 +143,18 @@ function App() {
   const history = useHistory();
 
   const onHandlePlayerGet = () => {
-    history.push("/battle");
+    socket.send(JSON.stringify("끊어주세요"));
 
     if (playerInfo.otherId === "" && playerInfo.userId === "" && playerInfo.hostCheck === "") {
-      setPlayerInfo(obj);
-      console.log("플레이어 정보를 저장했다");
-      console.log(playerInfo);
       socket.close(); //소켓을 닫는다
+      setTimeout(() => {
+        history.push("/battle");
+      }, 500);
+      setTimeout(() => {
+        setPlayerInfo(obj);
+        console.log("플레이어 정보를 저장했다");
+        console.log(playerInfo);
+      }, 2000);
     } else {
       console.log("player가 null이 아니야");
     }

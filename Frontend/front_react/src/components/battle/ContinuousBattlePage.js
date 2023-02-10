@@ -40,19 +40,21 @@ const ContinuousBattlePage = () => {
   console.log("socket", socket);
 
   useEffect(() => {
-    socket.onopen = () =>
-      setTimeout(
-        socket.send(
-          JSON.stringify({
-            messageType: messageType,
-            userId: userId,
-            otherId: otherId,
-            hostCheck: hostCheck,
-            battleMode: battleMode,
-          })
-        ),
-        2000
-      );
+    setTimeout(() => {
+      socket.onopen = () =>
+        setTimeout(
+          socket.send(
+            JSON.stringify({
+              messageType: messageType,
+              userId: userId,
+              otherId: otherId,
+              hostCheck: hostCheck,
+              battleMode: battleMode,
+            })
+          ),
+          2000
+        );
+    });
   }, [userId, otherId, hostCheck, battleMode]);
 
   useEffect(() => {
@@ -77,10 +79,8 @@ const ContinuousBattlePage = () => {
       );
     } else if (data.messageType === "ban_success") {
       console.log("문제 선택 완료!");
-      setTimeout(() => {
-        setIsReady(false);
-        setIsBanWait(true);
-      }, 5000);
+      setIsReady(false);
+      setIsBanWait(true);
     } else if (data.messageType === "select_success") {
       setTimeout(() => {
         setIsBanWait(false);
@@ -88,7 +88,7 @@ const ContinuousBattlePage = () => {
         setTimeout(() => {
           setIsSelected(false);
           setIsSolving(true);
-        }, 15000);
+        }, 10000);
       }, 5000);
     } else if (data.messageType === "submit_success") {
       submitResult = data.submitResult;
@@ -96,7 +96,7 @@ const ContinuousBattlePage = () => {
       if (submitResult === "success") {
         setIsSolved(true);
       }
-    } else if (data.messageType === "close") {
+    } else if (data.messageType === "closed") {
       socket.onclose();
     } else if (data.messageType === "sendProblem") {
       console.log(data.problems);
@@ -122,16 +122,6 @@ const ContinuousBattlePage = () => {
   const changeBanProblem = (data) => {
     setProblemNumber(data);
     socket.send(JSON.stringify({ method: "ban", data: data }));
-    setIsReady(false);
-    setIsBanWait(true);
-    setTimeout(() => {
-      setIsBanWait(false);
-      setIsSelected(true);
-      setTimeout(() => {
-        setIsSelected(false);
-        setIsSolving(true);
-      }, 10000);
-    }, 10000);
   };
 
   const goResultPage = () => {
