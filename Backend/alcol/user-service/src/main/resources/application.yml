@@ -20,6 +20,8 @@ spring:
     host: i8b303.p.ssafy.io
     port: 6000
     password: ehgud
+  resources:
+    static-locations=classpath:/static/:
 
 eureka:
   client:
