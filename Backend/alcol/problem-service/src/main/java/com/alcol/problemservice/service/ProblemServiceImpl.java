@@ -39,7 +39,7 @@ public class ProblemServiceImpl implements ProblemService
             ProblemDto.ProbNameTierDto probDetailDto = ProblemDto.ProbNameTierDto.builder()
                     .prob_no(problemEntity.getProbNo())
                     .prob_name(problemEntity.getProbName())
-                    .prob_tier(problemEntity.getTier())
+                    .prob_tier(problemEntity.getTier().getTier())
                     .build();
             list.add(probDetailDto);
         }
@@ -49,7 +49,8 @@ public class ProblemServiceImpl implements ProblemService
 
     public ProblemDto.ProbDetail getProbDetail(Long probNo)
     {
-        ProblemEntity problemEntity = problemRepository.findByProbNo(probNo);
+        ProblemEntity problemEntity = problemRepository.findById(probNo).orElse(null);
+
 
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
@@ -62,5 +63,22 @@ public class ProblemServiceImpl implements ProblemService
                 .prob_input_testcase(problemEntity.getProbTestInput())
                 .prob_output_testcase(problemEntity.getProbTestOutput())
                 .build();
+    }
+
+    public List<ProblemDto.ProbList> getAllProbList()
+    {
+        Iterable<ProblemEntity> problemList = problemRepository.findAll();
+        List<ProblemDto.ProbList> allProbList = new ArrayList<>();
+        for(ProblemEntity prob : problemList)
+        {
+            allProbList.add(ProblemDto.ProbList.builder()
+                            .prob_no(prob.getProbNo())
+                            .prob_name(prob.getProbName())
+                            .prob_category(prob.getProblemCategoryConnectEntityList())
+                            .prob_tier(prob.getTier().getTier())
+                    .build());
+        }
+        return allProbList;
+
     }
 }

@@ -80,4 +80,10 @@ public class ProblemController
     {
         return ResponseEntity.status(HttpStatus.OK).body(problemService.getProbDetail(probNum));
     }
+
+    @GetMapping("/problemList")
+    public ResponseEntity<List<ProblemDto.ProbList>> getAllProbList()
+    {
+        return ResponseEntity.status(HttpStatus.OK).body(problemService.getAllProbList());
+    }
 }
