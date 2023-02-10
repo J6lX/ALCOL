@@ -20,20 +20,20 @@ function Top() {
   );
 }
 
-function SelectedProblem({ problem }) {
+function SelectedProblem({ problemInfo }) {
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
   const players = useRecoilValue(matchingPlayerInfo);
   // let clsName = "../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png";
-  const category = problem.problem_category;
+  const category = problemInfo.problem_category;
   const makeBadge = (category) => {
     const result = [];
 
-    for (let i = 0; i < problem.problem_category.length; i++) {
+    for (let i = 0; i < problemInfo.problem_category.length; i++) {
       result.push(
         <Badge
           key={i}
-          count={problem.problem_category[i]}
+          count={problemInfo.problem_category[i]}
           color="#faad14"
           style={{ margin: "10px" }}
         />
@@ -108,10 +108,10 @@ function SelectedProblem({ problem }) {
             <p
               className="NanumSquare"
               style={{ color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
-              문제 {problem.problem_no}. {problem.problem_title}
+              문제 {problemInfo.problem_no}. {problemInfo.problem_title}
             </p>
             <img
-              src={require("../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png")}
+              src={require("../../assets/ALCOL tiers/tier_" + problemInfo.problem_tier + "_0.png")}
               alt="tier"
               style={{ width: "40px" }}
             />

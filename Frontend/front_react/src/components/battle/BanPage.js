@@ -4,74 +4,9 @@ import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-// import CountDownTimer from "./CountDownTimer";
-import { useRecoilValue } from "recoil";
-import { matchingPlayerInfo } from "../../states/atoms";
-import { LoginState } from "../../states/LoginState";
 import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
-import axios from "axios";
 
-function UserInfo() {
-  const [nickname, setNickname] = React.useState("a");
-  const [speedTier, setSpeedTier] = React.useState("a");
-  const [optTier, setOptTier] = React.useState("a");
-  const [othernickname, setOtherNickname] = React.useState("b");
-  const [otherspeedTier, setOtherSpeedTier] = React.useState("b");
-  const [otheroptTier, setOtherOptTier] = React.useState("b");
-  var userId = useRecoilValue(LoginState);
-  const playerInfo = useRecoilValue(matchingPlayerInfo);
-  let otherId = playerInfo.otherId;
-  useEffect(() => {}, [nickname, speedTier, optTier]);
-  useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
-
-  useEffect(() => {
-    axios
-      .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
-        user_id: userId,
-      })
-      .then(function (response) {
-        setNickname(response.data.nickname);
-        setSpeedTier(response.data.speedTier);
-        setOptTier(response.data.optimizationTier);
-      })
-      .catch((error) => {
-        let customCode = error.response.data.custom_code;
-        if (
-          customCode === "100" ||
-          customCode === "101" ||
-          customCode === "102" ||
-          customCode === "103" ||
-          customCode === "104" ||
-          customCode === "105"
-        ) {
-          // 로그인 실패 시 표시하는 내용
-          alert(error.response.data.description);
-        }
-      });
-    axios
-      .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
-        user_id: otherId,
-      })
-      .then(function (response) {
-        setOtherNickname(response.data.nickname);
-        setOtherSpeedTier(response.data.speedTier);
-        setOtherOptTier(response.data.optimizationTier);
-      })
-      .catch((error) => {
-        let customCode = error.response.data.custom_code;
-        if (
-          customCode === "100" ||
-          customCode === "101" ||
-          customCode === "102" ||
-          customCode === "103" ||
-          customCode === "104" ||
-          customCode === "105"
-        ) {
-          // 로그인 실패 시 표시하는 내용
-          alert(error.response.data.description);
-        }
-      });
-  }, [userId, otherId]);
+function UserInfo(userInfo) {
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col
@@ -90,13 +25,13 @@ function UserInfo() {
         span={3}
         style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        {nickname}
+        {userInfo.user.nick}
       </Col>
     </Row>
   );
 }
 
-function Top({ timeOut }) {
+function Top({ userInfo, timeOut }) {
   const [secs, setTime] = React.useState(0);
 
   const tick = () => {
@@ -116,7 +51,7 @@ function Top({ timeOut }) {
   return (
     <Row>
       <Col xs={12} sm={10} md={8} xl={6}>
-        <div className="ban_player_info">Player1</div>
+        <div className="ban_player_info">{userInfo.other.nick}</div>
         <img src={img_leftHand} alt="hand" className="ban_hands_left" />
       </Col>
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
@@ -182,7 +117,7 @@ function Mid({ props, onClick }) {
   );
 }
 
-function Bottom() {
+function Bottom(userInfo) {
   return (
     <Row style={{ marginTop: "10px" }}>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
@@ -190,14 +125,14 @@ function Bottom() {
       <Col xs={12} sm={10} md={8} xl={6}>
         <img src={img_rightHand} alt="hand" className="ban_hands_right" />
         <div style={{ marginTop: "70px" }} className="ban_player_info">
-          Player1
+          {userInfo.user.nick}
         </div>
       </Col>
     </Row>
   );
 }
 
-function App({ props, changeBanProblem }) {
+function App({ props, battleuserinfo, changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
   // var playerInfo = useRecoilValue(matchingPlayerInfo);
   // console.log(playerInfo.otherId);
@@ -242,8 +177,8 @@ function App({ props, changeBanProblem }) {
 
   return (
     <div className="matching_background">
-      <UserInfo />
-      <Top timeOut={timeOut} />
+      <UserInfo userInfo={battleuserinfo} />
+      <Top userInfo={battleuserinfo} timeOut={timeOut} />
       <Mid props={props} onClick={onClick} setProblem={setProblem} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Button
@@ -253,7 +188,7 @@ function App({ props, changeBanProblem }) {
           확정
         </Button>
       </div>
-      <Bottom />
+      <Bottom userInfo={battleuserinfo} />
     </div>
   );
 }
