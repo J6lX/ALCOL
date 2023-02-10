@@ -24,7 +24,7 @@ public class FileHandler
         // 프로젝트 폴더에 저장하기 위해 절대경로를 설정
         String absolutePath = new File("").getAbsolutePath();
 
-        log.info("absolute path : " + absolutePath);
+//        log.info("absolute path : " + absolutePath);
 
         // 경로를 지정하고 그곳에 저장
         String path = "images/" + currentDate;
