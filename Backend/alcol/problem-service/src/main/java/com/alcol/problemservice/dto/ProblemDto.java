@@ -1,5 +1,6 @@
 package com.alcol.problemservice.dto;
 
+import com.alcol.problemservice.entity.ProblemTierEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,6 @@ public class ProblemDto
     {
         private Long probNo;
         private String probName;
-        private String probTier;
+        private ProblemTierEntity probTier;
     }
 }
