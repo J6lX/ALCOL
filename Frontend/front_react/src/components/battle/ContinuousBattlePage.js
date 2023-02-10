@@ -97,8 +97,9 @@ const ContinuousBattlePage = () => {
     } else if (data.messageType === "close") {
       socket.onclose();
     } else if (data.messageType === "sendProblem") {
-      console.log("문제 세 개를 받아왔습니다.", data);
-      setProblems(data.problems);
+      console.log("문제 세 개를 받아왔습니다.", JSON.parse(data.problems));
+      const problems = JSON.parse(data.problems);
+      setProblems(problems);
       setTimeout(() => {
         setIsConnected(true);
         setIsReady(true);
@@ -169,7 +170,12 @@ const ContinuousBattlePage = () => {
         {isConnected && isSelected && (
           <SelectedProblemPage problemNumber={problemNumber} problems={problems} />
         )}
-        {isConnected && isSolving && <SolvingPage goResultPage={goResultPage} />}
+        {isConnected && isSolving && battleMode === "speed" && (
+          <SolvingPage goResultPage={goResultPage} />
+        )}
+        {isConnected && isSolving && battleMode === "optimization" && (
+          <SolvingPage goResultPage={goResultPage} />
+        )}
         {isSolved && <ResultPage />}
       </div>
     </div>
