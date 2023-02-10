@@ -156,7 +156,7 @@ public class WebSocket {
                             System.out.println("문제 번호 : " + problem.getProblemNum());
                             for(int j=0; j<problem.problemCategory.size(); j++)
                             {
-                                System.out.println("해당 문제의 카테고리 : "+problem.problemCategory.get(i));
+                                System.out.println("해당 문제의 카테고리 : "+problem.problemCategory.get(j));
 
                             }
                         }
