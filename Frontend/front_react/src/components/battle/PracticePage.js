@@ -96,6 +96,7 @@ function Ranking() {
                   <Col xs={12} lg={16}>
                     <Form.Item name="query">
                       <Input
+                        onPressEnter={onSearch}
                         placeholder="문제 이름으로 검색"
                         allowClear
                         size="middle"
