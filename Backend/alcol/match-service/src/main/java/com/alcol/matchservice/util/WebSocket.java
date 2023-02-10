@@ -293,7 +293,7 @@ public class WebSocket {
                 else{
                     send.put("userId", player1Id);
                     send.put("otherId", player2Id);
-                    send.put("host_check",host_user);
+                    send.put("hostCheck",host_user);
                 }
 //                handleClose(session);
                 session.getAsyncRemote().sendText(send.toJSONString());
