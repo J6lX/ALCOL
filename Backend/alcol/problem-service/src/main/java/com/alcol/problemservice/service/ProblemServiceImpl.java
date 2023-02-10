@@ -2,6 +2,7 @@ package com.alcol.problemservice.service;
 
 import com.alcol.problemservice.dto.ProblemDto;
 import com.alcol.problemservice.entity.ProblemEntity;
+import com.alcol.problemservice.entity.ProblemTierEntity;
 import com.alcol.problemservice.repository.ProblemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,17 +31,17 @@ public class ProblemServiceImpl implements ProblemService
     {
         List<ProblemDto.ProbDetailDto> list = new ArrayList<>();
 
-//        for (String probNo : probNoList)
-//        {
-//            probNo = probNo.replaceAll("\\[|\\]", "");
-//            ProblemEntity problemEntity = problemRepository.findByProbNo(Long.parseLong(probNo));
-//            ProblemDto.ProbDetailDto probDetailDto = ProblemDto.ProbDetailDto.builder()
-//                    .probNo(problemEntity.getProbNo())
-//                    .probName(problemEntity.getProbName())
-//                    .probTier(problemEntity.getTier())
-//                    .build();
-//            list.add(probDetailDto);
-//        }
+        for (String probNo : probNoList)
+        {
+            probNo = probNo.replaceAll("\\[|\\]", "");
+            ProblemEntity problemEntity = problemRepository.findByProbNo(Long.parseLong(probNo));
+            ProblemDto.ProbDetailDto probDetailDto = ProblemDto.ProbDetailDto.builder()
+                    .probNo(problemEntity.getProbNo())
+                    .probName(problemEntity.getProbName())
+                    .probTier(problemEntity.getTier())
+                    .build();
+            list.add(probDetailDto);
+        }
 
         return list;
     }

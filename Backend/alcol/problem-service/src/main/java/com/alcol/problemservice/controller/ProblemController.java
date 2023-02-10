@@ -34,7 +34,7 @@ public class ProblemController
      * @param probNoList
      * @return ResponseEntity<List<ProblemDto.ProbDetailDto>>
      */
-    @PostMapping("/getProbDetail")
+    @PostMapping("/getProbSubjectAndTier")
     public ResponseEntity<List<ProblemDto.ProbDetailDto>> getProbDetail(
             @RequestParam(value = "prob_no_list") List<String> probNoList
     )
