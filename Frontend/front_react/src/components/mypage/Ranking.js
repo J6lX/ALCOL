@@ -155,14 +155,17 @@ function Ranking() {
 
   // 로그인한 정보가 있는 경우
   if (userInfo) {
+    const headerData = JSON.stringify({
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      use_id: userInfo,
+    });
     axios
-      .post(`http://i8b303.p.ssafy.io:8000/myRank`, {
-        headers: {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          use_id: userInfo,
-        },
-      })
+      .post(
+        `http://i8b303.p.ssafy.io:8000/myRank`,
+        { battle_mode: { modeName } },
+        { headers: headerData }
+      )
       .then(function (response) {
         console.log(response);
       })
@@ -219,6 +222,39 @@ function Ranking() {
   const pageMove = (page) => {
     console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
     setCurrent(page);
+    axios
+      .post(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`)
+      // 응답 성공 시
+      .then(function (response) {
+        // console.log(response.data);
+        // 랭킹 정보가 존재하는 경우
+        if (response.data.customCode === "002") {
+          // (대충 데이터 저장 후 화면에 표시해준다는 내용)
+          const originData = response.data.bodyData;
+          rankerData = originData
+            .map((data) => {
+              console.log(data);
+              return {
+                grade: data.grade,
+                nickname: data.nickname,
+                profile_img: data.profile_pic,
+                mmr: data.MMR,
+                level: data.level,
+                tier: data.tier,
+                record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+              };
+            })
+            //응답 실패 시
+            .catch((error) => {
+              console.log("응답 실패 : " + error);
+            });
+
+          console.log(rankerData);
+        } else if (response.data.customCode === "003") {
+          // 랭킹 정보가 없는 경우
+          alert("등록된 정보가 없습니다.");
+        }
+      });
     window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
 
