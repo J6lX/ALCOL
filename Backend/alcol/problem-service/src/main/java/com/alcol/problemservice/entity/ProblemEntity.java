@@ -1,54 +1,64 @@
 package com.alcol.problemservice.entity;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
 @Table(name = "problem_tb")
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProblemEntity
 {
     @Id
+    @Column(name = "prob_no")
     private Long probNo;
 
-    @Column(nullable = false)
-    private String tier;
+    @ManyToOne
+    @JoinColumn(name = "tier")
+    private ProblemTierEntity tier;
 
-    @Column(nullable = false)
+    //문제랑 문제유형 1:N
+    @OneToMany(mappedBy = "problemEntity")
+    private List<ProblemCategoryConnectEntity> problemCategoryConnectEntityList = new ArrayList<>();
+
+    @Column(nullable = false, name = "prob_name")
     private String probName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_detail_desc")
     private String probDetailDesc;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_input_desc")
     private String probInputDesc;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_output_desc")
     private String probOutputDesc;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_time_limit")
     private int probTimeLimit;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_memory_limit")
     private int probMemoryLimit;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_test_input")
     private String probTestInput;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_test_output")
     private String probTestOutput;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_score_input")
     private String probScoreInput;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_score_output")
     private String probScoreOutput;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "prob_create_time")
     private LocalDateTime probCreateTime;
 }

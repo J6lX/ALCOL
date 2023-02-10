@@ -30,17 +30,17 @@ public class ProblemServiceImpl implements ProblemService
     {
         List<ProblemDto.ProbDetailDto> list = new ArrayList<>();
 
-        for (String probNo : probNoList)
-        {
-            probNo = probNo.replaceAll("\\[|\\]", "");
-            ProblemEntity problemEntity = problemRepository.findByProbNo(Long.parseLong(probNo));
-            ProblemDto.ProbDetailDto probDetailDto = ProblemDto.ProbDetailDto.builder()
-                    .probNo(problemEntity.getProbNo())
-                    .probName(problemEntity.getProbName())
-                    .probTier(problemEntity.getTier())
-                    .build();
-            list.add(probDetailDto);
-        }
+//        for (String probNo : probNoList)
+//        {
+//            probNo = probNo.replaceAll("\\[|\\]", "");
+//            ProblemEntity problemEntity = problemRepository.findByProbNo(Long.parseLong(probNo));
+//            ProblemDto.ProbDetailDto probDetailDto = ProblemDto.ProbDetailDto.builder()
+//                    .probNo(problemEntity.getProbNo())
+//                    .probName(problemEntity.getProbName())
+//                    .probTier(problemEntity.getTier())
+//                    .build();
+//            list.add(probDetailDto);
+//        }
 
         return list;
     }
