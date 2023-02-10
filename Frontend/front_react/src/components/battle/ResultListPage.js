@@ -42,20 +42,20 @@ function GameInfo() {
   const ModeInfo = useRecoilValue(resultListModeInfo);
   console.log(ModeInfo);
   const gameInfoTitle = {
-    padding: "8px 0",
+    padding: "4px 0",
     background: "rgba(0,0,0,0.5)",
     color: "white",
     textAlign: "center",
-    lineHeight: "16px",
+    lineHeight: "8px",
     fontWeight: "bold",
   };
   const gameInfoList = {
     padding: "8px 0",
     background: "rgba(0,0,0,0.5)",
     color: "white",
-    height: "10em",
+    height: "7em",
     textAlign: "center",
-    lineHeight: "10em",
+    lineHeight: "7em",
   };
   return (
     <div>
