@@ -4,12 +4,7 @@ import versus from "../../assets/versus.png";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
 import { useRecoilValue } from "recoil";
-import {
-  selectedMode,
-  selectedLanguage,
-  matchingPlayerInfo,
-  battleProblemInfo,
-} from "../../states/atoms";
+import { selectedMode, selectedLanguage, battleProblemInfo } from "../../states/atoms";
 
 function Top() {
   return (
@@ -20,10 +15,9 @@ function Top() {
   );
 }
 
-function SelectedProblem({ problemInfo }) {
+function SelectedProblem({ problemInfo, userInfo }) {
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
-  const players = useRecoilValue(matchingPlayerInfo);
   // let clsName = "../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png";
   const category = problemInfo.problem_category;
   const makeBadge = (category) => {
@@ -55,7 +49,7 @@ function SelectedProblem({ problemInfo }) {
             backgroundColor: "yellow",
             height: "50px",
           }}>
-          <p style={{ color: "black", fontSize: "3vh" }}>{players.userId}</p>
+          <p style={{ color: "black", fontSize: "3vh" }}>{userInfo.user.nick}</p>
         </Col>
         <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
           <img src={versus} alt="versus" style={{ width: "60px" }} />
@@ -69,7 +63,7 @@ function SelectedProblem({ problemInfo }) {
             backgroundColor: "yellow",
             height: "50px",
           }}>
-          <p style={{ color: "black", fontSize: "3vh" }}>{players.otherId}</p>
+          <p style={{ color: "black", fontSize: "3vh" }}>{userInfo.other.nick}</p>
         </Col>
       </Row>
       <br />
@@ -131,7 +125,7 @@ function SelectedProblem({ problemInfo }) {
   );
 }
 
-const SelectedProblemPage = () => {
+const SelectedProblemPage = (battleuserinfo) => {
   const problem = useRecoilValue(battleProblemInfo);
 
   return (
@@ -141,7 +135,7 @@ const SelectedProblemPage = () => {
       style={{ boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)" }}>
       <Top />
       <br />
-      <SelectedProblem problem={problem} />
+      <SelectedProblem problem={problem} userInfo={battleProblemInfo} />
     </div>
   );
 };
