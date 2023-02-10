@@ -7,6 +7,9 @@ import img_rightHand from "../../assets/rightHand.png";
 import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 
 function UserInfo(userInfo) {
+  console.log("userinfo", userInfo)
+  console.log(userInfo.userInfo.user.nick)
+  console.log(userInfo.userInfo.other.nick)
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col
@@ -25,18 +28,19 @@ function UserInfo(userInfo) {
         span={3}
         style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
         className="battle_user_info_contents">
-        {userInfo.user.nick}
+        {userInfo.userInfo.user.nick}
       </Col>
     </Row>
   );
 }
 
 function Top({ userInfo, timeOut }) {
-  const [secs, setTime] = React.useState(0);
-
+  // const [secs, setTime] = React.useState(0);
+  console.log("TopuserInfo", userInfo)
+  let secs = 0
   const tick = () => {
     if (secs < 180) {
-      setTime(secs + 1);
+      secs += 1
     } else {
       timeOut("timeout");
     }
@@ -125,7 +129,7 @@ function Bottom(userInfo) {
       <Col xs={12} sm={10} md={8} xl={6}>
         <img src={img_rightHand} alt="hand" className="ban_hands_right" />
         <div style={{ marginTop: "70px" }} className="ban_player_info">
-          {userInfo.user.nick}
+          {userInfo.userInfo.user.nick}
         </div>
       </Col>
     </Row>
