@@ -108,7 +108,8 @@ public class WebSocket {
                     bodyData.add("mode",battleMode);
                 }
                 System.out.println("this is restTempalte : "+ restTemplate);
-                if(sessionId2Obj.get(session.getId()).problemList.isEmpty())
+
+                if(sessionId2Obj.get(userId2Session.get(userId)).problemList.isEmpty())
                 {
                     String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 //                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
@@ -129,8 +130,10 @@ public class WebSocket {
                     sessionId2Obj.get(otherUserId).user2 = user;
                     userId2Session.put(userId, userId2Session.get(otherUserId));
                     System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
-                    session.getAsyncRemote().sendText("connect_success");
-                    userId2Session.get(otherUserId).getAsyncRemote().sendText("connect_success");
+                    JSONObject data = new JSONObject();
+                    data.put("messageType","connect_success");
+//                    session.getAsyncRemote().sendText("connect_success");
+                    userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
 //                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
 //                    System.out.println(problems);
@@ -154,10 +157,7 @@ public class WebSocket {
             else if (method.equals("getProblem"))
             {
                 String userId = obj.get("userId").toString();
-
-//                System.out.println(problems.toString());
                 JSONObject problems_json = new JSONObject();
-//                problems_json.put()
                 sendProblems(session, problems_json);
 
                 /****문제를 보내고 벤픽 시간을 제한해야 함****/
