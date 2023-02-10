@@ -75,7 +75,7 @@ function App() {
     socket.close();
     setuserSelectedMode("-1");
     setuserSelectLanguage("-1");
-    setPlayerInfo({ userId: "", otherId: "" });
+    setPlayerInfo({ userId: "", otherId: "", hostCheck: "" });
     history.push("/");
     setIsModalOpen(false);
   };
@@ -145,7 +145,7 @@ function App() {
   const onHandlePlayerGet = () => {
     history.push("/battle");
 
-    if (playerInfo.otherId === "" && playerInfo.userId === "") {
+    if (playerInfo.otherId === "" && playerInfo.userId === "" && playerInfo.hostCheck === "") {
       setPlayerInfo(obj);
       console.log("플레이어 정보를 저장했다");
       console.log(playerInfo);

@@ -29,12 +29,12 @@ const ContinuousBattlePage = () => {
   const languageMode = useRecoilState(selectedLanguage);
   console.log(battleModeInfo, languageMode);
 
-  
   const messageType = "connect";
   const userId = idInfo[0].userId;
   const otherId = idInfo[0].otherId;
+  const hostCheck = idInfo[0].hostCheck;
   const battleMode = battleModeInfo[0];
-  console.log(messageType, userId, otherId, battleMode);
+  console.log(messageType, userId, otherId, hostCheck, battleMode);
 
   socket = new WebSocket(websocketAddress);
   console.log("socket", socket);
@@ -46,6 +46,7 @@ const ContinuousBattlePage = () => {
           messageType: messageType,
           userId: userId,
           otherId: otherId,
+          hostCheck: hostCheck,
           battleMode: battleMode,
         })
       ),
@@ -65,12 +66,13 @@ const ContinuousBattlePage = () => {
     if (data.messageType === "connect_success") {
       console.log("연결 완료!");
       console.log(data);
-      socket.send(JSON.stringify({
-        messageType: "getProblem",
-        userId: userId,
-        otherId: otherId,
-      })
-      )
+      socket.send(
+        JSON.stringify({
+          messageType: "getProblem",
+          userId: userId,
+          otherId: otherId,
+        })
+      );
     } else if (data.messageType === "ban_success") {
       console.log("문제 선택 완료!");
       setTimeout(() => {
@@ -95,7 +97,7 @@ const ContinuousBattlePage = () => {
     } else if (data.messageType === "close") {
       socket.onclose();
     } else if (data.messageType === "sendProblem") {
-      console.log("문제 세 개를 받아왔습니다.", data)
+      console.log("문제 세 개를 받아왔습니다.", data);
       setProblems(data.problems);
       setTimeout(() => {
         setIsConnected(true);
