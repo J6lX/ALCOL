@@ -169,7 +169,7 @@ public class WebSocket {
                         {
 
                             host_user = true;
-                            goBattle(sessionId2Obj.get(i).id, id);
+                            goBattle(sessionId2Obj.get(i).id, id,host_user);
                             break;
                         }
                     }
@@ -275,7 +275,7 @@ public class WebSocket {
         return true;
     }
 
-    private void goBattle(String player1Id, String player2Id) {
+    private void goBattle(String player1Id, String player2Id,Boolean host_user) {
         Session session = null;
         for (String sessionId : sessionId2Obj.keySet()) {
             Object obj = sessionId2Obj.get(sessionId);
