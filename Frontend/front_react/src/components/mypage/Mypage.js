@@ -363,7 +363,6 @@ function Mypage() {
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
-                      <p className="miniTitle">스피드</p>
                       <PieChart
                         data={speedData}
                         reveal={speedData[0].value}
@@ -373,29 +372,33 @@ function Mypage() {
                         rounded
                         animate
                         startAngle={120}
-                        style={{
-                          width: "80%",
-                          height: "80%",
-                          whiteSpace: "pre-wrap",
-                        }}
-                        // label={({ dataEntry }) => "Gold"}
+                        className="tierGraph"
+                        label={({ dataEntry }) => "G1"}
                         labelStyle={{
                           fontSize: "10px",
-                          fill: "#f3f3f3",
+                          fill: "black",
                         }}
                         labelPosition={0}
                       />
-                      <img src={goldBadge} alt="Badge" className="tierBadge" />
-                      <span className="tierNo">1</span>
+                      <img
+                        src={goldBadge}
+                        alt="Badge"
+                        className="tierBadge"
+                        style={{
+                          zIndex: "10",
+                        }}
+                      />
                     </Col>
                     {/* 스피드전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
+                      <p>스피드전 요약</p>
                       <p>티어명</p>
                       <p>MMR</p>
                       <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
+                      <p>최적화전 요약</p>
                       <p>티어명</p>
                       <p>MMR</p>
                       <p>1000위(상위 20%)</p>
@@ -410,7 +413,6 @@ function Mypage() {
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
-                      <p className="miniTitle">최적화</p>
                       <PieChart
                         data={efficiencyData}
                         reveal={efficiencyData[0].value}
@@ -420,18 +422,22 @@ function Mypage() {
                         rounded
                         animate
                         startAngle={120}
-                        style={{
-                          width: "80%",
-                          height: "80%",
-                        }}
-                        // label={({ dataEntry }) => "티어 진척도" + dataEntry.value + "%"}
+                        className="tierGraph"
+                        label={({ dataEntry }) => "G1"}
                         labelStyle={{
                           fontSize: "10px",
-                          fill: "#f3f3f3",
+                          fill: "black",
                         }}
                         labelPosition={0}
                       />
-                      <img src={goldBadge} alt="Badge" className="tierBadge" />
+                      <img
+                        src={goldBadge}
+                        alt="Badge"
+                        className="tierBadge"
+                        style={{
+                          zIndex: "10",
+                        }}
+                      />
                     </Col>
                   </Row>
                 </Col>

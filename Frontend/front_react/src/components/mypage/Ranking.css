@@ -16,6 +16,10 @@ body {
   color: #a0a0a0;
 }
 
+.filterText {
+  font-size: 24px;
+}
+
 .headerImg {
   position: relative;
   width: 100%;

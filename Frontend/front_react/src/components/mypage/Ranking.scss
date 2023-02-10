@@ -24,6 +24,11 @@ body {
   color: $text-dark;
 }
 
+// 필터 토글 글씨 크기 조절
+.filterText {
+  font-size: 24px;
+}
+
 // 헤더 이미지
 .headerImg {
   position: relative;

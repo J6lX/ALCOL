@@ -81,12 +81,22 @@
   padding: 5px;
 }
 
+/* 티어 표시 그래프 */
+.tierGraph {
+  position: relative;
+  z-index: 11;
+  margin: 5px;
+  width: 90%;
+  height: 90%;
+  white-space: pre-wrap;
+}
+
 /* 티어 뱃지(스피드, 효율성) */
 .tierBadge {
   position: relative;
   width: 80%;
   height: 80%;
-  transform: translate(0px, -105%);
+  transform: translate(0px, -110%);
 }
 
 /* 뱃지 안에 들어갈 숫자(세부 티어 */
