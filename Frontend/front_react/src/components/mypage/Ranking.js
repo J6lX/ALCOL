@@ -5,6 +5,8 @@ import qs from "query-string";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
@@ -69,6 +71,18 @@ const rankingLabel = [
 // 랭커 정보 기록
 let rankerData = [];
 
+// 사용자 정보 기록
+let userData = [];
+
+// // 사용자 기록 표시
+// function userDisplay() {
+//   if (userData) {
+//     // 대충 사용자 정보 표시한다는 내용
+//   } else {
+//     // 대충 로그인하라는 내용
+//   }
+// }
+
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
@@ -128,14 +142,34 @@ function Ranking() {
         // 랭킹 정보가 없는 경우
         alert("등록된 정보가 없습니다.");
       }
-
-      // // 화면 새로고침(선택 사항)
-      // window.location.reload();
     })
     //응답 실패 시
     .catch((error) => {
       console.log("응답 실패 : " + error);
     });
+
+  // 현재 로그인한 사용자 정보 요청
+  const userInfo = useRecoilValue(LoginState);
+  const accessToken = useRecoilValue(AccessTokenInfo);
+  const refreshToken = useRecoilValue(RefreshTokenInfo);
+
+  // 로그인한 정보가 있는 경우
+  if (userInfo) {
+    axios
+      .post(`http://i8b303.p.ssafy.io:8000/myRank`, {
+        headers: {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          use_id: userInfo,
+        },
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   // const dummyData = [
   //   {
@@ -189,26 +223,18 @@ function Ranking() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        paddingTop: "70px",
+      }}>
       {/* 페이지 제목(이미지 위에 띄우기) */}
-      <img
-        src={rankingHeader}
-        alt="headerImage"
-        className="headerImg"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-        }}></img>
-      <Row justify="center">
-        <Col align="middle" span={16} className="title">
-          <h1>랭킹</h1>
-        </Col>
-      </Row>
-      <Row justify="space-around" className="bodyblock">
+      <img src={rankingHeader} alt="headerImage" className="headerImg"></img>
+      <h1 className="rankTitle">랭킹</h1>
+      <Row justify="space-around" className="bodyBlock">
         <Col span={16}>
           {/* 검색 상자 */}
           <Row justify="end">
-            <Col xs={0} md={8} lg={5}>
+            <Col xs={0} md={6} lg={5}>
               <Input
                 placeholder="닉네임으로 검색"
                 allowClear
@@ -232,7 +258,7 @@ function Ranking() {
           {/* 랭킹 표시 블록 */}
           <Row>
             <Col span={24}>
-              <Row className="block" justify="center" align="center">
+              <Row className="rankerBlock" justify="center" align="center">
                 <Col span={24}>
                   {/* 토글 버튼 목록 */}
                   <Row className="select">

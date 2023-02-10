@@ -9,9 +9,24 @@ body {
   max-width: 100%;
 }
 
-// 블록 테두리 설정
-.block {
+// 블록 위치 설정
+.bodyBlock {
+  position: relative;
+  top: 10%;
   border-color: $neon-blue;
+
+  //페이지 크기 별 css 디자인 수정
+  // 작은 크기
+  @media (max-width: 770px) {
+    top: 20%;
+    border-color: $neon-blue;
+    margin-top: 4%;
+  }
+
+  // 큰 크기
+  @media (min-width: 1050px) {
+    border-color: $neon-blue;
+  }
 }
 
 // 기본 텍스트(흰색)
@@ -41,30 +56,30 @@ body {
 }
 
 // 이미지 안에 들어갈 제목
-.title {
-  z-index: 10;
+.rankTitle {
+  z-index: 1;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
-  font-size: 30px;
-  transform: translate(-50%, -150%);
+  font-size: 35px;
+  transform: translate(-50%, -50%);
 
   //페이지 크기 별 css 디자인 수정
   // 작은 크기
-  @media (max-width: 750px) {
-    z-index: 10;
+  @media (max-width: 780px) {
+    z-index: 1;
     position: absolute;
-    top: 50%;
+    top: 25%;
     left: 50%;
-    font-size: 20px;
-    transform: translate(-50%, -480%);
+    font-size: 30px;
+    transform: translate(-50%, -50%);
   }
 
   // 큰 크기
   @media (min-width: 1050px) {
-    z-index: 10;
+    z-index: 1;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     font-size: 50px;
     transform: translate(-50%, -50%);
@@ -72,10 +87,13 @@ body {
 }
 
 // 검색 페이지 + 모드 선택 + 랭킹 표시 body
-.bodyblock {
-  position: relative;
-  top: 30%;
-  transform: translate(0%, -10%);
+.rankerBlock {
+  border: solid 0.5px white;
+  background-color: #1d1e22;
+  border-radius: 15px;
+  margin: 5px;
+  padding: 4px;
+  text-align: center;
 }
 
 // 모드 선택 및 랭킹 표시 블록

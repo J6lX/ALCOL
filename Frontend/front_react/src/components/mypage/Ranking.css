@@ -4,8 +4,22 @@ body {
   max-width: 100%;
 }
 
-.block {
+.bodyBlock {
+  position: relative;
+  top: 10%;
   border-color: #61dafb;
+}
+@media (max-width: 770px) {
+  .bodyBlock {
+    top: 20%;
+    border-color: #61dafb;
+    margin-top: 4%;
+  }
+}
+@media (min-width: 1050px) {
+  .bodyBlock {
+    border-color: #61dafb;
+  }
 }
 
 .textDefault {
@@ -29,39 +43,42 @@ body {
   margin: 10px;
 }
 
-.title {
-  z-index: 10;
+.rankTitle {
+  z-index: 1;
   position: absolute;
-  top: 50%;
+  top: 30%;
   left: 50%;
-  font-size: 30px;
-  transform: translate(-50%, -150%);
+  font-size: 35px;
+  transform: translate(-50%, -50%);
 }
-@media (max-width: 750px) {
-  .title {
-    z-index: 10;
+@media (max-width: 780px) {
+  .rankTitle {
+    z-index: 1;
     position: absolute;
-    top: 50%;
+    top: 25%;
     left: 50%;
-    font-size: 20px;
-    transform: translate(-50%, -480%);
+    font-size: 30px;
+    transform: translate(-50%, -50%);
   }
 }
 @media (min-width: 1050px) {
-  .title {
-    z-index: 10;
+  .rankTitle {
+    z-index: 1;
     position: absolute;
-    top: 50%;
+    top: 40%;
     left: 50%;
     font-size: 50px;
     transform: translate(-50%, -50%);
   }
 }
 
-.bodyblock {
-  position: relative;
-  top: 30%;
-  transform: translate(0%, -10%);
+.rankerBlock {
+  border: solid 0.5px white;
+  background-color: #1d1e22;
+  border-radius: 15px;
+  margin: 5px;
+  padding: 4px;
+  text-align: center;
 }
 
 .modeSelector {
