@@ -92,6 +92,7 @@ public class RankingController
     @GetMapping("/rankList")
     public ResponseEntity<RankDto.ResponseDto<?>> requestAllRankingList(@RequestParam String battle_mode, int page)
     {
+        System.out.println("랭크 리스트로 들어왔으면 콘솔에 뜨렴^^^^^^");
         List<RankDto.Ranking> RankingList = rankService.getAllRankingList(battle_mode, page);
         if(RankingList.size() == 0)
         {
