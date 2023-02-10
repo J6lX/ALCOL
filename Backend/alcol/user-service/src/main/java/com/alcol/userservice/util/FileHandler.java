@@ -90,7 +90,9 @@ public class FileHandler
         String new_file_name = System.nanoTime() + originalFileExtension;
 
         // 저장된 파일로 변경하여 이를 보여주기 위함
-        file = new File("/tmp/" + path + File.separator + new_file_name);
+        file = new File(path + File.separator + new_file_name);
+
+        log.info("file absolute path : " + file.getAbsolutePath());
 
         // 파일을 저장
         try {
