@@ -14,8 +14,25 @@ public class ProblemDto
     @AllArgsConstructor
     public static class ProbNameTierDto
     {
-        private Long probNo;
-        private String probName;
-        private ProblemTierEntity probTier;
+        private Long prob_no;
+        private String prob_name;
+        private ProblemTierEntity prob_tier;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProbDetail
+    {
+        private Long prob_no;
+        private String prob_name;
+        private String prob_content;
+        private String prob_input_content;
+        private String prob_output_content;
+        private int prob_time_limit;
+        private int prob_memory_limit;
+        private String prob_input_testcase;
+        private String prob_output_testcase;
     }
 }
