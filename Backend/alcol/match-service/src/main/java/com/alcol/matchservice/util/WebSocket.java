@@ -290,7 +290,7 @@ public class WebSocket {
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
                     send.put("hostCheck","true");
-                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
+//                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
                     session.getAsyncRemote().sendText(send.toJSONString());
                 }
                 else{
@@ -298,7 +298,7 @@ public class WebSocket {
                     send.put("userId", player1Id);
                     send.put("otherId", player2Id);
                     send.put("hostCheck","false");
-                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
+//                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
                     session.getAsyncRemote().sendText(send.toJSONString());
                 }
 //                handleClose(session);
