@@ -94,6 +94,7 @@ public class WebSocket {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
                 String battleMode = obj.get("battleMode").toString();
+                String hostCheck = obj.get("hostCheck").toString();
                 ranking = redisTemplate.opsForZSet();
                 try
                 {
@@ -113,16 +114,32 @@ public class WebSocket {
 
 
                 User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
-                if(sessionMap.containsKey(otherUserId))
+                if(hostCheck.equals("false"))
                 {
-                    sessionId2Obj.get(otherUserId).user2 = user;
-                    userId2Session.put(userId, userId2Session.get(otherUserId));
-                    userId2SessionId.put(userId, otherUserId);
-                    System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
-                    JSONObject data = new JSONObject();
-                    data.put("messageType","connect_success");
+                    while(true)
+                    {
+                        if(sessionMap.containsKey(otherUserId))
+                        {
+                            sessionId2Obj.get(otherUserId).user2 = user;
+                            userId2Session.put(userId, userId2Session.get(otherUserId));
+                            userId2SessionId.put(userId, otherUserId);
+                            System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
+                            JSONObject data = new JSONObject();
+                            data.put("messageType","connect_success");
+                            userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
+                            break;
+                        }
+                        else {
+                            try
+                            {
+                                Thread.sleep(500);
+                            }catch (InterruptedException e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 //                    session.getAsyncRemote().sendText("connect_success");
-                    userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                    String url = "http://i8b303.p.ssafy.io:9005/problem-service/getLevelAndTier";
 //                    ResponseEntity<List> problems = restTemplate.getForEntity(url,List.class);
 //                    System.out.println(problems);
