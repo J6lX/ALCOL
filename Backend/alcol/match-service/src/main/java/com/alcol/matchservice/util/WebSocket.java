@@ -286,16 +286,19 @@ public class WebSocket {
                 System.out.println(session);
                 JSONObject send = new JSONObject();
                 if(((User) obj).getId().equals(player2Id)){
+
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
                     host_user=true;
                     send.put("hostCheck",host_user);
+                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
                 }
                 else{
                     host_user = false;
                     send.put("userId", player1Id);
                     send.put("otherId", player2Id);
                     send.put("hostCheck",host_user);
+                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
                 }
 //                handleClose(session);
                 synchronized (session) {
