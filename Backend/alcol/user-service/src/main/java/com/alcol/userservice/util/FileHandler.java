@@ -33,9 +33,11 @@ public class FileHandler
 
 //        log.info("absolute path : " + absolutePath);
 
-        String relativeFolder = resourceLoader.getResource(
-                "classpath:" + File.separator + "static"
-        ).getURI().getPath();
+//        String relativeFolder = resourceLoader.getResource(
+//                "classpath:" + File.separator + "static"
+//        ).getURI().getPath();
+
+        String relativeFolder = resourceLoader.getResource("classpath:").getURI().getPath();
 
 //                + "resources"
 //                + File.separator + "static"
