@@ -5,10 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,20 +35,22 @@ public class FileHandler
 
 //        log.info("absolute path : " + absolutePath);
 
-        String relativeFolder = resourceLoader.getResource(
-                "classpath:" + File.separator + "myStatic"
-        ).getURI().getPath();
+//        String relativeFolder = resourceLoader.getResource(
+//                "classpath:" + File.separator + "myStatic"
+//        ).getURI().getPath();
 
 //                + "resources"
 //                + File.separator + "static"
 //                + File.separator + "images"
 //                + File.separator + currentDate;
 
+        URL relativeFolder = FileHandler.class.getClassLoader().getResource(".");
+
         log.info("relativeFolder : " + relativeFolder);
 
         // 경로를 지정하고 그곳에 저장
 //        String path = "images/" + currentDate;
-        File file = new File(relativeFolder);
+        File file = new File(relativeFolder.getPath());
 
         // 저장할 위치의 디렉토리가 존재하지 않을 경우
         if (!file.exists())
