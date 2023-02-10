@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from "react";
-// import axios from "axios";
 import ReadyPage from "./ReadyPage";
 import BanPage from "./BanPage";
 import WaitOtherBanPage from "./WaitOtherBanPage";
@@ -30,22 +29,7 @@ const ContinuousBattlePage = () => {
   const languageMode = useRecoilState(selectedLanguage);
   console.log(battleModeInfo, languageMode);
 
-  useEffect(() => {
-    setProblems([
-      {
-        problem_no: 1001,
-        problem_category: ["구현", "그래프 이론", "그래프 탐색"],
-      },
-      {
-        problem_no: 1002,
-        problem_category: ["수학", "브르투포스 알고리즘"],
-      },
-      {
-        problem_no: 1003,
-        problem_category: ["다이나믹 프로그래밍", "비트 마스킹", "최대 유량"],
-      },
-    ]);
-  }, []);
+  
   const messageType = "connect";
   const userId = idInfo[0].userId;
   const otherId = idInfo[0].otherId;
@@ -76,31 +60,24 @@ const ContinuousBattlePage = () => {
   }, []);
 
   socket.onmessage = (servermessage) => {
-    const data = servermessage.data;
+    const data = JSON.parse(servermessage.data);
     console.log(data);
-    if (data === "connect_success") {
+    if (data.messageType === "connect_success") {
       console.log("연결 완료!");
       console.log(data);
-
-      // axios
-      //   .get("http://i8b303.p.ssafy.io/problemList", header)
-      //   .then((response) => {
-      //     setProblems(response.data.problems);
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
-      setTimeout(() => {
-        setIsConnected(true);
-        setIsReady(true);
-      }, 3000);
-    } else if (data === "ban_success") {
+      socket.send(JSON.stringify({
+        messageType: "getProblem",
+        userId: userId,
+        otherId: otherId,
+      })
+      )
+    } else if (data.messageType === "ban_success") {
       console.log("문제 선택 완료!");
       setTimeout(() => {
         setIsReady(false);
         setIsBanWait(true);
       }, 5000);
-    } else if (data === "select_success") {
+    } else if (data.messageType === "select_success") {
       setTimeout(() => {
         setIsBanWait(false);
         setIsSelected(true);
@@ -109,14 +86,21 @@ const ContinuousBattlePage = () => {
           setIsSolving(true);
         }, 15000);
       }, 5000);
-    } else if (data === "submit_success") {
+    } else if (data.messageType === "submit_success") {
       submitResult = data.submitResult;
       console.log(submitResult);
       if (submitResult === "success") {
         setIsSolved(true);
       }
-    } else if (data === "close") {
+    } else if (data.messageType === "close") {
       socket.onclose();
+    } else if (data.messageType === "sendProblem") {
+      console.log("문제 세 개를 받아왔습니다.", data)
+      setProblems(data.problems);
+      setTimeout(() => {
+        setIsConnected(true);
+        setIsReady(true);
+      }, 3000);
     } else {
       console.log("뭐가 오긴 왔는데...");
       console.log(data);

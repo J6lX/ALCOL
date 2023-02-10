@@ -197,13 +197,28 @@ const CodingPlace = ({ submitcode }) => {
     if (code.trim() === "") {
       setSubmitMessage("코드를 입력해주세요.");
     } else {
-      let codedata;
-      code.forEach((item) => {
-        if (item === " ") {
-          codedata += "ㄱ";
+      let codedata = "";
+      // 내일 물어보기: tab이 spacebar로 이루어져 있는 것 같은데 탭도 꼭 개행문자가 필요한지. 현재 가능하긴 함.
+      for (let i=0; i<code.length; i++) {
+        if (code[i] === "\n") {
+          codedata += "\n"
+          console.log("enter", code[i])
+          for (let j=1; j<code.length-i-1; j+=2) {
+            if (code[i+j] === " " && code[i+j+1] === " ") {
+              codedata += "\t"
+              console.log("tab", code[i+j])
+            } else {
+              i += j-1
+              break
+            }
+          }
+        } else {
+          console.log(code[i])
+          codedata += code[i]
         }
-      });
-      console.log(codedata);
+      }
+      console.log(codedata)
+      console.log(JSON.stringify({code: codedata}));
       const solving_data = {
         problem_id: problem_number,
         language: "python3",
@@ -328,7 +343,7 @@ const Console = () => {
   const submitMessage = useRecoilValue(submitMessageState);
   // const solvingHeight = useRecoilValue(solvingHeightState);
   const consoleHeight = useRecoilValue(consoleHeightState);
-  window.onload();
+  // window.onload();
 
   return (
     <div
