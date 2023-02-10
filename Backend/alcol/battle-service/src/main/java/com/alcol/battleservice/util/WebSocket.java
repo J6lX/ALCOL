@@ -141,15 +141,20 @@ public class WebSocket {
 //                    {
                         String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 //                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
-                        List<Map<String,String>> problems = restTemplate.getForObject(url,List.class);
+                        List<Map<String,Object>> problems = restTemplate.getForObject(url,List.class);
                         for(int i=0; i<problems.size(); i++)
                         {
-                            Map<String,String> prob = problems.get(i);
-                            System.out.println(prob.toString());
-                            System.out.println(prob.get("problem_category"));
-                            System.out.println(prob.get("problem_category").toString());
-                            Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
-                            System.out.println("넣은 문제 : "+problem.toString());
+                            Map<String,Object> prob = problems.get(i);
+
+                            System.out.println(prob.get("problem_no"));
+//                            System.out.println(prob.);
+                            List<String> categorys = (List<String>) prob.get("problem_category");
+                            System.out.println(categorys);
+
+//                            System.out.println(prob.get("problem_category"));
+//                            System.out.println(prob.get("problem_category").toString());
+//                            Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
+//                            System.out.println("넣은 문제 : "+problem.toString());
                         }
 //                    }
                 }
