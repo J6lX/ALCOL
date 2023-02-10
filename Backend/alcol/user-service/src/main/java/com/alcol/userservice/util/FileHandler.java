@@ -46,7 +46,7 @@ public class FileHandler
 
         URL relativeFolder = FileHandler.class.getClassLoader().getResource("myStatic");
 
-        log.info("relativeFolder : " + relativeFolder);
+        log.info("relativeFolder : " + relativeFolder.getPath());
 
         // 경로를 지정하고 그곳에 저장
 //        String path = "images/" + currentDate;
