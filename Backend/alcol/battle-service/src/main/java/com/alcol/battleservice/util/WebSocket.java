@@ -168,7 +168,7 @@ public class WebSocket {
                             }
                         }
 
-                        sessionId2Obj.get(userId).problemList = getProblemListMap;
+                        sessionId2Obj.get(userId).problemBanCheck = getProblemListMap;
 
 //                    }
                 }
@@ -184,51 +184,68 @@ public class WebSocket {
             {
                 String userId = obj.get("userId").toString();
                 JSONObject problems_json = new JSONObject();
+                JSONObject problems_category = new JSONObject();
+                String sessionId;
+                if(sessionId2Obj.containsKey(userId))
+                {
+                    sessionId = userId;
+                }
+                else
+                {
+                    sessionId = userId2SessionId.get(userId);
+                }
+                for(int i=0; i<sessionId2Obj.get(sessionId).problemList.size(); i++)
+                {
+                    problems_category.put("category",sessionId2Obj.get(sessionId).problemList.get(i));
+                }
+                problems_json.put("messageType","sendProblem");
+                problems_json.put("problems",problems_category);
+
                 sendProblems(session, problems_json);
 
                 /****문제를 보내고 벤픽 시간을 제한해야 함****/
 
-                JSONObject banResult_json = new JSONObject();
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        String sessionId="";
-                        if(sessionId2Obj.containsKey(userId))
-                        {
-                            sessionId = userId;
-                        }
-                        else
-                        {
-                            sessionId = userId2SessionId.get(userId);
-                        }
-                        System.out.println("내 아이디 : "+userId);
-                        System.out.println("문제 요청 부분의 세션 아이디 : "+sessionId);
-                        List<Integer> randomProblemList = new ArrayList<>();
-                        for (int key : sessionId2Obj.get(sessionId).problemList.keySet())
-                        {
-                            if(sessionId2Obj.get(sessionId).problemList.get(key))
-                            {
-                                randomProblemList.add(key);
-                            }
-                        }
-
-                        /**밴픽 시간이 다 지난 후에 밴픽을 끝내는 메시지와 함께 문제 전송*/
-                        Random random = new Random();
-                        int randomIndex = random.nextInt(randomProblemList.size());
-                        int selectProblemNum = randomProblemList.get(randomIndex);
-                        sessionId2Obj.get(sessionId).problemNum = selectProblemNum;
-//                        String url = "http://localhost:9005/getProblem/"+selectProblemNum;
-//                        ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
-//                        banResult_json.put("messageType","select_sucess");
-//                        banResult_json.put("problemNum",selectProblemNum);
-                        //문제 이름, 번호같은 디테일 넣어야 함.
-//                        banResult_json.put("problemName",)
-                    }
-                };
-                runCheck = true;
-                Timer timer = new Timer(true);
-                long delay = 5000;
-                timer.schedule(task, delay);
+//                JSONObject banResult_json = new JSONObject();
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        String sessionId="";
+//                        if(sessionId2Obj.containsKey(userId))
+//                        {
+//                            sessionId = userId;
+//                        }
+//                        else
+//                        {
+//                            sessionId = userId2SessionId.get(userId);
+//                        }
+//                        System.out.println("내 아이디 : "+userId);
+//                        System.out.println("문제 요청 부분의 세션 아이디 : "+sessionId);
+//                        List<Integer> randomProblemList = new ArrayList<>();
+//                        for (int key : sessionId2Obj.get(sessionId).problemList.keySet())
+//                        {
+//                            if(sessionId2Obj.get(sessionId).problemList.get(key))
+//                            {
+//                                randomProblemList.add(key);
+//                            }
+//                        }
+//
+//                        /**밴픽 시간이 다 지난 후에 밴픽을 끝내는 메시지와 함께 문제 전송*/
+//                        Random random = new Random();
+//                        int randomIndex = random.nextInt(randomProblemList.size());
+//                        int selectProblemNum = randomProblemList.get(randomIndex);
+//                        sessionId2Obj.get(sessionId).problemNum = selectProblemNum;
+////                        String url = "http://localhost:9005/getProblem/"+selectProblemNum;
+////                        ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
+////                        banResult_json.put("messageType","select_sucess");
+////                        banResult_json.put("problemNum",selectProblemNum);
+//                        //문제 이름, 번호같은 디테일 넣어야 함.
+////                        banResult_json.put("problemName",)
+//                    }
+//                };
+//                runCheck = true;
+//                Timer timer = new Timer(true);
+//                long delay = 5000;
+//                timer.schedule(task, delay);
 
             }
             /**사용자가 밴을 할 때 들어오는 곳, 문제를 false로 바꿈*/
