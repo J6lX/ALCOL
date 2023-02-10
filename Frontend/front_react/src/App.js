@@ -92,7 +92,9 @@ function App() {
             <Route path="/ranking" component={Ranking} />
 
             {/* 회원가입 페이지 */}
-            <PrivateRoute path="/register" exact={true} component={RegisterPage} />
+            <Route exact path="/register">
+              {isAuthenticated ? <Redirect to="/" /> : <Route component={RegisterPage} />}
+            </Route>
 
             {/* 회원정보 수정 페이지 */}
             <PrivateRoute path="/modify" exact={true} component={ModifyPage} />
