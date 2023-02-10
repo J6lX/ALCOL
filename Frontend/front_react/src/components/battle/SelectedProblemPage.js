@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Row, Col, Badge } from "antd";
 import versus from "../../assets/versus.png";
 // import $ from "jquery";
