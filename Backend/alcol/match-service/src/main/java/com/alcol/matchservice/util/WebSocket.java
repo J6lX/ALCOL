@@ -170,7 +170,7 @@ public class WebSocket {
                             break;
                         }
                     }
-                    System.out.println("세션 아이디 : "+sessionId2Obj.get(i).id);
+//                    System.out.println("세션 아이디 : "+sessionId2Obj.get(i).id);
                 }
             }
             else if (method.equals("msg"))
