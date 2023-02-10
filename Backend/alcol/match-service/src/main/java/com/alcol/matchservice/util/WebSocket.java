@@ -36,6 +36,7 @@ public class WebSocket {
     private RestTemplate restTemplate;
     private ZSetOperations<String, Object> ranking;
     private int mmr;
+    private boolean host_user = false;
     private static Set<String> sessionSet = new HashSet<String>();
     private static Map<String, Session> sessionMap = new HashMap<>();
     private static Map<String, User> sessionId2Obj = new HashMap<>();
@@ -166,6 +167,8 @@ public class WebSocket {
                         System.out.println(id);
                         if(!sessionId2Obj.get(i).id.equals(id))
                         {
+
+                            host_user = true;
                             goBattle(sessionId2Obj.get(i).id, id);
                             break;
                         }
@@ -285,10 +288,12 @@ public class WebSocket {
                 if(((User) obj).getId().equals(player2Id)){
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
+                    send.put("host_check",host_user);
                 }
                 else{
                     send.put("userId", player1Id);
                     send.put("otherId", player2Id);
+                    send.put("host_check",host_user);
                 }
 //                handleClose(session);
                 session.getAsyncRemote().sendText(send.toJSONString());
