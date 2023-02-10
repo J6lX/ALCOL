@@ -206,6 +206,7 @@ public class UserServiceImpl implements UserService
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
 
+        log.info("userId : " + userId);
         log.info("UserEntity : " + userEntity);
 
         try {
