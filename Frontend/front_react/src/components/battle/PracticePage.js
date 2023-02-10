@@ -34,14 +34,26 @@ const problemLabel = [
   },
 ];
 
-// 연습 문제 데이터
-const problemData = [
-  { key: 1, problemNo: "1", problemName: "문제1", problemType: "DFS", problemDifficulty: "Gold" },
-  { key: 2, problemNo: "2", problemName: "문제2", problemType: "DFS", problemDifficulty: "Gold" },
-  { key: 3, problemNo: "3", problemName: "문제3", problemType: "DFS", problemDifficulty: "Gold" },
-  { key: 4, problemNo: "4", problemName: "문제4", problemType: "DFS", problemDifficulty: "Gold" },
-  { key: 5, problemNo: "5", problemName: "문제5", problemType: "DFS", problemDifficulty: "Gold" },
-];
+// 연습 문제 데이터(샘플)
+const problemData = {
+  success: true,
+  bodyData: [
+    {
+      problem_number: 1,
+      problem_name: "수지는 짱구를 좋아해",
+      problem_type: ["dfs", "bfs", "수학"],
+      problem_difficulty: "GOLD1",
+    },
+    {
+      problem_number: 2,
+      problem_name: "형만이랑 미선이는 결혼을 했어",
+      problem_type: ["dfs", "bfs", "수학"],
+      problem_difficulty: "SILVER2",
+    },
+  ],
+  customCode: "000",
+  description: "문제 리스트가 존재합니다.",
+};
 
 // 페이지 렌더링
 function Ranking() {

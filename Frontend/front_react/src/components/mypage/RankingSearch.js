@@ -167,7 +167,7 @@ function Ranking() {
     }
   }
 
-  // 랭커 정보를 recoil에 저장
+  // 검색 결과를 recoil에 저장
   const [result, setResult] = useRecoilState(SearchResultState);
 
   console.log(result);

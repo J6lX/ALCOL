@@ -203,36 +203,6 @@ function Ranking() {
       console.log("응답 실패 : " + error);
     });
 
-  // // 현재 로그인한 사용자 정보 요청
-  // const userInfo = useRecoilValue(LoginState);
-  // const accessToken = useRecoilValue(AccessTokenInfo);
-  // const refreshToken = useRecoilValue(RefreshTokenInfo);
-
-  // // 로그인한 정보가 있는 경우 내 랭킹 정보 요청
-  // // 문제 해결 중(404 Not Found)
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     const headerData = JSON.stringify({
-  //       access_token: accessToken,
-  //       refresh_token: refreshToken,
-  //       use_id: userInfo,
-  //     });
-  //     axios
-  //       .post(
-  //         `http://i8b303.p.ssafy.io:8000/myRank`,
-  //         { battle_mode: { modeName } },
-  //         { headers: headerData }
-  //       )
-  //       .then(function (response) {
-  //         console.log(response);
-  //         userData = response.data;
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
-  // });
-
   // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
