@@ -151,7 +151,7 @@ public class WebSocket {
                     sessionMap.put(userId, session);
                     sessionId2Obj.put(userId, battleRoom);
                     userId2Session.put(userId, session);
-                    userId2SessionId.put(userId, otherUserId);
+                    userId2SessionId.put(userId, userId);
                     System.out.println("이번에 만들어짐 : " + sessionMap);
                     System.out.println("this is restTempalte : "+ restTemplate);
 
