@@ -145,16 +145,20 @@ public class WebSocket {
                         for(int i=0; i<problems.size(); i++)
                         {
                             Map<String,Object> prob = problems.get(i);
-
                             System.out.println(prob.get("problem_no"));
-//                            System.out.println(prob.);
                             List<String> categorys = (List<String>) prob.get("problem_category");
                             System.out.println(categorys);
+                            Problem problem = Problem.builder()
+                                    .problemNum(Integer.parseInt(prob.get("problem_no").toString()))
+                                    .problemCategory((List<String>) prob.get("problem_category"))
+                                    .build();
+                            System.out.println("넣은 문제 : " + problem.toString());
+                            System.out.println("문제 번호 : " + problem.getProblemNum());
+                            for(int j=0; j<problem.problemCategory.size(); j++)
+                            {
+                                System.out.println("해당 문제의 카테고리 : "+problem.problemCategory.get(i));
 
-//                            System.out.println(prob.get("problem_category"));
-//                            System.out.println(prob.get("problem_category").toString());
-//                            Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
-//                            System.out.println("넣은 문제 : "+problem.toString());
+                            }
                         }
 //                    }
                 }
