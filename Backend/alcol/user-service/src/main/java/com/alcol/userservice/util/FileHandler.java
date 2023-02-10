@@ -44,7 +44,7 @@ public class FileHandler
 //                + File.separator + "images"
 //                + File.separator + currentDate;
 
-        URL relativeFolder = FileHandler.class.getClassLoader().getResource(".");
+        URL relativeFolder = FileHandler.class.getClassLoader().getResource("myStatic");
 
         log.info("relativeFolder : " + relativeFolder);
 
