@@ -4,6 +4,7 @@ import { RecoilRoot, useRecoilValue } from "recoil";
 
 import HomePage from "./components/home/HomePage";
 import LoginPage from "./components/accounts/LoginPage";
+import FindPasswordPage from "./components/accounts/FindPassword";
 import RegisterPage from "./components/accounts/RegisterPage";
 import ModifyPage from "./components/accounts/ModifyPage";
 import ModeSelectPage from "./components/battle/ModeSelectPage";
@@ -69,6 +70,9 @@ function App() {
               {isAuthenticated ? <Redirect to="/" /> : <Route component={LoginPage} />}
             </Route>
             {/* 로그아웃 페이지(로그아웃 기능 구현용) */}
+
+            {/* 비밀번호 찾기 페이지 */}
+            <Route path="/findPassword" component={FindPasswordPage}></Route>
 
             {/* 모드 선택 페이지 */}
             <PrivateRoute path="/mode" component={ModeSelectPage} />
