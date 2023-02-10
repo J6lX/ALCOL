@@ -203,14 +203,7 @@ public class WebSocket {
                 JSONObject problems_json = new JSONObject();
                 JSONObject problems_category = new JSONObject();
                 String sessionId;
-                if(sessionId2Obj.containsKey(userId))
-                {
-                    sessionId = userId;
-                }
-                else
-                {
-                    sessionId = userId2SessionId.get(userId);
-                }
+                sessionId = userId2SessionId.get(userId);
                 for(int i=0; i<sessionId2Obj.get(sessionId).problemList.size(); i++)
                 {
                     problems_category.put("category",sessionId2Obj.get(sessionId).problemList.get(i));
