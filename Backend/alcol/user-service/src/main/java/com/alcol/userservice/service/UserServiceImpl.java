@@ -106,6 +106,7 @@ public class UserServiceImpl implements UserService
             @RequestBody UserDto.SignUpDto signUpDto,
             @RequestPart MultipartFile file
     )
+            throws IOException
     {
         log.info("UserServiceImpl 의 createUser 메소드 실행");
 
