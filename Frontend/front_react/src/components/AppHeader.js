@@ -46,7 +46,7 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Link to="/mypage/tester">
+          <Link to={`/mypage/${isLoggedIn}`}>
             <Avatar size={44} icon={<UserOutlined />} />
           </Link>
         </Col>
@@ -56,7 +56,7 @@ function LoginTag(props) {
             height: "64px",
             textAlign: "center",
           }}>
-          <Link to="/mypage/tester" className="text">
+          <Link to={`/mypage/${isLoggedIn}`} className="text">
             TEST
           </Link>
         </Col>

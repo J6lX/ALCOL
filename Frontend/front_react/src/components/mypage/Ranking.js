@@ -71,15 +71,15 @@ const rankingLabel = [
 // 랭커 정보 기록
 let rankerData = [];
 
-// 사용자 정보 기록
-let userData = [];
+// // 사용자 정보 기록
+// let userData = [];
 
 // // 사용자 기록 표시
 // function userDisplay() {
 //   if (userData) {
 //     // 대충 사용자 정보 표시한다는 내용
 //   } else {
-//     // 대충 로그인하라는 내용
+//     // 대충 '개인 랭킹 정보를 보려면 로그인하세요' 텍스트를 표시하겠다는 내용
 //   }
 // }
 
