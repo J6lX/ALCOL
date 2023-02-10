@@ -224,6 +224,8 @@ function Ranking() {
   //   }
   // });
 
+  // 유저 검색 시
+
   // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
@@ -277,7 +279,7 @@ function Ranking() {
         <Col span={16}>
           {/* 검색 상자 */}
           <Row justify="end">
-            <Col xs={0} md={6} lg={5}>
+            <Col xs={8} md={6} lg={5}>
               <Input
                 placeholder="닉네임으로 검색"
                 allowClear

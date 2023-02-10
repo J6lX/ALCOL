@@ -14,7 +14,7 @@ body {
   position: relative;
   top: 5%;
   border-color: $neon-blue;
-  transform: translate(0%, -15%);
+  transform: translate(0%, -5%);
 
   //페이지 크기 별 css 디자인 수정
   // 작은 크기
@@ -22,12 +22,13 @@ body {
     top: 20%;
     border-color: $neon-blue;
     margin-top: 4%;
-    transform: translate(0%, -10%);
+    transform: translate(0%, -2%);
   }
 
   // 큰 크기
   @media (min-width: 1050px) {
     border-color: $neon-blue;
+    transform: translate(0%, -5%);
   }
 }
 
@@ -63,7 +64,7 @@ body {
   position: absolute;
   top: 30%;
   left: 50%;
-  font-size: 35px;
+  font-size: 50px;
   transform: translate(-50%, -50%);
 
   //페이지 크기 별 css 디자인 수정
@@ -83,7 +84,7 @@ body {
     position: absolute;
     top: 40%;
     left: 50%;
-    font-size: 50px;
+    font-size: 70px;
     transform: translate(-50%, -50%);
   }
 }
