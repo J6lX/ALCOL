@@ -298,7 +298,10 @@ public class WebSocket {
                     send.put("hostCheck",host_user);
                 }
 //                handleClose(session);
-                session.getAsyncRemote().sendText(send.toJSONString());
+                synchronized (session) {
+//                    session.sendMessage(message);
+                    session.getAsyncRemote().sendText(send.toJSONString());
+                }
             }
         }
     }
