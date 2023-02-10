@@ -72,6 +72,8 @@ public class RankingController
 
     @PostMapping("/myRank")
     public ResponseEntity<RankDto.ResponseDto<?>> requestMyRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
+        System.out.println("내 랭킹 확인 컨트롤러로 들어옴");
+        
         // header에 있는 user_id값 가져옴
         String userId = requestHeader.getHeaders("user_id").nextElement();
         String battleMode = requestMap.get("battle_mode");
@@ -92,6 +94,7 @@ public class RankingController
     @GetMapping("/rankList")
     public ResponseEntity<RankDto.ResponseDto<?>> requestAllRankingList(@RequestParam String battle_mode, int page)
     {
+        System.out.println("랭크 리스트로 들어왔으면 콘솔에 뜨렴^^^^^^");
         List<RankDto.Ranking> RankingList = rankService.getAllRankingList(battle_mode, page);
         if(RankingList.size() == 0)
         {
@@ -103,6 +106,7 @@ public class RankingController
     @GetMapping("/searchUser")
     public ResponseEntity<RankDto.ResponseDto<?>> requestSearchUser(@RequestParam String battle_mode, String nickname)
     {
+        System.out.println("유저검색 컨트롤러로 들어옴");
         RankDto.Ranking searchUser = rankService.getSearchUserInfo(battle_mode, nickname);
 
         if(searchUser == null){
