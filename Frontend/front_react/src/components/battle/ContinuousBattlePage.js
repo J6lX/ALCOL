@@ -119,18 +119,18 @@ const ContinuousBattlePage = () => {
     }
 
     socket.onmessage = (servermessage) => {
-      console.log(servermessage.data);
+      console.log(servermessage);
       const data = JSON.parse(servermessage.data);
       if (data.messageType === "connect_success") {
         console.log("연결 완료!");
         console.log(data);
-        socket.send(
-          JSON.stringify({
-            messageType: "getProblem",
-            userId: userId,
-            otherId: otherId,
-          })
-        );
+          socket.send(
+            JSON.stringify({
+              messageType: "getProblem",
+              userId: userId,
+              otherId: otherId,
+            })
+          );
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
         console.log("문제 선택 완료!");
