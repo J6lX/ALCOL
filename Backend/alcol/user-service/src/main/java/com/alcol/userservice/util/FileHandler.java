@@ -44,13 +44,13 @@ public class FileHandler
 //                + File.separator + "images"
 //                + File.separator + currentDate;
 
-        URL relativeFolder = FileHandler.class.getClassLoader().getResource("myStatic");
+        String relativeFolder = FileHandler.class.getClassLoader().getResourceAsStream("myStatic").toString();
 
-        log.info("relativeFolder : " + relativeFolder.getPath());
+        log.info("relativeFolder : " + relativeFolder);
 
         // 경로를 지정하고 그곳에 저장
 //        String path = "images/" + currentDate;
-        File file = new File(relativeFolder.getPath());
+        File file = new File(relativeFolder);
 
         // 저장할 위치의 디렉토리가 존재하지 않을 경우
         if (!file.exists())
