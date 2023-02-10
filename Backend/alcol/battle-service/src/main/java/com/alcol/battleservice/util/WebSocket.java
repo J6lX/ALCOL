@@ -212,9 +212,17 @@ public class WebSocket {
                 System.out.println(sessionId2Obj.get(sessionId).problemList);
                 System.out.println(sessionId2Obj.get(sessionId).problemList.toString());
 
+//                String[] problems_category = new String[sessionId2Obj.get(sessionId).problemList.size()];
+
                 for(int i=0; i<sessionId2Obj.get(sessionId).problemList.size(); i++)
                 {
-                    problems_category.put("category",sessionId2Obj.get(sessionId).problemList.get(i));
+//                    problems_category.put(i,sessionId2Obj.get(sessionId).problemList.get(i));
+                    int problems_number = sessionId2Obj.get(sessionId).problemList.get(i).problemNum;
+                    List<String> problems_category_array = new ArrayList<>();
+                    for(int j=0; j<sessionId2Obj.get(sessionId).problemList.get(i).problemCategory.size();j++){
+                        problems_category_array.add(sessionId2Obj.get(sessionId).problemList.get(i).problemCategory.get(j));
+                    }
+                    problems_category.put(problems_number,problems_category_array);
                 }
                 problems_json.put("messageType","sendProblem");
                 problems_json.put("problems",problems_category);
