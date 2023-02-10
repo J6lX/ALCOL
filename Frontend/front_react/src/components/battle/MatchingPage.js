@@ -143,9 +143,8 @@ function App() {
   const history = useHistory();
 
   const onHandlePlayerGet = () => {
-    socket.send(JSON.stringify("끊어주세요"));
-
     if (playerInfo.otherId === "" && playerInfo.userId === "" && playerInfo.hostCheck === "") {
+      socket.send(JSON.stringify("끊어주세요"));
       socket.close(); //소켓을 닫는다
       setTimeout(() => {
         history.push("/battle");
@@ -156,7 +155,7 @@ function App() {
         console.log(playerInfo);
       }, 2000);
     } else {
-      console.log("player가 null이 아니야");
+      console.log("player정보가 있음");
     }
   };
 

@@ -30,12 +30,12 @@ const ContinuousBattlePage = () => {
   const battleModeInfo = useRecoilState(selectedMode);
   const languageMode = useRecoilState(selectedLanguage);
   console.log(languageMode);
-  const [nickname, setNickname] = React.useState("a");
-  const [speedTier, setSpeedTier] = React.useState("a");
-  const [optTier, setOptTier] = React.useState("a");
-  const [othernickname, setOtherNickname] = React.useState("b");
-  const [otherspeedTier, setOtherSpeedTier] = React.useState("b");
-  const [otheroptTier, setOtherOptTier] = React.useState("b");
+  const [nickname, setNickname] = useState("a");
+  const [speedTier, setSpeedTier] = useState("a");
+  const [optTier, setOptTier] = useState("a");
+  const [othernickname, setOtherNickname] = useState("b");
+  const [otherspeedTier, setOtherSpeedTier] = useState("b");
+  const [otheroptTier, setOtherOptTier] = useState("b");
   useEffect(() => {}, [nickname, speedTier, optTier]);
   useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
 
@@ -113,7 +113,7 @@ const ContinuousBattlePage = () => {
           ),
           2000
         );
-    });
+    }, 1000);
   }, [userId, otherId, hostCheck, battleMode]);
 
   useEffect(() => {
