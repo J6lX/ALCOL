@@ -166,7 +166,7 @@ const Guide2 = () => {
 
 const Guide3 = () => {
   return (
-    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "12%" }}>
+    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "11%" }}>
       <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
         <div className="consoleBox">
           <div className="ver"></div>
@@ -184,6 +184,7 @@ const Guide3 = () => {
           같이하면 재미가 두 배
         </h1>
       </div>
+      <br />
       <ScrollLink
         className="NanumSquare"
         to="Guide4"
@@ -200,7 +201,7 @@ const Guide3 = () => {
 
 const Guide4 = () => {
   return (
-    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "16%" }}>
+    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "13%" }}>
       <div className="grayBackground">
         <Col span={1}></Col>
         <Col
@@ -305,6 +306,8 @@ const Guide4 = () => {
           </div>
         </Col>
       </div>
+      <br />
+      <br />
       <ScrollLink
         className="NanumSquare"
         to="Guide5"
