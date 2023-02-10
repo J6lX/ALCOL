@@ -39,19 +39,21 @@ const ContinuousBattlePage = () => {
   socket = new WebSocket(websocketAddress);
   console.log("socket", socket);
 
-  socket.onopen = () =>
-    setTimeout(
-      socket.send(
-        JSON.stringify({
-          messageType: messageType,
-          userId: userId,
-          otherId: otherId,
-          hostCheck: hostCheck,
-          battleMode: battleMode,
-        })
-      ),
-      2000
-    );
+  useEffect(() => {
+    socket.onopen = () =>
+      setTimeout(
+        socket.send(
+          JSON.stringify({
+            messageType: messageType,
+            userId: userId,
+            otherId: otherId,
+            hostCheck: hostCheck,
+            battleMode: battleMode,
+          })
+        ),
+        2000
+      );
+  }, [userId, otherId, hostCheck, battleMode]);
 
   useEffect(() => {
     return () => {
@@ -61,8 +63,8 @@ const ContinuousBattlePage = () => {
   }, []);
 
   socket.onmessage = (servermessage) => {
+    console.log(servermessage);
     const data = JSON.parse(servermessage.data);
-    console.log(data);
     if (data.messageType === "connect_success") {
       console.log("연결 완료!");
       console.log(data);
@@ -97,8 +99,8 @@ const ContinuousBattlePage = () => {
     } else if (data.messageType === "close") {
       socket.onclose();
     } else if (data.messageType === "sendProblem") {
-      console.log("문제 세 개를 받아왔습니다.", JSON.parse(data.problems));
-      const problems = JSON.parse(data.problems);
+      console.log(data.problems);
+      const problems = data.problems;
       setProblems(problems);
       setTimeout(() => {
         setIsConnected(true);
@@ -119,7 +121,7 @@ const ContinuousBattlePage = () => {
 
   const changeBanProblem = (data) => {
     setProblemNumber(data);
-    // socket.send(JSON.stringify({ method: "ban", data: data }));
+    socket.send(JSON.stringify({ method: "ban", data: data }));
     setIsReady(false);
     setIsBanWait(true);
     setTimeout(() => {
@@ -138,32 +140,9 @@ const ContinuousBattlePage = () => {
     // socket.onclose();
   };
 
-  //확인용 함수들
-  const changeConnectTrue = () => {
-    setTimeout(() => {
-      setIsConnected(true);
-      setIsReady(true);
-    }, 5000);
-  };
-  // const changeSelectedTrue = () => {
-  //   setTimeout(() => {
-  //     setIsSelected(true);
-  //     setIsReady(false);
-  //   }, 5000);
-  // };
-  // const changeSolvedTrue = () => {
-  //   setTimeout(() => {
-  //     setIsSolved(true);
-  //     setIsSelected(false);
-  //   }, 5000);
-  // };
   return (
     <div>
       <div>
-        <button onClick={changeConnectTrue}>connect</button>
-        {/* <button onClick={changeSelectedTrue}>banselect</button>
-        <button>submit_resultfail</button>
-        <button onClick={changeSolvedTrue}>submit_resultsuccess</button> */}
         {!isConnected && <ReadyPage />}
         {isConnected && isReady && <BanPage props={problems} changeBanProblem={changeBanProblem} />}
         {isConnected && isBanWait && <WaitOtherBanPage />}

@@ -16,11 +16,36 @@ function UserInfo() {
   const [speedTier, setSpeedTier] = React.useState("a");
   const [optTier, setOptTier] = React.useState("a");
   var userId = useRecoilValue(LoginState);
+  const playerInfo = useRecoilValue(matchingPlayerInfo);
+  let otherId = playerInfo.otherId;
   useEffect(() => {}, [nickname, speedTier, optTier]);
 
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
       user_id: userId,
+    })
+    .then(function (response) {
+      setNickname(response.data.nickname);
+      setSpeedTier(response.data.speedTier);
+      setOptTier(response.data.optimizationTier);
+    })
+    .catch((error) => {
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        // 로그인 실패 시 표시하는 내용
+        alert(error.response.data.description);
+      }
+    });
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+      user_id: otherId,
     })
     .then(function (response) {
       setNickname(response.data.nickname);
@@ -113,11 +138,14 @@ function Top({ timeOut }) {
 function Mid({ props, onClick }) {
   const problems = props;
   console.log("뭐야 이거", props);
-  const printProblems = (problems) => {
+  const keys = Object.keys(problems);
+  console.log(keys);
+  const printProblems = (number) => {
+    console.log(number);
     const result = [];
 
-    for (let i = 0; i < problems.length; i++) {
-      result.push(<div key={i}> {problems[i]} </div>);
+    for (let i = 0; i < problems[keys[number]].length; i++) {
+      result.push(<div key={i}> {problems[keys[number]][i]} </div>);
     }
     return result;
   };
@@ -133,22 +161,16 @@ function Mid({ props, onClick }) {
     <Row justify="space-between" style={{ marginTop: "50px" }} className="ban_algo_contents">
       <Col sm={0} md={0} xl={4}></Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
-        <div className="ban_algo_problem_title">알고리즘 유형</div>
-        <div className="ban_algo_problem_category">
-          {printProblems(problems[0].problem_category)}
-        </div>
+        <div className="ban_algo_problem_title">문제 1</div>
+        <div className="ban_algo_problem_category">{printProblems(0)}</div>
       </Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "2")}>
-        <div className="ban_algo_problem_title">알고리즘 유형</div>
-        <div className="ban_algo_problem_category">
-          {printProblems(problems[1].problem_category)}
-        </div>
+        <div className="ban_algo_problem_title">문제 2</div>
+        <div className="ban_algo_problem_category">{printProblems(1)}</div>
       </Col>
       <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "3")}>
-        <div className="ban_algo_problem_title">알고리즘 유형</div>
-        <div className="ban_algo_problem_category">
-          {printProblems(problems[2].problem_category)}
-        </div>
+        <div className="ban_algo_problem_title">문제 3</div>
+        <div className="ban_algo_problem_category">{printProblems(2)}</div>
       </Col>
       <Col sm={0} md={0} xl={4}></Col>
     </Row>
@@ -180,7 +202,15 @@ function App({ props, changeBanProblem }) {
   };
 
   const selected = () => {
-    changeBanProblem(choose);
+    if (choose === "1") {
+      changeBanProblem(keys[0]);
+    } else if (choose === "2") {
+      changeBanProblem(keys[1]);
+    } else if (choose === "3") {
+      changeBanProblem(keys[2]);
+    } else {
+      console.log("제대로 하세요... 쫌...");
+    }
   };
 
   const timeOut = (data) => {
@@ -191,18 +221,19 @@ function App({ props, changeBanProblem }) {
   useEffect(() => {
     setProblem(props);
   }, [props]);
+  const keys = Object.keys(props);
   useEffect(() => {
     if (choose === "1") {
-      console.log("선택한 문제 번호는:" + problem[0].problem_no);
+      console.log("선택한 문제 번호는:" + keys[0]);
       setChoose("1");
     } else if (choose === "2") {
-      console.log("선택한 문제 번호는:" + problem[1].problem_no);
+      console.log("선택한 문제 번호는:" + keys[1]);
       setChoose("2");
     } else if (choose === "3") {
-      console.log("선택한 문제 번호는:" + problem[2].problem_no);
+      console.log("선택한 문제 번호는:" + keys[2]);
       setChoose("3");
     }
-  }, [choose, problem]);
+  }, [choose, problem, keys]);
 
   return (
     <div className="matching_background">
