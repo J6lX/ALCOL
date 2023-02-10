@@ -146,6 +146,8 @@ public class WebSocket {
                         {
                             Map<String,String> prob = problems.get(i);
                             System.out.println(prob.toString());
+                            System.out.println(prob.get("problem_category"));
+                            System.out.println(prob.get("problem_category").toString());
                             Problem problem = Problem.builder().problemNum(Integer.parseInt(prob.get("problem_no"))).problemCategory(prob.get("problem_category")).build();
                             System.out.println("넣은 문제 : "+problem.toString());
                         }
