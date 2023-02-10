@@ -5,6 +5,7 @@ import { atom } from "recoil";
 const { persistAtom } = recoilPersist();
 
 // 로그인 여부 저장
+// LoginState에는 사용자 ID(닉네임 X)를 저장
 export const LoginState = atom({
   key: "LoginState",
   default: "",

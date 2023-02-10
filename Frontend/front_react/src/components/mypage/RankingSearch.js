@@ -1,13 +1,13 @@
-import { Button, Row, Col, Input, Table, ConfigProvider, theme, Pagination, Form } from "antd";
+import { Button, Row, Col, Input, Table, ConfigProvider, theme, Pagination } from "antd";
 import "./Ranking.css";
 import rankingHeader from "../../assets/ranking_header.png";
 import qs from "query-string";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { LoginState } from "../../states/LoginState";
-import { RankerListState } from "../../states/RankingState";
+import { SearchResultState } from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
@@ -73,7 +73,10 @@ function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
   const modeName = paramInfo.mode;
-  const pageNo = Number(paramInfo.page);
+
+  // 파라미터 값 가져오기
+  const keywordData = useParams();
+  const userNickname = keywordData.username;
 
   // 탭 선택 여부에 따라 스타일링
   const [speedColor, setSpeedColor] = useState({ color: "white" });
@@ -165,120 +168,32 @@ function Ranking() {
   }
 
   // 랭커 정보를 recoil에 저장
-  const [rankerList, setRankerList] = useRecoilState(RankerListState);
+  const [result, setResult] = useRecoilState(SearchResultState);
 
-  // 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
+  console.log(result);
+
+  // 유저 검색 시
   // axios 통신 진행
-  // 이미지 데이터는 파일명으로 반환: 이미지 데이터는 따로 요청해야 하나?
   axios
     .get(
-      `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${pageNo}`
+      `http://i8b303.p.ssafy.io:8000/searchUser?battle_mode=${modeName}&nickname=${userNickname}`
     )
     // 응답 성공 시
     .then(function (response) {
-      // 랭킹 정보가 존재하는 경우
-      if (response.data.customCode === "002") {
-        // (대충 데이터 저장 후 화면에 표시해준다는 내용)
-        const originData = response.data.bodyData;
-        const rankerData = originData.map((data) => {
-          // data.record(전적) 데이터가 균일하지 않는 현상 발생
-          return {
-            grade: data.grade,
-            nickname: data.nickname,
-            profile_img: data.profile_pic,
-            mmr: data.mmr,
-            level: data.level,
-            tier: data.tier,
-            // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-          };
-        });
-        setRankerList(rankerData);
-      } else if (response.data.customCode === "003") {
-        // 랭킹 정보가 없는 경우
-        alert("등록된 정보가 없습니다.");
-      }
+      console.log(response);
+      // if (response.data.customCode === "002") {
+      // }
+      setResult();
     })
     //응답 실패 시
     .catch((error) => {
       console.log("응답 실패 : " + error);
     });
 
-  // // 현재 로그인한 사용자 정보 요청
-  // const userInfo = useRecoilValue(LoginState);
-  // const accessToken = useRecoilValue(AccessTokenInfo);
-  // const refreshToken = useRecoilValue(RefreshTokenInfo);
-
-  // // 로그인한 정보가 있는 경우 내 랭킹 정보 요청
-  // // 문제 해결 중(404 Not Found)
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     const headerData = JSON.stringify({
-  //       access_token: accessToken,
-  //       refresh_token: refreshToken,
-  //       use_id: userInfo,
-  //     });
-  //     axios
-  //       .post(
-  //         `http://i8b303.p.ssafy.io:8000/myRank`,
-  //         { battle_mode: { modeName } },
-  //         { headers: headerData }
-  //       )
-  //       .then(function (response) {
-  //         console.log(response);
-  //         userData = response.data;
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
-  // });
-
   // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
-  const [current, setCurrent] = useState(pageNo);
+  const [current, setCurrent] = useState(1);
   const pageMove = (page) => {
-    console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
     setCurrent(page);
-    axios
-      .post(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`)
-      // 응답 성공 시
-      .then(function (response) {
-        // console.log(response.data);
-        // 랭킹 정보가 존재하는 경우
-        if (response.data.customCode === "002") {
-          // (대충 데이터 저장 후 화면에 표시해준다는 내용)
-          const originData = response.data.bodyData;
-          const rankerData = originData
-            .map((data) => {
-              console.log(data);
-              return {
-                grade: data.grade,
-                nickname: data.nickname,
-                profile_img: data.profile_pic,
-                mmr: data.MMR,
-                level: data.level,
-                tier: data.tier,
-                record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-              };
-            })
-            //응답 실패 시
-            .catch((error) => {
-              console.log("응답 실패 : " + error);
-            });
-          console.log(rankerData);
-          return rankerData;
-        } else if (response.data.customCode === "003") {
-          // 랭킹 정보가 없는 경우
-          alert("등록된 정보가 없습니다.");
-        }
-      });
-    window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
-  };
-
-  // 엔터키 입력 또는 검색 버튼 클릭 시 유저 검색
-  const onSearch = (values) => {
-    console.log(values.keyword);
-    const searchInput = values.keyword;
-    window.location.assign(`/ranking/${searchInput}?mode=${modeName}`);
   };
 
   return (
@@ -292,35 +207,29 @@ function Ranking() {
       <Row justify="space-around" className="bodyBlock">
         <Col span={16}>
           {/* 검색 상자 */}
-          <Form onFinish={onSearch}>
-            <Row justify="end">
-              <Col xs={8} md={6} lg={5}>
-                <Form.Item name="keyword">
-                  <Input
-                    placeholder="닉네임으로 검색"
-                    allowClear
-                    onChange={inputChange}
-                    size="middle"
-                    value={search}
-                    style={{
-                      margin: "5px",
-                    }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col
-                xs={0}
-                md={3}
+          <Row justify="end">
+            <Col xs={8} md={6} lg={5}>
+              <Input
+                placeholder="닉네임으로 검색"
+                allowClear
+                onChange={inputChange}
+                size="middle"
+                value={search}
                 style={{
-                  marginLeft: "5px",
-                  padding: "5px",
-                }}>
-                <Form.Item>
-                  <Button htmlType="submit">검색</Button>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
+                  margin: "5px",
+                }}
+              />
+            </Col>
+            <Col
+              xs={0}
+              md={3}
+              style={{
+                marginLeft: "5px",
+                padding: "5px",
+              }}>
+              <Button>검색</Button>
+            </Col>
+          </Row>
 
           {/* 랭킹 표시 블록 */}
           <Row>
@@ -376,23 +285,15 @@ function Ranking() {
                           style={{
                             padding: "3px",
                           }}
-                          dataSource={rankerList}
+                          dataSource={result}
                           columns={rankingLabel}
                           showHeader={false}
                           pagination={false}
-                          // expandable={{
-                          //   innerRow,
-                          //   defaultExpandedRowKeys: ["0"],
-                          // }}
-                          // pagination={{
-                          //   position: ["bottomCenter"],
-                          //   defaultPageSize: 10,
-                          // }}
                         />
                         <Pagination
                           defaultCurrent={current}
                           onChange={pageMove}
-                          total={(pageNo + 9) * 10}
+                          total={10}
                           showQuickJumper={false}
                           showSizeChanger={false}
                         />

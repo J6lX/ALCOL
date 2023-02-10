@@ -71,7 +71,6 @@ function Ranking() {
   // 엔터키 입력 또는 검색 버튼 클릭 시 문제 제목 기준으로 필터링
   const onSearch = (values) => {
     const searchInput = values.query;
-    console.log(problemData);
     if (searchInput.trim()) {
       const filteredData = problemData.filter((problem) =>
         problem.problemName.includes(searchInput)
