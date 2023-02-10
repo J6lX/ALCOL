@@ -186,7 +186,7 @@ public class WebSocket {
                         }
 
                         sessionId2Obj.get(userId).problemBanCheck = getProblemListMap;
-
+                        sessionId2Obj.get(userId).problemList = getProblemList;
 //                    }
                 }
                 System.out.println();
