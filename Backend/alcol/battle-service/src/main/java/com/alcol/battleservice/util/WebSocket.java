@@ -190,7 +190,9 @@ public class WebSocket {
 //                    }
                 }
                 System.out.println();
-                session.getAsyncRemote().sendText("connect_success");
+                JSONObject data = new JSONObject();
+                data.put("messageType","connect_success");
+                session.getAsyncRemote().sendText(data.toJSONString());
 
 
 
