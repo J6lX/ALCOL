@@ -35,12 +35,11 @@ public class ProblemController
      * @return ResponseEntity<List<ProblemDto.ProbDetailDto>>
      */
     @PostMapping("/getProbSubjectAndTier")
-    public ResponseEntity<List<ProblemDto.ProbDetailDto>> getProbDetail(
-            @RequestParam(value = "prob_no_list") List<String> probNoList
-    )
+    public ResponseEntity<List<ProblemDto.ProbNameTierDto>> getProbDetail(
+            @RequestParam(value = "prob_no_list") List<String> probNoList)
     {
         log.info("ProblemController 의 getProbDetail 메소드 실행");
-        List<ProblemDto.ProbDetailDto> list = problemService.getProbDetailList(probNoList);
+        List<ProblemDto.ProbNameTierDto> list = problemService.getProbDetailList(probNoList);
         return restTemplateUtils.sendResponse(list);
     }
 
@@ -76,4 +75,5 @@ public class ProblemController
         return ResponseEntity.status(HttpStatus.OK).body(list);
         
     }
+
 }

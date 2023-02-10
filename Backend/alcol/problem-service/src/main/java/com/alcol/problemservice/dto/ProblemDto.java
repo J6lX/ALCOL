@@ -12,7 +12,7 @@ public class ProblemDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ProbDetailDto
+    public static class ProbNameTierDto
     {
         private Long probNo;
         private String probName;
