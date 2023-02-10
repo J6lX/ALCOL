@@ -5,14 +5,15 @@ import qs from "query-string";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { LoginState } from "../../states/LoginState";
+import { RankerListState } from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
   {
     dataIndex: "grade",
-    key: "grade",
+    key: "id",
     title: "순위",
     align: "center",
     hidden: true,
@@ -27,9 +28,9 @@ const rankingLabel = [
   {
     dataIndex: "profile_img",
     title: "Image",
-    render: () => (
+    render: (profile_img) => (
       <img
-        src={`profile_img`}
+        src={profile_img}
         alt="profile"
         style={{
           width: "32px",
@@ -68,21 +69,6 @@ const rankingLabel = [
   },
 ];
 
-// 랭커 정보 기록
-let rankerData = [];
-
-// // 사용자 정보 기록
-// let userData = [];
-
-// // 사용자 기록 표시
-// function userDisplay() {
-//   if (userData) {
-//     // 대충 사용자 정보 표시한다는 내용
-//   } else {
-//     // 대충 '개인 랭킹 정보를 보려면 로그인하세요' 텍스트를 표시하겠다는 내용
-//   }
-// }
-
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
@@ -111,33 +97,93 @@ function Ranking() {
     }
   }, [modeName]);
 
+  // 랭커 정보 기록
+
+  // 사용자 정보 기록
+  let userData = null;
+
+  // 사용자 기록 표시
+  function UserDisplay() {
+    // recoil에서 사용자 정보 가져오기
+    const userId = useRecoilValue(LoginState);
+
+    // 사용자가 로그인하지 않은 경우
+    if (!userId) {
+      return (
+        <Row align="center" style={{ padding: "4px" }}>
+          <Col span={24} justify="center">
+            <span>정보를 보려면 로그인하세요.</span>
+          </Col>
+        </Row>
+      );
+      // 로그인했지만 정보가 없는 경우
+    } else if (!userData) {
+      return (
+        <Row align="center" style={{ padding: "4px" }}>
+          <Col span={24} justify="center">
+            <span>사용자 정보를 불러올 수 없습니다.</span>
+          </Col>
+        </Row>
+      );
+      // 로그인했고 정보를 불러올 수 없는 경우
+    } else {
+      return (
+        <Row align="center" style={{ padding: "4px" }}>
+          <Col span={3}>
+            <p>MyRank</p>
+          </Col>
+          <Col span={1}>
+            <p>MyImg</p>
+          </Col>
+          <Col span={4}>
+            <p>MyName</p>
+          </Col>
+          <Col span={3}>
+            <p>MyLevel</p>
+          </Col>
+          <Col span={4}>
+            <p>MyMMR</p>
+          </Col>
+          <Col span={4}>
+            <p>MyTier</p>
+          </Col>
+          <Col span={3}>
+            <p>MyRecord</p>
+          </Col>
+        </Row>
+      );
+    }
+  }
+
+  // 랭커 정보를 recoil에 저장
+  const [rankerList, setRankerList] = useRecoilState(RankerListState);
+
   // 파라미터를 바탕으로 서버에 랭커 정보 요청
   // axios 통신 진행
+  // 이미지 데이터는 파일명으로 반환: 이미지 데이터는 따로 요청해야 하나?
   axios
     .get(
       `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${pageNo}`
     )
     // 응답 성공 시
     .then(function (response) {
-      console.log(response.data);
       // 랭킹 정보가 존재하는 경우
       if (response.data.customCode === "002") {
         // (대충 데이터 저장 후 화면에 표시해준다는 내용)
         const originData = response.data.bodyData;
-        rankerData = originData.map((data) => {
-          console.log(data);
+        const rankerData = originData.map((data) => {
+          // data.record(전적) 데이터가 균일하지 않는 현상 발생
           return {
             grade: data.grade,
             nickname: data.nickname,
             profile_img: data.profile_pic,
-            mmr: data.MMR,
+            mmr: data.mmr,
             level: data.level,
             tier: data.tier,
-            record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+            // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
           };
         });
-
-        console.log(rankerData);
+        setRankerList(rankerData);
       } else if (response.data.customCode === "003") {
         // 랭킹 정보가 없는 경우
         alert("등록된 정보가 없습니다.");
@@ -148,74 +194,35 @@ function Ranking() {
       console.log("응답 실패 : " + error);
     });
 
-  // 현재 로그인한 사용자 정보 요청
-  const userInfo = useRecoilValue(LoginState);
-  const accessToken = useRecoilValue(AccessTokenInfo);
-  const refreshToken = useRecoilValue(RefreshTokenInfo);
+  // // 현재 로그인한 사용자 정보 요청
+  // const userInfo = useRecoilValue(LoginState);
+  // const accessToken = useRecoilValue(AccessTokenInfo);
+  // const refreshToken = useRecoilValue(RefreshTokenInfo);
 
-  // 로그인한 정보가 있는 경우
-  if (userInfo) {
-    const headerData = JSON.stringify({
-      access_token: accessToken,
-      refresh_token: refreshToken,
-      use_id: userInfo,
-    });
-    axios
-      .post(
-        `http://i8b303.p.ssafy.io:8000/myRank`,
-        { battle_mode: { modeName } },
-        { headers: headerData }
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  // const dummyData = [
-  //   {
-  //     grade: 1,
-  //     nickname: "seoyoung",
-  //     profile_pic: "",
-  //     level: 25,
-  //     MMR: 153,
-  //     tier: "gold",
-  //     record: {
-  //       win: 22,
-  //       lose: 17,
-  //       winningRate: 69,
-  //     },
-  //   },
-  //   {
-  //     grade: 2,
-  //     nickname: "seyoung",
-  //     profile_pic: "",
-  //     level: 39,
-  //     MMR: 150,
-  //     tier: "gold",
-  //     record: {
-  //       win: 22,
-  //       lose: 17,
-  //       winningRate: 69,
-  //     },
-  //   },
-  // ];
-
-  // // map 구현용 테스트 코드(성공 시 삭제)
-  // const extractedData = dummyData.map((data) => {
-  //   return {
-  //     grade: data.grade,
-  //     nickname: data.nickname,
-  //     profile_img: data.profile_pic,
-  //     mmr: data.MMR,
-  //     level: data.level,
-  //     tier: data.tier,
-  //     record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-  //   };
+  // // 로그인한 정보가 있는 경우 내 랭킹 정보 요청
+  // // 문제 해결 중(404 Not Found)
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     const headerData = JSON.stringify({
+  //       access_token: accessToken,
+  //       refresh_token: refreshToken,
+  //       use_id: userInfo,
+  //     });
+  //     axios
+  //       .post(
+  //         `http://i8b303.p.ssafy.io:8000/myRank`,
+  //         { battle_mode: { modeName } },
+  //         { headers: headerData }
+  //       )
+  //       .then(function (response) {
+  //         console.log(response);
+  //         userData = response.data;
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
   // });
-  // console.log(extractedData);
 
   // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
@@ -231,7 +238,7 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
-          rankerData = originData
+          const rankerData = originData
             .map((data) => {
               console.log(data);
               return {
@@ -248,8 +255,8 @@ function Ranking() {
             .catch((error) => {
               console.log("응답 실패 : " + error);
             });
-
           console.log(rankerData);
+          return rankerData;
         } else if (response.data.customCode === "003") {
           // 랭킹 정보가 없는 경우
           alert("등록된 정보가 없습니다.");
@@ -319,29 +326,7 @@ function Ranking() {
                   {/* 내 랭킹 표시 */}
                   <Row align="center" style={{ paddingTop: "40px" }}>
                     <Col justify="center" align="center" className="profileBox">
-                      <Row align="center" style={{ padding: "4px" }}>
-                        <Col span={3}>
-                          <p>MyRank</p>
-                        </Col>
-                        <Col span={1}>
-                          <p>MyImg</p>
-                        </Col>
-                        <Col span={4}>
-                          <p>MyName</p>
-                        </Col>
-                        <Col span={3}>
-                          <p>MyLevel</p>
-                        </Col>
-                        <Col span={4}>
-                          <p>MyMMR</p>
-                        </Col>
-                        <Col span={4}>
-                          <p>MyTier</p>
-                        </Col>
-                        <Col span={3}>
-                          <p>MyRecord</p>
-                        </Col>
-                      </Row>
+                      <UserDisplay />
                     </Col>
                   </Row>
 
@@ -367,7 +352,7 @@ function Ranking() {
                           style={{
                             padding: "3px",
                           }}
-                          dataSource={rankerData}
+                          dataSource={rankerList}
                           columns={rankingLabel}
                           showHeader={false}
                           pagination={false}
