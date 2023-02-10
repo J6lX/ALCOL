@@ -95,7 +95,7 @@ function App() {
             <PrivateRoute path="/register" exact={true} component={RegisterPage} />
 
             {/* 회원정보 수정 페이지 */}
-            <PrivateRoute path="/modify" exact={true} component={ModifyPage} />
+            <Route path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
             <PrivateRoute path="/solve" exact={true} component={SolvingPage} />
