@@ -145,6 +145,8 @@ public class WebSocket {
                         String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 //                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
                         List<Map<String,Object>> problems = restTemplate.getForObject(url,List.class);
+                        HashMap<Integer,Boolean> getProblemListMap = new HashMap<>();
+                        List<Problem> getProblemList = new ArrayList<>();
                         for(int i=0; i<problems.size(); i++)
                         {
                             Map<String,Object> prob = problems.get(i);
@@ -155,6 +157,8 @@ public class WebSocket {
                                     .problemNum(Integer.parseInt(prob.get("problem_no").toString()))
                                     .problemCategory((List<String>) prob.get("problem_category"))
                                     .build();
+                            getProblemListMap.put(Integer.parseInt(prob.get("problem_no").toString()),true);
+                            getProblemList.add(problem);
                             System.out.println("넣은 문제 : " + problem.toString());
                             System.out.println("문제 번호 : " + problem.getProblemNum());
                             for(int j=0; j<problem.problemCategory.size(); j++)
@@ -163,6 +167,9 @@ public class WebSocket {
 
                             }
                         }
+
+                        sessionId2Obj.get(userId).problemList = getProblemListMap;
+
 //                    }
                 }
                 System.out.println();
@@ -194,13 +201,14 @@ public class WebSocket {
                         {
                             sessionId = userId2SessionId.get(userId);
                         }
+                        System.out.println("내 아이디 : "+userId);
                         System.out.println("문제 요청 부분의 세션 아이디 : "+sessionId);
                         List<Integer> randomProblemList = new ArrayList<>();
-                        for (String key : sessionId2Obj.get(sessionId).problemList.keySet())
+                        for (int key : sessionId2Obj.get(sessionId).problemList.keySet())
                         {
                             if(sessionId2Obj.get(sessionId).problemList.get(key))
                             {
-                                randomProblemList.add(Integer.parseInt(key));
+                                randomProblemList.add(key);
                             }
                         }
 
@@ -229,7 +237,7 @@ public class WebSocket {
                 String userId = obj.get("userId").toString();
                 String problemNum = obj.get("problemNum").toString();
                 String sessionId = userId2Session.get(userId).getId();
-                sessionId2Obj.get(sessionId).problemList.put(problemNum,false);
+//                sessionId2Obj.get(sessionId).problemList.put(problemNum,false);
             }
 
             /**문제를 제출했을 때 들어오는 곳, 채점서버로 요청 보내야 함.*/

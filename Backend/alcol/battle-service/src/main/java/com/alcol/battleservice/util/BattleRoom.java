@@ -15,7 +15,7 @@ import java.util.List;
 public class BattleRoom {
     User user1;
     User user2;
-    HashMap<String, Boolean> problemList = new HashMap<>();
+    HashMap<Integer, Boolean> problemList = new HashMap<>();
     int problemNum;
     List<Problem> problems = new ArrayList<>();
 }
