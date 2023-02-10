@@ -92,10 +92,10 @@ function App() {
             <Route path="/ranking" component={Ranking} />
 
             {/* 회원가입 페이지 */}
-            <PrivateRoute path="/register" exact={true} component={RegisterPage} />
+            <Route path="/register" exact={true} component={RegisterPage} />
 
             {/* 회원정보 수정 페이지 */}
-            <Route path="/modify" exact={true} component={ModifyPage} />
+            <PrivateRoute path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
             <PrivateRoute path="/solve" exact={true} component={SolvingPage} />
