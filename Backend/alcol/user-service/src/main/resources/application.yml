@@ -21,7 +21,7 @@ spring:
     port: 6000
     password: ehgud
   resources:
-    static-locations=classpath:/static/:
+    static-locations=classpath:/myStatic/:
 
 eureka:
   client:
