@@ -123,7 +123,7 @@ public class RankServiceImpl implements RankService{
         List<RankDto.Ranking> RankingList = new ArrayList<>();
         ranking = redisTemplate.opsForZSet();
         // 랭킹을 정렬된 Set 형태로 받아온다.
-        Set<Object> rankUserIds= ranking.range(battleMode, (pageNum-1) * 50 ,50 * pageNum - 1);
+        Set<Object> rankUserIds= ranking.reverseRange(battleMode, (pageNum-1) * 50 ,50 * pageNum - 1);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(rankUserIds.isEmpty()){
             log.warn(battleMode + " 모드에 대한 랭킹 정보가 존재하지 않습니다.");
