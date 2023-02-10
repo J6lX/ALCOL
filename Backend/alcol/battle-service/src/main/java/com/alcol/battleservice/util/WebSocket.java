@@ -204,6 +204,8 @@ public class WebSocket {
                 JSONObject problems_category = new JSONObject();
                 String sessionId;
                 sessionId = userId2SessionId.get(userId);
+                System.out.println("세션 아이디 : "+sessionId);
+                System.out.println("세션 아이디 투 오브젝트 : " + sessionId2Obj.toString());
                 System.out.println(sessionId2Obj.get(sessionId).toString());
                 System.out.println(sessionId2Obj.get(sessionId).problemList);
                 System.out.println(sessionId2Obj.get(sessionId).problemList.toString());
