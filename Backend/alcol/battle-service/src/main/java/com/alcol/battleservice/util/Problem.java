@@ -4,10 +4,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Builder
 @ToString
 public class Problem {
     int problemNum;
-    String problemCategory;
+    List<String> problemCategory = new ArrayList<>();
 }
