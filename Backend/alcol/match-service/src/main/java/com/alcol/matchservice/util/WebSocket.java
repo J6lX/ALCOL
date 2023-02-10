@@ -288,7 +288,7 @@ public class WebSocket {
                 if(((User) obj).getId().equals(player2Id)){
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
-                    send.put("host_check",host_user);
+                    send.put("hostCheck",host_user);
                 }
                 else{
                     send.put("userId", player1Id);
