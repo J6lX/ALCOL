@@ -125,10 +125,10 @@ public class WebSocket {
                             System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
                             JSONObject data = new JSONObject();
                             data.put("messageType","connect_success");
-//                            userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 
                             synchronized (session) {
-                                session.getAsyncRemote().sendText(data.toJSONString());
+                                userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
+//                                session.getAsyncRemote().sendText(data.toJSONString());
                             }
                             break;
                         }
