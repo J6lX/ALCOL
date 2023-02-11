@@ -295,7 +295,7 @@ public class WebSocket {
                 {
 //                    sessionId2Obj.get(sessionId).problemList
                     sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.put(Integer.parseInt(problemNum),false);
-                    System.out.println(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(problemNum)+"번 문제 밴됨");
+                    System.out.println(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(Integer.parseInt(problemNum))+"번 문제 밴됨");
                     if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().userId.equals(userId))
                     {
                         sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum = Integer.parseInt(problemNum);
@@ -340,6 +340,8 @@ public class WebSocket {
                         userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(userId2SessionId.get(userId)));
+
+                        session.getAsyncRemote().sendText(data.toJSONString());
                         userId2Session.get(userId2SessionId.get(userId)).getAsyncRemote().sendText(data.toJSONString());
 //                        session.getAsyncRemote().sendText(data.toJSONString());
                     }
@@ -348,6 +350,10 @@ public class WebSocket {
                         System.out.println("한명이 밴함");
                         JSONObject data = new JSONObject();
                         data.put("messageType","ban_success");
+                        synchronized (session) {
+//                    session.sendMessage(message);
+                            session.getAsyncRemote().sendText(data.toJSONString());
+                        }
                     }
                 }
 //                String sessionId = userId2Session.get(userId).getId();
