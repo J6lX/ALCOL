@@ -371,8 +371,11 @@ function Mypage() {
             }}>
             <Col xs={16} md={6} lg={4} className="text block">
               {/* 개인 정보 표시 블록 */}
-              <Row justify="center">
-                <Col>
+              <Row
+                style={{
+                  display: "flex",
+                }}>
+                <Col justify="center" align="middle">
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                   <img src={tempImg} alt="프사" className="userImg" />
                   <h1>{userInfo.nickname}</h1>
@@ -502,7 +505,6 @@ function Mypage() {
                   <p className="textHighlight">지난 시즌 기록</p>
                   <hr />
                   <p className="textHighlight">시즌 기록 없음</p>
-                  <hr />
                 </Col>
               </Row>
             </Col>
