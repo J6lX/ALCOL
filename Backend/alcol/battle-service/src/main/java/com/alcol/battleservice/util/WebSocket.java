@@ -419,7 +419,7 @@ public class WebSocket {
 //                );
 
                 ResponseDataDTO<Map<String,Object>> getSubmitToken =
-                        restTemplate.exchange(
+                        restTemplateForHttps.exchange(
                                 url ,
                                 HttpMethod.POST ,
                                 entity,
