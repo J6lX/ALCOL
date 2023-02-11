@@ -40,6 +40,7 @@ public class WebSocket {
     private static Map<String, BattleRoom> sessionId2Obj = new HashMap<>();
     private static Map<String, Session> userId2Session = new HashMap<>();
     private static Map<String, String> userId2SessionId = new HashMap<>();
+    private static Map<Session, String> session2UserId = new HashMap<>();
     private static Map<String, User> userMap = new HashMap<>();
     private static Set<String> userSet = new HashSet<String>();
     private static Map<String, LocalTime> refreshMap = new HashMap<>();
@@ -121,6 +122,7 @@ public class WebSocket {
                         {
                             sessionId2Obj.get(otherUserId).user2 = user;
                             userId2Session.put(userId, session);
+                            session2UserId.put(session, userId);
                             userId2SessionId.put(userId, otherUserId);
                             System.out.println("이미 만들어져 있음 : "+ sessionMap.get(otherUserId).getId());
                             JSONObject data = new JSONObject();
@@ -154,6 +156,7 @@ public class WebSocket {
                     sessionMap.put(userId, session);
                     sessionId2Obj.put(userId, battleRoom);
                     userId2Session.put(userId, session);
+                    session2UserId.put(session,userId);
                     userId2SessionId.put(userId, userId);
                     System.out.println("이번에 만들어짐 : " + sessionMap);
                     System.out.println("this is restTempalte : "+ restTemplate);
@@ -437,16 +440,24 @@ public class WebSocket {
             sessionSet.remove(sessionId);
 
 //            User user = sessionId2Obj.get(sessionId);
+            String userId = session2UserId.get(session);
+            session2UserId.remove(session);
+            se
+            userId2SessionId.remove(userId);
+            userId2Session.remove(userId);
+
             sessionId2Obj.remove(sessionId);
+            sessionMap.remove(sessionId);
+
+//            userId2SessionId(session);
             String type = null;
             String id = null;
 
             type = "고객";
 //            id = user.getId();
-            userSet.remove(id);
-            userMap.remove(id);
+            userSet.remove(userId);
+            userMap.remove(userId);
 
-            refreshMap.put(id + type, LocalTime.now());
             printInfo();
         }
     }
