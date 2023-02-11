@@ -300,19 +300,43 @@ public class WebSocket {
                     {
                         sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum = Integer.parseInt(problemNum);
                         System.out.println(userId +" 유저가 " + sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum + "번 문제를 밴함");
-
+                        System.out.println("현재 밴 상태 : "+ sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck);
                     }
                     else
                     {
                         sessionId2Obj.get(userId2SessionId.get(userId)).user2.banProblemNum = Integer.parseInt(problemNum);
                         System.out.println(userId +" 유저가 " + sessionId2Obj.get(userId2SessionId.get(userId)).user2.banProblemNum + "번 문제를 밴함");
+                        System.out.println("현재 밴 상태 : "+ sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck);
                     }
                     if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().banProblemNum!=0
                             && sessionId2Obj.get(userId2SessionId.get(userId)).getUser2().banProblemNum!=0)
                     {
                         System.out.println("두 명 다 밴이 끝남");
                         JSONObject data = new JSONObject();
+                        int randomProblemCount=0;
+                        int selectProblemResult = 0;
+                        List<Integer> noSelectedProblemNumber = new ArrayList<>();
+                        for(int key : sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.keySet())
+                        {
+                            if(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(key)==true)
+                            {
+                                randomProblemCount++;
+                                noSelectedProblemNumber.add(key);
+                            }
+                        }
+                        System.out.println("현재 밴이 안된 문제 갯수 : "+randomProblemCount);
+                        if(randomProblemCount>1)
+                        {
+                            Random random = new Random();
+                            int randomIndex = random.nextInt(noSelectedProblemNumber.size());
+                            selectProblemResult = noSelectedProblemNumber.get(randomIndex);
+                        }
+                        else
+                        {
+                            selectProblemResult = noSelectedProblemNumber.get(0);
+                        }
                         data.put("messageType","select_success");
+                        data.put("problem",selectProblemResult);
                         userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(userId2SessionId.get(userId)));
