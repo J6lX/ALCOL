@@ -411,16 +411,16 @@ public class WebSocket {
                 bodyData.put("language",submitLanguage);
                 bodyData.put("code",submitCode);
                 HttpEntity<Map<String, Object>> entity =  new HttpEntity<>(bodyData, header);
-                ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
+                JSONObject getSubmitToken = restTemplateForHttps.postForObject(
                         url,
                         entity,
-                        HashMap.class
+                        JSONObject.class
                 );
 
-                System.out.println(getSubmitToken.getBody());
+                System.out.println(getSubmitToken.get("data"));
 //                JSONParser submitParser = new JSONParser();
-                JSONObject responseToken = (JSONObject) parser.parse(getSubmitToken.getBody().get("data").toString());
-                System.out.println(responseToken.get("data"));
+//                JSONObject responseToken = (JSONObject) parser.parse(getSubmitToken.getBody().get("data").toString());
+//                System.out.println(responseToken.get("data"));
 //                System.out.println(responseToken.get("data"));
 
 //                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
