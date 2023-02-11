@@ -70,22 +70,6 @@ const efficiencyData = [
   },
 ];
 
-// 최근 20전 표시 데이터(임시)
-const recentRecord = [
-  {
-    id: "win",
-    label: "win",
-    value: 13,
-    color: "#5cfdfd",
-  },
-  {
-    id: "lose",
-    label: "lose",
-    value: 7,
-    color: "#FDE14B",
-  },
-];
-
 // 날짜 차이 계산 함수
 function CalculateDatediff(startDate) {
   // datediffValue = 날짜 계산 차이 값(단위 : ms)
@@ -123,64 +107,14 @@ function CalculateDatediff(startDate) {
   }
 }
 
-// 그래프 중앙에 표시할 텍스트 레이블
-const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
-  let total = 0;
-  dataWithArc.forEach((datum) => {
-    total += datum.value;
-  });
-
-  const win = recentRecord[0].value;
-  const lose = recentRecord[1].value;
-  const winrate = Math.round((win / total) * 100);
-
-  return (
-    <>
-      <text
-        x={centerX}
-        y={centerY - 10}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill="white"
-        style={{
-          fontFamily: "NanumSquareNeo",
-          fontSize: "18px",
-          fontWeight: 600,
-          whiteSpace: "pre-line",
-        }}>
-        최근 {total} 전
-      </text>
-      <text
-        x={centerX}
-        y={centerY + 10}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill="white"
-        style={{
-          fontFamily: "NanumSquareNeo",
-          fontSize: "14px",
-          fontWeight: 400,
-          whiteSpace: "pre-line",
-        }}>
-        {win}승 {lose}패
-      </text>
-      <text
-        x={centerX}
-        y={centerY + 28}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill="#fde14b"
-        style={{
-          fontFamily: "NanumSquareNeo",
-          fontSize: "12px",
-          fontWeight: 300,
-          whiteSpace: "pre-line",
-        }}>
-        ({winrate}%)
-      </text>
-    </>
-  );
-};
+// 승/패 판단 함수
+function IsVictory(result) {
+  if (result === 1) {
+    return "승리";
+  } else {
+    return "패배";
+  }
+}
 
 function Mypage() {
   // 파라미터로 사용자 ID 가져오기
@@ -232,7 +166,7 @@ function Mypage() {
           // 현재 지나치게 요청을 많이 하는 문제 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
           const originBattleRec = originBattleRecord.data.map((record) => {
             return {
-              battle_result: record.battle_result,
+              battle_result: IsVictory(record.battle_result),
               battle_mode: record.battle_mode,
               opponent: record.other_user_nickname,
               prob_name: record.prob_name,
@@ -252,7 +186,95 @@ function Mypage() {
   const refinedData = battleRec.slice(0, resultCount);
 
   // 그래프 표시용 정보
-  // const graphData = battleRec.slice(0, 20)
+  const graphData = battleRec.slice(0, 20);
+  // graphData의 정보 정제
+
+  let wincount = 0;
+  let losecount = 0;
+
+  for (const recordCase of graphData) {
+    if (recordCase.battle_result === "승리") {
+      wincount++;
+    } else {
+      losecount++;
+    }
+  }
+
+  // 최근 20전 표시 데이터(임시)
+  const recentRecord = [
+    {
+      id: "win",
+      label: "win",
+      value: wincount,
+      color: "#5cfdfd",
+    },
+    {
+      id: "lose",
+      label: "lose",
+      value: losecount,
+      color: "#FDE14B",
+    },
+  ];
+
+  // 그래프 중앙에 표시할 텍스트 레이블
+  const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
+    let total = 0;
+    dataWithArc.forEach((datum) => {
+      total += datum.value;
+    });
+
+    // 승 수, 패 수, 승률 표시
+    const win = recentRecord[0].value;
+    const lose = recentRecord[1].value;
+    const winrate = Math.round((win / total) * 100);
+
+    return (
+      <>
+        <text
+          x={centerX}
+          y={centerY - 10}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="white"
+          style={{
+            fontFamily: "NanumSquareNeo",
+            fontSize: "18px",
+            fontWeight: 600,
+            whiteSpace: "pre-line",
+          }}>
+          최근 {total} 전
+        </text>
+        <text
+          x={centerX}
+          y={centerY + 10}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="white"
+          style={{
+            fontFamily: "NanumSquareNeo",
+            fontSize: "14px",
+            fontWeight: 400,
+            whiteSpace: "pre-line",
+          }}>
+          {win}승 {lose}패
+        </text>
+        <text
+          x={centerX}
+          y={centerY + 28}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill="#fde14b"
+          style={{
+            fontFamily: "NanumSquareNeo",
+            fontSize: "12px",
+            fontWeight: 300,
+            whiteSpace: "pre-line",
+          }}>
+          ({winrate}%)
+        </text>
+      </>
+    );
+  };
 
   return (
     <div
