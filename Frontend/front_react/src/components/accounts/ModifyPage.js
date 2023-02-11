@@ -1,6 +1,10 @@
 import React, { useState, useRef } from "react";
-import "./RegisterPage.css";
+import { useRecoilValue } from "recoil";
 import { Button, Form, Input, Avatar, Col, Row } from "antd";
+import axios from "axios";
+import { LoginState } from "../../states/LoginState";
+import "./RegisterPage.css";
+// import { resolve } from "path";
 
 function TextTitle({ text }) {
   return (
@@ -43,19 +47,41 @@ function FormRegister({ type, name, text_incorrect, text_empty }) {
 }
 
 function ProfileImage() {
+  var userId = useRecoilValue(LoginState);
   const [profileImage, setProfileImage] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
   );
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
+    .then(function (response) {
+      console.log(response.data);
+      setProfileImage(response.data.storedFileName);
+    })
+    .catch((error) => {
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        alert(error.response.data.description);
+      }
+    });
+
   const fileInput = useRef(null);
   const onChange = (e) => {
     if (e.target.files[0]) {
       //사진을 선택했을때
       setProfileImage(e.target.files[0]);
+      //--해야돼요--
+      //서버로 선택한 파일 보내기
+      //-----------
     } else {
       //취소했을때
-      setProfileImage(
-        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-      );
+      setProfileImage(profileImage);
       return;
     }
     //화면에 프로필 사진 표시
@@ -116,24 +142,20 @@ function App() {
                   text_incorrect="올바른 이메일 양식을 사용해주세요"
                   text_empty="이메일을 작성해주세요!"
                 />
-                <FormRegister
-                  type="password"
-                  name="Password"
-                  text_incorrect="비밀번호를 작성해주세요!"
-                  text_empty="비밀번호를 작성해주세요!"
-                />
               </Col>
               <Col span={10} pull={14}>
                 <ProfileImage />
               </Col>
             </Row>
-            <TextInfo text="게임에서 사용할 닉네임을 작성하세요" />
-            <FormRegister
-              type="nickname"
-              name="Nickname"
-              text_incorrect="게임에서 사용할 닉네임을 지정해 주세요"
-              text_empty="게임에서 사용할 닉네임을 지정해 주세요"
-            />
+            <div style={{ marginTop: "10px" }}>
+              <TextInfo text="게임에서 사용할 닉네임을 작성하세요" />
+              <FormRegister
+                type="nickname"
+                name="Nickname"
+                text_incorrect="게임에서 사용할 닉네임을 지정해 주세요"
+                text_empty="게임에서 사용할 닉네임을 지정해 주세요"
+              />
+            </div>
             <BtnRegister />
           </Form>
         </div>

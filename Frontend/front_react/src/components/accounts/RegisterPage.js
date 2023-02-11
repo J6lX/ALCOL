@@ -144,11 +144,11 @@ function App() {
                   rules={[
                     {
                       type: "email",
-                      message: "The input is not valid E-mail!",
+                      message: "이메일 양식이 올바르지 않습니다!",
                     },
                     {
                       required: true,
-                      message: "Please input your E-mail!",
+                      message: "이메일을 작성해주세요!",
                     },
                   ]}>
                   <div className="form_input">

@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { Row, Col } from "antd";
+import { motion, useAnimation, useScroll, useTransform } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 import speedIcon from "../../assets/speed_mode_icon.png";
 import performanceIcon from "../../assets/performance_mode_icon.png";
 import banIcon from "../../assets/X.png";
@@ -18,13 +21,39 @@ const returnColor = (event) => {
 };
 
 const Guide1 = () => {
+  const control = useAnimation();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      control.start("visible");
+    } else {
+      control.set("hidden");
+    }
+  }, [control, inView]);
+
+  const boxVariant = {
+    //엘리먼트가 보일때 불투명은 1 보이지 않을때 붍투명은 0
+    // scale : 엘리먼트가 보일때의 크기를 키우거나 줄입니다.
+    // transition : 애니메이션의 속도
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    hidden: { opacity: 0.5, scale: 0.5 },
+  };
+
   return (
-    <div id="Guide1" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "17%" }}>
+    <motion.div
+      id="Guide1"
+      className="middle"
+      ref={ref}
+      variants={boxVariant}
+      initial={"hidden"}
+      animate={control}
+      style={{ backgroundColor: "#16171B", paddingTop: "17%" }}>
       <Row style={{ width: "85vw" }}>
         <Col span={12}>
           <div className="right">
             <h1
-              className="NanumSquare"
+              className="flux"
               style={{
                 marginTop: "4ch",
                 marginRight: "0.5ch",
@@ -42,7 +71,7 @@ const Guide1 = () => {
           <br />
           <div className="right">
             <h1
-              className="NanumSquare"
+              className="flux"
               style={{ marginRight: "0.5ch", fontSize: "2.1vw", color: "#FAC557" }}>
               최적화
             </h1>
@@ -93,14 +122,45 @@ const Guide1 = () => {
         style={{ color: "white", marginTop: "10vw" }}>
         다음
       </ScrollLink>
-    </div>
+    </motion.div>
   );
 };
 
 const Guide2 = () => {
+  const control = useAnimation();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      control.start("visible");
+    } else {
+      control.set("hidden");
+    }
+  }, [control, inView]);
+
+  const boxVariant = {
+    //엘리먼트가 보일때 불투명은 1 보이지 않을때 붍투명은 0
+    // scale : 엘리먼트가 보일때의 크기를 키우거나 줄입니다.
+    // transition : 애니메이션의 속도
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    hidden: { opacity: 0.5, scale: 0.8 },
+  };
+
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["end end", "start end"],
+  });
+
+  const player1Value = useTransform(scrollYProgress, [1, 0], ["-150%", "200%"]);
+  const player2Value = useTransform(scrollYProgress, [1, 0], ["90%", "-120%"]);
+
   return (
     <div id="Guide2" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "14%" }}>
-      <div className="usernameBox" style={{ left: "0%", top: "20%", justifyContent: "right" }}>
+      <motion.div
+        className="usernameBox"
+        style={{ left: "0%", top: "20%", justifyContent: "right", translateX: player1Value }}>
         <h1
           className="NanumSquare"
           style={{
@@ -112,8 +172,10 @@ const Guide2 = () => {
           }}>
           당신
         </h1>
-      </div>
-      <div className="usernameBox" style={{ right: "0%", bottom: "0%", justifyContent: "left" }}>
+      </motion.div>
+      <motion.div
+        className="usernameBox"
+        style={{ right: "0%", bottom: "0%", justifyContent: "left", translateX: player2Value }}>
         <h1
           className="NanumSquare"
           style={{
@@ -125,8 +187,13 @@ const Guide2 = () => {
           }}>
           상대방
         </h1>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
+      </motion.div>
+      <motion.div
+        ref={ref}
+        variants={boxVariant}
+        initial={"hidden"}
+        animate={control}
+        style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
         <h1
           className="NanumSquare"
           style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
@@ -137,10 +204,14 @@ const Guide2 = () => {
         </h1>
         <Col style={{ display: "flex", justifyContent: "space-around" }}>
           <Col span={6} className="problemBox">
-            <img src={banIcon} alt="performanceIcon" />
+            <div>
+              <img src={banIcon} alt="performanceIcon" className="blink" />
+            </div>
           </Col>
           <Col span={6} className="problemBox">
-            <img src={banIcon} alt="performanceIcon" />
+            <div>
+              <img src={banIcon} alt="performanceIcon" className="blink" />
+            </div>
           </Col>
           <Col span={6} className="problemBox"></Col>
         </Col>
@@ -149,7 +220,7 @@ const Guide2 = () => {
           style={{ fontSize: "1vw", color: "white", marginBottom: "10px" }}>
           금지되지 않은 문제 중 하나가 출제돼요
         </h1>
-      </div>
+      </motion.div>
       <ScrollLink
         className="NanumSquare"
         to="Guide3"
@@ -165,26 +236,70 @@ const Guide2 = () => {
 };
 
 const Guide3 = () => {
+  const control = useAnimation();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      control.start("visible");
+    } else {
+      control.set("hidden");
+    }
+  }, [control, inView]);
+
+  const CHILD_VARIANTS_LEFT = {
+    visible: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.9 } },
+    hidden: { opacity: 0.5, scale: 0.5, x: 300, y: 300 },
+  };
+
+  const TEXT_VARIANTS_LEFT = {
+    visible: { opacity: 1, scale: 1, x: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0.5, scale: 0.5, x: 300 },
+  };
+
+  const SUB_TEXT_VARIANTS_LEFT = {
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0.5, scale: 0.5, y: 100 },
+  };
+
   return (
-    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "11%" }}>
-      <div style={{ display: "flex", flexDirection: "column", textAlign: "center" }}>
-        <div className="consoleBox">
+    <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "12%" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          textAlign: "center",
+          overflow: "hidden",
+        }}>
+        <motion.div
+          className="consoleBox"
+          ref={ref}
+          variants={CHILD_VARIANTS_LEFT}
+          initial={"hidden"}
+          animate={control}>
           <div className="ver"></div>
           <div className="hor"></div>
-        </div>
+        </motion.div>
         <br />
-        <h1
-          className="NanumSquare"
-          style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
-          상대방과 실시간으로 알고리즘 실력을 겨루세요!
-        </h1>
-        <h1
-          className="NanumSquare right"
-          style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "5vw" }}>
-          같이하면 재미가 두 배
-        </h1>
+        <motion.div ref={ref} variants={TEXT_VARIANTS_LEFT} initial={"hidden"} animate={control}>
+          <h1
+            className="NanumSquare"
+            style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
+            상대방과 실시간으로 알고리즘 실력을 겨루세요!
+          </h1>
+        </motion.div>
+        <motion.div
+          ref={ref}
+          variants={SUB_TEXT_VARIANTS_LEFT}
+          initial={"hidden"}
+          animate={control}>
+          <h1
+            className="NanumSquare right"
+            style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "5vw" }}>
+            같이하면 재미가 두 배
+          </h1>
+        </motion.div>
       </div>
-      <br />
       <ScrollLink
         className="NanumSquare"
         to="Guide4"
@@ -201,7 +316,7 @@ const Guide3 = () => {
 
 const Guide4 = () => {
   return (
-    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "13%" }}>
+    <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "16%" }}>
       <div className="grayBackground">
         <Col span={1}></Col>
         <Col
@@ -306,8 +421,6 @@ const Guide4 = () => {
           </div>
         </Col>
       </div>
-      <br />
-      <br />
       <ScrollLink
         className="NanumSquare"
         to="Guide5"
@@ -323,11 +436,38 @@ const Guide4 = () => {
 };
 
 const Guide5 = () => {
+  const containerRef = useRef(null);
+  const control = useAnimation();
+  const [ref, inView] = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      control.start("visible");
+    } else {
+      control.set("hidden");
+    }
+  }, [control, inView]);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["end end", "start end"],
+  });
+
+  const frientBoxValue = useTransform(scrollYProgress, [1, 0], ["100%", "0%"]);
+  const frientBoxValue2 = useTransform(scrollYProgress, [1, 0], ["200%", "0%"]);
+  const frientBoxValue3 = useTransform(scrollYProgress, [1, 0], ["300%", "0%"]);
+
+  const TextAnim = {
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+    hidden: { opacity: 0, scale: 0.5 },
+  };
+
   return (
     <div id="Guide5" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "15%" }}>
-      <Row style={{ width: "85vw" }}>
+      <Row style={{ width: "85vw" }} className="scroll-container" ref={containerRef}>
         <Col span={2}></Col>
         <Col
+          className="img-container"
           span={8}
           style={{
             display: "flex",
@@ -335,62 +475,68 @@ const Guide5 = () => {
             justifyContent: "center",
             alignItems: "center",
           }}>
-          <div className="friendBox">
-            <Col span={1}></Col>
-            <Col span={8}>
-              <div className="profileCircle"></div>
-            </Col>
-            <Col span={15}>
-              <div className="profileName"></div>
-              <h1
-                className="NanumSquare"
-                style={{
-                  fontSize: "1.1vw",
-                  fontWeight: "bold",
-                  color: "#16171B",
-                  marginTop: "10px",
-                }}>
-                따라잡기까지 30점
-              </h1>
-            </Col>
-          </div>
-          <div className="friendBox" style={{ marginLeft: "10vw" }}>
-            <Col span={1}></Col>
-            <Col span={8}>
-              <div className="profileCircle"></div>
-            </Col>
-            <Col span={15}>
-              <div className="profileName"></div>
-              <h1
-                className="NanumSquare"
-                style={{
-                  fontSize: "1.1vw",
-                  fontWeight: "bold",
-                  color: "#16171B",
-                  marginTop: "10px",
-                }}>
-                당신의 친구들 중 2위입니다
-              </h1>
-            </Col>
-          </div>
-          <div className="friendBox">
-            <Col span={1}></Col>
-            <Col span={8}>
-              <div className="profileCircle"></div>
-            </Col>
-            <Col span={15}>
-              <div className="profileName"></div>
-              <h1
-                className="NanumSquare"
-                style={{
-                  fontSize: "1.1vw",
-                  fontWeight: "bold",
-                  color: "#16171B",
-                  marginTop: "10px",
-                }}>
-                따라잡히기까지 15점
-              </h1>
-            </Col>
+          <div className="img-inner">
+            <div className="contentsImg">
+              <motion.div className="friendBox" style={{ translateX: frientBoxValue }}>
+                <Col span={1}></Col>
+                <Col span={8}>
+                  <div className="profileCircle"></div>
+                </Col>
+                <Col span={15}>
+                  <div className="profileName"></div>
+                  <h1
+                    className="NanumSquare"
+                    style={{
+                      fontSize: "1.1vw",
+                      fontWeight: "bold",
+                      color: "#16171B",
+                      marginTop: "10px",
+                    }}>
+                    따라잡기까지 30점
+                  </h1>
+                </Col>
+              </motion.div>
+              <motion.div
+                className="friendBox"
+                style={{ marginLeft: "10vw", translateX: frientBoxValue2 }}>
+                <Col span={1}></Col>
+                <Col span={8}>
+                  <div className="profileCircle"></div>
+                </Col>
+                <Col span={15}>
+                  <div className="profileName"></div>
+                  <h1
+                    className="NanumSquare"
+                    style={{
+                      fontSize: "1.1vw",
+                      fontWeight: "bold",
+                      color: "#16171B",
+                      marginTop: "10px",
+                    }}>
+                    당신의 친구들 중 2위입니다
+                  </h1>
+                </Col>
+              </motion.div>
+              <motion.div className="friendBox" style={{ translateX: frientBoxValue3 }}>
+                <Col span={1}></Col>
+                <Col span={8}>
+                  <div className="profileCircle"></div>
+                </Col>
+                <Col span={15}>
+                  <div className="profileName"></div>
+                  <h1
+                    className="NanumSquare"
+                    style={{
+                      fontSize: "1.1vw",
+                      fontWeight: "bold",
+                      color: "#16171B",
+                      marginTop: "10px",
+                    }}>
+                    따라잡히기까지 15점
+                  </h1>
+                </Col>
+              </motion.div>
+            </div>
           </div>
         </Col>
         <Col span={2}></Col>
@@ -402,19 +548,28 @@ const Guide5 = () => {
             justifyContent: "center",
             marginLeft: "20px",
           }}>
-          <h1
-            className="NanumSquare"
-            style={{ fontSize: "2.7vw", color: "white", marginBottom: "10px" }}>
-            친구들 사이에서
-          </h1>
-          <h1
-            className="NanumSquare"
-            style={{ fontSize: "2.7vw", color: "white", marginBottom: "10px" }}>
-            자신의 알고리즘 레벨이
-          </h1>
-          <h1 className="NanumSquare" style={{ fontSize: "2.7vw", color: "white" }}>
-            어디쯤인지 확인해보아요
-          </h1>
+          <motion.div
+            className="App"
+            ref={ref}
+            initial="hidden"
+            animate={control}
+            variants={TextAnim}>
+            <div className="container" style={{ translateX: frientBoxValue }}>
+              <h1
+                className="NanumSquare"
+                style={{ fontSize: "2.7vw", color: "white", marginBottom: "10px" }}>
+                친구들 사이에서
+              </h1>
+              <h1
+                className="NanumSquare"
+                style={{ fontSize: "2.7vw", color: "white", marginBottom: "10px" }}>
+                자신의 알고리즘 레벨이
+              </h1>
+              <h1 className="NanumSquare" style={{ fontSize: "2.7vw", color: "white" }}>
+                어디쯤인지 확인해보아요
+              </h1>
+            </div>
+          </motion.div>
         </Col>
       </Row>
       <ScrollLink
