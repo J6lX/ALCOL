@@ -341,7 +341,7 @@ public class WebSocket {
                         System.out.println(problems.getBody().toString());
                         System.out.println(problems.getBody().get("prob_name"));
                         data.put("messageType","select_success");
-                        data.put("problem",selectProblemResult);
+                        data.put("problem",problems);
                         userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
