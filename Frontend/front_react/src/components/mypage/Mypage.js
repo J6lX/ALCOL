@@ -143,20 +143,19 @@ function Mypage() {
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
   const [resultCount, setResultCount] = useState(10);
 
-  const dataLength = battleRec.length;
-  useEffect(() => {
-    // 모든 데이터를 불러왔음에도 '더 보기'를 누르는 경우 알림
-    if (resultCount - 10 >= dataLength) {
-      alert("전적을 모두 불러왔습니다.");
-    }
-  });
+  // const dataLength = battleRec.length;
+  // // 모든 데이터를 불러왔음에도 '더 보기'를 누르는 경우 알림
+  // useEffect(() => {
+  //   if (resultCount - 10 >= dataLength) {
+  //     alert("전적을 모두 불러왔습니다.");
+  //   }
+  // });
 
   // 서버에 마이페이지에 표시할 데이터 요청
   // 요청을 총 4번 해야 한다.
   // 1. 사용자 정보(/user-service/getUserInfo)
   // 2. 사용자의 전적(/user-service/getBattleLog)
   // 3. 지난 시즌 요약()
-  // 4. 티어 정보
 
   useEffect(() => {
     const requestBody = { user_id: userId };
@@ -198,6 +197,7 @@ function Mypage() {
   }, [setBattleRec, setUserInfo, userId]);
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
+  // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
   const userSPDTier = userInfo.speedTier.slice(0, 1);
   const userEFFTier = userInfo.efficiencyTier.slice(0, 1);
 
@@ -362,6 +362,7 @@ function Mypage() {
                       xl={6}
                       justify="center"
                       style={{
+                        zindex: "8",
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
@@ -379,6 +380,7 @@ function Mypage() {
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
+                          zindex: "8",
                         }}
                         labelPosition={0}
                       />
@@ -387,7 +389,7 @@ function Mypage() {
                         alt="Badge"
                         className="tierBadge"
                         style={{
-                          zIndex: "10",
+                          zIndex: "8",
                         }}
                       />
                     </Col>
@@ -412,6 +414,7 @@ function Mypage() {
                       xl={6}
                       justify="center"
                       style={{
+                        zindex: "8",
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
@@ -427,6 +430,7 @@ function Mypage() {
                         className="tierGraph"
                         label={({ dataEntry }) => "G1"}
                         labelStyle={{
+                          zindex: "8",
                           fontSize: "10px",
                           fill: "black",
                         }}
@@ -437,7 +441,7 @@ function Mypage() {
                         alt="Badge"
                         className="tierBadge"
                         style={{
-                          zIndex: "10",
+                          zIndex: "8",
                         }}
                       />
                     </Col>

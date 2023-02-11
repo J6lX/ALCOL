@@ -6,32 +6,35 @@ import alcol from "../assets/alcol_empty_white.png";
 import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { AccessTokenInfo, LoginState, UserInfoState, RefreshTokenInfo } from "../states/LoginState";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import {
+  AccessTokenInfo,
+  CurrentNickname,
+  LoginState,
+  RefreshTokenInfo,
+} from "../states/LoginState";
 
 const { Header } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
   // isLoggedIn === 로그인 상태 체크
-  const isLoggedIn = useRecoilValue(LoginState);
 
   // 로그아웃 정보 반영
-  const setIsLoggedIn = useSetRecoilState(LoginState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
-  const setUserInfo = useSetRecoilState(UserInfoState);
+  const [nickname, setUserNickname] = useRecoilState(CurrentNickname);
 
+  console.log(nickname);
   const logoutRequest = () => {
     setIsLoggedIn(false);
     setAccessTokenData("");
     setRefreshTokenData("");
-    setUserInfo([]);
+    setUserNickname("");
 
     // 메인 화면으로 리다이렉트
     window.location.reload();
-    // window.location.href = "http://localhost:3000/";
-    // window.location.href = "http://i8b303.p.ssafy.io:8000/";
   };
 
   // 로그인 한 경우(isLoggedin === true인 경우) 회원 정보 표시
@@ -59,7 +62,7 @@ function LoginTag(props) {
             textAlign: "center",
           }}>
           <Link to={`/mypage/${isLoggedIn}`} className="text">
-            TEST
+            {nickname}
           </Link>
         </Col>
         <Col

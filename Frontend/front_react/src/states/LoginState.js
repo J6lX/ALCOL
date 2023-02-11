@@ -38,3 +38,10 @@ export const userBattleRec = atom({
   key: "UserBattleRec",
   default: [],
 });
+
+// 닉네임만 저장
+export const CurrentNickname = atom({
+  key: "userNickname",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
