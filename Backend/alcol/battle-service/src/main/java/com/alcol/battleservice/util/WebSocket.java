@@ -424,7 +424,7 @@ public class WebSocket {
 
 //                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
 //                 responseToken = getSubmitToken.getBody().get("data");
-                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
+                url = "https://i8b303.p.ssafy.io:443/api/submission?id="+submissionId;
                 JSONObject getSubmitResult = restTemplateForHttps.postForObject(
                         url,
                         entity,
