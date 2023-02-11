@@ -104,14 +104,15 @@ public class LogServiceImpl implements LogService
         ResponseEntity<List<LogDto.ProbDetailDto>> probDetailList = restTemplateUtils.sendRequest(
                 bodyData,
                 "http://i8b303.p.ssafy.io:9001/problem-service/getProbSubjectAndTier",
+//                "http://localhost:9001/problem-service/getProbSubjectAndTier",
                 new ParameterizedTypeReference<List<LogDto.ProbDetailDto>>() {}
         );
 
         for (int i = 0; i < battleLogDtoList.size(); i++)
         {
-            battleLogDtoList.get(i).setProbNo(probDetailList.getBody().get(i).getProbNo());
-            battleLogDtoList.get(i).setProbName(probDetailList.getBody().get(i).getProbName());
-            battleLogDtoList.get(i).setProbTier(probDetailList.getBody().get(i).getProbTier());
+            battleLogDtoList.get(i).setProbNo(probDetailList.getBody().get(i).getProb_no());
+            battleLogDtoList.get(i).setProbName(probDetailList.getBody().get(i).getProb_name());
+            battleLogDtoList.get(i).setProbTier(probDetailList.getBody().get(i).getProb_tier());
         }
 
         return battleLogDtoList;
