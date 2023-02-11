@@ -7,7 +7,7 @@ import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../states/LoginState";
+import { AccessTokenInfo, LoginState, UserInfoState, RefreshTokenInfo } from "../states/LoginState";
 
 const { Header } = Layout;
 
@@ -20,11 +20,13 @@ function LoginTag(props) {
   const setIsLoggedIn = useSetRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
+  const setUserInfo = useSetRecoilState(UserInfoState);
 
   const logoutRequest = () => {
     setIsLoggedIn(false);
     setAccessTokenData("");
     setRefreshTokenData("");
+    setUserInfo([]);
 
     // 메인 화면으로 리다이렉트
     window.location.reload();

@@ -9,15 +9,8 @@ import { PieChart } from "react-minimal-pie-chart";
 import axios from "axios";
 
 import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
-
-// 현재 로그인한 사용자 정보
-const userData = {
-  "3812ed0e-9c08-46eb-ac5d-de574d697e60": {
-    name: "tester",
-    battleRec: {},
-    friends: {},
-  },
-};
+import { LoginState, UserInfoState } from "../../states/LoginState";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // 매치 기록 정렬 컬럼
 const matchCol = [
@@ -193,10 +186,12 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
 };
 
 function Mypage() {
-  // URL 파라미터로 사용자 정보 가져오기
-  const userInfo = useParams();
+  // recoil로 사용자 ID 가져오기
+  const userId = useRecoilValue(LoginState);
   // profile = 사용자 닉네임
-  const profile = userData[userInfo.username];
+
+  // recoil에 사용자 정보 저장
+  const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
 
   // 더 보기 단추
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
@@ -289,12 +284,25 @@ function Mypage() {
   // console.log(sortRecord);
 
   // 서버에 마이페이지에 표시할 데이터 요청
+  // 요청을 총 4번 해야 한다.
+  // 1. 사용자 정보(/user-service/getUserInfo)
+  // 2. 사용자의 전적(/user-service/getBattleLog)
+  // 3. 지난 시즌 요약()
+  // 4. 티어 정보
   axios
-    .get(``, {
-      body: { user_id: { profile } },
+    .get(`http://localhost:3000/getUserInfo`, {
+      body: { user_id: { userId } },
     })
     .then((response) => {
       console.log(response);
+      const originData = {
+        nickname: response.nickname,
+        profileImg: response.stored_file_name,
+        level: response.level,
+        speedTier: response.speed_tier,
+        efficiencyTier: response.optimization_tier,
+      };
+      setUserInfo(originData);
     })
     .catch((error) => {
       console.log(error);
@@ -311,7 +319,7 @@ function Mypage() {
         padding: "30px",
         height: "100%",
       }}>
-      {profile ? (
+      {userId ? (
         <div>
           {/* 사용자 프로필 블록 */}
           <Row
@@ -334,7 +342,7 @@ function Mypage() {
                 <Col>
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                   <img src={tempImg} alt="프사" className="userImg" />
-                  <h1>{profile.name}</h1>
+                  <h1>{userInfo.nickname}</h1>
                 </Col>
               </Row>
             </Col>

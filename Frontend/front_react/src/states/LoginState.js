@@ -25,3 +25,10 @@ export const RefreshTokenInfo = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+// 유저 정보를 리스트로 저장
+export const UserInfoState = atom({
+  key: "UserInfoState",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
