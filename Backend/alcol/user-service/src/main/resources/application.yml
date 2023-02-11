@@ -21,6 +21,27 @@ spring:
     port: 6000
     password: ehgud
 
+logging:
+  level:
+    com:
+      alcol:
+        userservice:
+          util:
+            FileHandler: ERROR
+
+cloud:
+  aws:
+    s3:
+      bucket: kimjusung-bucket
+    credentials:
+      access-key: AKIA3RRQEFMVYL2FLUGC
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
 eureka:
   client:
     register-with-eureka: true
