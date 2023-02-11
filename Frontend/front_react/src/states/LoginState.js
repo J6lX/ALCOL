@@ -45,3 +45,9 @@ export const CurrentNickname = atom({
   default: "",
   effects_UNSTABLE: [persistAtom],
 });
+
+// 백업용 전적을 리스트로 저장
+export const BackupBattleRec = atom({
+  key: "BackupBattleRec",
+  default: [],
+});

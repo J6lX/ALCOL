@@ -1,6 +1,5 @@
 import { Row, Col, ConfigProvider, Table, theme } from "antd";
 import "./Mypage.css";
-import settingIcon from "../../assets/setting.png";
 import tempImg from "../../logo.svg";
 import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
@@ -11,7 +10,7 @@ import axios from "axios";
 import bronzeBadge from "../../assets/ALCOL tiers/bigtier_bronze.png";
 import silverBadge from "../../assets/ALCOL tiers/bigtier_silver.png";
 import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
-import { userBattleRec, UserInfoState } from "../../states/LoginState";
+import { BackupBattleRec, userBattleRec, UserInfoState } from "../../states/LoginState";
 import { useRecoilState } from "recoil";
 
 // 매치 기록 정렬 컬럼
@@ -135,9 +134,10 @@ function Mypage() {
   // 파라미터로 사용자 ID 가져오기
   const userId = useParams().username;
 
-  // recoil에 사용자 정보 저장
+  // recoil에 마이페이지에 표시할 정보 저장
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
   const [battleRec, setBattleRec] = useRecoilState(userBattleRec);
+  const [BackupRec, setBackupRec] = useRecoilState(BackupBattleRec);
 
   // 더 보기 단추
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
@@ -151,12 +151,11 @@ function Mypage() {
   //   }
   // });
 
-  // 서버에 마이페이지에 표시할 데이터 요청
+  // 마이페이지에 표시할 정보 요청
   // 요청을 총 4번 해야 한다.
   // 1. 사용자 정보(/user-service/getUserInfo)
   // 2. 사용자의 전적(/user-service/getBattleLog)
   // 3. 지난 시즌 요약()
-
   useEffect(() => {
     const requestBody = { user_id: userId };
 
@@ -189,12 +188,13 @@ function Mypage() {
             };
           });
           setBattleRec(originBattleRec);
+          setBackupRec(originBattleRec);
         })
       )
       .catch((error) => {
         console.log(error);
       });
-  }, [setBattleRec, setUserInfo, userId]);
+  }, [setBattleRec, setUserInfo, setBackupRec, userId]);
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
@@ -253,6 +253,46 @@ function Mypage() {
     },
   ];
 
+  // 모드 선택에 따라 필터링 및 탭 스타일 변경 진행
+  const [speedColor, setSpeedColor] = useState({ color: "white" });
+  const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
+  const [levelColor, setLevelColor] = useState({ color: "white" });
+  const [modeName, setModeName] = useState("level");
+  // 필터링
+  const setLevel = () => {
+    setModeName("level");
+    setBattleRec(BackupRec);
+  };
+
+  const setSpeed = () => {
+    setModeName("speed");
+    const filteredData = BackupRec.filter((data) => data.battle_mode === "speed");
+    setBattleRec(filteredData);
+  };
+
+  const setEfficiency = () => {
+    setModeName("efficiency");
+    const filteredData = BackupRec.filter((data) => data.battle_mode === "optimization");
+    setBattleRec(filteredData);
+  };
+
+  // 탭 스타일 변경
+  useEffect(() => {
+    if (modeName === "speed") {
+      setSpeedColor({ color: "#94D6FB" });
+      setEfficiencyColor({ color: "white" });
+      setLevelColor({ color: "white" });
+    } else if (modeName === "efficiency") {
+      setEfficiencyColor({ color: "#94d6f8" });
+      setSpeedColor({ color: "white" });
+      setLevelColor({ color: "white" });
+    } else if (modeName === "level") {
+      setSpeedColor({ color: "white" });
+      setEfficiencyColor({ color: "white" });
+      setLevelColor({ color: "#94d6f8" });
+    }
+  }, [modeName]);
+
   // 그래프 중앙에 표시할 텍스트 레이블
   const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
     let total = 0;
@@ -263,7 +303,7 @@ function Mypage() {
     // 승 수, 패 수, 승률 표시
     const win = recentRecord[0].value;
     const lose = recentRecord[1].value;
-    const winrate = Math.round((win / total) * 100);
+    const winrate = win + lose > 0 ? Math.round((win / total) * 100) : 0;
 
     return (
       <>
@@ -472,13 +512,19 @@ function Mypage() {
               {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
               <Row justify="space-around" className="modeFilter">
                 <Col sm={4} lg={4}>
-                  <h4>모두</h4>
+                  <h4 style={levelColor} onClick={setLevel}>
+                    모두
+                  </h4>
                 </Col>
                 <Col sm={4} lg={4}>
-                  <h4>스피드전</h4>
+                  <h4 style={speedColor} onClick={setSpeed}>
+                    스피드전
+                  </h4>
                 </Col>
                 <Col sm={4} lg={4}>
-                  <h4>최적화전</h4>
+                  <h4 style={efficiencyColor} onClick={setEfficiency}>
+                    최적화전
+                  </h4>
                 </Col>
               </Row>
 
