@@ -123,7 +123,7 @@ public class RankServiceImpl implements RankService{
         List<RankDto.Ranking> RankingList = new ArrayList<>();
         ranking = redisTemplate.opsForZSet();
         // 랭킹을 정렬된 Set 형태로 받아온다.
-        Set<Object> rankUserIds= ranking.range(battleMode, (pageNum-1) * 50 ,50 * pageNum - 1);
+        Set<Object> rankUserIds= ranking.reverseRange(battleMode, (pageNum-1) * 50 ,50 * pageNum - 1);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(rankUserIds.isEmpty()){
             log.warn(battleMode + " 모드에 대한 랭킹 정보가 존재하지 않습니다.");
@@ -157,16 +157,24 @@ public class RankServiceImpl implements RankService{
 
         return RankingList;
     }
+
     /**
-     * 랭킹 페이지에서 유저 검색하면 유저 정보 넘기는 메소드
+     * 닉네임으로 UserId를 검색하는 메소드
      * */
-    public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
+    public String SearchUserIdUsingNickname(String nickname)
     {
         // 닉네임으로 유저 아이디 요청해서 가져옴 (user-service)
         Map<String, String> map = new HashMap<>();
         map.put("nickname", nickname);
         String url = "http://i8b303.p.ssafy.io:8000/user-service/getUserId";
-        String searchUserId = restTemplate.postForObject(url, map, String.class);
+        return restTemplate.postForObject(url, map, String.class);
+    }
+    /**
+     * 랭킹 페이지에서 유저 검색하면 유저 정보 넘기는 메소드
+     * */
+    public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
+    {
+        String searchUserId = SearchUserIdUsingNickname(nickname);
 
         // 해당 닉네임이 존재하지 않을 경우
         if(searchUserId.equals("noneUserId"))
@@ -204,5 +212,36 @@ public class RankServiceImpl implements RankService{
                 .build();
 
         return rank;
+    }
+
+    public List<Map> getTop3UserList()
+    {
+        ranking = redisTemplate.opsForZSet();
+        List<Map> responseList = new ArrayList<>();
+        Map<String, List<RankDto.Top3Ranking>> modeTop3 = new HashMap<>();
+        List<RankDto.Top3Ranking> speedTop3 = new ArrayList<>();
+
+        // 스피드전 top3의 userId 받아오기
+        Set<Object> speedRankUserIds= ranking.reverseRange("speed", 1,3);
+        // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
+        if(speedRankUserIds.isEmpty()){
+            log.warn("speed 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            return null;
+        }
+
+
+
+
+
+        // 최적화전 top3의 userId 받아오기
+        Set<Object> optRankUserIds= ranking.reverseRange("optimization", 1,3);
+        // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
+        if(optRankUserIds.isEmpty()){
+            log.warn("speed 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            return null;
+        }
+
+
+
     }
 }
