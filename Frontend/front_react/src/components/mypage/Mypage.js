@@ -9,19 +9,19 @@ import { PieChart } from "react-minimal-pie-chart";
 import axios from "axios";
 
 import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
-import { LoginState, UserInfoState } from "../../states/LoginState";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { userBattleRec, UserInfoState } from "../../states/LoginState";
+import { useRecoilState } from "recoil";
 
 // 매치 기록 정렬 컬럼
 const matchCol = [
   {
     title: "결과",
-    dataIndex: "matchResult",
+    dataIndex: "battle_result",
     key: "matchResult",
     align: "center",
   },
   {
-    dataIndex: "playMode",
+    dataIndex: "battle_mode",
     title: "플레이 모드",
     align: "center",
     key: "playMode",
@@ -33,62 +33,22 @@ const matchCol = [
     align: "center",
   },
   {
-    dataIndex: "problemName",
+    dataIndex: "prob_name",
     key: "problemName",
     title: "문제 이름",
     align: "center",
   },
   {
-    dataIndex: "problemDifficulty",
+    dataIndex: "prob_tier",
     key: "problemDifficulty",
     title: "문제 난이도",
     align: "center",
   },
   {
-    dataIndex: "recordDate",
+    dataIndex: "record_date",
     key: "recordDate",
     title: "일시",
     align: "center",
-  },
-];
-
-// 매치 기록 데이터
-const matchData = [
-  {
-    id: 1,
-    playMode: "스피드",
-    problemName: "Problem1",
-    matchResult: "승리",
-    opponent: "맥주",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 2,
-    playMode: "스피드",
-    problemName: "Problem2",
-    matchResult: "승리",
-    opponent: "소주",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 3,
-    playMode: "스피드",
-    problemName: "Problem3",
-    matchResult: "승리",
-    opponent: "막걸리",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 4,
-    playMode: "스피드",
-    problemName: "Problem4",
-    matchResult: "승리",
-    opponent: "와인",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
   },
 ];
 
@@ -125,6 +85,43 @@ const recentRecord = [
     color: "#FDE14B",
   },
 ];
+
+// 날짜 차이 계산 함수
+function CalculateDatediff(startDate) {
+  // datediffValue = 날짜 계산 차이 값(단위 : ms)
+  const datediffValue = new Date() - new Date(startDate);
+
+  // dateDivider = ms 단위를 일 단위로 환산하는 용도
+  const dateDivider = 24 * 60 * 60 * 1000;
+  // hourDivider = ms 단위를 시간 단위로 환산하는 용도
+  const hourDivider = 60 * 60 * 1000;
+  // minuteDivider = ms 단위를 분 단위로 환산하는 용도
+  const minuteDivider = 60 * 1000;
+
+  // dayValue = ms 단위를 일 단위로 변환한 값(버림)
+  const dayValue = Math.floor(datediffValue / dateDivider);
+  // hourValue = ms 단위를 시간 단위로 변환한 값(버림)
+  const hourValue = Math.floor(datediffValue / hourDivider);
+  // minuteValue = ms 단위를 분 단위로 변환한 값(버림)
+  const minuteValue = Math.floor(datediffValue / minuteDivider);
+
+  // dayValue가 1 이상이면 'n일 전'으로 반환
+  if (dayValue > 0) {
+    return `${dayValue}일 전`;
+  }
+  // 1일 이내인 경우 시간 단위로 계산
+  else if (hourValue > 0) {
+    return `${hourValue}시간 전`;
+  }
+  // 1시간 이내인 경우 분 단위로 계산
+  else if (minuteValue > 5) {
+    return `${hourValue}분 전`;
+  }
+  // 5분 이내인 경우 '방금'으로 처리
+  else {
+    return "방금";
+  }
+}
 
 // 그래프 중앙에 표시할 텍스트 레이블
 const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
@@ -186,18 +183,18 @@ const CenteredMetric = ({ dataWithArc, centerX, centerY }) => {
 };
 
 function Mypage() {
-  // recoil로 사용자 ID 가져오기
-  const userId = useRecoilValue(LoginState);
-  // profile = 사용자 닉네임
+  // 파라미터로 사용자 ID 가져오기
+  const userId = useParams().username;
 
   // recoil에 사용자 정보 저장
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
+  const [battleRec, setBattleRec] = useRecoilState(userBattleRec);
 
   // 더 보기 단추
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
   const [resultCount, setResultCount] = useState(10);
 
-  const dataLength = matchData.length;
+  const dataLength = battleRec.length;
   useEffect(() => {
     // 모든 데이터를 불러왔음에도 '더 보기'를 누르는 경우 알림
     if (resultCount - 10 >= dataLength) {
@@ -205,111 +202,57 @@ function Mypage() {
     }
   });
 
-  // API에서 받아오는 데이터(샘플)
-  const sampleData = [
-    {
-      user: {
-        nickname: "dohyung",
-        level: "120",
-        picture: "",
-      },
-      info: {
-        consecutive_access_date: "10", // 연속 접속일
-        consecutive_win_cnt: "5", // 연승 수
-        play_cnt: "52", // 플레이 게임 수
-      },
-      recent: {
-        win: "13",
-        lose: "7",
-      },
-      speed: "gold",
-      optimization: "silver",
-      // record_list 데이터는 id를 객체 안에 넣거나, 객체를 이중으로 감싸야 할듯?
-      record_list: {
-        1: {
-          result: "win",
-          battle_mode: "speed",
-          other_player: "kimjusung",
-          problem_tier: "Gold",
-          submit_count: "3",
-          date: "2", // 2 일전, 0 일 경우 오늘
-        },
-        2: {
-          result: "win",
-          battle_mode: "speed",
-          other_player: "kimjuyeoup",
-          problem_tier: "Gold",
-          submit_count: "3",
-          date: "0", // 2 일전, 0 일 경우 오늘
-        },
-        3: {
-          result: "lose",
-          battle_mode: "speed",
-          other_player: "kimyoungbin",
-          problem_tier: "Silver",
-          submit_count: "2",
-          date: "5", // 2 일전, 0 일 경우 오늘
-        },
-      },
-      // 이전 시즌 데이터는 곧 추가하겠습니다.
-    },
-  ];
-
-  // 맵핑 테스트용
-  const assimilatedData = sampleData.map((data) => {
-    return {
-      nickname: data.user.nickname,
-      level: data.user.level,
-      recentWin: data.recent.win,
-      recentLost: data.recent.lose,
-      // 전적은 recSource로 받아온 후 한 번 더 맵핑
-      recSource: data.record_list,
-    };
-  });
-
-  console.log(assimilatedData);
-  // // 전적 맵핑 테스트용
-  // const sortRecord = [assimilatedData[0].recSource].map((record) => {
-  //   console.log("record :", record);
-  //   return {
-  //     id: record.id,
-  //     playMode: record.battle_mode,
-  //     problemName: "문제 이름",
-  //     matchResult: record.result,
-  //     opponent: record.other_player,
-  //     recordDate: record.date,
-  //     problemDifficulty: record.problem_tier,
-  //   };
-  // });
-  // console.log(sortRecord);
-
   // 서버에 마이페이지에 표시할 데이터 요청
   // 요청을 총 4번 해야 한다.
   // 1. 사용자 정보(/user-service/getUserInfo)
   // 2. 사용자의 전적(/user-service/getBattleLog)
   // 3. 지난 시즌 요약()
   // 4. 티어 정보
-  axios
-    .get(`http://localhost:3000/getUserInfo`, {
-      body: { user_id: { userId } },
-    })
-    .then((response) => {
-      console.log(response);
-      const originData = {
-        nickname: response.nickname,
-        profileImg: response.stored_file_name,
-        level: response.level,
-        speedTier: response.speed_tier,
-        efficiencyTier: response.optimization_tier,
-      };
-      setUserInfo(originData);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+  useEffect(() => {
+    const requestBody = { user_id: userId };
+
+    axios
+      .all([
+        axios.post(`http://i8b303.p.ssafy.io:9000/user-service/getUserInfo`, requestBody),
+        axios.post(`http://i8b303.p.ssafy.io:9000/user-service/getBattleLog`, requestBody),
+      ])
+      .then(
+        axios.spread((originUserInfo, originBattleRecord) => {
+          // 사용자 기본 정보를 recoil(userInfo)에 저장
+          const originUserData = {
+            nickname: originUserInfo.data.nickname,
+            profileImg: originUserInfo.data.stored_file_name,
+            level: originUserInfo.data.level,
+            speedTier: originUserInfo.data.speed_tier,
+            efficiencyTier: originUserInfo.data.optimization_tier,
+          };
+          setUserInfo(originUserData);
+          // 사용자 전적을 recoil(userBattleRec)에 저장
+          // 현재 지나치게 요청을 많이 하는 문제 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
+          const originBattleRec = originBattleRecord.data.map((record) => {
+            return {
+              battle_result: record.battle_result,
+              battle_mode: record.battle_mode,
+              opponent: record.other_user_nickname,
+              prob_name: record.prob_name,
+              prob_tier: record.prob_tier,
+              record_date: CalculateDatediff(record.end_time),
+            };
+          });
+          setBattleRec(originBattleRec);
+        })
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [setBattleRec, setUserInfo, userId]);
 
   // 서버에서 전적을 한 번에 불러온 후 10개씩 표시
-  const refinedData = matchData.slice(0, resultCount);
+  const refinedData = battleRec.slice(0, resultCount);
+
+  // 그래프 표시용 정보
+  // const graphData = battleRec.slice(0, 20)
 
   return (
     <div
@@ -459,19 +402,6 @@ function Mypage() {
               style={{
                 margin: "10px",
               }}>
-              <Row
-                justify="center"
-                style={{
-                  paddingBottom: "15px",
-                }}>
-                {/* 친구 정보 표시 */}
-                <Col xs={24} className="textHighlight miniBlock">
-                  <p>친구 정보</p>
-                  <hr />
-                  <p>친구 1</p>
-                </Col>
-              </Row>
-
               <Row>
                 {/* 지난 시즌 기록 보기 */}
                 <Col xs={24} className="miniBlock">

@@ -32,3 +32,9 @@ export const UserInfoState = atom({
   default: [],
   effects_UNSTABLE: [persistAtom],
 });
+
+// 유저 전적을 리스트로 저장
+export const userBattleRec = atom({
+  key: "UserBattleRec",
+  default: [],
+});
