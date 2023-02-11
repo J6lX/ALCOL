@@ -44,7 +44,7 @@ public class ProblemController
     }
 
     @GetMapping("/getThreeProblem")
-    public ResponseEntity<List<Wait>> example(@RequestParam int mmr)
+    public ResponseEntity<List<Wait>> getThreeProblems(@RequestParam int mmr)
     {
         List<Wait> list = new ArrayList<>();
         List<String> cate = new ArrayList<>();

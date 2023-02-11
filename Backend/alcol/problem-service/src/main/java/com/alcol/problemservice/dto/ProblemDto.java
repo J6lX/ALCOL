@@ -51,4 +51,14 @@ public class ProblemDto
         private List<String> prob_category;
         private String prob_tier;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ThreeProb
+    {
+        private Long prob_no;
+        private List<String> prob_category;
+    }
 }
