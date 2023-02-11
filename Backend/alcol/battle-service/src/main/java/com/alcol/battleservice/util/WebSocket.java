@@ -288,7 +288,7 @@ public class WebSocket {
             else if (method.equals("ban"))
             {
                 String userId = obj.get("userId").toString();
-                String problemNum = obj.get("bannedProblem").toString();
+                String problemNum = obj.get("problemNumber").toString();
 
 
                 if(!problemNum.equals("timeout"))
