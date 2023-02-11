@@ -299,6 +299,7 @@ public class WebSocket {
                     send.put("otherId", player2Id);
                     send.put("hostCheck","false");
 //                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
+                    
                     session.getAsyncRemote().sendText(send.toJSONString());
                 }
 //                handleClose(session);
