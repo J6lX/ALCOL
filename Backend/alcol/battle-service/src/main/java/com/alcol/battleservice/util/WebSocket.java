@@ -386,7 +386,7 @@ public class WebSocket {
                 String submitCode = obj.get("code").toString();
                 String submitBattleMode = obj.get("mode").toString();
                 String submitLanguage = obj.get("language").toString();
-                String url = "http://i8b303.p.ssafy.io:9090/getProblem/";
+                String url = "https://i8b303.p.ssafy.io:443/api/submission";
 //                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
                 HttpHeaders header = new HttpHeaders();
                 header.add("Cookie","sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
