@@ -422,7 +422,7 @@ public class WebSocket {
                 JSONObject responseToken = (JSONObject) parser.parse(getSubmitToken.getBody().get("data").toString());
                 System.out.println(responseToken.get("data"));
 //                System.out.println(responseToken.get("data"));
-                
+
 //                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
 //                 responseToken = getSubmitToken.getBody().get("data");
 //                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
@@ -431,7 +431,7 @@ public class WebSocket {
 //                        entity,
 //                        HashMap.class
 //                );
-                System.out.println(getSubmitResult.getBody());
+//                System.out.println(getSubmitResult.getBody());
             }
 
             else if (method.equals("msg"))
