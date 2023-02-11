@@ -10,6 +10,7 @@ import performanceIcon from "../../assets/performance_mode_icon.png";
 import banIcon from "../../assets/X.png";
 import rankingsIcon from "../../assets/rankings_black.png";
 import rankingIcon from "../../assets/ranking_black.png";
+import arrowDownIcon from "../../assets/arrow_down.png";
 import "./GuidePage.css";
 
 const changeColor = (event) => {
@@ -112,16 +113,7 @@ const Guide1 = () => {
           </div>
         </Col>
       </Row>
-      <ScrollLink
-        className="NanumSquare"
-        to="Guide2"
-        spy={true}
-        smooth={true}
-        onMouseEnter={changeColor}
-        onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "10vw" }}>
-        다음
-      </ScrollLink>
+      <img src={arrowDownIcon} alt="down" style={{ marginTop: "100px" }}></img>
     </motion.div>
   );
 };
@@ -221,16 +213,7 @@ const Guide2 = () => {
           금지되지 않은 문제 중 하나가 출제돼요
         </h1>
       </motion.div>
-      <ScrollLink
-        className="NanumSquare"
-        to="Guide3"
-        spy={true}
-        smooth={true}
-        onMouseEnter={changeColor}
-        onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "5vw" }}>
-        다음
-      </ScrollLink>
+      <img src={arrowDownIcon} alt="down" style={{ marginTop: "100px" }}></img>
     </div>
   );
 };
@@ -248,7 +231,7 @@ const Guide3 = () => {
   }, [guide3Control, guid3View]);
 
   const guide3BoxAnim = {
-    visible: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.7 } },
+    visible: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.5 } },
     hidden: { opacity: 0.5, scale: 0.5, x: 300, y: 300 },
   };
 
@@ -299,16 +282,7 @@ const Guide3 = () => {
           </h1>
         </motion.div>
       </div>
-      <ScrollLink
-        className="NanumSquare"
-        to="Guide4"
-        spy={true}
-        smooth={true}
-        onMouseEnter={changeColor}
-        onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "0.6vw" }}>
-        다음
-      </ScrollLink>
+      <img src={arrowDownIcon} alt="down" style={{ marginTop: "100px" }}></img>
     </div>
   );
 };
@@ -441,16 +415,7 @@ const Guide4 = () => {
           </div>
         </Col>
       </motion.div>
-      <ScrollLink
-        className="NanumSquare"
-        to="Guide5"
-        spy={true}
-        smooth={true}
-        onMouseEnter={changeColor}
-        onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "1vw" }}>
-        다음
-      </ScrollLink>
+      <img src={arrowDownIcon} alt="down" style={{ marginTop: "100px" }}></img>
     </div>
   );
 };
@@ -592,16 +557,7 @@ const Guide5 = () => {
           </motion.div>
         </Col>
       </Row>
-      <ScrollLink
-        className="NanumSquare"
-        to="Guide6"
-        spy={true}
-        smooth={true}
-        onMouseEnter={changeColor}
-        onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "1vw" }}>
-        다음
-      </ScrollLink>
+      <img src={arrowDownIcon} alt="down" style={{ marginTop: "100px" }}></img>
     </div>
   );
 };
@@ -685,17 +641,17 @@ const Guide6 = () => {
             </p>
           </div>
         </Link>
+        <ScrollLink
+          className="NanumSquare"
+          to="MainPage"
+          spy={true}
+          smooth={true}
+          onMouseEnter={changeColor}
+          onMouseLeave={returnColor}
+          style={{ color: "white", marginTop: "7.5vw" }}>
+          맨 위로
+        </ScrollLink>
       </div>
-      <ScrollLink
-        className="NanumSquare"
-        to="MainPage"
-        spy={true}
-        smooth={true}
-        onMouseEnter={changeColor}
-        onMouseLeave={returnColor}
-        style={{ color: "white", marginTop: "7.5vw" }}>
-        맨 위로
-      </ScrollLink>
     </div>
   );
 };
@@ -705,23 +661,23 @@ const GuidePage = () => {
     <div className="fullmiddle">
       <Guide1 />
       <div>
-        <div style={{ width: "100vw", height: "40vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide2 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide3 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide4 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide5 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide6 />
       <div>
