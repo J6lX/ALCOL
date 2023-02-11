@@ -334,4 +334,13 @@ public class UserServiceImpl implements UserService
         }
         return list;
     }
+
+    @Override
+    public String getTier(int mmr)
+    {
+        log.info("UserServiceImpl 메소드의 getTier 메소드 실행");
+        UserTierEntity userTierEntity = userTierRepository
+                .findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(mmr, mmr);
+        return userTierEntity.getTier();
+    }
 }

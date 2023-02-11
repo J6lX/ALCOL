@@ -23,4 +23,6 @@ public interface UserService extends UserDetailsService
     String getUserId(String nickName);
 
     List<String> getAllUserId();
+
+    String getTier(int mmr);
 }

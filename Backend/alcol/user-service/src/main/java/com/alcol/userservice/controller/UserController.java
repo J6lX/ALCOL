@@ -5,8 +5,6 @@ import com.alcol.userservice.error.CustomStatusCode;
 import com.alcol.userservice.service.UserService;
 import com.alcol.userservice.util.ApiUtils;
 import com.alcol.userservice.util.RestTemplateUtils;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -149,7 +147,7 @@ public class UserController
 
     /**
      * @param param
-     * @return nickname
+     * @return 사용자 닉네임을 리턴
      */
     @PostMapping("/getUserId")
     public String getUserId(@RequestBody HashMap<String, Object> param)
@@ -167,5 +165,16 @@ public class UserController
         log.info("UserController 의 getAllUserId 메소드 실행");
         List<String> list = userService.getAllUserId();
         return restTemplateUtils.sendResponse(list);
+    }
+
+    /**
+     * @param mmr
+     * @return 티어
+     */
+    @GetMapping("/getTier/{mmr}")
+    public String getTier(@PathVariable("mmr") int mmr)
+    {
+        log.info("UserController 의 getTier 메소드 실행");
+        return userService.getTier(mmr);
     }
 }
