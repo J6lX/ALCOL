@@ -185,7 +185,7 @@ function Ranking() {
           return {
             grade: data.grade,
             nickname: data.nickname,
-            profile_img: data.profile_pic,
+            profile_img: data.stored_file_name,
             mmr: data.mmr,
             level: data.level,
             tier: data.tier,

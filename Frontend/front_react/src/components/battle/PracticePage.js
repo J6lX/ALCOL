@@ -4,31 +4,32 @@ import practiceHeader from "../../assets/practice_header.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+// import { useRecoilState s} from "recoil";
 
 // 연습 문제 구분 설명
 const problemLabel = [
   {
     title: "문제 번호",
-    dataIndex: "problemNo",
+    dataIndex: "problem_number",
     key: "problemNo",
     align: "center",
     render: (text, record) => <Link to={"/solveprac/" + record.key}>{text}</Link>,
   },
   {
     title: "문제 이름",
-    dataIndex: "problemName",
+    dataIndex: "problem_name",
     key: "problemNo",
     align: "center",
   },
   {
     title: "문제 유형",
-    dataIndex: "problemType",
+    dataIndex: "problem_type",
     key: "problemNo",
     align: "center",
   },
   {
     title: "문제 난이도",
-    dataIndex: "problemDifficulty",
+    dataIndex: "problem_difficulty",
     key: "problemNo",
     align: "center",
   },
@@ -57,8 +58,11 @@ const problemData = {
 
 // 페이지 렌더링
 function Ranking() {
-  // 데이터 상태 관리
-  const [refinedData, setRefinedData] = useState(problemData);
+  // 데이터 상태 관리(임시 코드)
+  const [refinedData, setRefinedData] = useState(problemData.bodyData);
+
+  // // 연습 문제 상태 관리(서버 연결 시 사용)
+  // const [practiceProblem, setPracticeProblem] = useRecoilState();
 
   // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");
@@ -75,6 +79,8 @@ function Ranking() {
     .get(`http://i8b303.p.ssafy.io:8000/problemList`)
     .then((response) => {
       console.log(response);
+      // // 문제 소스는 .bodyData에 담아서 전송됨
+      // const originData = response.bodyData
     })
     .catch((error) => {
       console.log(error);
