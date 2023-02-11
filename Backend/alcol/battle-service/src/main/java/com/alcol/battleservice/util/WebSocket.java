@@ -345,6 +345,9 @@ public class WebSocket {
                         synchronized (session) {
 //                    session.sendMessage(message);
                             session.getAsyncRemote().sendText(data.toJSONString());
+                        }
+                        synchronized (session) {
+//                    session.sendMessage(message);
                             userId2Session.get(userId2SessionId.get(otherId)).getAsyncRemote().sendText(data.toJSONString());
                         }
 
