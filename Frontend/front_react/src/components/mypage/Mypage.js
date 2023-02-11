@@ -6,12 +6,13 @@ import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
 import React, { useState, useEffect } from "react";
 import { PieChart } from "react-minimal-pie-chart";
+import axios from "axios";
 
 import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
 
 // 현재 로그인한 사용자 정보
 const userData = {
-  tester: {
+  "3812ed0e-9c08-46eb-ac5d-de574d697e60": {
     name: "tester",
     battleRec: {},
     friends: {},
@@ -93,105 +94,6 @@ const matchData = [
     problemName: "Problem4",
     matchResult: "승리",
     opponent: "와인",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 5,
-    playMode: "스피드",
-    problemName: "Problem5",
-    matchResult: "승리",
-    opponent: "고량주",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 6,
-    playMode: "스피드",
-    problemName: "Problem1",
-    matchResult: "승리",
-    opponent: "1번 플레이어",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 7,
-    playMode: "스피드",
-    problemName: "Problem2",
-    matchResult: "승리",
-    opponent: "2번 플레이어",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 8,
-    playMode: "스피드",
-    problemName: "Problem3",
-    matchResult: "승리",
-    opponent: "3번 플레이어",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 9,
-    playMode: "스피드",
-    problemName: "Problem4",
-    matchResult: "승리",
-    opponent: "4번 플레이어",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 10,
-    playMode: "스피드",
-    problemName: "Problem5",
-    matchResult: "승리",
-    opponent: "5번 플레이어",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 11,
-    playMode: "스피드",
-    problemName: "Problem1",
-    matchResult: "승리",
-    opponent: "플레이어 6",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 12,
-    playMode: "스피드",
-    problemName: "Problem2",
-    matchResult: "승리",
-    opponent: "플레이어 7",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 13,
-    playMode: "스피드",
-    problemName: "Problem3",
-    matchResult: "승리",
-    opponent: "플레이어 8",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 14,
-    playMode: "스피드",
-    problemName: "Problem4",
-    matchResult: "승리",
-    opponent: "플레이어 9",
-    recordDate: "어제",
-    problemDifficulty: "Diamond",
-  },
-  {
-    id: 15,
-    playMode: "스피드",
-    problemName: "Problem5",
-    matchResult: "승리",
-    opponent: "플레이어 10",
     recordDate: "어제",
     problemDifficulty: "Diamond",
   },
@@ -307,6 +209,96 @@ function Mypage() {
       alert("전적을 모두 불러왔습니다.");
     }
   });
+
+  // API에서 받아오는 데이터(샘플)
+  const sampleData = [
+    {
+      user: {
+        nickname: "dohyung",
+        level: "120",
+        picture: "",
+      },
+      info: {
+        consecutive_access_date: "10", // 연속 접속일
+        consecutive_win_cnt: "5", // 연승 수
+        play_cnt: "52", // 플레이 게임 수
+      },
+      recent: {
+        win: "13",
+        lose: "7",
+      },
+      speed: "gold",
+      optimization: "silver",
+      // record_list 데이터는 id를 객체 안에 넣거나, 객체를 이중으로 감싸야 할듯?
+      record_list: {
+        1: {
+          result: "win",
+          battle_mode: "speed",
+          other_player: "kimjusung",
+          problem_tier: "Gold",
+          submit_count: "3",
+          date: "2", // 2 일전, 0 일 경우 오늘
+        },
+        2: {
+          result: "win",
+          battle_mode: "speed",
+          other_player: "kimjuyeoup",
+          problem_tier: "Gold",
+          submit_count: "3",
+          date: "0", // 2 일전, 0 일 경우 오늘
+        },
+        3: {
+          result: "lose",
+          battle_mode: "speed",
+          other_player: "kimyoungbin",
+          problem_tier: "Silver",
+          submit_count: "2",
+          date: "5", // 2 일전, 0 일 경우 오늘
+        },
+      },
+      // 이전 시즌 데이터는 곧 추가하겠습니다.
+    },
+  ];
+
+  // 맵핑 테스트용
+  const assimilatedData = sampleData.map((data) => {
+    return {
+      nickname: data.user.nickname,
+      level: data.user.level,
+      recentWin: data.recent.win,
+      recentLost: data.recent.lose,
+      // 전적은 recSource로 받아온 후 한 번 더 맵핑
+      recSource: data.record_list,
+    };
+  });
+
+  console.log(assimilatedData);
+  // // 전적 맵핑 테스트용
+  // const sortRecord = [assimilatedData[0].recSource].map((record) => {
+  //   console.log("record :", record);
+  //   return {
+  //     id: record.id,
+  //     playMode: record.battle_mode,
+  //     problemName: "문제 이름",
+  //     matchResult: record.result,
+  //     opponent: record.other_player,
+  //     recordDate: record.date,
+  //     problemDifficulty: record.problem_tier,
+  //   };
+  // });
+  // console.log(sortRecord);
+
+  // 서버에 마이페이지에 표시할 데이터 요청
+  axios
+    .get(``, {
+      body: { user_id: { profile } },
+    })
+    .then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
   // 서버에서 전적을 한 번에 불러온 후 10개씩 표시
   const refinedData = matchData.slice(0, resultCount);
