@@ -1,6 +1,7 @@
 package com.alcol.battleservice.util;
 
 import com.alcol.battleservice.config.ServerEndpointConfigurator;
+import com.alcol.battleservice.dto.ResponseDataDTO;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
@@ -13,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -26,6 +25,8 @@ import javax.net.ssl.SSLContext;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -96,8 +97,7 @@ public class WebSocket {
      * 웹소켓 메시지(From Client) 수신하는 경우 호출
      */
     @OnMessage
-    public void handleMessage(String jsonMessage, Session session) throws ParseException, IOException
-    {
+    public void handleMessage(String jsonMessage, Session session) throws ParseException, IOException, URISyntaxException {
         if (session != null)
         {
             JSONParser parser = new JSONParser();
@@ -411,22 +411,33 @@ public class WebSocket {
                 bodyData.put("problem_id", submitProblemNum);
                 bodyData.put("language",submitLanguage);
                 bodyData.put("code",submitCode);
-                HttpEntity<Map<String, Object>> entity = new HttpEntity<>(bodyData, header);
-                ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
-                        url,
-                        entity,
-                        HashMap.class
-                );
+                HttpEntity<Map<String, Object>> entity =  new HttpEntity<>(bodyData, header);
+//                ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
+//                        url,
+//                        entity,
+//                        HashMap.class
+//                );
 
-                System.out.println(getSubmitToken.getBody());
-                String submissionId = getSubmitToken.getBody().get("submission_id").toString();
-                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
-                ResponseEntity<HashMap> getSubmitResult = restTemplateForHttps.postForEntity(
-                        url,
-                        entity,
-                        HashMap.class
-                );
-                System.out.println(getSubmitResult.getBody());
+                ResponseDataDTO<Map<String,Object>> getSubmitToken =
+                        restTemplate.exchange(
+                                url ,
+                                HttpMethod.POST ,
+                                entity,
+                                new ParameterizedTypeReference<ResponseDataDTO<Map<String,Object>>>() {}
+                        ).getBody();
+
+
+                System.out.println(getSubmitToken.getResponse().get("data"));
+                Map<String,Object> getSubmitTokenUnpack = (Map<String, Object>) getSubmitToken.getResponse().get("data");
+                System.out.println(getSubmitTokenUnpack.get("submission_id"));
+//                String submissionId = getSubmitToken.getBody().get("data").get("submission_id").toString();
+//                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
+//                ResponseEntity<HashMap> getSubmitResult = restTemplateForHttps.postForEntity(
+//                        url,
+//                        entity,
+//                        HashMap.class
+//                );
+//                System.out.println(getSubmitResult.getBody());
             }
 
             else if (method.equals("msg"))
@@ -475,6 +486,7 @@ public class WebSocket {
     @OnClose
     public void handleClose(Session session)
     {
+        // 포네그리프
         if (session != null)
         {
             String sessionId = session.getId();
