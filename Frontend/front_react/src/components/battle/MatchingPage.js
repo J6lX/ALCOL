@@ -126,7 +126,6 @@ function App() {
     function onHandlePlayerGet() {
       setPlayerInfo(obj)
       setTimeout(() => {
-        socket.send(JSON.stringify("끊어주세요"));
         socket.close()
         console.log("플레이어 정보를 저장했다");
         console.log(playerInfo);
