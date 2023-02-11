@@ -382,7 +382,7 @@ public class WebSocket {
             else if (method.equals("submit"))
             {
                 String submitUserId = obj.get("userId").toString();
-                String submitProblemNum = obj.get("problemNumer").toString();
+                String submitProblemNum = obj.get("problemNumber").toString();
                 String submitCode = obj.get("code").toString();
                 String submitBattleMode = obj.get("mode").toString();
                 String submitLanguage = obj.get("language").toString();
