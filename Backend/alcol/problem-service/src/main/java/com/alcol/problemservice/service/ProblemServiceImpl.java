@@ -1,8 +1,8 @@
 package com.alcol.problemservice.service;
 
 import com.alcol.problemservice.dto.ProblemDto;
+import com.alcol.problemservice.entity.ProblemCategoryConnectEntity;
 import com.alcol.problemservice.entity.ProblemEntity;
-import com.alcol.problemservice.entity.ProblemTierEntity;
 import com.alcol.problemservice.repository.ProblemRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -71,14 +71,19 @@ public class ProblemServiceImpl implements ProblemService
         List<ProblemDto.ProbList> allProbList = new ArrayList<>();
         for(ProblemEntity prob : problemList)
         {
+            List<String> categoryList = new ArrayList<>();
+            List<ProblemCategoryConnectEntity> probConnect = prob.getProblemCategoryConnectEntityList();
+            for(ProblemCategoryConnectEntity probConnectEntity : probConnect)
+                categoryList.add(probConnectEntity.getProblemCategoryEntity().getCategoryName());
+
             allProbList.add(ProblemDto.ProbList.builder()
                             .prob_no(prob.getProbNo())
                             .prob_name(prob.getProbName())
-                            .prob_category(prob.getProblemCategoryConnectEntityList())
+                            .prob_category(categoryList)
                             .prob_tier(prob.getTier().getTier())
                     .build());
         }
-        return allProbList;
 
+        return allProbList;
     }
 }

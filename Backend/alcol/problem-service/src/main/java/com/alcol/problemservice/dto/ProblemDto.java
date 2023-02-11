@@ -48,7 +48,7 @@ public class ProblemDto
     {
         private Long prob_no;
         private String prob_name;
-        private List<ProblemCategoryConnectEntity> prob_category;
+        private List<String> prob_category;
         private String prob_tier;
     }
 }
