@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Getter
-@Table(name = "prob_tier_pivot_tb")
+@Table(name = "prob_tier_tb")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProblemTierEntity {
