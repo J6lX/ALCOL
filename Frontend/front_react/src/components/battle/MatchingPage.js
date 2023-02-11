@@ -136,7 +136,7 @@ function App() {
     //서버가 오프라인일때 발생하는 코드
     socket.addEventListener("close", () => {
       console.log("---서버와 연결 끊김---");
-      socket.send(JSON.stringify("끊어주세요"));
+      // socket.send(JSON.stringify("끊어주세요"));
     });
     };
 //Modal 선택 관련
