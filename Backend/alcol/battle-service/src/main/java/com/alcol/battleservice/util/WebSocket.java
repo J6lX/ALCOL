@@ -427,7 +427,7 @@ public class WebSocket {
                         ).getBody();
 
 
-                System.out.println(getSubmitToken.getResponse().get("data"));
+                System.out.println(getSubmitToken.getResponse());
                 Map<String,Object> getSubmitTokenUnpack = (Map<String, Object>) getSubmitToken.getResponse().get("data");
                 System.out.println(getSubmitTokenUnpack.get("submission_id"));
 //                String submissionId = getSubmitToken.getBody().get("data").get("submission_id").toString();
