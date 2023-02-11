@@ -72,6 +72,7 @@ public class ProblemServiceImpl implements ProblemService
         List<ProblemDto.ProbList> allProbList = new ArrayList<>();
         for(ProblemEntity prob : problemList)
         {
+            List<String> categoryList = new ArrayList<>();
             allProbList.add(ProblemDto.ProbList.builder()
                             .prob_no(prob.getProbNo())
                             .prob_name(prob.getProbName())
