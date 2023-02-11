@@ -330,15 +330,6 @@ function Mypage() {
               padding: "5px",
             }}>
             <Col xs={16} md={6} lg={4} className="text block">
-              {/* 설정 아이콘 표시 블록 */}
-              <Row>
-                <Col md={{ offset: 21 }}>
-                  <Link to="/modify">
-                    <img src={settingIcon} alt="settings" className="settingIcon" />
-                  </Link>
-                </Col>
-              </Row>
-
               {/* 개인 정보 표시 블록 */}
               <Row justify="center">
                 <Col>
