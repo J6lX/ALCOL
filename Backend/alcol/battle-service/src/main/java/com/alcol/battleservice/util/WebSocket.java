@@ -233,7 +233,10 @@ public class WebSocket {
                 }
                 problems_json.put("messageType","sendProblem");
                 problems_json.put("problems",problems_category);
-                session.getAsyncRemote().sendText(problems_json.toJSONString());
+                synchronized (session) {
+//                    session.sendMessage(message);
+                    session.getAsyncRemote().sendText(problems_json.toJSONString());
+                }
 //                sendProblems(session, problems_json);
 
                 /****문제를 보내고 벤픽 시간을 제한해야 함****/
