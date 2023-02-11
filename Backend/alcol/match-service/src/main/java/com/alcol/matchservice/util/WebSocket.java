@@ -90,6 +90,7 @@ public class WebSocket {
         if (session != null)
         {
             JSONParser parser = new JSONParser();
+            System.out.println("핸들로 들어오는 json 메세지 " + jsonMessage);
             JSONObject obj = (JSONObject) parser.parse(jsonMessage);
             System.out.println(jsonMessage);
             String method = obj.get("method").toString();
@@ -289,7 +290,7 @@ public class WebSocket {
                     host_user=true;
                     send.put("userId", player2Id);
                     send.put("otherId", player1Id);
-                    send.put("hostCheck","true");
+                    send.put("hostCheck",host_user);
 //                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
                     session.getAsyncRemote().sendText(send.toJSONString());
                 }
@@ -297,9 +298,9 @@ public class WebSocket {
                     host_user = false;
                     send.put("userId", player1Id);
                     send.put("otherId", player2Id);
-                    send.put("hostCheck","false");
+                    send.put("hostCheck",host_user);
 //                    System.out.println("보내기 직전 send Json : "+send.toJSONString());
-                    
+
                     session.getAsyncRemote().sendText(send.toJSONString());
                 }
 //                handleClose(session);
