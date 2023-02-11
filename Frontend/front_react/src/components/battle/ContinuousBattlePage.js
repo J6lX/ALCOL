@@ -134,19 +134,22 @@ const ContinuousBattlePage = () => {
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
         console.log("문제 선택 완료!");
+        setTimeout(()=>{
         setIsReady(false);
-        setIsBanWait(true);
+        setIsBanWait(true);}, 500);
       } else if (data.messageType === "select_success") {
-        setProblemInfo(data.problem);
+        console.log("이게 날라왔어", data.problem)
         setTimeout(() => {
-          setIsReady(false);
-          setIsBanWait(false);
-          setIsSelected(true);
+          setProblemInfo(data.problem);
           setTimeout(() => {
-            setIsSelected(false);
-            setIsSolving(true);
-          }, 5000);
-        }, 2000);
+            setIsReady(false);
+            setIsBanWait(false);
+            setIsSelected(true);
+            setTimeout(() => {
+              setIsSelected(false);
+              setIsSolving(true);}, 10000)
+          }, 1000);
+        }, 1000);
       } else if (data.messageType === "submit_success") {
         submitResult = data.submitResult;
         console.log(submitResult);
@@ -180,12 +183,12 @@ const ContinuousBattlePage = () => {
   
 
 
-  useEffect(() => {
-    return () => {
-      console.log("배틀을 나가서 소켓 연결 끊김");
-      socket.onclose();
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     console.log("배틀을 나가서 소켓 연결 끊김");
+  //     socket.onclose();
+  //   };
+  // }, []);
 
   
 
@@ -225,6 +228,7 @@ const ContinuousBattlePage = () => {
         {isConnected && isSelected && (
           <SelectedProblemPage
             problemNumber={problemNumber}
+            problems={problems}
             problemInfo={problemInfo}
             battleuserinfo={{
               user: { nick: nickname, speedTier: speedTier, optTier: optTier },
@@ -233,7 +237,13 @@ const ContinuousBattlePage = () => {
           />
         )}
         {isConnected && isSolving && battleMode === "speed" && (
-          <SolvingPage goResultPage={goResultPage} />
+          <SolvingPage 
+          problemInfo={problemInfo} 
+          battleuserinfo={{
+            user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+            other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+          }} 
+          goResultPage={goResultPage} />
         )}
         {isConnected && isSolving && battleMode === "optimization" && (
           <SolvingPage goResultPage={goResultPage} />

@@ -10,6 +10,7 @@ import { python } from "@codemirror/lang-python";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, message, Modal } from "antd";
+import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 let allheight = window.innerHeight;
 
@@ -51,11 +52,17 @@ const ResultMessage = () => {
   );
 };
 
-const BattleNav = () => {
-  // let now = new Date();
-  // let hours = now.getHours();
-  // let minutes = now.getMinutes();
+const BattleNav = (userInfo) => {
+  const battleModeInfo = useRecoilState(selectedMode);
+  console.log(battleModeInfo)
+  let mode = "unknown"
+  if (battleModeInfo === "speed") {
+    mode = "스피드"
+  } else if (battleModeInfo === "optimization") {
+    mode = "최적화"
+  }
 
+  console.log("userInfosolving", userInfo)
   return (
     <div className="BattleNav">
       <img src={Logo} alt="alcol_logo_black" style={{ height: "5vh", marginLeft: "20px" }} />
@@ -63,16 +70,16 @@ const BattleNav = () => {
         <p
           className="NanumSquare"
           style={{ color: "black", fontSize: "2.5vh", marginRight: "3vw" }}>
-          배틀 유형
+          {mode}
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          소주 세 병
+          {userInfo.userInfo.other.nick}
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
           Vs.
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          맥주 5000cc
+        {userInfo.userInfo.user.nick}
         </p>
         <ResultMessage className="MessageToast" />
       </div>
@@ -83,14 +90,15 @@ const BattleNav = () => {
   );
 };
 
-const Problem = () => {
+const Problem = (problemInfo) => {
+  const problem = problemInfo.problemInfo
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2.5vh", fontWeight: "bold", padding: "2%" }}>
-          이상한 술집
+          {problem.prob_name}
         </p>
       </div>
       <div
@@ -108,16 +116,7 @@ const Problem = () => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          프로그래밍 대회 전날, 은상과 친구들은 이상한 술집에 모였다. 이 술집에서 막걸리를 시키면
-          주전자의 용량은 똑같았으나 안에 들어 있는 막걸리 용량은 랜덤이다. 즉 한 번 주문에 막걸리
-          용량이 802ml 이기도 1002ml가 나오기도 한다. 은상은 막걸리 N 주전자를 주문하고, 자신을
-          포함한 친구들 K명에게 막걸리를 똑같은 양으로 나눠주려고 한다. 그런데 은상과 친구들은 다른
-          주전자의 막걸리가 섞이는 것이 싫어서, 분배 후 주전자에 막걸리가 조금 남아 있다면 그냥
-          막걸리를 버리기로 한다. (즉, 한 번 주문한 막걸리에 남은 것을 모아서 친구들에게 다시 주는
-          경우는 없다. 예를 들어 5명이 3 주전자를 주문하여 1002, 802, 705 ml의 막걸리가 각 주전자에
-          담겨져 나왔고, 이것을 401ml로 동등하게 나눴을 경우 각각 주전자에서 200ml, 0m, 304ml 만큼은
-          버린다.) 이럴 때 K명에게 최대한의 많은 양의 막걸리를 분배할 수 있는 용량 ml는 무엇인지
-          출력해주세요.
+          {problem.prob_content}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -128,10 +127,12 @@ const Problem = () => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          첫째 줄에는 은상이가 주문한 막걸리 주전자의 개수 N, 그리고 은상이를 포함한 친구들의 수 K가
-          주어진다. 둘째 줄부터 N개의 줄에 차례로 주전자의 용량이 주어진다. N은 10000이하의
-          정수이고, K는 1,000,000이하의 정수이다. 막걸리의 용량은 2의 23 빼기 1 보다 작거나 같은
-          자연수 또는 0이다. 단, 항상 N ≤ K 이다. 즉, 주전자의 개수가 사람 수보다 많을 수는 없다.
+          {problem.prob_input_content}
+        </p>
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
+          ex. {problem.prob_input_testcase}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -142,7 +143,12 @@ const Problem = () => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          첫째 줄에 K명에게 나눠줄 수 있는 최대의 막걸리 용량 ml 를 출력한다.
+          {problem.prob_output_content}
+        </p>
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
+          ex. {problem.prob_output_testcase}
         </p>
       </div>
     </div>
@@ -155,6 +161,7 @@ const CodingPlace = ({ submitcode }) => {
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
   const [code, setCode] = useState("");
   const setSubmitMessage = useSetRecoilState(submitMessageState);
+  const languageMode = useRecoilState(selectedLanguage);
   const problem_number = 1;
 
   const onChange = (newValue) => {
@@ -264,7 +271,7 @@ const CodingPlace = ({ submitcode }) => {
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2vh", height: "100%", padding: "2%" }}>
-          코딩할 언어: python
+          코딩할 언어: {languageMode}
         </p>
       </div>
       <div
@@ -360,7 +367,7 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ goResultPage }) => {
+const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -377,7 +384,7 @@ const SolvingPage = ({ goResultPage }) => {
     <div id="allconsole">
       <RecoilRoot>
         <div>
-          <BattleNav />
+          <BattleNav userInfo={battleuserinfo} />
           <div
             style={{
               display: "flex",
@@ -386,7 +393,7 @@ const SolvingPage = ({ goResultPage }) => {
               border: "0.1px solid gray",
             }}>
             <div style={{ width: "30vw", height: "92vh", border: "0.1px solid gray" }}>
-              <Problem />
+              <Problem problemInfo={problemInfo} />
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>

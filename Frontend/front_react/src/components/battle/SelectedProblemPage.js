@@ -4,7 +4,7 @@ import versus from "../../assets/versus.png";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
 import { useRecoilValue } from "recoil";
-import { selectedMode, selectedLanguage, battleProblemInfo } from "../../states/atoms";
+import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function Top() {
   return (
@@ -15,19 +15,20 @@ function Top() {
   );
 }
 
-function SelectedProblem({ problemInfo, userInfo }) {
+function SelectedProblem({ problemInfo, problem_category, userInfo }) {
+  console.log("userInfo 왜 이러냐", userInfo)
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
   // let clsName = "../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png";
-  const category = problemInfo.problem_category;
+  const category = problem_category;
   const makeBadge = (category) => {
     const result = [];
 
-    for (let i = 0; i < problemInfo.problem_category.length; i++) {
+    for (let i = 0; i < problem_category.length; i++) {
       result.push(
         <Badge
           key={i}
-          count={problemInfo.problem_category[i]}
+          count={problem_category[i]}
           color="#faad14"
           style={{ margin: "10px" }}
         />
@@ -102,10 +103,10 @@ function SelectedProblem({ problemInfo, userInfo }) {
             <p
               className="NanumSquare"
               style={{ color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
-              문제 {problemInfo.problem_no}. {problemInfo.problem_title}
+              문제 {problemInfo.prob_no}. {problemInfo.prob_name}
             </p>
             <img
-              src={require("../../assets/ALCOL tiers/tier_" + problemInfo.problem_tier + "_0.png")}
+              src={require("../../assets/ALCOL tiers/tier_gold_0.png")}
               alt="tier"
               style={{ width: "40px" }}
             />
@@ -116,7 +117,7 @@ function SelectedProblem({ problemInfo, userInfo }) {
               제한시간
             </p>
             <p className="NanumSquare" style={{ color: "white", fontSize: "14px" }}>
-              2시간(120분)
+              {problemInfo.prob_time_limit}시간({problemInfo.prob_time_limit * 60}분)
             </p>
           </Col>
         </div>
@@ -125,9 +126,9 @@ function SelectedProblem({ problemInfo, userInfo }) {
   );
 }
 
-const SelectedProblemPage = (battleuserinfo) => {
-  const problem = useRecoilValue(battleProblemInfo);
-
+const SelectedProblemPage = ({problemNumber, problems, problemInfo, battleuserinfo}) => {
+  const problem_category = problems[problemNumber]
+  console.log("선택된 문제 정보", problemInfo)
   return (
     <div
       id="problem_category"
@@ -135,7 +136,7 @@ const SelectedProblemPage = (battleuserinfo) => {
       style={{ boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)" }}>
       <Top />
       <br />
-      <SelectedProblem problem={problem} userInfo={battleProblemInfo} />
+      <SelectedProblem problemInfo={problemInfo} problem_category={problem_category} userInfo={battleuserinfo} />
     </div>
   );
 };
