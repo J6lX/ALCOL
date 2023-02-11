@@ -63,9 +63,9 @@ public class ProblemController
         cate2.add("화이땡!!");
         cate2.add("유유유형");
 
-        Wait wait1 = new Wait(1001, cate);
-        Wait wait2 = new Wait(1005, cate1);
-        Wait wait3 = new Wait(1007, cate2);
+        Wait wait1 = new Wait(1, cate);
+        Wait wait2 = new Wait(2, cate1);
+        Wait wait3 = new Wait(3, cate2);
 
 
         list.add(wait1);
