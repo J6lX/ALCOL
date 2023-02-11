@@ -445,7 +445,10 @@ public class WebSocket {
             userId2SessionId.remove(userId);
             userId2Session.remove(userId);
 
-            sessionId2Obj.remove(sessionId);
+            if(sessionId2Obj.containsKey(userId))
+            {
+                sessionId2Obj.remove(userId);
+            };
             sessionMap.remove(sessionId);
 
 //            userId2SessionId(session);
