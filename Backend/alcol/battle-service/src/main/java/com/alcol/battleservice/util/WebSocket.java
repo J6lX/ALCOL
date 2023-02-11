@@ -336,6 +336,10 @@ public class WebSocket {
                         {
                             selectProblemResult = noSelectedProblemNumber.get(0);
                         }
+                        String url = "http://i8b303.p.ssafy.io:9005/problem-service/getProblemDetail/"+selectProblemResult;
+                        ResponseEntity<HashMap> problems = restTemplate.getForEntity(url,HashMap.class);
+                        System.out.println(problems.getBody().toString());
+                        System.out.println(problems.getBody().get("prob_name"));
                         data.put("messageType","select_success");
                         data.put("problem",selectProblemResult);
                         userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
