@@ -5,8 +5,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -379,13 +381,27 @@ public class WebSocket {
             /**문제를 제출했을 때 들어오는 곳, 채점서버로 요청 보내야 함.*/
             else if (method.equals("submit"))
             {
-                String userId = obj.get("userId").toString();
-                String problemNum = obj.get("problemNum").toString();
+                String submitUserId = obj.get("userId").toString();
+                String submitProblemNum = obj.get("problemNumer").toString();
                 String submitCode = obj.get("code").toString();
+                String submitBattleMode = obj.get("mode").toString();
+                String submitLanguage = obj.get("language").toString();
+                String url = "http://i8b303.p.ssafy.io:9090/getProblem/";
+//                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
+                HttpHeaders header = new HttpHeaders();
+                header.add("Cookie","sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
+                JSONObject bodyData = new JSONObject();
+                bodyData.put("problem_id", submitProblemNum);
+                bodyData.put("language",submitLanguage);
+                bodyData.put("code",submitCode);
 
-                String url = "http://localhost:9005/getProblem/";
-                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
+                ResponseEntity<HashMap> getSubmitToken = restTemplate.postForEntity(
+                        url,
+                        bodyData,
+                        HashMap.class
+                );
 
+                System.out.println(getSubmitToken.getBody());
             }
 
             else if (method.equals("msg"))
