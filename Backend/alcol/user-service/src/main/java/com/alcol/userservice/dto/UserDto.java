@@ -1,6 +1,7 @@
 package com.alcol.userservice.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
@@ -25,6 +26,7 @@ public class UserDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserInfoDto
     {
         private String nickname;
@@ -71,6 +73,7 @@ public class UserDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class UserBattleLogDto
     {
         private int battleResult;

@@ -293,6 +293,7 @@ public class UserServiceImpl implements UserService
         ResponseEntity<List<UserDto.UserBattleLogDto>> response = restTemplateUtils.sendRequest(
                 bodyData,
                 "http://i8b303.p.ssafy.io:9005/log-service/getBattleLog",
+//                "http://localhost:9005/log-service/getBattleLog",
                 new ParameterizedTypeReference<List<UserDto.UserBattleLogDto>>() {}
         );
 
