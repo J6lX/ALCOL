@@ -1,7 +1,6 @@
 package com.alcol.battleservice.util;
 
 import com.alcol.battleservice.config.ServerEndpointConfigurator;
-import com.alcol.battleservice.dto.ResponseDataDTO;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
@@ -412,32 +411,27 @@ public class WebSocket {
                 bodyData.put("language",submitLanguage);
                 bodyData.put("code",submitCode);
                 HttpEntity<Map<String, Object>> entity =  new HttpEntity<>(bodyData, header);
-//                ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
-//                        url,
-//                        entity,
-//                        HashMap.class
-//                );
+                ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
+                        url,
+                        entity,
+                        HashMap.class
+                );
 
-                ResponseDataDTO<Map<String,Object>> getSubmitToken =
-                        restTemplateForHttps.exchange(
-                                url ,
-                                HttpMethod.POST ,
-                                entity,
-                                new ParameterizedTypeReference<ResponseDataDTO<Map<String,Object>>>() {}
-                        ).getBody();
-
-
-                System.out.println(getSubmitToken.getResponse());
-                Map<String,Object> getSubmitTokenUnpack = (Map<String, Object>) getSubmitToken.getResponse().get("data");
-                System.out.println(getSubmitTokenUnpack.get("submission_id"));
-//                String submissionId = getSubmitToken.getBody().get("data").get("submission_id").toString();
+                System.out.println(getSubmitToken.getBody());
+//                JSONParser submitParser = new JSONParser();
+                JSONObject responseToken = (JSONObject) parser.parse(getSubmitToken.getBody().get("data").toString());
+                System.out.println(responseToken.get("data"));
+//                System.out.println(responseToken.get("data"));
+                
+//                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
+//                 responseToken = getSubmitToken.getBody().get("data");
 //                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
 //                ResponseEntity<HashMap> getSubmitResult = restTemplateForHttps.postForEntity(
 //                        url,
 //                        entity,
 //                        HashMap.class
 //                );
-//                System.out.println(getSubmitResult.getBody());
+                System.out.println(getSubmitResult.getBody());
             }
 
             else if (method.equals("msg"))
