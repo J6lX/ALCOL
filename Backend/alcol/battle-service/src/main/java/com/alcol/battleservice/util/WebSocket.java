@@ -420,24 +420,17 @@ public class WebSocket {
                 System.out.println(getSubmitToken.get("data"));
 //                System.out.println(getSubmitToken.get("data").get());
                 Map<String,String> getSubmiTokenJson = (Map<String, String>) getSubmitToken.get("data");
-                System.out.println(getSubmiTokenJson.get("submission_id"));
-//                getSubmiTokenJson.put()
-//                System.out.println(getSubmiTokenJson.get("submission_id"));
-                
-//                JSONParser submitParser = new JSONParser();
-//                JSONObject responseToken = (JSONObject) parser.parse(getSubmitToken.getBody().get("data").toString());
-//                System.out.println(responseToken.get("data"));
-//                System.out.println(responseToken.get("data"));
+                String submissionId = getSubmiTokenJson.get("submission_id");
 
 //                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
 //                 responseToken = getSubmitToken.getBody().get("data");
-//                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
-//                ResponseEntity<HashMap> getSubmitResult = restTemplateForHttps.postForEntity(
-//                        url,
-//                        entity,
-//                        HashMap.class
-//                );
-//                System.out.println(getSubmitResult.getBody());
+                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
+                JSONObject getSubmitResult = restTemplateForHttps.postForObject(
+                        url,
+                        entity,
+                        JSONObject.class
+                );
+                System.out.println(getSubmitResult.get("data"));
             }
 
             else if (method.equals("msg"))
