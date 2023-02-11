@@ -5,6 +5,8 @@ import com.alcol.userservice.error.CustomStatusCode;
 import com.alcol.userservice.service.UserService;
 import com.alcol.userservice.util.ApiUtils;
 import com.alcol.userservice.util.RestTemplateUtils;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
