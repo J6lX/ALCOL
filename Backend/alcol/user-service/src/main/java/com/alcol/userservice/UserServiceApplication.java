@@ -11,6 +11,11 @@ import org.springframework.web.client.RestTemplate;
 @EnableEurekaClient
 public class UserServiceApplication
 {
+    static
+    {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }

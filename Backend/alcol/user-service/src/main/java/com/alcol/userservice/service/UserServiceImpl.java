@@ -135,11 +135,11 @@ public class UserServiceImpl implements UserService
         userEntity.setUserId(UUID.randomUUID().toString());
 
         // 프로필 사진이 회원 가입 시 같이 전달된 경우
-//        if (file != null && file.getSize() != 0) {
-//            if (!fileHandler.parseFileInfo(file, userEntity)) {
-//                return "PICTURE_UPLOAD_FAILURE";
-//            }
-//        }
+        if (file != null && file.getSize() != 0) {
+            if (!fileHandler.parseFileInfo(file, userEntity)) {
+                return "PICTURE_UPLOAD_FAILURE";
+            }
+        }
 
         // redis 에 사용자 경험치를 1 으로 저장, mmr 은 1000 으로 저장
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();

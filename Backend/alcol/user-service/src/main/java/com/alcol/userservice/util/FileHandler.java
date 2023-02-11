@@ -1,77 +1,43 @@
 package com.alcol.userservice.util;
 
 import com.alcol.userservice.entity.UserEntity;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
 public class FileHandler
 {
-    private final ResourceLoader resourceLoader;
+    private final AmazonS3Client amazonS3Client;
 
-    public FileHandler(ResourceLoader resourceLoader)
+    @Value("${cloud.aws.s3.bucket}")
+    private String S3Bucket;
+
+    public FileHandler(AmazonS3Client amazonS3Client)
     {
-        this.resourceLoader = resourceLoader;
+        this.amazonS3Client = amazonS3Client;
     }
 
-    public boolean parseFileInfo(MultipartFile multipartFile, UserEntity userEntity) throws IOException {
+    public boolean parseFileInfo(MultipartFile multipartFile, UserEntity userEntity) throws IOException
+    {
         // 파일 이름을 업로드 한 날짜로 바꾸어서 저장
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-//        String currentDate = simpleDateFormat.format(new Date());
-
-        // 프로젝트 폴더에 저장하기 위해 절대경로를 설정
-//        String absolutePath = new File("").getAbsolutePath();
-
-//        log.info("absolute path : " + absolutePath);
-
-//        String relativeFolder = resourceLoader.getResource(
-//                "classpath:" + File.separator + "myStatic"
-//        ).getURI().getPath();
-
-//                + "resources"
-//                + File.separator + "static"
-//                + File.separator + "images"
-//                + File.separator + currentDate;
-
-        String tmp = FileHandler.class.getClassLoader().getResource("myStatic").toString();
-        log.info("tmp: " + tmp);
-
-        InputStream is = FileHandler.class.getClassLoader().getResourceAsStream("cat2");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        String path = reader.lines().collect(Collectors.joining(System.lineSeparator()));
-
-        log.info("relativeFolder : " + path);
-
-        // 경로를 지정하고 그곳에 저장
-//        String path = "images/" + currentDate;
-        File file = new File(path);
-
-        // 저장할 위치의 디렉토리가 존재하지 않을 경우
-        if (!file.exists())
-        {
-            // mkdir() 함수와 다른 점은 상위 디렉토리가 존재하지 않을 때 그것까지 생성
-            file.mkdirs();
-        }
-
-        // 파일이 비어있는 경우
-        if (multipartFile.isEmpty())
-        {
-            return false;
-        }
+        String currentDate = simpleDateFormat.format(new Date());
 
         String contentType = multipartFile.getContentType();
         String originalFileExtension = null;
+        long size = multipartFile.getSize();
 
         // 확장자 명이 없으면 이 파일은 잘못된 것이다
         if (ObjectUtils.isEmpty(contentType))
@@ -89,24 +55,25 @@ public class FileHandler
             originalFileExtension = ".png";
         }
 
-        // 각 이름은 겹치면 안되므로 나노 초까지 동원하여 지정
-        String new_file_name = System.nanoTime() + originalFileExtension;
+        String newFileName = currentDate + System.nanoTime() + originalFileExtension;
 
-        // 저장된 파일로 변경하여 이를 보여주기 위함
-        file = new File(path + File.separator + new_file_name);
+        ObjectMetadata objectMetaData = new ObjectMetadata();
+        objectMetaData.setContentType(multipartFile.getContentType());
+        objectMetaData.setContentLength(size);
 
-        log.info("file absolute path : " + file.getAbsolutePath());
+        // S3에 업로드
+        amazonS3Client.putObject(
+                new PutObjectRequest(S3Bucket, newFileName, multipartFile.getInputStream(), objectMetaData)
+                        .withCannedAcl(CannedAccessControlList.PublicRead)
+        );
 
-        // 파일을 저장
-        try {
-            multipartFile.transferTo(file);
-        } catch(Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        // 접근가능한 URL 가져오기
+        String imagePath = amazonS3Client.getUrl(S3Bucket, newFileName).toString();
+
+        log.info(imagePath);
 
         userEntity.setOriginalFileName(multipartFile.getOriginalFilename());
-        userEntity.setStoredFileName(new_file_name);
+        userEntity.setStoredFileName(newFileName);
         userEntity.setFileSize(multipartFile.getSize());
 
         return true;
