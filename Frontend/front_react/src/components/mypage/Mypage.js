@@ -472,10 +472,6 @@ function Mypage() {
                   <hr />
                   <p className="textHighlight">시즌 기록 없음</p>
                   <hr />
-                  {/* 지난 시즌 이력 조회 링크 */}
-                  <Link to={`/season/${userInfo.username}`}>
-                    <p className="textHighlight">지난 시즌 조회</p>
-                  </Link>
                 </Col>
               </Row>
             </Col>
