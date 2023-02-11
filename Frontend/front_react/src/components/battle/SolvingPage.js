@@ -10,7 +10,7 @@ import { python } from "@codemirror/lang-python";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, message, Modal } from "antd";
-import { selectedMode, selectedLanguage } from "../../states/atoms";
+// import { selectedLanguage } from "../../states/atoms";
 
 let allheight = window.innerHeight;
 
@@ -52,15 +52,16 @@ const ResultMessage = () => {
   );
 };
 
-const BattleNav = (userInfo) => {
-  const battleModeInfo = useRecoilState(selectedMode);
-  console.log(battleModeInfo)
-  let mode = "unknown"
-  if (battleModeInfo === "speed") {
-    mode = "스피드"
-  } else if (battleModeInfo === "optimization") {
-    mode = "최적화"
+const BattleNav = ({userInfo, mode}) => {
+  // const mode = useRecoilValue(selectedMode);
+  let battlemode
+  if (mode[0] === "speed") {
+    battlemode = "스피드"
+  } else if (mode[0] === "optimization") {
+    battlemode = "최적화"
   }
+
+  console.log("배틀 모드", mode)
 
   console.log("userInfosolving", userInfo)
   return (
@@ -70,16 +71,16 @@ const BattleNav = (userInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "black", fontSize: "2.5vh", marginRight: "3vw" }}>
-          {mode}
+          {battlemode}
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          {userInfo.userInfo.other.nick}
+          {userInfo.other.nick}
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
           Vs.
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-        {userInfo.userInfo.user.nick}
+        {userInfo.user.nick}
         </p>
         <ResultMessage className="MessageToast" />
       </div>
@@ -155,14 +156,15 @@ const Problem = (problemInfo) => {
   );
 };
 
-const CodingPlace = ({ submitcode }) => {
+const CodingPlace = ({ problemNumber, language, submitcode }) => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
   const [code, setCode] = useState("");
   const setSubmitMessage = useSetRecoilState(submitMessageState);
-  const languageMode = useRecoilState(selectedLanguage);
-  const problem_number = 1;
+  // const problem_number = 1;
+
+  console.log("배틀 언어", language)
 
   const onChange = (newValue) => {
     console.log(newValue);
@@ -224,25 +226,27 @@ const CodingPlace = ({ submitcode }) => {
           codedata += code[i]
         }
       }
-      console.log(codedata)
-      console.log(JSON.stringify({code: codedata}));
-      const solving_data = {
-        problem_id: problem_number,
-        language: "python3",
-        code: code,
-      };
+      setTimeout(()=>{
+        submitcode(codedata, problemNumber);}, 500);
+      // console.log(codedata)
+      // console.log(JSON.stringify({code: codedata}));
+      // const solving_data = {
+      //   messageType: "submit",
+      //   problem_id: problemNumber,
+      //   language: language,
+      //   code: code,
+      // };
       // 나중에 recoil이나 shared로 뺄 수 있으면 빼기.
-      const header = {
-        headers: {
-          access_token: "access_token",
-          refresh_token: "refresh_token",
-          user_id: "user_id",
-        },
-      };
+      // const header = {
+      //   headers: {
+      //     access_token: "access_token",
+      //     refresh_token: "refresh_token",
+      //     user_id: "user_id",
+      //   },
+      // };
 
-      console.log(solving_data, header);
-      setSubmitMessage("뭔가 제출 했음");
-      submitcode();
+      // console.log(solving_data, header);
+      // setSubmitMessage("뭔가 제출 했음");
       // axios
       //   .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
       //   .then((response) => {
@@ -271,7 +275,7 @@ const CodingPlace = ({ submitcode }) => {
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2vh", height: "100%", padding: "2%" }}>
-          코딩할 언어: {languageMode}
+          코딩할 언어: {language}
         </p>
       </div>
       <div
@@ -367,11 +371,11 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
+const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, goResultPage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  // const showModal = () => {
+  //   setIsModalOpen(true);
+  // };
   const handleOk = () => {
     setIsModalOpen(false);
     goResultPage();
@@ -379,12 +383,13 @@ const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
   // const handleCancel = () => {
   //   setIsModalOpen(false);
   // };
+  const problemNumber = problemInfo.prob_no
 
   return (
     <div id="allconsole">
       <RecoilRoot>
         <div>
-          <BattleNav userInfo={battleuserinfo} />
+          <BattleNav userInfo={battleuserinfo} mode={battleMode} />
           <div
             style={{
               display: "flex",
@@ -397,7 +402,7 @@ const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace submitcode={showModal} goResultPage={goResultPage} />
+                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} goResultPage={goResultPage} />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />

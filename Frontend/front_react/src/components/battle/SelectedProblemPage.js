@@ -21,6 +21,23 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   const language = useRecoilValue(selectedLanguage);
   // let clsName = "../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png";
   const category = problem_category;
+  console.log("티어 정보가 어떻게 되어있니", problemInfo)
+  let tier;
+  if (problemInfo.prob_tier[0] === "B") {
+    tier = "bronze";
+  } else if (problemInfo.prob_tier[0] === "S") {
+    tier = "silver";
+  } else if (problemInfo.prob_tier[0] === "G") {
+    tier = "gold";
+  } else if (problemInfo.prob_tier[0] === "P") {
+    tier = "platinum";
+  } else if (problemInfo.prob_tier[0] === "D") {
+    tier = "diamond";
+  } else if (problemInfo.prob_tier[0] === "A") {
+    tier = "alcol";
+  }
+  let LV = problemInfo.prob_tier[problemInfo.prob_tier.length-1];
+  console.log(tier, LV)
   const makeBadge = (category) => {
     const result = [];
 
@@ -106,7 +123,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
               문제 {problemInfo.prob_no}. {problemInfo.prob_name}
             </p>
             <img
-              src={require("../../assets/ALCOL tiers/tier_gold_0.png")}
+              src={require("../../assets/ALCOL tiers/tier_bronze_4.png")}
               alt="tier"
               style={{ width: "40px" }}
             />
@@ -126,8 +143,8 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   );
 }
 
-const SelectedProblemPage = ({problemNumber, problems, problemInfo, battleuserinfo}) => {
-  const problem_category = problems[problemNumber]
+const SelectedProblemPage = ({problems, problemInfo, battleMode, battleLanguage, battleuserinfo}) => {
+  const problem_category = problems[problemInfo.prob_no]
   console.log("선택된 문제 정보", problemInfo)
   return (
     <div

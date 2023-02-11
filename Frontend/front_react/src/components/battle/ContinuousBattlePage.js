@@ -23,12 +23,13 @@ const ContinuousBattlePage = () => {
   const [isSelected, setIsSelected] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
-  const [problemNumber, setProblemNumber] = useState("-1");
+  // const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const [problemInfo, setProblemInfo] = useState([]);
   const idInfo = useRecoilState(matchingPlayerInfo);
   const battleModeInfo = useRecoilState(selectedMode);
   const languageMode = useRecoilState(selectedLanguage);
+  // let problems;
   console.log(languageMode);
   const [nickname, setNickname] = useState("a");
   const [speedTier, setSpeedTier] = useState("a");
@@ -39,7 +40,7 @@ const ContinuousBattlePage = () => {
   useEffect(() => {}, [nickname, speedTier, optTier]);
   useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
 
-  
+  console.log(problems);
 
   const messageType = "connect";
   const userId = idInfo[0].userId;
@@ -56,8 +57,8 @@ const ContinuousBattlePage = () => {
       .then(function (response) {
         console.log("내 정보 가져오기 axios 날림")
         setNickname(response.data.nickname);
-        setSpeedTier(response.data.speedTier);
-        setOptTier(response.data.optimizationTier);
+        setSpeedTier(response.data.speed_tier);
+        setOptTier(response.data.optimization_tier);
       })
       .catch((error) => {
         let customCode = error.response.data.custom_code;
@@ -80,8 +81,8 @@ const ContinuousBattlePage = () => {
       .then(function (response) {
         console.log("상대 정보 가져오기 axios 날림")
         setOtherNickname(response.data.nickname);
-        setOtherSpeedTier(response.data.speedTier);
-        setOtherOptTier(response.data.optimizationTier);
+        setOtherSpeedTier(response.data.speed_tier);
+        setOtherOptTier(response.data.optimization_tier);
       })
       .catch((error) => {
         let customCode = error.response.data.custom_code;
@@ -102,7 +103,7 @@ const ContinuousBattlePage = () => {
   if (isConnected === false && nickname !== "a" && othernickname !== "b") {
     socket = new WebSocket(websocketAddress);
     console.log("socket", socket);
-
+    
     socket.onopen = () => {
       setTimeout(() => {
         console.log("여길 봐", userId, otherId, hostCheck, battleMode)
@@ -124,13 +125,14 @@ const ContinuousBattlePage = () => {
       if (data.messageType === "connect_success") {
         console.log("연결 완료!");
         console.log(data);
-          socket.send(
+          setTimeout(()=>{
+            socket.send(
             JSON.stringify({
               messageType: "getProblem",
               userId: userId,
               otherId: otherId,
             })
-          );
+          );}, 300)
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
         console.log("문제 선택 완료!");
@@ -174,6 +176,9 @@ const ContinuousBattlePage = () => {
   
     socket.onclose = (message) => {
       console.log("closed!", message);
+      // setTimeout(() => {
+      //   isConnected(false)
+      // }, 100)
     };
     socket.onerror = (message) => {
       console.log("error", message);
@@ -193,7 +198,7 @@ const ContinuousBattlePage = () => {
   
 
   const changeBanProblem = (data) => {
-    setProblemNumber(data);
+    // setProblemNumber(data);
     socket.send(
       JSON.stringify({
         messageType: "ban",
@@ -203,6 +208,21 @@ const ContinuousBattlePage = () => {
       })
     );
   };
+
+  const submit = (codedata, problemNumber) => {
+    console.log(battleModeInfo, languageMode, problemNumber, codedata)
+    socket.send(
+      JSON.stringify({
+        messageType: "submit",
+        userId: userId,
+        otherId: otherId,
+        mode: battleModeInfo[0],
+        language: languageMode[0],
+        problemNumber: problemNumber,
+        code: codedata,
+      })
+    );
+  }
 
   const goResultPage = () => {
     setIsSolving(false);
@@ -227,9 +247,10 @@ const ContinuousBattlePage = () => {
         {isConnected && isBanWait && <WaitOtherBanPage />}
         {isConnected && isSelected && (
           <SelectedProblemPage
-            problemNumber={problemNumber}
             problems={problems}
             problemInfo={problemInfo}
+            battleMode={battleModeInfo}
+            battleLanguage={languageMode}
             battleuserinfo={{
               user: { nick: nickname, speedTier: speedTier, optTier: optTier },
               other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
@@ -238,11 +259,14 @@ const ContinuousBattlePage = () => {
         )}
         {isConnected && isSolving && battleMode === "speed" && (
           <SolvingPage 
-          problemInfo={problemInfo} 
+          problemInfo={problemInfo}
+          battleMode={battleModeInfo}
+          battleLanguage={languageMode}
           battleuserinfo={{
             user: { nick: nickname, speedTier: speedTier, optTier: optTier },
             other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
           }} 
+          submit={submit}
           goResultPage={goResultPage} />
         )}
         {isConnected && isSolving && battleMode === "optimization" && (
