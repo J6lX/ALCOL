@@ -288,6 +288,7 @@ public class WebSocket {
             else if (method.equals("ban"))
             {
                 String userId = obj.get("userId").toString();
+                String otherId = obj.get("otherId").toString();
                 String problemNum = obj.get("problemNumber").toString();
 
 
@@ -339,12 +340,12 @@ public class WebSocket {
                         data.put("problem",selectProblemResult);
                         userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
-                        System.out.println(" 다음 유저 : " + userId2Session.get(userId2SessionId.get(userId)));
+                        System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
 
                         synchronized (session) {
 //                    session.sendMessage(message);
                             session.getAsyncRemote().sendText(data.toJSONString());
-                            userId2Session.get(userId2SessionId.get(userId)).getAsyncRemote().sendText(data.toJSONString());
+                            userId2Session.get(userId2SessionId.get(otherId)).getAsyncRemote().sendText(data.toJSONString());
                         }
 
 //                        session.getAsyncRemote().sendText(data.toJSONString());
