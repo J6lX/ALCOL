@@ -62,6 +62,7 @@ public class ProblemServiceImpl implements ProblemService
                 .prob_memory_limit(problemEntity.getProbMemoryLimit())
                 .prob_input_testcase(problemEntity.getProbTestInput())
                 .prob_output_testcase(problemEntity.getProbTestOutput())
+                .prob_tier(problemEntity.getTier().getTier())
                 .build();
     }
 

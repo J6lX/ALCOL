@@ -38,6 +38,7 @@ public class ProblemDto
         private int prob_memory_limit;
         private String prob_input_testcase;
         private String prob_output_testcase;
+        private String prob_tier;
     }
 
     @Getter
