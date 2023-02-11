@@ -14,6 +14,23 @@
 body {
   background-color: #16171b;
   font-family: "NanumSquareNeo";
+  overflow-x: hidden;
+}
+
+/* 아래의 모든 코드는 영역::코드로 사용 */
+.body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.body::-webkit-scrollbar-thumb {
+  height: 5px;
+  background: #000000;
+
+  border-radius: 10px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: rgba(58, 58, 58, 0.4);
 }
 
 .App {
@@ -92,4 +109,14 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ababab;
+}
+::-webkit-scrollbar-track {
+  background-color: #323232;
 }
