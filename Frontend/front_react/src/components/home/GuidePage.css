@@ -242,20 +242,35 @@
   }
 }
 
-/* @keyframes blink-effect {
-  50% {
-    opacity: 0;
-  }
-  100%
+.blinking {
+  -webkit-animation: blink 1.5s ease-in-out infinite alternate;
+  -moz-animation: blink 1.5s ease-in-out infinite alternate;
+  animation: blink 1.5s ease-in-out infinite alternate;
+
+  animation-delay: 3s;
 }
 
-.blink {
-  animation: blink-effect 1s step-end infinite;
-
-  /*
-  animation-name: blink-effect;
-  animation-duration: 1s;
-  animation-iteration-count:infinite;
-  animation-timing-function:step-end;
-  
-} */
+@-webkit-keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

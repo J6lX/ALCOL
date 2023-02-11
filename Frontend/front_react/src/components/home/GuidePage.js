@@ -205,12 +205,12 @@ const Guide2 = () => {
         <Col style={{ display: "flex", justifyContent: "space-around" }}>
           <Col span={6} className="problemBox">
             <div>
-              <img src={banIcon} alt="performanceIcon" className="blink" />
+              <img src={banIcon} alt="performanceIcon" className="blinking" />
             </div>
           </Col>
           <Col span={6} className="problemBox">
             <div>
-              <img src={banIcon} alt="performanceIcon" className="blink" />
+              <img src={banIcon} alt="performanceIcon" className="blinking" />
             </div>
           </Col>
           <Col span={6} className="problemBox"></Col>
@@ -236,30 +236,25 @@ const Guide2 = () => {
 };
 
 const Guide3 = () => {
-  const control = useAnimation();
-  const [ref, inView] = useInView();
+  const guide3Control = useAnimation();
+  const [guide3Ref, guid3View] = useInView();
 
   useEffect(() => {
-    if (inView) {
-      control.start("visible");
+    if (guid3View) {
+      guide3Control.start("visible");
     } else {
-      control.set("hidden");
+      guide3Control.set("hidden");
     }
-  }, [control, inView]);
+  }, [guide3Control, guid3View]);
 
-  const CHILD_VARIANTS_LEFT = {
-    visible: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.9 } },
+  const guide3BoxAnim = {
+    visible: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.7 } },
     hidden: { opacity: 0.5, scale: 0.5, x: 300, y: 300 },
   };
 
-  const TEXT_VARIANTS_LEFT = {
+  const guide3TextAnim = {
     visible: { opacity: 1, scale: 1, x: 0, transition: { duration: 0.5 } },
     hidden: { opacity: 0.5, scale: 0.5, x: 300 },
-  };
-
-  const SUB_TEXT_VARIANTS_LEFT = {
-    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
-    hidden: { opacity: 0.5, scale: 0.5, y: 100 },
   };
 
   return (
@@ -273,29 +268,33 @@ const Guide3 = () => {
         }}>
         <motion.div
           className="consoleBox"
-          ref={ref}
-          variants={CHILD_VARIANTS_LEFT}
+          ref={guide3Ref}
+          variants={guide3BoxAnim}
           initial={"hidden"}
-          animate={control}>
+          animate={guide3Control}>
           <div className="ver"></div>
           <div className="hor"></div>
         </motion.div>
         <br />
-        <motion.div ref={ref} variants={TEXT_VARIANTS_LEFT} initial={"hidden"} animate={control}>
+        <motion.div
+          ref={guide3Ref}
+          variants={guide3TextAnim}
+          initial={"hidden"}
+          animate={guide3Control}>
           <h1
             className="NanumSquare"
             style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
             상대방과 실시간으로 알고리즘 실력을 겨루세요!
           </h1>
-        </motion.div>
-        <motion.div
-          ref={ref}
-          variants={SUB_TEXT_VARIANTS_LEFT}
-          initial={"hidden"}
-          animate={control}>
+
           <h1
             className="NanumSquare right"
-            style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "5vw" }}>
+            style={{
+              fontSize: "1vw",
+              color: "white",
+              marginBottom: "10px",
+              paddingRight: "5vw",
+            }}>
             같이하면 재미가 두 배
           </h1>
         </motion.div>
@@ -315,9 +314,30 @@ const Guide3 = () => {
 };
 
 const Guide4 = () => {
+  const guide4Control = useAnimation();
+  const [guide4ref, guide4inView] = useInView();
+
+  useEffect(() => {
+    if (guide4inView) {
+      guide4Control.start("visible");
+    } else {
+      guide4Control.set("hidden");
+    }
+  }, [guide4Control, guide4inView]);
+
+  const backgroundValue = {
+    visible: { x: 0, transition: { duration: 0.5 } },
+    hidden: { x: 800 },
+  };
+
   return (
     <div id="Guide4" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "16%" }}>
-      <div className="grayBackground">
+      <motion.div
+        ref={guide4ref}
+        variants={backgroundValue}
+        initial={"hidden"}
+        animate={guide4Control}
+        className="grayBackground">
         <Col span={1}></Col>
         <Col
           span={5}
@@ -347,7 +367,7 @@ const Guide4 = () => {
             </h1>
             <div style={{ display: "flex" }}>
               <h1
-                className="NanumSquare"
+                className="flux"
                 style={{ fontSize: "1.7vw", color: "#FAC557", marginBottom: "2vw" }}>
                 랭커
               </h1>
@@ -398,7 +418,7 @@ const Guide4 = () => {
             </h1>
             <div style={{ display: "flex" }}>
               <h1
-                className="NanumSquare"
+                className="flux"
                 style={{ fontSize: "1.7vw", color: "#FAC557", marginBottom: "2vw" }}>
                 높은 티어
               </h1>
@@ -420,7 +440,7 @@ const Guide4 = () => {
             </h1>
           </div>
         </Col>
-      </div>
+      </motion.div>
       <ScrollLink
         className="NanumSquare"
         to="Guide5"
