@@ -419,6 +419,14 @@ public class WebSocket {
                 );
 
                 System.out.println(getSubmitToken.getBody());
+                String submissionId = getSubmitToken.getBody().get("submission_id").toString();
+                url = "https://i8b303.p.ssafy.io:443/api/submission?"+submissionId;
+                ResponseEntity<HashMap> getSubmitResult = restTemplateForHttps.postForEntity(
+                        url,
+                        entity,
+                        HashMap.class
+                );
+                System.out.println(getSubmitResult.getBody());
             }
 
             else if (method.equals("msg"))
