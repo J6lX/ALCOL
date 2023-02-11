@@ -418,8 +418,11 @@ public class WebSocket {
                 );
 
                 System.out.println(getSubmitToken.get("data"));
-                JSONObject getSubmiTokenJson = (JSONObject) parser.parse(getSubmitToken.get("data").toString());
+//                System.out.println(getSubmitToken.get("data").get());
+                Map<String,String> getSubmiTokenJson = (Map<String, String>) getSubmitToken.get("data");
                 System.out.println(getSubmiTokenJson.get("submission_id"));
+//                getSubmiTokenJson.put()
+//                System.out.println(getSubmiTokenJson.get("submission_id"));
                 
 //                JSONParser submitParser = new JSONParser();
 //                JSONObject responseToken = (JSONObject) parser.parse(getSubmitToken.getBody().get("data").toString());
