@@ -15,6 +15,7 @@ import ContinuousBattlePage from "./components/battle/ContinuousBattlePage";
 import ResultPage from "./components/battle/ResultPage";
 import ResultListPage from "./components/battle/ResultListPage";
 import SolvingPage from "./components/battle/SolvingPage";
+import SolvingOptPage from "./components/battle/SolvingOptPage";
 import PracticeSolvingPage from "./components/battle/PracticeSolvingPage";
 import "./App.css";
 import Mypage from "./components/mypage/Mypage";
@@ -105,6 +106,9 @@ function App() {
 
             {/* 배틀 문제 푸는 페이지 */}
             <PrivateRoute path="/solve" exact={true} component={SolvingPage} />
+
+            {/* 최적화전 배틀 문제 푸는 페이지 */}
+            <PrivateRoute path="/solveopt" exact={true} component={SolvingOptPage} />
 
             {/* 배틀 결과 페이지 */}
             <PrivateRoute path="/result" exact={true} component={ResultPage} />
