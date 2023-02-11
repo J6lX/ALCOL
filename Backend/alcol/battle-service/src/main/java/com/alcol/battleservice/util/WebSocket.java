@@ -1,6 +1,11 @@
 package com.alcol.battleservice.util;
 
 import com.alcol.battleservice.config.ServerEndpointConfigurator;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -10,14 +15,20 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.SSLContext;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -33,6 +44,7 @@ public class WebSocket {
     @Autowired
     private RestTemplate restTemplate;
 
+    private RestTemplate restTemplateForHttps = this.makeRestTemplate();
     private ZSetOperations<String, Object> ranking;
     private int userMmr;
     private int otherMmr;
@@ -50,6 +62,9 @@ public class WebSocket {
 
     static Random random = new Random();
     static boolean runCheck = false;
+
+    public WebSocket() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+    }
 
     @OnOpen
     public void handleOpen(Session session) {
@@ -395,7 +410,7 @@ public class WebSocket {
                 bodyData.put("language",submitLanguage);
                 bodyData.put("code",submitCode);
 
-                ResponseEntity<HashMap> getSubmitToken = restTemplate.postForEntity(
+                ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
                         url,
                         bodyData,
                         HashMap.class
@@ -532,6 +547,30 @@ public class WebSocket {
         }
 
         return true;
+    }
+
+    private RestTemplate makeRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+
+        TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+
+        SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+                .loadTrustMaterial(null, acceptingTrustStrategy)
+                .build();
+
+        SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setSSLSocketFactory(csf)
+                .build();
+
+        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+        requestFactory.setHttpClient(httpClient);
+
+        requestFactory.setConnectTimeout(3 * 1000);
+
+        requestFactory.setReadTimeout(3 * 1000);
+
+        return new RestTemplate(requestFactory);
     }
 
 }
