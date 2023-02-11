@@ -103,7 +103,7 @@ public class LogServiceImpl implements LogService
         bodyData.add("prob_no_list", probNoList);
         ResponseEntity<List<LogDto.ProbDetailDto>> probDetailList = restTemplateUtils.sendRequest(
                 bodyData,
-                "http://i8b303.p.ssafy.io:9001/problem-service/getProbDetail",
+                "http://i8b303.p.ssafy.io:9001/problem-service/getProbSubjectAndTier",
                 new ParameterizedTypeReference<List<LogDto.ProbDetailDto>>() {}
         );
 
