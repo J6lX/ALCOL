@@ -38,6 +38,8 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   }
   let LV = problemInfo.prob_tier[problemInfo.prob_tier.length-1];
   console.log(tier, LV)
+
+  // const tierAddress = `../../assets/ALCOL tiers/tier_${tier}_${LV}.png`
   const makeBadge = (category) => {
     const result = [];
 
@@ -123,7 +125,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
               문제 {problemInfo.prob_no}. {problemInfo.prob_name}
             </p>
             <img
-              src={require("../../assets/ALCOL tiers/tier_bronze_4.png")}
+              src={require("../../assets/ALCOL tiers/tier_bronze_0.png")}
               alt="tier"
               style={{ width: "40px" }}
             />

@@ -169,7 +169,7 @@ function SelectLanguage({ setLanguage, back }) {
           gameInfo2={"문제를 풉니다"}
           avgTime={"5"}
           setMode={setLanguage}
-          setText={"java"}
+          setText={"Java"}
         />
         <SelectBox
           gameMode={"파이썬"}
@@ -178,7 +178,7 @@ function SelectLanguage({ setLanguage, back }) {
           gameInfo2={"문제를 풉니다"}
           avgTime={"5"}
           setMode={setLanguage}
-          setText={"python"}
+          setText={"Python3"}
         />
       </div>
     </div>
