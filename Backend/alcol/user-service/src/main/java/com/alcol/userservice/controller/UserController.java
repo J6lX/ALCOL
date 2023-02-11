@@ -134,15 +134,15 @@ public class UserController
     }
 
     /**
-     * @param userId
+     * @param param
      * @return 배틀 로그 리스트를 리턴
      */
     @PostMapping("/getBattleLog")
-    public List<UserDto.UserBattleLogDto> getBattleLog(@RequestParam(value="user_id") String userId)
+    public List<UserDto.UserBattleLogDto> getBattleLog(@RequestBody HashMap<String, Object> param)
             throws URISyntaxException
     {
         log.info("UserController 의 getBattleLog 메소드 실행");
-        return userService.getBattleLog(userId);
+        return userService.getBattleLog(param.get("user_id") + "");
     }
 
     /**
