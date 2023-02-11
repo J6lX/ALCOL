@@ -110,4 +110,16 @@ public class RankingController
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(searchUser, CustomStatusCode.SEARCH_USER_EXIST));
     }
+
+    @GetMapping("/getTop3")
+    public ResponseEntity<RankDto.ResponseDto<?>> requestTop3User()
+    {
+        Map<String, List<RankDto.Top3Ranking>> top3List = rankService.getTop3UserList();
+
+        if(top3List == null)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SEARCH_TOP3_NOT_EXIST));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(top3List, CustomStatusCode.SEARCH_TOP3_EXIST));
+    }
 }

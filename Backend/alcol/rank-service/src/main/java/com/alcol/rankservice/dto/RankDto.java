@@ -55,6 +55,17 @@ public class RankDto
         @Getter
         @Builder
         @AllArgsConstructor
+        @NoArgsConstructor(access = AccessLevel.PROTECTED)
+        static public class Top3Ranking
+        {
+                private int grade;
+                private String nickname;
+                private String storedFileName;
+        }
+
+        @Getter
+        @Builder
+        @AllArgsConstructor
         public static class ResponseDto<T>
         {
                 private final boolean success;

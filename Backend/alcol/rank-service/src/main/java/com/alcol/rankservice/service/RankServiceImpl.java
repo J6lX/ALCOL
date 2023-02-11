@@ -157,16 +157,24 @@ public class RankServiceImpl implements RankService{
 
         return RankingList;
     }
+
     /**
-     * 랭킹 페이지에서 유저 검색하면 유저 정보 넘기는 메소드
+     * 닉네임으로 UserId를 검색하는 메소드
      * */
-    public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
+    public String SearchUserIdUsingNickname(String nickname)
     {
         // 닉네임으로 유저 아이디 요청해서 가져옴 (user-service)
         Map<String, String> map = new HashMap<>();
         map.put("nickname", nickname);
         String url = "http://i8b303.p.ssafy.io:8000/user-service/getUserId";
-        String searchUserId = restTemplate.postForObject(url, map, String.class);
+        return restTemplate.postForObject(url, map, String.class);
+    }
+    /**
+     * 랭킹 페이지에서 유저 검색하면 유저 정보 넘기는 메소드
+     * */
+    public RankDto.Ranking getSearchUserInfo(String battleMode, String nickname)
+    {
+        String searchUserId = SearchUserIdUsingNickname(nickname);
 
         // 해당 닉네임이 존재하지 않을 경우
         if(searchUserId.equals("noneUserId"))
@@ -204,5 +212,61 @@ public class RankServiceImpl implements RankService{
                 .build();
 
         return rank;
+    }
+
+    public Map<String, List<RankDto.Top3Ranking>> getTop3UserList()
+    {
+        ranking = redisTemplate.opsForZSet();
+        Map<String, List<RankDto.Top3Ranking>> modeTop3 = new HashMap<>();
+        List<RankDto.Top3Ranking> speedTop3 = new ArrayList<>();
+        List<RankDto.Top3Ranking> optTop3 = new ArrayList<>();
+
+        // 스피드전 top3의 userId 받아오기
+        Set<Object> speedRankUserIds= ranking.reverseRange("speed", 1,3);
+        // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
+        if(speedRankUserIds.isEmpty()){
+            log.warn("스피드 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            return null;
+        }
+
+        Iterator<Object> iterator = speedRankUserIds.iterator();
+        int grade = 1;
+        while(iterator.hasNext())
+        {
+            String userId = String.valueOf(iterator.next());
+            // userId로 닉네임과 프로필사진 가져오기
+            RankDto.UserData userInfo = getUserData(userId);
+            // 스피드전 TOP3 리스트에 넣기
+            speedTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStoredFileName()));
+        }
+
+        // 스피드전 TOP3 맵으로 엮어서 response할 List에 넣기
+        modeTop3.put("speed", speedTop3);
+
+        // 최적화전 top3의 userId 받아오기
+        Set<Object> optRankUserIds= ranking.reverseRange("optimization", 1,3);
+        // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
+        if(optRankUserIds.isEmpty()){
+            log.warn("최적화 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            return null;
+        }
+
+        iterator = optRankUserIds.iterator();
+        grade = 1;
+        while(iterator.hasNext())
+        {
+            String userId = String.valueOf(iterator.next());
+            // userId로 닉네임과 프로필사진 가져오기
+            RankDto.UserData userInfo = getUserData(userId);
+            // 최적화전 TOP3 리스트에 넣기
+            optTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStoredFileName()));
+        }
+
+        // 최적화전 TOP3 맵으로 엮어서 response할 List에 넣기
+        modeTop3.put("optimization", optTop3);
+
+
+        return modeTop3;
+
     }
 }
