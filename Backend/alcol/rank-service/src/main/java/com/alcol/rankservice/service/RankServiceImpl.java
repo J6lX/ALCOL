@@ -214,34 +214,59 @@ public class RankServiceImpl implements RankService{
         return rank;
     }
 
-    public List<Map> getTop3UserList()
+    public Map<String, List<RankDto.Top3Ranking>> getTop3UserList()
     {
         ranking = redisTemplate.opsForZSet();
-        List<Map> responseList = new ArrayList<>();
         Map<String, List<RankDto.Top3Ranking>> modeTop3 = new HashMap<>();
         List<RankDto.Top3Ranking> speedTop3 = new ArrayList<>();
+        List<RankDto.Top3Ranking> optTop3 = new ArrayList<>();
 
         // 스피드전 top3의 userId 받아오기
         Set<Object> speedRankUserIds= ranking.reverseRange("speed", 1,3);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(speedRankUserIds.isEmpty()){
-            log.warn("speed 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            log.warn("스피드 모드에 대한 랭킹 정보가 존재하지 않습니다.");
             return null;
         }
 
+        Iterator<Object> iterator = speedRankUserIds.iterator();
+        int grade = 1;
+        while(iterator.hasNext())
+        {
+            String userId = String.valueOf(iterator.next());
+            // userId로 닉네임과 프로필사진 가져오기
+            RankDto.UserData userInfo = getUserData(userId);
+            // 스피드전 TOP3 리스트에 넣기
+            speedTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStoredFileName()));
+        }
 
-
-
+        // 스피드전 TOP3 맵으로 엮어서 response할 List에 넣기
+        modeTop3.put("speed", speedTop3);
 
         // 최적화전 top3의 userId 받아오기
         Set<Object> optRankUserIds= ranking.reverseRange("optimization", 1,3);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(optRankUserIds.isEmpty()){
-            log.warn("speed 모드에 대한 랭킹 정보가 존재하지 않습니다.");
+            log.warn("최적화 모드에 대한 랭킹 정보가 존재하지 않습니다.");
             return null;
         }
 
+        iterator = optRankUserIds.iterator();
+        grade = 1;
+        while(iterator.hasNext())
+        {
+            String userId = String.valueOf(iterator.next());
+            // userId로 닉네임과 프로필사진 가져오기
+            RankDto.UserData userInfo = getUserData(userId);
+            // 최적화전 TOP3 리스트에 넣기
+            optTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStoredFileName()));
+        }
 
+        // 최적화전 TOP3 맵으로 엮어서 response할 List에 넣기
+        modeTop3.put("optimization", optTop3);
+
+
+        return modeTop3;
 
     }
 }
