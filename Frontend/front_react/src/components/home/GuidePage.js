@@ -204,10 +204,14 @@ const Guide2 = () => {
         </h1>
         <Col style={{ display: "flex", justifyContent: "space-around" }}>
           <Col span={6} className="problemBox">
-            <img src={banIcon} alt="performanceIcon" />
+            <div>
+              <img src={banIcon} alt="performanceIcon" className="blink" />
+            </div>
           </Col>
           <Col span={6} className="problemBox">
-            <img src={banIcon} alt="performanceIcon" />
+            <div>
+              <img src={banIcon} alt="performanceIcon" className="blink" />
+            </div>
           </Col>
           <Col span={6} className="problemBox"></Col>
         </Col>
@@ -244,39 +248,58 @@ const Guide3 = () => {
   }, [control, inView]);
 
   const CHILD_VARIANTS_LEFT = {
-    visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-    hidden: { opacity: 0.5, y: 200 },
+    visible: { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.9 } },
+    hidden: { opacity: 0.5, scale: 0.5, x: 300, y: 300 },
+  };
+
+  const TEXT_VARIANTS_LEFT = {
+    visible: { opacity: 1, scale: 1, x: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0.5, scale: 0.5, x: 300 },
+  };
+
+  const SUB_TEXT_VARIANTS_LEFT = {
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5 } },
+    hidden: { opacity: 0.5, scale: 0.5, y: 100 },
   };
 
   return (
     <div id="Guide3" className="middle" style={{ backgroundColor: "#16171B", paddingTop: "12%" }}>
-      <motion.div
-        ref={ref}
-        variants={CHILD_VARIANTS_LEFT}
-        initial={"hidden"}
-        animate={control}
+      <div
         style={{
           display: "flex",
           flexDirection: "column",
           textAlign: "center",
           overflow: "hidden",
         }}>
-        <div className="consoleBox">
+        <motion.div
+          className="consoleBox"
+          ref={ref}
+          variants={CHILD_VARIANTS_LEFT}
+          initial={"hidden"}
+          animate={control}>
           <div className="ver"></div>
           <div className="hor"></div>
-        </div>
+        </motion.div>
         <br />
-        <h1
-          className="NanumSquare"
-          style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
-          상대방과 실시간으로 알고리즘 실력을 겨루세요!
-        </h1>
-        <h1
-          className="NanumSquare right"
-          style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "5vw" }}>
-          같이하면 재미가 두 배
-        </h1>
-      </motion.div>
+        <motion.div ref={ref} variants={TEXT_VARIANTS_LEFT} initial={"hidden"} animate={control}>
+          <h1
+            className="NanumSquare"
+            style={{ fontSize: "2.1vw", color: "white", marginBottom: "10px" }}>
+            상대방과 실시간으로 알고리즘 실력을 겨루세요!
+          </h1>
+        </motion.div>
+        <motion.div
+          ref={ref}
+          variants={SUB_TEXT_VARIANTS_LEFT}
+          initial={"hidden"}
+          animate={control}>
+          <h1
+            className="NanumSquare right"
+            style={{ fontSize: "1vw", color: "white", marginBottom: "10px", paddingRight: "5vw" }}>
+            같이하면 재미가 두 배
+          </h1>
+        </motion.div>
+      </div>
       <ScrollLink
         className="NanumSquare"
         to="Guide4"

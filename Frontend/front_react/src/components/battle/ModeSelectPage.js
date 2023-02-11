@@ -28,8 +28,8 @@ function UserInfo({ setMode, setLanguage }) {
     })
     .then(function (response) {
       setNickname(response.data.nickname);
-      setSpeedTier(response.data.speedTier);
-      setOptTier(response.data.optimizationTier);
+      setSpeedTier(response.data.speed_tier);
+      setOptTier(response.data.optimization_tier);
     })
     .catch((error) => {
       let customCode = error.response.data.custom_code;
