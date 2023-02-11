@@ -73,7 +73,7 @@ public class FileHandler
         log.info(imagePath);
 
         userEntity.setOriginalFileName(multipartFile.getOriginalFilename());
-        userEntity.setStoredFileName(newFileName);
+        userEntity.setStoredFileName(imagePath);
         userEntity.setFileSize(multipartFile.getSize());
 
         return true;
