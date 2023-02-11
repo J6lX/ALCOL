@@ -8,6 +8,8 @@ import React, { useState, useEffect } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import axios from "axios";
 
+import bronzeBadge from "../../assets/ALCOL tiers/bigtier_bronze.png";
+import silverBadge from "../../assets/ALCOL tiers/bigtier_silver.png";
 import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
 import { userBattleRec, UserInfoState } from "../../states/LoginState";
 import { useRecoilState } from "recoil";
@@ -52,23 +54,35 @@ const matchCol = [
   },
 ];
 
-// 스피드전 데이터
-const speedData = [
-  {
-    value: 20,
-    color: "#F6CB44",
-    name: "name1",
-  },
-];
+// 뱃지 주기
+function giveBadge(userTier) {
+  if (userTier === "B") {
+    return bronzeBadge;
+  } else if (userTier === "S") {
+    return silverBadge;
+  } else if (userTier === "G") {
+    return goldBadge;
+  }
+}
 
-// 효율성전 데이터
-const efficiencyData = [
-  {
-    value: 30,
-    color: "#F6CB44",
-    name: "name1",
-  },
-];
+// 티어 별 색깔 주기
+function giveColor(userTier) {
+  if (userTier === "B") {
+    return "#ec9e73";
+  } else if (userTier === "S") {
+    return "#e5edf8";
+  } else if (userTier === "G") {
+    return "#ecec63";
+  } else if (userTier === "P") {
+    return "#7aecbf";
+  } else if (userTier === "D") {
+    return "#5edfdf";
+  } else if (userTier === "A") {
+    return "#ec6385";
+  } else {
+    return "white";
+  }
+}
 
 // 날짜 차이 계산 함수
 function CalculateDatediff(startDate) {
@@ -116,6 +130,7 @@ function IsVictory(result) {
   }
 }
 
+// 페이지 렌더링 함수
 function Mypage() {
   // 파라미터로 사용자 ID 가져오기
   const userId = useParams().username;
@@ -182,6 +197,10 @@ function Mypage() {
       });
   }, [setBattleRec, setUserInfo, userId]);
 
+  // 스피드 티어와 효율성 티어를 별도의 변수에 저장
+  const userSPDTier = userInfo.speedTier.slice(0, 1);
+  const userEFFTier = userInfo.efficiencyTier.slice(0, 1);
+
   // 서버에서 전적을 한 번에 불러온 후 10개씩 표시
   const refinedData = battleRec.slice(0, resultCount);
 
@@ -213,6 +232,24 @@ function Mypage() {
       label: "lose",
       value: losecount,
       color: "#FDE14B",
+    },
+  ];
+
+  // 스피드전 데이터
+  const speedData = [
+    {
+      value: 20,
+      color: giveColor(userSPDTier),
+      name: "name1",
+    },
+  ];
+
+  // 효율성전 데이터
+  const efficiencyData = [
+    {
+      value: 30,
+      color: giveColor(userEFFTier),
+      name: "name1",
     },
   ];
 
@@ -312,7 +349,7 @@ function Mypage() {
               </Row>
             </Col>
 
-            {/* 스트릭 및 티어 정보 표시 블록*/}
+            {/* 티어 정보 및 뱃지 표시 블록*/}
             <Col xs={16} lg={18} className="block">
               <Row>
                 {/* 티어 정보 표시 블록 */}
@@ -346,7 +383,7 @@ function Mypage() {
                         labelPosition={0}
                       />
                       <img
-                        src={goldBadge}
+                        src={giveBadge(userSPDTier)}
                         alt="Badge"
                         className="tierBadge"
                         style={{
@@ -396,7 +433,7 @@ function Mypage() {
                         labelPosition={0}
                       />
                       <img
-                        src={goldBadge}
+                        src={giveBadge(userEFFTier)}
                         alt="Badge"
                         className="tierBadge"
                         style={{
