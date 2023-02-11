@@ -1,4 +1,6 @@
 .contents_background {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   background: url(/src/assets/background_login.png);
   background-size: cover;
