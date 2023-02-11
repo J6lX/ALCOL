@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -405,14 +406,15 @@ public class WebSocket {
 //                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
                 HttpHeaders header = new HttpHeaders();
                 header.add("Cookie","sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
+
                 JSONObject bodyData = new JSONObject();
                 bodyData.put("problem_id", submitProblemNum);
                 bodyData.put("language",submitLanguage);
                 bodyData.put("code",submitCode);
-
+                HttpEntity<Map<String, Object>> entity = new HttpEntity<>(bodyData, header);
                 ResponseEntity<HashMap> getSubmitToken = restTemplateForHttps.postForEntity(
                         url,
-                        bodyData,
+                        entity,
                         HashMap.class
                 );
 
