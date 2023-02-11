@@ -8,29 +8,29 @@ import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 // import { oneDark } from "@codemirror/theme-one-dark";
 import { darcula } from "@uiw/codemirror-theme-darcula";
-import "./SolvingPage.css";
+import "./SolvingOptPage.css";
 import { Button, message, Modal } from "antd";
-import { selectedMode, selectedLanguage } from "../../states/atoms";
+import { resultListResultInfo } from "../../states/atoms";
 
 let allheight = window.innerHeight;
 
 const isClickState = atom({
-  key: "isClickState",
+  key: "isClickState2",
   default: false,
 });
 
 const solvingHeightState = atom({
-  key: "solvingHeightState",
+  key: "solvingHeightState2",
   default: allheight * 0.46,
 });
 
 const consoleHeightState = atom({
-  key: "consoleHeightState",
+  key: "consoleHeightState2",
   default: allheight * 0.35,
 });
 
 const submitMessageState = atom({
-  key: "submitMessageState",
+  key: "submitMessageState2",
   default: "",
 });
 
@@ -52,17 +52,11 @@ const ResultMessage = () => {
   );
 };
 
-const BattleNav = (userInfo) => {
-  const battleModeInfo = useRecoilState(selectedMode);
-  console.log(battleModeInfo)
-  let mode = "unknown"
-  if (battleModeInfo === "speed") {
-    mode = "스피드"
-  } else if (battleModeInfo === "optimization") {
-    mode = "최적화"
-  }
+const BattleNav = () => {
+  // let now = new Date();
+  // let hours = now.getHours();
+  // let minutes = now.getMinutes();
 
-  console.log("userInfosolving", userInfo)
   return (
     <div className="BattleNav">
       <img src={Logo} alt="alcol_logo_black" style={{ height: "5vh", marginLeft: "20px" }} />
@@ -70,16 +64,16 @@ const BattleNav = (userInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "black", fontSize: "2.5vh", marginRight: "3vw" }}>
-          {mode}
+          배틀 유형
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-          {userInfo.userInfo.other.nick}
+          소주 세 병
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
           Vs.
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-        {userInfo.userInfo.user.nick}
+          맥주 5000cc
         </p>
         <ResultMessage className="MessageToast" />
       </div>
@@ -90,15 +84,14 @@ const BattleNav = (userInfo) => {
   );
 };
 
-const Problem = (problemInfo) => {
-  const problem = problemInfo.problemInfo
+const Problem = () => {
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2.5vh", fontWeight: "bold", padding: "2%" }}>
-          {problem.prob_name}
+          이상한 술집
         </p>
       </div>
       <div
@@ -116,7 +109,16 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_content}
+          프로그래밍 대회 전날, 은상과 친구들은 이상한 술집에 모였다. 이 술집에서 막걸리를 시키면
+          주전자의 용량은 똑같았으나 안에 들어 있는 막걸리 용량은 랜덤이다. 즉 한 번 주문에 막걸리
+          용량이 802ml 이기도 1002ml가 나오기도 한다. 은상은 막걸리 N 주전자를 주문하고, 자신을
+          포함한 친구들 K명에게 막걸리를 똑같은 양으로 나눠주려고 한다. 그런데 은상과 친구들은 다른
+          주전자의 막걸리가 섞이는 것이 싫어서, 분배 후 주전자에 막걸리가 조금 남아 있다면 그냥
+          막걸리를 버리기로 한다. (즉, 한 번 주문한 막걸리에 남은 것을 모아서 친구들에게 다시 주는
+          경우는 없다. 예를 들어 5명이 3 주전자를 주문하여 1002, 802, 705 ml의 막걸리가 각 주전자에
+          담겨져 나왔고, 이것을 401ml로 동등하게 나눴을 경우 각각 주전자에서 200ml, 0m, 304ml 만큼은
+          버린다.) 이럴 때 K명에게 최대한의 많은 양의 막걸리를 분배할 수 있는 용량 ml는 무엇인지
+          출력해주세요.
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -127,12 +129,10 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_input_content}
-        </p>
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          ex. {problem.prob_input_testcase}
+          첫째 줄에는 은상이가 주문한 막걸리 주전자의 개수 N, 그리고 은상이를 포함한 친구들의 수 K가
+          주어진다. 둘째 줄부터 N개의 줄에 차례로 주전자의 용량이 주어진다. N은 10000이하의
+          정수이고, K는 1,000,000이하의 정수이다. 막걸리의 용량은 2의 23 빼기 1 보다 작거나 같은
+          자연수 또는 0이다. 단, 항상 N ≤ K 이다. 즉, 주전자의 개수가 사람 수보다 많을 수는 없다.
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -143,12 +143,7 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_output_content}
-        </p>
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          ex. {problem.prob_output_testcase}
+          첫째 줄에 K명에게 나눠줄 수 있는 최대의 막걸리 용량 ml 를 출력한다.
         </p>
       </div>
     </div>
@@ -161,7 +156,6 @@ const CodingPlace = ({ submitcode }) => {
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
   const [code, setCode] = useState("");
   const setSubmitMessage = useSetRecoilState(submitMessageState);
-  const languageMode = useRecoilState(selectedLanguage);
   const problem_number = 1;
 
   const onChange = (newValue) => {
@@ -206,26 +200,26 @@ const CodingPlace = ({ submitcode }) => {
     } else {
       let codedata = "";
       // 내일 물어보기: tab이 spacebar로 이루어져 있는 것 같은데 탭도 꼭 개행문자가 필요한지. 현재 가능하긴 함.
-      for (let i=0; i<code.length; i++) {
+      for (let i = 0; i < code.length; i++) {
         if (code[i] === "\n") {
-          codedata += "\n"
-          console.log("enter", code[i])
-          for (let j=1; j<code.length-i-1; j+=2) {
-            if (code[i+j] === " " && code[i+j+1] === " ") {
-              codedata += "\t"
-              console.log("tab", code[i+j])
+          codedata += "\n";
+          console.log("enter", code[i]);
+          for (let j = 1; j < code.length - i - 1; j += 2) {
+            if (code[i + j] === " " && code[i + j + 1] === " ") {
+              codedata += "\t";
+              console.log("tab", code[i + j]);
             } else {
-              i += j-1
-              break
+              i += j - 1;
+              break;
             }
           }
         } else {
-          console.log(code[i])
-          codedata += code[i]
+          console.log(code[i]);
+          codedata += code[i];
         }
       }
-      console.log(codedata)
-      console.log(JSON.stringify({code: codedata}));
+      console.log(codedata);
+      console.log(JSON.stringify({ code: codedata }));
       const solving_data = {
         problem_id: problem_number,
         language: "python3",
@@ -265,13 +259,37 @@ const CodingPlace = ({ submitcode }) => {
     setIsModalOpen(false);
   };
 
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const showResultModal = () => {
+    setIsResultModalOpen(true);
+  };
+  const handleResultOk = () => {
+    setIsResultModalOpen(false);
+  };
+  const handleResultCancel = () => {
+    setIsResultModalOpen(false);
+  };
+
+  const resultList = useRecoilValue(resultListResultInfo);
+  console.log("뭐가 들어있냐면", resultList);
+  const result = [];
+  console.log(result);
+  for (let i = resultList.length - 1; i >= 0; i--) {
+    result.push(
+      <p>
+        {resultList[i].time} || 코드길이:{resultList[i].code_length} 메모리:{resultList[i].memory}
+      </p>
+    );
+  }
+  console.log(result);
+
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
       <div style={{ width: "69vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2vh", height: "100%", padding: "2%" }}>
-          코딩할 언어: {languageMode}
+          코딩할 언어: python
         </p>
       </div>
       <div
@@ -336,11 +354,21 @@ const CodingPlace = ({ submitcode }) => {
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showModal}>
               항복
             </Button>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showResultModal}>
+              제출 결과
+            </Button>
           </div>
         </div>
       </div>
       <Modal title="항복" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <p className="NanumSquare">정말로 항복하시겠습니까?</p>
+      </Modal>
+      <Modal
+        title="제출 결과 확인"
+        open={isResultModalOpen}
+        onOk={handleResultOk}
+        onCancel={handleResultCancel}>
+        {result}
       </Modal>
     </div>
   );
@@ -367,7 +395,7 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
+const SolvingPage = ({ goResultPage }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -384,7 +412,7 @@ const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
     <div id="allconsole">
       <RecoilRoot>
         <div>
-          <BattleNav userInfo={battleuserinfo} />
+          <BattleNav />
           <div
             style={{
               display: "flex",
@@ -393,7 +421,7 @@ const SolvingPage = ({ problemInfo, battleuserinfo, goResultPage }) => {
               border: "0.1px solid gray",
             }}>
             <div style={{ width: "30vw", height: "92vh", border: "0.1px solid gray" }}>
-              <Problem problemInfo={problemInfo} />
+              <Problem />
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>

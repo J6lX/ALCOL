@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import axios from "axios";
 import ReadyPage from "./ReadyPage";
 import BanPage from "./BanPage";
 import WaitOtherBanPage from "./WaitOtherBanPage";
@@ -13,7 +14,7 @@ let submitResult = "";
 // const serverAddress = "localhost:3000";
 const serverAddress = "i8b303.p.ssafy.io:9002";
 const websocketAddress = "ws://" + serverAddress + "/websocket";
-let socket = null;
+let socket = null
 
 const ContinuousBattlePage = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -24,109 +25,183 @@ const ContinuousBattlePage = () => {
   const [isSolved, setIsSolved] = useState(false);
   const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
+  const [problemInfo, setProblemInfo] = useState([]);
   const idInfo = useRecoilState(matchingPlayerInfo);
   const battleModeInfo = useRecoilState(selectedMode);
   const languageMode = useRecoilState(selectedLanguage);
-  console.log(battleModeInfo, languageMode);
+  console.log(languageMode);
+  const [nickname, setNickname] = useState("a");
+  const [speedTier, setSpeedTier] = useState("a");
+  const [optTier, setOptTier] = useState("a");
+  const [othernickname, setOtherNickname] = useState("b");
+  const [otherspeedTier, setOtherSpeedTier] = useState("b");
+  const [otheroptTier, setOtherOptTier] = useState("b");
+  useEffect(() => {}, [nickname, speedTier, optTier]);
+  useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
 
   
+
   const messageType = "connect";
   const userId = idInfo[0].userId;
   const otherId = idInfo[0].otherId;
+  const hostCheck = idInfo[0].hostCheck;
   const battleMode = battleModeInfo[0];
-  console.log(messageType, userId, otherId, battleMode);
-
-  socket = new WebSocket(websocketAddress);
-  console.log("socket", socket);
-
-  socket.onopen = () =>
-    setTimeout(
-      socket.send(
-        JSON.stringify({
-          messageType: messageType,
-          userId: userId,
-          otherId: otherId,
-          battleMode: battleMode,
-        })
-      ),
-      2000
-    );
+  console.log(messageType, userId, otherId, hostCheck, battleMode);
 
   useEffect(() => {
-    return () => {
-      console.log("배틀을 나가서 소켓 연결 끊김");
-      socket.onclose();
-    };
-  }, []);
-
-  socket.onmessage = (servermessage) => {
-    const data = JSON.parse(servermessage.data);
-    console.log(data);
-    if (data.messageType === "connect_success") {
-      console.log("연결 완료!");
-      console.log(data);
-      socket.send(JSON.stringify({
-        messageType: "getProblem",
-        userId: userId,
-        otherId: otherId,
+    axios
+      .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+        user_id: userId,
       })
-      )
-    } else if (data.messageType === "ban_success") {
-      console.log("문제 선택 완료!");
-      setTimeout(() => {
-        setIsReady(false);
-        setIsBanWait(true);
-      }, 5000);
-    } else if (data.messageType === "select_success") {
-      setTimeout(() => {
-        setIsBanWait(false);
-        setIsSelected(true);
-        setTimeout(() => {
-          setIsSelected(false);
-          setIsSolving(true);
-        }, 15000);
-      }, 5000);
-    } else if (data.messageType === "submit_success") {
-      submitResult = data.submitResult;
-      console.log(submitResult);
-      if (submitResult === "success") {
-        setIsSolved(true);
-      }
-    } else if (data.messageType === "close") {
-      socket.onclose();
-    } else if (data.messageType === "sendProblem") {
-      console.log("문제 세 개를 받아왔습니다.", data)
-      setProblems(data.problems);
-      setTimeout(() => {
-        setIsConnected(true);
-        setIsReady(true);
-      }, 3000);
-    } else {
-      console.log("뭐가 오긴 왔는데...");
-      console.log(data);
-    }
-  };
+      .then(function (response) {
+        console.log("내 정보 가져오기 axios 날림")
+        setNickname(response.data.nickname);
+        setSpeedTier(response.data.speedTier);
+        setOptTier(response.data.optimizationTier);
+      })
+      .catch((error) => {
+        let customCode = error.response.data.custom_code;
+        if (
+          customCode === "100" ||
+          customCode === "101" ||
+          customCode === "102" ||
+          customCode === "103" ||
+          customCode === "104" ||
+          customCode === "105"
+        ) {
+          // 로그인 실패 시 표시하는 내용
+          alert(error.response.data.description);
+        }
+      });
+    axios
+      .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+        user_id: otherId,
+      })
+      .then(function (response) {
+        console.log("상대 정보 가져오기 axios 날림")
+        setOtherNickname(response.data.nickname);
+        setOtherSpeedTier(response.data.speedTier);
+        setOtherOptTier(response.data.optimizationTier);
+      })
+      .catch((error) => {
+        let customCode = error.response.data.custom_code;
+        if (
+          customCode === "100" ||
+          customCode === "101" ||
+          customCode === "102" ||
+          customCode === "103" ||
+          customCode === "104" ||
+          customCode === "105"
+        ) {
+          // 로그인 실패 시 표시하는 내용
+          alert(error.response.data.description);
+        }
+      });
+  }, [userId, otherId]);
 
-  socket.onclose = (message) => {
-    console.log("closed!", message);
-  };
-  socket.onerror = (message) => {
-    console.log("error", message);
-  };
+  if (isConnected === false && nickname !== "a" && othernickname !== "b") {
+    socket = new WebSocket(websocketAddress);
+    console.log("socket", socket);
+
+    socket.onopen = () => {
+      setTimeout(() => {
+        console.log("여길 봐", userId, otherId, hostCheck, battleMode)
+        socket.send(
+          JSON.stringify({
+            messageType: messageType,
+            userId: userId,
+            otherId: otherId,
+            hostCheck: hostCheck,
+            battleMode: battleMode,
+          })
+        )
+      }, 500)
+    }
+
+    socket.onmessage = (servermessage) => {
+      console.log(servermessage);
+      const data = JSON.parse(servermessage.data);
+      if (data.messageType === "connect_success") {
+        console.log("연결 완료!");
+        console.log(data);
+          socket.send(
+            JSON.stringify({
+              messageType: "getProblem",
+              userId: userId,
+              otherId: otherId,
+            })
+          );
+        setIsConnected(true);
+      } else if (data.messageType === "ban_success") {
+        console.log("문제 선택 완료!");
+        setTimeout(()=>{
+        setIsReady(false);
+        setIsBanWait(true);}, 500);
+      } else if (data.messageType === "select_success") {
+        console.log("이게 날라왔어", data.problem)
+        setTimeout(() => {
+          setProblemInfo(data.problem);
+          setTimeout(() => {
+            setIsReady(false);
+            setIsBanWait(false);
+            setIsSelected(true);
+            setTimeout(() => {
+              setIsSelected(false);
+              setIsSolving(true);}, 10000)
+          }, 1000);
+        }, 1000);
+      } else if (data.messageType === "submit_success") {
+        submitResult = data.submitResult;
+        console.log(submitResult);
+        if (submitResult === "success") {
+          setIsSolved(true);
+        }
+      } else if (data.messageType === "closed") {
+        socket.onclose();
+      } else if (data.messageType === "sendProblem") {
+        console.log(data.problems);
+        const problems = data.problems;
+        setProblems(problems);
+        setTimeout(() => {
+          setIsConnected(true);
+          setIsReady(true);
+        }, 3000);
+      } else {
+        console.log("뭐가 오긴 왔는데...");
+        console.log(data);
+      }
+    };
+  
+    socket.onclose = (message) => {
+      console.log("closed!", message);
+    };
+    socket.onerror = (message) => {
+      console.log("error", message);
+    };
+  }
+
+  
+
+
+  // useEffect(() => {
+  //   return () => {
+  //     console.log("배틀을 나가서 소켓 연결 끊김");
+  //     socket.onclose();
+  //   };
+  // }, []);
+
+  
 
   const changeBanProblem = (data) => {
     setProblemNumber(data);
-    // socket.send(JSON.stringify({ method: "ban", data: data }));
-    setIsReady(false);
-    setIsBanWait(true);
-    setTimeout(() => {
-      setIsBanWait(false);
-      setIsSelected(true);
-      setTimeout(() => {
-        setIsSelected(false);
-        setIsSolving(true);
-      }, 10000);
-    }, 10000);
+    socket.send(
+      JSON.stringify({
+        messageType: "ban",
+        userId: userId,
+        otherId: otherId,
+        problemNumber: data,
+      })
+    );
   };
 
   const goResultPage = () => {
@@ -135,39 +210,44 @@ const ContinuousBattlePage = () => {
     // socket.onclose();
   };
 
-  //확인용 함수들
-  const changeConnectTrue = () => {
-    setTimeout(() => {
-      setIsConnected(true);
-      setIsReady(true);
-    }, 5000);
-  };
-  // const changeSelectedTrue = () => {
-  //   setTimeout(() => {
-  //     setIsSelected(true);
-  //     setIsReady(false);
-  //   }, 5000);
-  // };
-  // const changeSolvedTrue = () => {
-  //   setTimeout(() => {
-  //     setIsSolved(true);
-  //     setIsSelected(false);
-  //   }, 5000);
-  // };
   return (
     <div>
       <div>
-        <button onClick={changeConnectTrue}>connect</button>
-        {/* <button onClick={changeSelectedTrue}>banselect</button>
-        <button>submit_resultfail</button>
-        <button onClick={changeSolvedTrue}>submit_resultsuccess</button> */}
         {!isConnected && <ReadyPage />}
-        {isConnected && isReady && <BanPage props={problems} changeBanProblem={changeBanProblem} />}
+        {isConnected && isReady && (
+          <BanPage
+            props={problems}
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }}
+            changeBanProblem={changeBanProblem}
+          />
+        )}
         {isConnected && isBanWait && <WaitOtherBanPage />}
         {isConnected && isSelected && (
-          <SelectedProblemPage problemNumber={problemNumber} problems={problems} />
+          <SelectedProblemPage
+            problemNumber={problemNumber}
+            problems={problems}
+            problemInfo={problemInfo}
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }}
+          />
         )}
-        {isConnected && isSolving && <SolvingPage goResultPage={goResultPage} />}
+        {isConnected && isSolving && battleMode === "speed" && (
+          <SolvingPage 
+          problemInfo={problemInfo} 
+          battleuserinfo={{
+            user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+            other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+          }} 
+          goResultPage={goResultPage} />
+        )}
+        {isConnected && isSolving && battleMode === "optimization" && (
+          <SolvingPage goResultPage={goResultPage} />
+        )}
         {isSolved && <ResultPage />}
       </div>
     </div>
