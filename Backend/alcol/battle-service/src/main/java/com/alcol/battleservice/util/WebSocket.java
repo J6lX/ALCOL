@@ -442,7 +442,6 @@ public class WebSocket {
 //            User user = sessionId2Obj.get(sessionId);
             String userId = session2UserId.get(session);
             session2UserId.remove(session);
-            se
             userId2SessionId.remove(userId);
             userId2Session.remove(userId);
 
