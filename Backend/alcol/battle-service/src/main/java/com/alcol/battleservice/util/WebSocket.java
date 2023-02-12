@@ -24,6 +24,7 @@ import javax.net.ssl.SSLContext;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
@@ -130,7 +131,7 @@ public class WebSocket {
 
 
 
-                User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleMode(battleMode).build();
+                User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleLog(new ArrayList<>()).battleMode(battleMode).build();
                 if(hostCheck.equals("false"))
                 {
                     while(true)
