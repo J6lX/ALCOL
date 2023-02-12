@@ -101,7 +101,16 @@ public class BattleResultServiceImpl implements BattleResultService
         Map<String, String> map = new HashMap<>();
         map.put("user_id", userId);
         String url = "http://i8b303.p.ssafy.io:8000/user-service/getUserInfo";
-        RankDto.UserData userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
+        RankDto.UserData userData = null;
+        try
+        {
+            userData = restTemplate.postForObject(url, map, RankDto.UserData.class);
+        }
+        catch (Exception e)
+        {
+            log.error("유저 데이터를 user-service에서 받아오는 과정에서 오류 발생");
+            return false;
+        }
 
         try {
             // 유저 정보 redis update
