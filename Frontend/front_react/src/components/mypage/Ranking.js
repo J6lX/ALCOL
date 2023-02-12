@@ -1,16 +1,23 @@
-import { Button, Row, Col, Input, Table, ConfigProvider, theme, Pagination } from "antd";
+import { Button, Row, Col, Input, Table, ConfigProvider, theme, Pagination, Form } from "antd";
 import "./Ranking.css";
 import rankingHeader from "../../assets/ranking_header.png";
 import qs from "query-string";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
+import {
+  CurrentUserRankingState,
+  RankerListState,
+  SearchResultState,
+} from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
   {
     dataIndex: "grade",
-    key: "grade",
+    key: "id",
     title: "순위",
     align: "center",
     hidden: true,
@@ -25,9 +32,9 @@ const rankingLabel = [
   {
     dataIndex: "profile_img",
     title: "Image",
-    render: () => (
+    render: (profile_img) => (
       <img
-        src={`profile_img`}
+        src={profile_img}
         alt="profile"
         style={{
           width: "32px",
@@ -66,9 +73,6 @@ const rankingLabel = [
   },
 ];
 
-// 랭커 정보 기록
-let rankerData = [];
-
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
@@ -79,6 +83,15 @@ function Ranking() {
   const [speedColor, setSpeedColor] = useState({ color: "white" });
   const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
   const [levelColor, setLevelColor] = useState({ color: "white" });
+
+  // 검색어 입력 관리
+  const [search, setSearch] = useState("");
+
+  // 검색어 입력 시 value(search)가 실시간으로 변경되도록 적용
+  const inputChange = (event) => {
+    event.preventDefault();
+    setSearch(event.target.value);
+  };
 
   // 탭 스타일 변경
   useEffect(() => {
@@ -97,7 +110,95 @@ function Ranking() {
     }
   }, [modeName]);
 
-  // 파라미터를 바탕으로 서버에 랭커 정보 요청
+  // 사용자 정보 기록
+  const userId = useRecoilValue(LoginState);
+  const accessTokenData = useRecoilValue(AccessTokenInfo);
+  const refreshTokenData = useRecoilValue(RefreshTokenInfo);
+
+  const [userData, setUserData] = useRecoilState(CurrentUserRankingState);
+
+  // 사용자(본인) 정보: 사용자의 랭킹 정보 요청
+  useEffect(() => {
+    const userAuth = {
+      access_token: accessTokenData,
+      refresh_token: refreshTokenData,
+      user_id: userId,
+    };
+    // axios 요청(body: 모드, header: 사용자 인증 정보)
+    axios
+      .post(
+        `http://i8b303.p.ssafy.io:8000/rank-service/myRank`,
+        { body: { battle_mode: modeName } },
+        {
+          headers: userAuth,
+        }
+      )
+      .then((response) => {
+        console.log(response);
+        setUserData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [accessTokenData, refreshTokenData, userId, modeName, setUserData]);
+
+  // 사용자 기록 표시
+  function UserDisplay() {
+    // recoil에서 사용자 정보 가져오기
+    const userId = useRecoilValue(LoginState);
+
+    // 사용자가 로그인하지 않은 경우
+    if (!userId) {
+      return (
+        <Row align="center" style={{ padding: "4px" }}>
+          <Col span={24} justify="center">
+            <span>정보를 보려면 로그인하세요.</span>
+          </Col>
+        </Row>
+      );
+      // 로그인했지만 정보가 없는 경우
+    } else if (!userData) {
+      return (
+        <Row align="center" style={{ padding: "4px" }}>
+          <Col span={24} justify="center">
+            <span>사용자 정보를 불러올 수 없습니다.</span>
+          </Col>
+        </Row>
+      );
+      // 로그인 한 상태에서 정보를 정상적으로 불러온 경우
+    } else {
+      return (
+        <Row align="center" style={{ padding: "4px" }}>
+          <Col span={3}>
+            <p>MyRank</p>
+          </Col>
+          <Col span={1}>
+            <p>MyImg</p>
+          </Col>
+          <Col span={4}>
+            <p>MyName</p>
+          </Col>
+          <Col span={3}>
+            <p>MyLevel</p>
+          </Col>
+          <Col span={4}>
+            <p>MyMMR</p>
+          </Col>
+          <Col span={4}>
+            <p>MyTier</p>
+          </Col>
+          <Col span={3}>
+            <p>MyRecord</p>
+          </Col>
+        </Row>
+      );
+    }
+  }
+
+  // 랭커 정보를 recoil에 저장
+  const [rankerList, setRankerList] = useRecoilState(RankerListState);
+
+  // 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
   // axios 통신 진행
   axios
     .get(
@@ -105,134 +206,158 @@ function Ranking() {
     )
     // 응답 성공 시
     .then(function (response) {
-      console.log(response.data);
       // 랭킹 정보가 존재하는 경우
       if (response.data.customCode === "002") {
         // (대충 데이터 저장 후 화면에 표시해준다는 내용)
         const originData = response.data.bodyData;
-        rankerData = originData.map((data) => {
-          console.log(data);
+        const rankerData = originData.map((data) => {
+          // data.record(전적) 데이터가 균일하지 않는 현상 발생
           return {
             grade: data.grade,
             nickname: data.nickname,
-            profile_img: data.profile_pic,
-            mmr: data.MMR,
+            profile_img: data.stored_file_name,
+            mmr: data.mmr,
             level: data.level,
             tier: data.tier,
-            record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+            // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
           };
         });
-
-        console.log(rankerData);
+        setRankerList(rankerData);
       } else if (response.data.customCode === "003") {
         // 랭킹 정보가 없는 경우
         alert("등록된 정보가 없습니다.");
       }
-
-      // // 화면 새로고침(선택 사항)
-      // window.location.reload();
     })
     //응답 실패 시
     .catch((error) => {
       console.log("응답 실패 : " + error);
     });
 
-  // const dummyData = [
-  //   {
-  //     grade: 1,
-  //     nickname: "seoyoung",
-  //     profile_pic: "",
-  //     level: 25,
-  //     MMR: 153,
-  //     tier: "gold",
-  //     record: {
-  //       win: 22,
-  //       lose: 17,
-  //       winningRate: 69,
-  //     },
-  //   },
-  //   {
-  //     grade: 2,
-  //     nickname: "seyoung",
-  //     profile_pic: "",
-  //     level: 39,
-  //     MMR: 150,
-  //     tier: "gold",
-  //     record: {
-  //       win: 22,
-  //       lose: 17,
-  //       winningRate: 69,
-  //     },
-  //   },
-  // ];
-
-  // // map 구현용 테스트 코드(성공 시 삭제)
-  // const extractedData = dummyData.map((data) => {
-  //   return {
-  //     grade: data.grade,
-  //     nickname: data.nickname,
-  //     profile_img: data.profile_pic,
-  //     mmr: data.MMR,
-  //     level: data.level,
-  //     tier: data.tier,
-  //     record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-  //   };
-  // });
-  // console.log(extractedData);
-
-  // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
+  // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
     console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
     setCurrent(page);
+    axios
+      .post(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`)
+      // 응답 성공 시
+      .then(function (response) {
+        // console.log(response.data);
+        // 랭킹 정보가 존재하는 경우
+        if (response.data.customCode === "002") {
+          // (대충 데이터 저장 후 화면에 표시해준다는 내용)
+          const originData = response.data.bodyData;
+          const rankerData = originData
+            .map((data) => {
+              console.log(data);
+              return {
+                grade: data.grade,
+                nickname: data.nickname,
+                profile_img: data.profile_pic,
+                mmr: data.MMR,
+                level: data.level,
+                tier: data.tier,
+                record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+              };
+            })
+            //응답 실패 시
+            .catch((error) => {
+              console.log("응답 실패 : " + error);
+            });
+          console.log(rankerData);
+          return rankerData;
+        } else if (response.data.customCode === "003") {
+          // 랭킹 정보가 없는 경우
+          alert("등록된 정보가 없습니다.");
+        }
+      });
     window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
 
+  // 검색 결과를 recoil에 저장
+  const [result, setResult] = useRecoilState(SearchResultState);
+
+  // 검색 정보: 유저 검색 시
+  const onSearch = (values) => {
+    const userNickname = values.keyword;
+    // axios 통신 진행
+    axios
+      .get(
+        `http://i8b303.p.ssafy.io:8000/rank-service/searchUser?battle_mode=${modeName}&nickname=${userNickname}`
+      )
+      // 응답 성공 시
+      .then(function (response) {
+        console.log(response);
+        // const dataBody = response.dataBody
+        if (response.bodyData.customCode === "004") {
+          const searchResponse = {
+            grade: response.bodyData.grade,
+            nickname: response.bodyData.nickname,
+            profile_img: response.bodyData.profile_pic,
+            mmr: response.bodyData.MMR,
+            level: response.bodyData.level,
+            tier: response.bodyData.tier,
+            record: `${response.bodyData.record.win}승 ${response.bodyData.record.lose}패(${response.bodyData.record.winningRate}%)`,
+          };
+          setResult(searchResponse);
+          setRankerList(result);
+        }
+        // 검색 결과가 없는 경우(005)
+        else {
+          alert("검색 결과가 없습니다!");
+        }
+      })
+      //응답 실패 시
+      .catch((error) => {
+        console.log("응답 실패 : " + error);
+      });
+  };
+
   return (
-    <div>
+    <div
+      style={{
+        paddingTop: "70px",
+      }}>
       {/* 페이지 제목(이미지 위에 띄우기) */}
-      <img
-        src={rankingHeader}
-        alt="headerImage"
-        className="headerImg"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-        }}></img>
-      <Row justify="center">
-        <Col align="middle" span={16} className="title">
-          <h1>랭킹</h1>
-        </Col>
-      </Row>
-      <Row justify="space-around" className="bodyblock">
+      <img src={rankingHeader} alt="headerImage" className="headerImg"></img>
+      <h1 className="rankTitle">랭킹</h1>
+      <Row justify="space-around" className="bodyBlock">
         <Col span={16}>
           {/* 검색 상자 */}
-          <Row justify="end">
-            <Col xs={0} md={8} lg={5}>
-              <Input
-                placeholder="닉네임으로 검색"
-                allowClear
-                size="middle"
+          <Form onFinish={onSearch}>
+            <Row justify="end">
+              <Col xs={8} md={6} lg={5}>
+                <Form.Item name="keyword">
+                  <Input
+                    placeholder="닉네임으로 검색"
+                    allowClear
+                    onChange={inputChange}
+                    size="middle"
+                    value={search}
+                    style={{
+                      margin: "5px",
+                    }}
+                  />
+                </Form.Item>
+              </Col>
+              <Col
+                xs={0}
+                md={3}
                 style={{
-                  margin: "5px",
-                }}
-              />
-            </Col>
-            <Col
-              xs={0}
-              md={3}
-              style={{
-                marginLeft: "5px",
-                padding: "5px",
-              }}>
-              <Button>검색</Button>
-            </Col>
-          </Row>
+                  marginLeft: "5px",
+                  padding: "5px",
+                }}>
+                <Form.Item>
+                  <Button htmlType="submit">검색</Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
 
           {/* 랭킹 표시 블록 */}
           <Row>
             <Col span={24}>
-              <Row className="block" justify="center" align="center">
+              <Row className="rankerBlock" justify="center" align="center">
                 <Col span={24}>
                   {/* 토글 버튼 목록 */}
                   <Row className="select">
@@ -257,29 +382,7 @@ function Ranking() {
                   {/* 내 랭킹 표시 */}
                   <Row align="center" style={{ paddingTop: "40px" }}>
                     <Col justify="center" align="center" className="profileBox">
-                      <Row align="center" style={{ padding: "4px" }}>
-                        <Col span={3}>
-                          <p>MyRank</p>
-                        </Col>
-                        <Col span={1}>
-                          <p>MyImg</p>
-                        </Col>
-                        <Col span={4}>
-                          <p>MyName</p>
-                        </Col>
-                        <Col span={3}>
-                          <p>MyLevel</p>
-                        </Col>
-                        <Col span={4}>
-                          <p>MyMMR</p>
-                        </Col>
-                        <Col span={4}>
-                          <p>MyTier</p>
-                        </Col>
-                        <Col span={3}>
-                          <p>MyRecord</p>
-                        </Col>
-                      </Row>
+                      <UserDisplay />
                     </Col>
                   </Row>
 
@@ -305,7 +408,7 @@ function Ranking() {
                           style={{
                             padding: "3px",
                           }}
-                          dataSource={rankerData}
+                          dataSource={rankerList}
                           columns={rankingLabel}
                           showHeader={false}
                           pagination={false}

@@ -5,6 +5,7 @@ import { atom } from "recoil";
 const { persistAtom } = recoilPersist();
 
 // 로그인 여부 저장
+// LoginState에는 사용자 ID(닉네임 X)를 저장
 export const LoginState = atom({
   key: "LoginState",
   default: "",
@@ -23,4 +24,30 @@ export const RefreshTokenInfo = atom({
   key: "RefreshToken",
   default: "",
   effects_UNSTABLE: [persistAtom],
+});
+
+// 유저 정보를 리스트로 저장
+export const UserInfoState = atom({
+  key: "UserInfoState",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
+});
+
+// 유저 전적을 리스트로 저장
+export const userBattleRec = atom({
+  key: "UserBattleRec",
+  default: [],
+});
+
+// 닉네임만 저장
+export const CurrentNickname = atom({
+  key: "userNickname",
+  default: "",
+  effects_UNSTABLE: [persistAtom],
+});
+
+// 백업용 전적을 리스트로 저장
+export const BackupBattleRec = atom({
+  key: "BackupBattleRec",
+  default: [],
 });
