@@ -471,7 +471,7 @@ public class WebSocket {
                         System.out.println("테케 갯수 : "+fromdata_info_data.size());
                         System.out.println("속도 :"+ fromdata_statistic_info.get("time_cost"));
                         System.out.println("메모리 : "+fromdata_statistic_info.get("memory_cost"));
-                        BattleLog userBattleLog = BattleLog.builder().result("Accepted").memory(String.valueOf(fromdata_statistic_info.get("memory_cost"))).time((String) fromdata_statistic_info.get("time_cost")).build();
+                        BattleLog userBattleLog = BattleLog.builder().result("Accepted").memory(fromdata_statistic_info.get("memory_cost").toString()).time(fromdata_statistic_info.get("time_cost").toString()).build();
                         int user_mmr=0;
                         int other_mmr=0;
                         float user_odds=0;
