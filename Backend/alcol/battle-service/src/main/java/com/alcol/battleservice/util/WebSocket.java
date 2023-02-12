@@ -463,8 +463,8 @@ public class WebSocket {
                     else
                     {
                         System.out.println("빠져나옴");
-                        JSONObject fromdata_info = (JSONObject) fromdata.get("info");
-                        JSONObject fromdata_info_data = (JSONObject) fromdata_info.get("data");
+                        HashMap<String,Object> fromdata_info = (HashMap<String, Object>)fromdata.get("info");
+                        HashMap<String,Object> fromdata_info_data = (HashMap<String, Object>) fromdata_info.get("data");
                         System.out.println("채첨 케이스 갯수 : " + fromdata_info_data.size());
 //                        System.out.println("빠져나옴"+fromdata);
 
