@@ -464,7 +464,7 @@ public class WebSocket {
                     {
                         System.out.println("빠져나옴");
                         HashMap<String,Object> fromdata_info = (HashMap<String, Object>)fromdata.get("info");
-                        HashMap<String,Object> fromdata_info_data = (HashMap<String, Object>) fromdata_info.get("data");
+                        List<HashMap<String,Object>> fromdata_info_data = (List<HashMap<String, Object>>) fromdata_info.get("data");
                         System.out.println("채첨 케이스 갯수 : " + fromdata_info_data.size());
 //                        System.out.println("빠져나옴"+fromdata);
 
