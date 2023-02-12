@@ -146,6 +146,35 @@ public class WebSocket {
                             JSONObject data = new JSONObject();
                             data.put("messageType","connect_success");
 
+                            String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
+//                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
+                            List<Map<String,Object>> problems = restTemplate.getForObject(url,List.class);
+                            HashMap<Integer,Boolean> getProblemListMap = new HashMap<>();
+                            List<Problem> getProblemList = new ArrayList<>();
+                            for(int i=0; i<problems.size(); i++)
+                            {
+                                Map<String,Object> prob = problems.get(i);
+                                System.out.println(prob.get("problem_no"));
+                                List<String> categorys = (List<String>) prob.get("problem_category");
+                                System.out.println(categorys);
+                                Problem problem = Problem.builder()
+                                        .problemNum(Integer.parseInt(prob.get("problem_no").toString()))
+                                        .problemCategory((List<String>) prob.get("problem_category"))
+                                        .build();
+                                getProblemListMap.put(Integer.parseInt(prob.get("problem_no").toString()),true);
+                                getProblemList.add(problem);
+                                System.out.println("넣은 문제 : " + problem.toString());
+                                System.out.println("문제 번호 : " + problem.getProblemNum());
+                                for(int j=0; j<problem.problemCategory.size(); j++)
+                                {
+                                    System.out.println("해당 문제의 카테고리 : "+problem.problemCategory.get(j));
+
+                                }
+                            }
+
+                            sessionId2Obj.get(userId).problemBanCheck = getProblemListMap;
+                            sessionId2Obj.get(userId).problemList = getProblemList;
+
                             synchronized (session) {
                                 userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                                session.getAsyncRemote().sendText(data.toJSONString());
@@ -183,34 +212,7 @@ public class WebSocket {
                     System.out.println("방에 대한 정보" + sessionId2Obj.get(userId));
 //                    if(sessionId2Obj.get(userId))
 //                    {
-                    String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
-//                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
-                    List<Map<String,Object>> problems = restTemplate.getForObject(url,List.class);
-                    HashMap<Integer,Boolean> getProblemListMap = new HashMap<>();
-                    List<Problem> getProblemList = new ArrayList<>();
-                    for(int i=0; i<problems.size(); i++)
-                    {
-                        Map<String,Object> prob = problems.get(i);
-                        System.out.println(prob.get("problem_no"));
-                        List<String> categorys = (List<String>) prob.get("problem_category");
-                        System.out.println(categorys);
-                        Problem problem = Problem.builder()
-                                .problemNum(Integer.parseInt(prob.get("problem_no").toString()))
-                                .problemCategory((List<String>) prob.get("problem_category"))
-                                .build();
-                        getProblemListMap.put(Integer.parseInt(prob.get("problem_no").toString()),true);
-                        getProblemList.add(problem);
-                        System.out.println("넣은 문제 : " + problem.toString());
-                        System.out.println("문제 번호 : " + problem.getProblemNum());
-                        for(int j=0; j<problem.problemCategory.size(); j++)
-                        {
-                            System.out.println("해당 문제의 카테고리 : "+problem.problemCategory.get(j));
 
-                        }
-                    }
-
-                    sessionId2Obj.get(userId).problemBanCheck = getProblemListMap;
-                    sessionId2Obj.get(userId).problemList = getProblemList;
 //                    }
                 }
                 System.out.println();
