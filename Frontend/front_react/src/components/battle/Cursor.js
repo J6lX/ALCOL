@@ -19,20 +19,20 @@ const Cursor = () => {
   const requestRef = useRef(null);
 
   useEffect(() => {
-    // document.addEventListener("mousedown", mouseOverEvent);
-    // document.addEventListener("mouseup", mouseOutEvent);
+    document.addEventListener("mousedown", mouseOverEvent);
+    document.addEventListener("mouseup", mouseOutEvent);
     document.addEventListener("mousemove", mouseMoveEvent);
-    // document.addEventListener("mouseenter", mouseEnterEvent);
-    // document.addEventListener("mouseleave", mouseLeaveEvent);
+    document.addEventListener("mouseenter", mouseEnterEvent);
+    document.addEventListener("mouseleave", mouseLeaveEvent);
 
     animateDotOutline();
 
     return () => {
-      //   document.removeEventListener("mousedown", mouseOverEvent);
-      //   document.removeEventListener("mouseup", mouseOutEvent);
+      document.removeEventListener("mousedown", mouseOverEvent);
+      document.removeEventListener("mouseup", mouseOutEvent);
       document.removeEventListener("mousemove", mouseMoveEvent);
-      //   document.removeEventListener("mouseenter", mouseEnterEvent);
-      //   document.removeEventListener("mouseleave", mouseLeaveEvent);
+      document.removeEventListener("mouseenter", mouseEnterEvent);
+      document.removeEventListener("mouseleave", mouseLeaveEvent);
 
       cancelAnimationFrame(requestRef.current);
     };

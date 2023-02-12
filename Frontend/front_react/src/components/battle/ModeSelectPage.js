@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -219,93 +219,139 @@ function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setM
   );
 }
 
-// function MouseCursor() {
-//   const coords = { x: 0, y: 0 };
-//   const circles = document.querySelectorAll(".circle");
+function MouseCursor() {
+  //마우스 위치
+  const endX = useRef(window.innerWidth / 2);
+  const endY = useRef(window.innerHeight / 2);
 
-//   const colors = [
-//     "#ffb56b",
-//     "#fdaf69",
-//     "#f89d63",
-//     "#f59761",
-//     "#ef865e",
-//     "#ec805d",
-//     "#e36e5c",
-//     "#df685c",
-//     "#d5585c",
-//     "#d1525c",
-//     "#c5415d",
-//     "#c03b5d",
-//     "#b22c5e",
-//     "#ac265e",
-//     "#9c155f",
-//     "#950f5f",
-//     "#830060",
-//     "#7c0060",
-//     "#680060",
-//     "#60005f",
-//     "#48005f",
-//     "#3d005e",
-//   ];
+  const coords = { x: 0, y: 0 };
+  const circles = document.querySelectorAll(".circle");
 
-//   circles.forEach(function (circle, index) {
-//     circle.x = 0;
-//     circle.y = 0;
-//     circle.style.backgroundColor = "black"; // colors[index % colors.length];
-//   });
+  // const requestRef = useRef(null);
 
-//   window.addEventListener("mousemove", function (e) {
-//     coords.x = e.clientX;
-//     coords.y = e.clientY;
-//   });
+  // const mouseMoveEvent = (e) => {
+  //   cursorVisible.current = true;
+  //   toggleCursorVisibility();
 
-//   function animateCircles() {
-//     let x = coords.x;
-//     let y = coords.y;
+  //   endX.current = e.pageX;
+  //   endY.current = e.pageY;
 
-//     circles.forEach(function (circle, index) {
-//       circle.style.left = x - 12 + "px";
-//       circle.style.top = y - 12 + "px";
+  //   dot.current.style.top = endY.current + "px";
+  //   dot.current.style.left = endX.current + "px";
+  // };
 
-//       circle.style.scale = (circles.length - index) / circles.length;
+  useEffect((e) => {
+    const mouseMoveEvent = (e) => {
+      endX.current = e.pageX;
+      endY.current = e.pageY;
 
-//       circle.x = x;
-//       circle.y = y;
+      function animateCircles() {
+        let x = coords.x;
+        let y = coords.y;
 
-//       const nextCircle = circles[index + 1] || circles[0];
-//       x += (nextCircle.x - x) * 0.3;
-//       y += (nextCircle.y - y) * 0.3;
-//     });
+        circles.forEach(function (circle, index) {
+          circle.style.left = x - 12 + "px";
+          circle.style.top = y - 12 + "px";
 
-//     requestAnimationFrame(animateCircles);
-//   }
+          circle.style.scale = (circles.length - index) / circles.length;
 
-//   animateCircles();
+          circle.x = x;
+          circle.y = y;
 
-//   return (
-//     <div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//       <div className="circle"></div>
-//     </div>
-//   );
-// }
+          const nextCircle = circles[index + 1] || circles[0];
+          x += (nextCircle.x - x) * 0.3;
+          y += (nextCircle.y - y) * 0.3;
+        });
+
+        requestAnimationFrame(animateCircles);
+      }
+      animateCircles();
+    };
+    document.addEventListener("mousemove", mouseMoveEvent);
+
+    // return () => {
+    //   document.removeEventListener("mousemove", mouseMoveEvent);
+    // };
+  }, []);
+
+  const colors = [
+    "#ffb56b",
+    "#fdaf69",
+    "#f89d63",
+    "#f59761",
+    "#ef865e",
+    "#ec805d",
+    "#e36e5c",
+    "#df685c",
+    "#d5585c",
+    "#d1525c",
+    "#c5415d",
+    "#c03b5d",
+    "#b22c5e",
+    "#ac265e",
+    "#9c155f",
+    "#950f5f",
+    "#830060",
+    "#7c0060",
+    "#680060",
+    "#60005f",
+    "#48005f",
+    "#3d005e",
+  ];
+
+  circles.forEach(function (circle, index) {
+    circle.x = 0;
+    circle.y = 0;
+    circle.style.backgroundColor = colors[index % colors.length];
+  });
+
+  // function animateCircles() {
+  //   let x = coords.x;
+  //   let y = coords.y;
+
+  //   circles.forEach(function (circle, index) {
+  //     circle.style.left = x - 12 + "px";
+  //     circle.style.top = y - 12 + "px";
+
+  //     circle.style.scale = (circles.length - index) / circles.length;
+
+  //     circle.x = x;
+  //     circle.y = y;
+
+  //     const nextCircle = circles[index + 1] || circles[0];
+  //     x += (nextCircle.x - x) * 0.3;
+  //     y += (nextCircle.y - y) * 0.3;
+  //   });
+
+  //   requestAnimationFrame(animateCircles);
+  // }
+
+  // animateCircles();
+
+  return (
+    <div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+      <div className="circle"></div>
+    </div>
+  );
+}
 
 function FixedText() {
   return (
@@ -408,8 +454,6 @@ function App() {
   return (
     <div className="battle_background animate__animated animate__fadeIn">
       {/* <div className="cursor"></div> */}
-      {/* <MouseCursor /> */}
-      <Cursor />
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
@@ -423,6 +467,8 @@ function App() {
       )}
 
       <FixedText />
+      <Cursor />
+      <MouseCursor />
     </div>
   );
 }

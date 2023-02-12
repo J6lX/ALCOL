@@ -1,4 +1,4 @@
-/* .circle {
+.circle {
   height: 24px;
   width: 24px;
   border-radius: 24px;
@@ -8,7 +8,7 @@
   left: 0;
   pointer-events: none;
 }
-
+/*
 .cursor {
   z-index: 999;
   position: fixed;
@@ -71,7 +71,7 @@
 .cursor-dot-outline {
   width: 40px;
   height: 40px;
-  background-color: rgba(229, 128, 128, 0.5);
+  background-color: #fef6626b;
 }
 
 .battle_user_info_row {
