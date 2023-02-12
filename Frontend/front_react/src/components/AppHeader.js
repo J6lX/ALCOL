@@ -26,7 +26,6 @@ function LoginTag(props) {
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
   const [nickname, setUserNickname] = useRecoilState(CurrentNickname);
 
-  console.log(nickname);
   const logoutRequest = () => {
     setIsLoggedIn(false);
     setAccessTokenData("");

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { LoginState } from "../../states/LoginState";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 import { RankerListState } from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
@@ -106,10 +106,31 @@ function Ranking() {
     }
   }, [modeName]);
 
-  // 랭커 정보 기록
-
   // 사용자 정보 기록
   let userData = null;
+  const userId = useRecoilValue(LoginState);
+  const accessTokenData = useRecoilValue(AccessTokenInfo);
+  const refreshTokenData = useRecoilValue(RefreshTokenInfo);
+
+  // 사용자의 랭킹 정보 요청
+  useEffect(() => {
+    const userAuth = {
+      access_token: accessTokenData,
+      refresh_token: refreshTokenData,
+      user_id: userId,
+    };
+
+    axios
+      .post(`http://i8b303.p.ssafy.io:8000/myRank`, {
+        headers: userAuth,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [accessTokenData, refreshTokenData, userId]);
 
   // 사용자 기록 표시
   function UserDisplay() {
@@ -134,7 +155,7 @@ function Ranking() {
           </Col>
         </Row>
       );
-      // 로그인 한 상태에서 정보를 정상적으로 불  러온 경우
+      // 로그인 한 상태에서 정보를 정상적으로 불러온 경우
     } else {
       return (
         <Row align="center" style={{ padding: "4px" }}>
@@ -169,7 +190,6 @@ function Ranking() {
 
   // 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
   // axios 통신 진행
-  // 이미지 데이터는 파일명으로 반환: 이미지 데이터는 따로 요청해야 하나?
   axios
     .get(
       `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${pageNo}`
