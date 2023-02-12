@@ -39,6 +39,20 @@ public class LogDto
 
     @Getter
     @Builder
+    @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class UserSeasonLogDto
+    {
+        private String battleMode;
+        private String season;
+        private String tier;
+        private int ranking;
+        private int winCnt;
+        private int loseCnt;
+    }
+
+    @Getter
+    @Builder
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ProbDetailDto

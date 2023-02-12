@@ -12,4 +12,6 @@ public interface LogService
     LogDto.UserPlayDto getExpAndMmr(String userId);
 
     List<LogDto.UserResultAndMmrDto> getAllResultAndMmr() throws URISyntaxException;
+
+    List<LogDto.UserSeasonLogDto> getPastSeasonLog(String user_id);
 }

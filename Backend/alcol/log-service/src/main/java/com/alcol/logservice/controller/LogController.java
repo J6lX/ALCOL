@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -46,6 +47,13 @@ public class LogController
         log.info("LogController 의 getBattleLog 메소드 실행");
         List<LogDto.UserBattleLogDto> list = logService.getBattleLog(userId);
         return restTemplateUtils.sendResponse(list);
+    }
+
+    @PostMapping("/getPastSeasonLog")
+    public List<LogDto.UserSeasonLogDto> getPastSeasonLog(@RequestBody HashMap<String, Object> param)
+    {
+        log.info("LogController 의 getPastSeasonLog 메소드 실행");
+        return logService.getPastSeasonLog(param.get("user_id") + "");
     }
 
     /**

@@ -3,8 +3,10 @@ package com.alcol.logservice.service;
 import com.alcol.logservice.dto.LogDto;
 import com.alcol.logservice.entity.BattleLogEntity;
 import com.alcol.logservice.entity.ExpLogEntity;
+import com.alcol.logservice.entity.PastSeasonLogEntity;
 import com.alcol.logservice.repository.BattleLogRepository;
 import com.alcol.logservice.repository.ExpLogRepository;
+import com.alcol.logservice.repository.PastSeasonLogRepository;
 import com.alcol.logservice.util.RestTemplateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,16 +28,19 @@ public class LogServiceImpl implements LogService
 {
     private final ExpLogRepository expLogRepository;
     private final BattleLogRepository battleLogRepository;
+    private final PastSeasonLogRepository pastSeasonLogRepository;
     private final RestTemplateUtils restTemplateUtils;
 
     public LogServiceImpl(
             ExpLogRepository expLogRepository,
             BattleLogRepository battleLogRepository,
+            PastSeasonLogRepository pastSeasonLogRepository,
             RestTemplateUtils restTemplateUtils
     )
     {
         this.expLogRepository = expLogRepository;
         this.battleLogRepository = battleLogRepository;
+        this.pastSeasonLogRepository = pastSeasonLogRepository;
         this.restTemplateUtils = restTemplateUtils;
     }
 
@@ -175,6 +180,33 @@ public class LogServiceImpl implements LogService
         }
 
         return list;
+    }
+
+    @Override
+    public List<LogDto.UserSeasonLogDto> getPastSeasonLog(String userId)
+    {
+        log.info("LogServiceImpl 의 getPastSeasonLog 메소드 실행");
+
+        List<PastSeasonLogEntity> pastSeasonLogEntityList =
+                pastSeasonLogRepository.findAllByUserIdOrderByPastSeasonLogNoDesc(userId);
+
+        List<LogDto.UserSeasonLogDto> userSeasonLogDtoList = new ArrayList<>();
+
+        for (PastSeasonLogEntity pastSeasonLogEntity : pastSeasonLogEntityList)
+        {
+            userSeasonLogDtoList.add(
+                    LogDto.UserSeasonLogDto.builder()
+                            .battleMode(pastSeasonLogEntity.getBattleMode())
+                            .season(pastSeasonLogEntity.getSeason())
+                            .tier(pastSeasonLogEntity.getTier())
+                            .ranking(pastSeasonLogEntity.getRanking())
+                            .winCnt(pastSeasonLogEntity.getWinCnt())
+                            .loseCnt(pastSeasonLogEntity.getLoseCnt())
+                            .build()
+            );
+        }
+
+        return userSeasonLogDtoList;
     }
 
 }
