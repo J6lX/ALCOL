@@ -571,22 +571,22 @@ public class WebSocket {
                             {
                                 userId2Session.get(submitOtherId).getAsyncRemote().sendText(other_submit_result_send.toJSONString());
                             }
-//
-//                            /**
-//                             * 배틀 기록을 저장하는 부분
-//                             */
-//                            if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
-//                            {
-//                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr = change_user_mmr;
-//                            }
-//                            else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
-//                            {
-//                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr = change_user_mmr;
-//                            }
-//                            /**
-//                             * 배틀 정보를 Log Service로 넘기는 부분
-//                             */
-                            String url_log = "http://i8b303.p.ssafy.io:8000/log-service/insertBattleLog";
+
+                            /**
+                             * 배틀 기록을 저장하는 부분
+                             */
+                            if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                            {
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr = change_user_mmr;
+                            }
+                            else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                            {
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr = change_user_mmr;
+                            }
+                            /**
+                             * 배틀 정보를 Log Service로 넘기는 부분
+                             */
+                            String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
                             JSONObject sendBattleLog = new JSONObject();
                             sendBattleLog.put("battleLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)));
                             String getBattleLogSaveResult = restTemplate.postForObject(
