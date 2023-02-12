@@ -88,7 +88,8 @@ public class ProblemServiceImpl implements ProblemService
         return allProbList;
     }
 
-    public List<ProblemDto.ThreeProb> getThreeProbList(int mmr) {
+    public List<ProblemDto.ThreeProb> getThreeProbList(int mmr)
+    {
         // 해당 mmr의 티어가 무엇인지 가져온다.
         String url = "http://i8b303.p.ssafy.io:8000/user-service/getTier/" + mmr;
         String tier =  restTemplate.getForObject(url, String.class);
@@ -96,10 +97,17 @@ public class ProblemServiceImpl implements ProblemService
         // 티어에 해당하는 문제 가져오기
 
         // 여기 t가 임시로 만든 testRepository
-        System.out.println(t.findAllByTier(tier).get(0).getProbName());
+//        System.out.println(t.findAllByTier(tier).get(0).getProbName());
 
+        ProblemTierEntity problemTierEntity = t.findByTier(tier);
 
-return null;
+        List<ProblemEntity> list = problemTierEntity.getProblemEntityList();
 
+        for (ProblemEntity problemEntity : list)
+        {
+            log.info("문제 : " + problemEntity.getProbName());
+        }
+
+        return null;
     }
 }
