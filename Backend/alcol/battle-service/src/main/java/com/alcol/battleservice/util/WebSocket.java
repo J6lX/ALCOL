@@ -96,7 +96,7 @@ public class WebSocket {
      * 웹소켓 메시지(From Client) 수신하는 경우 호출
      */
     @OnMessage
-    public void handleMessage(String jsonMessage, Session session) throws ParseException, IOException, URISyntaxException {
+    public void handleMessage(String jsonMessage, Session session) throws ParseException, IOException, URISyntaxException, InterruptedException {
         if (session != null)
         {
             JSONParser parser = new JSONParser();
@@ -425,18 +425,30 @@ public class WebSocket {
 //                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
 //                 responseToken = getSubmitToken.getBody().get("data");
                 url = "https://i8b303.p.ssafy.io:443/api/submission?id="+submissionId;
-                ResponseEntity<JSONObject> getSubmitResult = restTemplateForHttps.exchange(
-                        url,
-                        HttpMethod.GET,
-                        entity,
-                        JSONObject.class
-                );
-//                JSONObject getSubmitResult = restTemplateForHttps.postForObject(
-//                        url,
-//                        entity,
-//                        JSONObject.class
-//                );
-                System.out.println(getSubmitResult.getBody().get("data"));
+                while(true)
+                {
+                    ResponseEntity<JSONObject> getSubmitResult = restTemplateForHttps.exchange(
+                            url,
+                            HttpMethod.GET,
+                            entity,
+                            JSONObject.class
+                    );
+                    Map<String,String> getSubmitResultMap = (Map<String, String>) getSubmitResult.getBody().get("data");
+                    System.out.println(getSubmitResultMap.get("result"));
+                    if(getSubmitResultMap.get("result").equals("6")){
+                        System.out.println("다시 돌아감");
+                        Thread.sleep(500);
+                        continue;
+
+                    }
+                    else
+                    {
+                        System.out.println("빠져나옴"+getSubmitResultMap);
+
+                    }
+                }
+
+//                System.out.println(getSubmitResult.getBody().get("data"));
             }
 
             else if (method.equals("msg"))
