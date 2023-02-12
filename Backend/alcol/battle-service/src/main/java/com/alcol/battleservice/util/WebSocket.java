@@ -146,6 +146,7 @@ public class WebSocket {
                             JSONObject data = new JSONObject();
                             data.put("messageType","connect_success");
 
+                            System.out.println("mmr AVG : "+mmrAvg);
                             String url = "http://i8b303.p.ssafy.io:8000/problem-service/getThreeProblem?mmr="+mmrAvg;
 //                ResponseEntity<JSONObject> problems = restTemplate.getForEntity(url,JSONObject.class);
                             List<Map<String,Object>> problems = restTemplate.getForObject(url,List.class);
