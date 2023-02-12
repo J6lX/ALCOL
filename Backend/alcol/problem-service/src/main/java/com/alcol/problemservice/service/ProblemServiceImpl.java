@@ -113,6 +113,7 @@ public class ProblemServiceImpl implements ProblemService
         // 세 문제 랜덤으로 뽑기
         int cnt = 0;
         int size = problemEntityList.size();
+        boolean[] check = new boolean[size+1];
 
         // 문제가 없을 경우 null을 리턴한다.
         if(size == 0) return null;
@@ -121,6 +122,10 @@ public class ProblemServiceImpl implements ProblemService
         {
             Random random = new Random();
             int num = random.nextInt(size);
+            // 중복된 문제는 선택하지 않는다.
+            if(check[num]) continue;
+            check[num] = true;
+
             ProblemEntity selectedProb = problemEntityList.get(num);
             List<ProblemCategoryConnectEntity> category = selectedProb.getProblemCategoryConnectEntityList();
 

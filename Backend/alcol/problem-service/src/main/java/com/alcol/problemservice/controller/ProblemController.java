@@ -38,6 +38,11 @@ public class ProblemController
         return restTemplateUtils.sendResponse(list);
     }
 
+    /**
+     * 배틀에서 문제 3개 요청
+     * @param mmr
+     * @return List<ProblemDto.ThreeProb>
+     */
     @GetMapping("/getThreeProblem")
     public ResponseEntity<List<ProblemDto.ThreeProb>> getThreeProblems(@RequestParam int mmr)
     {
