@@ -438,7 +438,7 @@ public class WebSocket {
                     if(getSubmitResult.getBody().get("result").equals("6"))
                     {
                         System.out.println("다시 돌아감");
-                        Thread.sleep(500);
+                        Thread.sleep(3000);
                         continue;
                     }
                     else
