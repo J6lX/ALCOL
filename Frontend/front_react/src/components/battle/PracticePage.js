@@ -13,7 +13,7 @@ const problemLabel = [
     dataIndex: "problem_number",
     key: "problemNo",
     align: "center",
-    render: (text, record) => <Link to={"/solveprac/" + record.key}>{text}</Link>,
+    render: (text, number) => <Link to={`/solveprac/${number.problem_number}`}>{text}</Link>,
   },
   {
     title: "문제 이름",

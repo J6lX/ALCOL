@@ -7,11 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
-import {
-  CurrentUserRankingState,
-  RankerListState,
-  SearchResultState,
-} from "../../states/RankingState";
+import { CurrentUserRankingState, RankerListState } from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
@@ -119,6 +115,7 @@ function Ranking() {
 
   // 사용자(본인) 정보: 사용자의 랭킹 정보 요청
   useEffect(() => {
+    // 사용자 인증 정보 모음(액세스 토큰, 리프레시 토큰, 사용자 ID)
     const userAuth = {
       access_token: accessTokenData,
       refresh_token: refreshTokenData,
@@ -128,14 +125,29 @@ function Ranking() {
     axios
       .post(
         `http://i8b303.p.ssafy.io:8000/rank-service/myRank`,
-        { body: { battle_mode: modeName } },
+        {
+          battle_mode: modeName,
+        },
         {
           headers: userAuth,
         }
       )
       .then((response) => {
-        console.log(response);
-        setUserData(response.data);
+        if (response.data.customCode === "000") {
+          // 로그인한 사용자 데이터(userData) 설정
+          const originData = response.data.bodyData;
+          const originUserData = {
+            grade: originData.grade,
+            nickname: originData.nickname,
+            profile_img: originData.stored_file_name,
+            mmr: originData.mmr,
+            level: originData.level,
+            tier: originData.tier,
+          };
+          setUserData(originUserData);
+        } else {
+          setUserData([]);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -170,22 +182,22 @@ function Ranking() {
       return (
         <Row align="center" style={{ padding: "4px" }}>
           <Col span={3}>
-            <p>MyRank</p>
+            <p>{userData.grade}</p>
           </Col>
           <Col span={1}>
-            <p>MyImg</p>
+            <p>{userData.profile_img}</p>
           </Col>
           <Col span={4}>
-            <p>MyName</p>
+            <p>{userData.nickname}</p>
           </Col>
           <Col span={3}>
-            <p>MyLevel</p>
+            <p>{userData.level}</p>
           </Col>
           <Col span={4}>
-            <p>MyMMR</p>
+            <p>{userData.mmr}</p>
           </Col>
           <Col span={4}>
-            <p>MyTier</p>
+            <p>{userData.tier}</p>
           </Col>
           <Col span={3}>
             <p>MyRecord</p>
@@ -195,48 +207,52 @@ function Ranking() {
     }
   }
 
-  // 랭커 정보를 recoil에 저장
   const [rankerList, setRankerList] = useRecoilState(RankerListState);
 
-  // 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
-  // axios 통신 진행
-  axios
-    .get(
-      `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${pageNo}`
-    )
-    // 응답 성공 시
-    .then(function (response) {
-      // 랭킹 정보가 존재하는 경우
-      if (response.data.customCode === "002") {
-        // (대충 데이터 저장 후 화면에 표시해준다는 내용)
-        const originData = response.data.bodyData;
-        const rankerData = originData.map((data) => {
-          // data.record(전적) 데이터가 균일하지 않는 현상 발생
-          return {
-            grade: data.grade,
-            nickname: data.nickname,
-            profile_img: data.stored_file_name,
-            mmr: data.mmr,
-            level: data.level,
-            tier: data.tier,
-            // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-          };
-        });
-        setRankerList(rankerData);
-      } else if (response.data.customCode === "003") {
-        // 랭킹 정보가 없는 경우
-        alert("등록된 정보가 없습니다.");
-      }
-    })
-    //응답 실패 시
-    .catch((error) => {
-      console.log("응답 실패 : " + error);
-    });
+  useEffect(() => {
+    // 랭커 정보를 recoil에 저장
+
+    // 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
+    // axios 통신 진행
+    axios
+      .get(
+        `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${pageNo}`
+      )
+      // 응답 성공 시
+      .then(function (response) {
+        // 랭킹 정보가 존재하는 경우
+        if (response.data.customCode === "002") {
+          // (대충 데이터 저장 후 화면에 표시해준다는 내용)
+          const originData = response.data.bodyData;
+          // console.log(originData);
+
+          const rankerData = originData.map((data) => {
+            // data.record(전적) 데이터가 없음(null)
+            return {
+              grade: data.grade,
+              nickname: data.nickname,
+              profile_img: data.stored_file_name,
+              mmr: data.mmr,
+              level: data.level,
+              tier: data.tier,
+              // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+            };
+          });
+          setRankerList(rankerData);
+        } else if (response.data.customCode === "003") {
+          // 랭킹 정보가 없는 경우
+          alert("등록된 정보가 없습니다.");
+        }
+      })
+      //응답 실패 시
+      .catch((error) => {
+        console.log("응답 실패 : " + error);
+      });
+  }, [modeName, pageNo, setRankerList]);
 
   // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
-    console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
     setCurrent(page);
     axios
       .post(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`)
@@ -247,35 +263,32 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
-          const rankerData = originData
-            .map((data) => {
-              console.log(data);
-              return {
-                grade: data.grade,
-                nickname: data.nickname,
-                profile_img: data.profile_pic,
-                mmr: data.MMR,
-                level: data.level,
-                tier: data.tier,
-                record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-              };
-            })
-            //응답 실패 시
-            .catch((error) => {
-              console.log("응답 실패 : " + error);
-            });
-          console.log(rankerData);
+          const rankerData = originData.map((data) => {
+            console.log(data);
+            return {
+              grade: data.grade,
+              nickname: data.nickname,
+              profile_img: data.profile_pic,
+              mmr: data.MMR,
+              level: data.level,
+              tier: data.tier,
+              record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+            };
+          });
+
           return rankerData;
         } else if (response.data.customCode === "003") {
           // 랭킹 정보가 없는 경우
           alert("등록된 정보가 없습니다.");
         }
+        window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
+      })
+      //응답 실패 시
+      .catch((error) => {
+        alert("마지막 페이지입니다.");
+        console.log("응답 실패 : " + error);
       });
-    window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
-
-  // 검색 결과를 recoil에 저장
-  const [result, setResult] = useRecoilState(SearchResultState);
 
   // 검색 정보: 유저 검색 시
   const onSearch = (values) => {
@@ -288,31 +301,28 @@ function Ranking() {
       // 응답 성공 시
       .then(function (response) {
         console.log(response);
-        // const dataBody = response.dataBody
-        if (response.bodyData.customCode === "004") {
-          const searchResponse = {
-            grade: response.bodyData.grade,
-            nickname: response.bodyData.nickname,
-            profile_img: response.bodyData.profile_pic,
-            mmr: response.bodyData.MMR,
-            level: response.bodyData.level,
-            tier: response.bodyData.tier,
-            record: `${response.bodyData.record.win}승 ${response.bodyData.record.lose}패(${response.bodyData.record.winningRate}%)`,
-          };
-          setResult(searchResponse);
-          setRankerList(result);
-        }
-        // 검색 결과가 없는 경우(005)
-        else {
-          alert("검색 결과가 없습니다!");
-        }
+        const dataBody = response.data.bodyData;
+        const searchResponse = {
+          grade: dataBody.grade,
+          nickname: dataBody.nickname,
+          profile_img: dataBody.profile_pic,
+          mmr: dataBody.mmr,
+          level: dataBody.level,
+          tier: dataBody.tier,
+          // record: `${dataBody.record.win}승 ${dataBody.record.lose}패(${dataBody.record.winningRate}%)`,
+        };
+        setRankerList([searchResponse]);
+        console.log("table:", rankerList);
+        // window.location.replace(`/ranking/search?mode=${modeName}&username=${dataBody.nickname}`);
       })
       //응답 실패 시
       .catch((error) => {
+        alert("존재하지 않는 닉네임입니다.");
         console.log("응답 실패 : " + error);
       });
   };
 
+  // 페이지 렌더링
   return (
     <div
       style={{
