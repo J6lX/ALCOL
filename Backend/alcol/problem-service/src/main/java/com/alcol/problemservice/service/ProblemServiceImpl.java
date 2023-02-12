@@ -94,10 +94,8 @@ public class ProblemServiceImpl implements ProblemService
         String tier =  restTemplate.getForObject(url, String.class);
 
         // 티어에 해당하는 문제 가져오기
-//        List<ProblemEntity> r = problemRepository.findByTier(tier);
-//        System.out.println(problemRepository.findAllByTier());
-//        System.out.println(r.get(0).getProbName());
-//        System.out.println(r.size());
+
+        // 여기 t가 임시로 만든 testRepository
         System.out.println(t.findAllByTier(tier).get(0).getProbName());
 
 
