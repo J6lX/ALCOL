@@ -433,19 +433,19 @@ public class WebSocket {
                             entity,
                             JSONObject.class
                     );
-                    Map<String,String> getSubmitResultMap = (Map<String, String>) getSubmitResult;
-                    System.out.println(getSubmitResultMap.get("result"));
-                    if(getSubmitResultMap.get("result").equals("6")){
-                        System.out.println("다시 돌아감");
-                        Thread.sleep(500);
-                        continue;
-
-                    }
-                    else
-                    {
-                        System.out.println("빠져나옴"+getSubmitResultMap);
-
-                    }
+//                    Map<String,String> getSubmitResultMap = (Map<String, String>) getSubmitResult;
+                    System.out.println(getSubmitResult.getBody());
+//                    if(getSubmitResultMap.get("result").equals("6")){
+//                        System.out.println("다시 돌아감");
+//                        Thread.sleep(500);
+//                        continue;
+//
+//                    }
+//                    else
+//                    {
+//                        System.out.println("빠져나옴"+getSubmitResultMap);
+//
+//                    }
                 }
 
 //                System.out.println(getSubmitResult.getBody().get("data"));
