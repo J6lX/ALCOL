@@ -33,6 +33,7 @@ public class RankServiceImpl implements RankService{
         // redis에 정보가 없다면 user-service에게 요청해 가져오고 redis에 저장한다.
         if(!userInfo.hasKey(key, "nickname"))
         {
+            log.info(userId + "에 대한 유저 데이터가 레디스에 존재하지 않습니다.");
             battleResultService.recordUserData(userId);
         }
 
