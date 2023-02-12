@@ -138,7 +138,7 @@ function translateModeName(mode) {
   if (mode === "optimization") {
     return "최적화";
   } else {
-    return "효율성";
+    return "스피드";
   }
 }
 
@@ -151,20 +151,20 @@ function IsVictory(result) {
   }
 }
 
-// 사진 데이터 편집 함수
+// 사진 데이터 관리 함수
 function ProfileImage() {
-  var userId = useRecoilValue(LoginState);
-  const [profileImage, setProfileImage] = useState(
+  // 서버에 저장되어있던 사용자의 프로필 사진 가져오기
+  const userId = useRecoilValue(LoginState);
+  const [photo, setPhoto] = useState(
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
   );
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
     .then(function (response) {
-      console.log("Photo :", response.data);
-      setProfileImage(response.data.storedFileName);
+      setPhoto(response.data.stored_file_name);
     })
     .catch((error) => {
-      let customCode = error.response.data.custom_code;
+      const customCode = error.response.data.custom_code;
       if (
         customCode === "100" ||
         customCode === "101" ||
@@ -181,29 +181,31 @@ function ProfileImage() {
   const onChange = (e) => {
     if (e.target.files[0]) {
       //사진을 선택했을때
-      setProfileImage(e.target.files[0]);
+      setPhoto(e.target.files[0]);
       //--해야돼요--
       //서버로 선택한 파일 보내기
       //-----------
     } else {
       //취소했을때
-      setProfileImage(profileImage);
+      setPhoto(photo);
       return;
     }
     //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setProfileImage(reader.result);
+        setPhoto(reader.result);
       }
     };
     reader.readAsDataURL(e.target.files[0]);
   };
 
+  console.log(photo);
+
   return (
     <div>
       <img
-        src={ProfileImage}
+        src={photo}
         alt="profile_image"
         className="userImg"
         onClick={() => {
@@ -268,7 +270,7 @@ function Mypage() {
           const originBattleRec = originBattleRecord.data.map((record) => {
             return {
               battle_result: IsVictory(record.battle_result),
-              battle_mode: record.battle_mode,
+              battle_mode: translateModeName(record.battle_mode),
               opponent: record.other_user_nickname,
               prob_name: record.prob_name,
               prob_tier: record.prob_tier,
@@ -374,20 +376,23 @@ function Mypage() {
   const [levelColor, setLevelColor] = useState({ color: "white" });
   const [modeName, setModeName] = useState("level");
   // 필터링
+  // 백업 리코일에 저장한 원본 값으로 롤백
   const setLevel = () => {
     setModeName("level");
     setBattleRec(BackupRec);
   };
 
+  // 테이블에 표시할 데이터를 스피드 모드를 기준으로 필터링
   const setSpeed = () => {
     setModeName("speed");
-    const filteredData = BackupRec.filter((data) => data.battle_mode === "speed");
+    const filteredData = BackupRec.filter((data) => data.battle_mode === "스피드");
     setBattleRec(filteredData);
   };
 
+  // 테이블에 표시할 데이터를 최적화 모드를 기준으로 필터링
   const setEfficiency = () => {
     setModeName("efficiency");
-    const filteredData = BackupRec.filter((data) => data.battle_mode === "optimization");
+    const filteredData = BackupRec.filter((data) => data.battle_mode === "최적화");
     setBattleRec(filteredData);
   };
 
