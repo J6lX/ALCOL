@@ -6,9 +6,10 @@ import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
-import { Button, Row, Col } from "antd";
+import { Button, Row, Col, Skeleton } from "antd";
 import "./HomePage.css";
 import "animate.css";
+// import { constSelector } from "recoil";
 
 const MainPage = () => {
   const changeColor = (event) => {
@@ -61,6 +62,25 @@ const MainPage = () => {
 };
 
 const SpeedRanking = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [speed, setSpeedRanking] = useState();
+
+  useEffect(() => {
+    axios
+      .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
+      .then(function (response) {
+        console.log(response.data.bodyData);
+        setSpeedRanking(response.data.bodyData.speed);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log(speed);
+  }, [speed]);
+
   return (
     <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
       <h1
@@ -71,17 +91,20 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <img className="Circle firstUser"></img>
+        <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        <img alt="rank" className="Circle firstUser"></img>
         <div className="secondthirdLayout">
-          <img className="Circle secondUser"></img>
-          <img className="Circle thirdUser"></img>
+          <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+          <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+          {/* <img alt="rank" className="Circle secondUser"></img> */}
+          {/* <img alt="rank" className="Circle thirdUser"></img> */}
         </div>
       </div>
     </div>
   );
 };
 
-const EfficiencyRanking = () => {
+const EfficiencyRanking = ({ efficiencyRanking }) => {
   return (
     <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
       <h1
@@ -103,6 +126,23 @@ const EfficiencyRanking = () => {
 };
 
 const RankingPage = () => {
+  // const [speed, setSpeedRanking] = useState("");
+  // const [efficiency, setEfficiencyRanking] = useState("");
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
+  //     .then(function (response) {
+  //       console.log("여기는 랭킹2");
+  //       console.log(response.data.bodyData.speed);
+  //       setSpeedRanking(response.data.bodyData.speed);
+  //       setEfficiencyRanking(response.data.bodyData.optimization);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
+
   return (
     <div className="fullmiddle" style={{ height: "100%", backgroundColor: "#16171B" }}>
       <br />
@@ -154,26 +194,6 @@ const RankingPage = () => {
 };
 
 const HomePage = () => {
-  const [speedRanking, setSpeedRanking] = useState("");
-  const [efficiencyRanking, setEfficiencyRanking] = useState();
-  if (speedRanking === "") {
-    axios
-      .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
-      .then(function (response) {
-        console.log(response.data.bodyData);
-        setSpeedRanking(response.data.bodyData.speed);
-        setEfficiencyRanking(response.data.bodyData.optimization);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  useEffect(() => {
-    console.log(speedRanking);
-    console.log(efficiencyRanking);
-  }, [speedRanking, efficiencyRanking]);
-
   return (
     <div style={{ zIndex: "-2" }}>
       <MainPage />
