@@ -571,15 +571,13 @@ public class WebSocket {
                         submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
 
                         JSONObject other_submit_fail_send = new JSONObject();
-                        submit_fail_send.put("messageType","otherSubmitResult");
-                        submit_fail_send.put("testcase",fromdata_info_data.size());
-                        submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
+                        other_submit_fail_send.put("messageType","otherSubmitResult");
+                        other_submit_fail_send.put("testcase",fromdata_info_data.size());
+                        other_submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
 
 
                         HashMap<String,Object> fromdata_statistic_info = (HashMap<String, Object>)fromdata.get("statistic_info");
-
                         BattleLog failBattleLog = BattleLog.builder().result("Failed").memory(fromdata_statistic_info.get("memory_cost").toString()).time(fromdata_statistic_info.get("time_cost").toString()).build();
-
 
 
                         if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
