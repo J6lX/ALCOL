@@ -435,7 +435,8 @@ public class WebSocket {
                     );
 //                    Map<String,String> getSubmitResultMap = (Map<String, String>) getSubmitResult;
                     System.out.println("바디까지 : "+ getSubmitResult.getBody());
-                    JSONObject fromdata = (JSONObject) getSubmitResult.getBody().get("data");
+//                    JSONObject fromdata = (JSONObject) getSubmitResult.getBody().get("data");
+                    HashMap<String, String> fromdata = (HashMap<String, String>) getSubmitResult.getBody().get("data");
                     System.out.println("data까지 : "+getSubmitResult.getBody().get("data"));
                     System.out.println("result까지 : "+fromdata.get("result"));
                     if(getSubmitResult.getBody().get("result").equals("6"))
