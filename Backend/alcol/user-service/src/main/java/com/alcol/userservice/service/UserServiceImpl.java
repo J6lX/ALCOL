@@ -154,12 +154,14 @@ public class UserServiceImpl implements UserService
 
         // 회원가입 정보 저장
         userRepository.save(userEntity);
+
         log.info("UserServiceImpl 의 createUser 메소드에서 회원가입 성공");
 
         return userEntity.getUserId();
     }
 
     /**
+     * 회원 정보 수정
      * @param user_id
      * @param file
      * @return
@@ -167,6 +169,8 @@ public class UserServiceImpl implements UserService
     @Override
     public String updateUser(String user_id, MultipartFile file) throws IOException
     {
+        log.info("UserServiceImpl 의 updateUser 메소드 실행");
+
         UserEntity userEntity = userRepository.findByUserId(user_id);
 
         if (file != null && file.getSize() != 0)
@@ -178,27 +182,10 @@ public class UserServiceImpl implements UserService
         }
 
         userRepository.save(userEntity);
+
+        log.info("UserServiceImpl 의 updateUser 메소드에서 회원 정보 수정 성공");
+
         return userEntity.getUserId();
-    }
-
-    @Override
-    public UserDto.UserDetailDto getUserDetailByEmail(String email)
-    {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT)
-                // UserDto.UserDetailDto 에 setter 가 없으므로 필요한 설정
-                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-                .setFieldMatchingEnabled(true);
-
-        UserEntity userEntity = userRepository.findByEmail(email);
-
-        if (userEntity == null)
-        {
-            throw new UsernameNotFoundException(email);
-        }
-
-        return modelMapper.map(userEntity, UserDto.UserDetailDto.class);
     }
 
     /**
@@ -217,8 +204,7 @@ public class UserServiceImpl implements UserService
      * @throws URISyntaxException
      */
     @Override
-    public UserDto.UserInfoDto getUserInfo(String userId)
-            throws URISyntaxException
+    public UserDto.UserInfoDto getUserInfo(String userId) throws URISyntaxException
     {
         log.info("UserServiceImpl 의 getUserInfo 메소드 실행");
 
@@ -366,5 +352,24 @@ public class UserServiceImpl implements UserService
         UserTierEntity userTierEntity = userTierRepository
                 .findByMinMmrLessThanEqualAndMaxMmrGreaterThanEqual(mmr, mmr);
         return userTierEntity.getTier();
+    }
+
+    @Override
+    public UserDto.UserDetailDto getUserDetailByEmail(String email)
+    {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+
+        UserEntity userEntity = userRepository.findByEmail(email);
+
+        if (userEntity == null)
+        {
+            throw new UsernameNotFoundException(email);
+        }
+
+        return modelMapper.map(userEntity, UserDto.UserDetailDto.class);
     }
 }
