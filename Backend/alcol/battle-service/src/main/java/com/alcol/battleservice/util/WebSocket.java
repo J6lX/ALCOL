@@ -587,8 +587,9 @@ public class WebSocket {
                              * 배틀 정보를 Log Service로 넘기는 부분
                              */
                             String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
-                            JSONObject sendBattleLog = new JSONObject();
-                            sendBattleLog.put("battleLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)));
+                            MultiValueMap<String, BattleRoom> sendBattleLog = new LinkedMultiValueMap<>();
+//                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
+                            sendBattleLog.put("battleLog", (List<BattleRoom>) sessionId2Obj.get(userId2SessionId.get(submitUserId)));
                             String getBattleLogSaveResult = restTemplate.postForObject(
                                     url_log,
                                     sendBattleLog,
@@ -671,29 +672,6 @@ public class WebSocket {
             }
         }
     }
-
-    private void sendProblems(Session session, JSONObject problems_json) {
-//        Session session = null;
-        session.getAsyncRemote().sendText(problems_json.toJSONString());
-//        for (String sessionId : sessionId2Obj.keySet()) {
-//            Object obj = sessionId2Obj.get(sessionId);
-//            if ((obj instanceof User && ((User) obj).getId().equals(player2Id)) || (obj instanceof User && ((User) obj).getId().equals(player1Id))) {
-//                session = sessionMap.get(sessionId);
-//                System.out.println(session);
-//                JSONObject send = new JSONObject();
-//                if(((User) obj).getId().equals(player2Id)){
-//                    send.put("userId", player2Id);
-//                    send.put("otherId", player1Id);
-//                }
-//                else{
-//                    send.put("userId", player1Id);
-//                    send.put("otherId", player2Id);
-//                }
-//                session.getAsyncRemote().sendText(send.toJSONString());
-//            }
-//        }
-    }
-
 
     /**
      * 웹소켓 사용자 연결 해제하는 경우 호출
