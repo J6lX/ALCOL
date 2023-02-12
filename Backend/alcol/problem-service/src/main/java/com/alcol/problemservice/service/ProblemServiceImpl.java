@@ -134,6 +134,12 @@ public class ProblemServiceImpl implements ProblemService
                     .build());
         }
 
+        // 문제가 없을 경우
+        if(threeProbList.size() < 3)
+        {
+            return null;
+        }
+
         return threeProbList;
     }
 }
