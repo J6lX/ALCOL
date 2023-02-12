@@ -114,6 +114,9 @@ public class ProblemServiceImpl implements ProblemService
         int cnt = 0;
         int size = problemEntityList.size();
 
+        // 문제가 없을 경우 null을 리턴한다.
+        if(size == 0) return null;
+
         while(cnt < 3)
         {
             Random random = new Random();
@@ -132,12 +135,6 @@ public class ProblemServiceImpl implements ProblemService
                     .prob_no(selectedProb.getProbNo())
                     .prob_category(categoryList)
                     .build());
-        }
-
-        // 문제가 없을 경우
-        if(threeProbList.size() < 3)
-        {
-            return null;
         }
 
         return threeProbList;
