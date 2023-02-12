@@ -1,5 +1,6 @@
 package com.alcol.apigatewayservice.filter;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 @Configuration
+@Slf4j
 public class PreFlightCorsConfiguration
 {
     private static final String ALLOWED_ORIGIN = "*";
@@ -28,8 +30,12 @@ public class PreFlightCorsConfiguration
         return (ServerWebExchange ctx, WebFilterChain chain) ->
         {
             ServerHttpRequest request = ctx.getRequest();
+
+            log.info("PreFlightCorsConfiguration 클래스의 corsFilter 함수 실행");
+
             if (CorsUtils.isPreFlightRequest(request))
             {
+                log.info("apigateway 서버가 preflight 요청을 받았습니다!!");
                 ServerHttpResponse response = ctx.getResponse();
                 HttpHeaders headers = response.getHeaders();
                 headers.add("Access-Control-Allow-Origin", ALLOWED_ORIGIN);
@@ -40,6 +46,7 @@ public class PreFlightCorsConfiguration
 
                 if (request.getMethod() == HttpMethod.OPTIONS)
                 {
+                    log.info("apigateway 서바가 받은 preflight 요청은 OPTION 방식입니다.");
                     response.setStatusCode(HttpStatus.OK);
                     return Mono.empty();
                 }
