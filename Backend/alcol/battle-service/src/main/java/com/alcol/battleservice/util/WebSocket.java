@@ -565,7 +565,38 @@ public class WebSocket {
                             }
                         }
                         System.out.println(fromdata_info_data.size()+"개 중 "+(fromdata_info_data.size()-errorCnt)+"개 맞음");
+                        JSONObject submit_fail_send = new JSONObject();
+                        submit_fail_send.put("messageType","submitResult");
+                        submit_fail_send.put("testcase",fromdata_info_data.size());
+                        submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
 
+                        JSONObject other_submit_fail_send = new JSONObject();
+                        submit_fail_send.put("messageType","otherSubmitResult");
+                        submit_fail_send.put("testcase",fromdata_info_data.size());
+                        submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
+
+
+                        HashMap<String,Object> fromdata_statistic_info = (HashMap<String, Object>)fromdata.get("statistic_info");
+
+                        BattleLog failBattleLog = BattleLog.builder().result("Failed").memory(fromdata_statistic_info.get("memory_cost").toString()).time(fromdata_statistic_info.get("time_cost").toString()).build();
+
+
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(failBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(failBattleLog);
+                        }
+
+                        synchronized (session){
+                            session.getAsyncRemote().sendText(submit_fail_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId)){
+                            userId2Session.get(submitOtherId).getAsyncRemote().sendText(other_submit_fail_send.toJSONString());
+                        }
 //                        System.out.println("빠져나옴"+fromdata);
 
                         break;
