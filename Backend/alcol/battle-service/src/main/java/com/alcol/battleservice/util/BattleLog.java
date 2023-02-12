@@ -10,4 +10,5 @@ import lombok.ToString;
 public class BattleLog {
     String result;
     String time;
+    String memory;
 }
