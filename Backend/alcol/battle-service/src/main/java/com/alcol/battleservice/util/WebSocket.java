@@ -482,8 +482,9 @@ public class WebSocket {
                         int errorCnt = 0;
                         for(int i=0; i<testCaseSize; i++)
                         {
-                            HashMap<String,Integer> fromdata_info_data_error = (HashMap<String,Integer>) fromdata_info_data.get(i).get("error");
-                            if(!(fromdata_info_data_error.get("error") ==0))
+                            int error_check = (int) fromdata_info_data.get(i).get("error");
+//                            HashMap<String,Integer> fromdata_info_data_error = (HashMap<String,Integer>) fromdata_info_data.get(i).get("error");
+                            if(error_check!=0)
                             {
                                 errorCnt++;
                             }
