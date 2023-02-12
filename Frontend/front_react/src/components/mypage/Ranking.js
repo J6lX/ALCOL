@@ -7,7 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
-import { RankerListState } from "../../states/RankingState";
+import { RankerListState, SearchResultState } from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
@@ -264,11 +264,43 @@ function Ranking() {
     window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
 
-  // 엔터키 입력 또는 검색 버튼 클릭 시 유저 검색
+  // 검색 결과를 recoil에 저장
+  const [result, setResult] = useRecoilState(SearchResultState);
+
+  // 유저 검색 시
   const onSearch = (values) => {
-    console.log(values.keyword);
-    const searchInput = values.keyword;
-    window.location.assign(`/ranking/${searchInput}?mode=${modeName}`);
+    const userNickname = values.keyword;
+    // axios 통신 진행
+    axios
+      .get(
+        `http://i8b303.p.ssafy.io:8000/searchUser?battle_mode=${modeName}&nickname=${userNickname}`
+      )
+      // 응답 성공 시
+      .then(function (response) {
+        console.log(response);
+        // const dataBody = response.dataBody
+        if (response.bodyData.customCode === "004") {
+          const searchResponse = {
+            grade: response.bodyData.grade,
+            nickname: response.bodyData.nickname,
+            profile_img: response.bodyData.profile_pic,
+            mmr: response.bodyData.MMR,
+            level: response.bodyData.level,
+            tier: response.bodyData.tier,
+            record: `${response.bodyData.record.win}승 ${response.bodyData.record.lose}패(${response.bodyData.record.winningRate}%)`,
+          };
+          setResult(searchResponse);
+          setRankerList(result);
+        }
+        // 검색 결과가 없는 경우(005)
+        else {
+          alert("검색 결과가 없습니다!");
+        }
+      })
+      //응답 실패 시
+      .catch((error) => {
+        console.log("응답 실패 : " + error);
+      });
   };
 
   return (
