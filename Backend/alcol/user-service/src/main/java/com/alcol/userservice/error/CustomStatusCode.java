@@ -14,7 +14,8 @@ public enum CustomStatusCode
     DUPLICATE_USER_NICKNAME(HttpStatus.CONFLICT, "004", "회원가입 실패. 닉네임이 중복되었습니다."),
     PICTURE_UPLOAD_FAILURE(HttpStatus.CONFLICT, "005", "회원가입 실패. 사진 저장에 실패하였습니다."),
     LOGIN_FAILURE(HttpStatus.CONFLICT, "006", "로그인 실패. 이메일 또는 비밀번호가 틀렸습니다. " +
-            "재 로그인 해주세요.");
+            "재 로그인 해주세요."),
+    UPDATE_USER_SUCCESS(HttpStatus.CREATED, "007", "회원 정보 수정에 성공하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String customCode;

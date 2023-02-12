@@ -135,8 +135,10 @@ public class UserServiceImpl implements UserService
         userEntity.setUserId(UUID.randomUUID().toString());
 
         // 프로필 사진이 회원 가입 시 같이 전달된 경우
-        if (file != null && file.getSize() != 0) {
-            if (!fileHandler.parseFileInfo(file, userEntity)) {
+        if (file != null && file.getSize() != 0)
+        {
+            if (!fileHandler.parseFileInfo(file, userEntity))
+            {
                 return "PICTURE_UPLOAD_FAILURE";
             }
         }
@@ -154,6 +156,28 @@ public class UserServiceImpl implements UserService
         userRepository.save(userEntity);
         log.info("UserServiceImpl 의 createUser 메소드에서 회원가입 성공");
 
+        return userEntity.getUserId();
+    }
+
+    /**
+     * @param user_id
+     * @param file
+     * @return
+     */
+    @Override
+    public String updateUser(String user_id, MultipartFile file) throws IOException
+    {
+        UserEntity userEntity = userRepository.findByUserId(user_id);
+
+        if (file != null && file.getSize() != 0)
+        {
+            if (!fileHandler.parseFileInfo(file, userEntity))
+            {
+                return "PICTURE_UPLOAD_FAILURE";
+            }
+        }
+
+        userRepository.save(userEntity);
         return userEntity.getUserId();
     }
 
