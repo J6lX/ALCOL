@@ -579,7 +579,6 @@ function Mypage() {
                       xl={6}
                       justify="center"
                       style={{
-                        zindex: "8",
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
@@ -597,16 +596,18 @@ function Mypage() {
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
-                          zindex: "8",
                         }}
                         labelPosition={0}
+                        style={{
+                          zIndex: "8",
+                        }}
                       />
                       <img
                         src={giveBadge(userSPDTier)}
                         alt="Badge"
                         className="tierBadge"
                         style={{
-                          zIndex: "8",
+                          zIndex: "7",
                         }}
                       />
                     </Col>
@@ -647,18 +648,20 @@ function Mypage() {
                         className="tierGraph"
                         label={({ dataEntry }) => `${userEFFTier}${userEFFnumber}`}
                         labelStyle={{
-                          zindex: "8",
                           fontSize: "10px",
                           fill: "black",
                         }}
                         labelPosition={0}
+                        style={{
+                          zIndex: "8",
+                        }}
                       />
                       <img
                         src={giveBadge(userEFFTier)}
                         alt="Badge"
                         className="tierBadge"
                         style={{
-                          zIndex: "8",
+                          zIndex: "7",
                         }}
                       />
                     </Col>
