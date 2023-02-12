@@ -439,7 +439,8 @@ public class WebSocket {
                     HashMap<String, Object> fromdata = (HashMap<String, Object>) getSubmitResult.getBody().get("data");
                     System.out.println("data까지 : "+getSubmitResult.getBody().get("data"));
                     System.out.println("result까지 : "+fromdata.get("result"));
-                    if(getSubmitResult.getBody().get("result").equals("6"))
+                    int submit_result = (int) fromdata.get("result");
+                    if(submit_result==6)
                     {
                         System.out.println("다시 돌아감");
                         Thread.sleep(3000);
@@ -447,7 +448,7 @@ public class WebSocket {
                     }
                     else
                     {
-                        System.out.println("빠져나옴"+getSubmitResult);
+                        System.out.println("빠져나옴"+fromdata);
                         break;
                     }
                 }
