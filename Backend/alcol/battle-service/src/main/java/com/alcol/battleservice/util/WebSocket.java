@@ -434,7 +434,8 @@ public class WebSocket {
                             JSONObject.class
                     );
 //                    Map<String,String> getSubmitResultMap = (Map<String, String>) getSubmitResult;
-                    System.out.println(getSubmitResult.getBody().get("result"));
+                    System.out.println("바디까지 : "+ getSubmitResult.getBody());
+                    System.out.println("result까지 : "+getSubmitResult.getBody().get("result"));
                     if(getSubmitResult.getBody().get("result").equals("6"))
                     {
                         System.out.println("다시 돌아감");
