@@ -459,6 +459,7 @@ public class WebSocket {
                      * statistic_info 안에 memory_cost : 사용 메모리
                      * err : 에러 발생 ?
                      * 몇개 맞았는지 보려면 info 안에 data 갯수 세고 그만큼 for문 돌면서 err 갯수 찾기 ?
+                     * 스피드전에서 result 가 0이라면 승리를 의미. 바로 MMR 계산.
                      */
                     else if(submit_result==0)
                     {
@@ -470,11 +471,62 @@ public class WebSocket {
                         System.out.println("테케 갯수 : "+fromdata_info_data.size());
                         System.out.println("속도 :"+ fromdata_statistic_info.get("time_cost"));
                         System.out.println("메모리 : "+fromdata_statistic_info.get("memory_cost"));
+                        BattleLog userBattleLog = BattleLog.builder().result("Accepted").memory(String.valueOf(fromdata_statistic_info.get("memory_cost"))).time((String) fromdata_statistic_info.get("time_cost")).build();
+                        int user_mmr=0;
+                        int other_mmr=0;
+                        float user_odds=0;
+                        float other_odds=0;
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                            user_mmr = sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr;
+                            other_mmr = sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr;
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                            user_mmr = sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr;
+                            other_mmr = sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr;
+                        }
+                        if(submitBattleMode.equals("speed"))
+                        {
+                            /**
+                             * mmr 계산식
+                             * ELO Algorithm = Pa = Pb + K * (W - We)
+                             * Pa = 경기 후의 점수
+                             * Pb = 경기 전의 점수
+                             * K = 가중치
+                             * W = 경기 결과 (승리 1, 무승부 0.5, 패배 0)
+                             * We = 예상 승률
+                             *
+                             * 예상 승률 We = (1.0 / (1.0 + pow(10, ((1000-1200) / 400))))
+                             */
+
+                            /**-----------------------------------------------------------------------------------------------*/
+
+                            user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                            other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                            int change_user_mmr = (int) (user_mmr+30*(1-user_odds));
+                            int change_other_mmr = (int) (other_mmr+30*(0-other_odds));
+
+                            /**-----------------------------------------------------------------------------------------------*/
+
+                            System.out.println("경기 전 user mmr : "+ user_mmr);
+                            System.out.println("경기 후 user mmr : "+ change_user_mmr);
+                            System.out.println("경기 전 other mmr : "+ other_mmr);
+                            System.out.println("경기 후 other mmr : "+ change_other_mmr);
+                            JSONObject submit_result_send = new JSONObject();
+                            submit_result_send.put("messageType","battleResult");
+                            submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
+                            submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
+                            submit_result_send.put("changeMmr",change_user_mmr);
+//                            session.getAsyncRemote().sendText(submit_result_send.toJSONString());
+                        }
                         break;
                     }
                     else
                     {
-                        System.out.println("빠져나옴");
+                        System.out.println("틀렸습니다.");
                         HashMap<String,Object> fromdata_info = (HashMap<String, Object>)fromdata.get("info");
                         List<HashMap<String,Object>> fromdata_info_data = (List<HashMap<String, Object>>) fromdata_info.get("data");
                         System.out.println("채첨 케이스 갯수 : " + fromdata_info_data.size());
