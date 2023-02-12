@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/log-service")
 @Slf4j
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LogController
 {
     private final LogService logService;
