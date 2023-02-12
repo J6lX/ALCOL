@@ -7,9 +7,14 @@ import React, { useState, useEffect } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import axios from "axios";
 
+import noBadge from "../../assets/X.png";
 import bronzeBadge from "../../assets/ALCOL tiers/bigtier_bronze.png";
 import silverBadge from "../../assets/ALCOL tiers/bigtier_silver.png";
 import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
+import platinumBadge from "../../assets/ALCOL tiers/bigtier_platinum.png";
+import diamondBadge from "../../assets/ALCOL tiers/bigtier_diamond.png";
+import alcolBadge from "../../assets/ALCOL tiers/bigtier_alcol.png";
+
 import { BackupBattleRec, userBattleRec, UserInfoState } from "../../states/LoginState";
 import { useRecoilState } from "recoil";
 
@@ -61,6 +66,14 @@ function giveBadge(userTier) {
     return silverBadge;
   } else if (userTier === "G") {
     return goldBadge;
+  } else if (userTier === "P") {
+    return platinumBadge;
+  } else if (userTier === "D") {
+    return diamondBadge;
+  } else if (userTier === "A") {
+    return alcolBadge;
+  } else {
+    return noBadge;
   }
 }
 
@@ -199,7 +212,16 @@ function Mypage() {
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
   const userSPDTier = userInfo.speedTier.slice(0, 1);
+  const userSPDnumber = userInfo.speedTier.slice(
+    userInfo.speedTier.length - 1,
+    userInfo.speedTier.length
+  );
+
   const userEFFTier = userInfo.efficiencyTier.slice(0, 1);
+  const userEFFnumber = userInfo.efficiencyTier.slice(
+    userInfo.efficiencyTier.length - 1,
+    userInfo.efficiencyTier.length
+  );
 
   // 서버에서 전적을 한 번에 불러온 후 10개씩 표시
   const refinedData = battleRec.slice(0, resultCount);
@@ -410,7 +432,7 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => "G1"}
+                        label={({ dataEntry }) => `${userSPDTier}${userSPDnumber}`}
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
@@ -430,14 +452,14 @@ function Mypage() {
                     {/* 스피드전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>스피드전 요약</p>
-                      <p>티어명</p>
+                      <p>{userInfo.speedTier}</p>
                       <p>MMR</p>
                       <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>최적화전 요약</p>
-                      <p>티어명</p>
+                      <p>{userInfo.efficiencyTier}</p>
                       <p>MMR</p>
                       <p>1000위(상위 20%)</p>
                     </Col>
@@ -462,7 +484,7 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => "G1"}
+                        label={({ dataEntry }) => `${userEFFTier}${userEFFnumber}`}
                         labelStyle={{
                           zindex: "8",
                           fontSize: "10px",
