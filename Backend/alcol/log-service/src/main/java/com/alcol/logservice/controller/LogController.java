@@ -50,10 +50,11 @@ public class LogController
     }
 
     @PostMapping("/getPastSeasonLog")
-    public List<LogDto.UserSeasonLogDto> getPastSeasonLog(@RequestBody HashMap<String, Object> param)
+    public ResponseEntity<List<LogDto.UserSeasonLogDto>> getPastSeasonLog(@RequestBody HashMap<String, Object> param)
     {
         log.info("LogController 의 getPastSeasonLog 메소드 실행");
-        return logService.getPastSeasonLog(param.get("user_id") + "");
+        List<LogDto.UserSeasonLogDto> list = logService.getPastSeasonLog(param.get("user_id") + "");
+        return restTemplateUtils.sendResponse(list);
     }
 
     /**
