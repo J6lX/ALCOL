@@ -6,7 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 // import { useRecoilState s} from "recoil";
 
-// 연습 문제 구분 설명
+// 연습 문제 분류(구분 컬럼)
 const problemLabel = [
   {
     title: "문제 번호",
