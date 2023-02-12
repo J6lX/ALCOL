@@ -202,7 +202,7 @@ public class WebSocket {
                 else
                 {
 //                    User user = User.builder().session(session).userId(userId).prevMmr(mmr).build();
-                    BattleRoom battleRoom = BattleRoom.builder().user1(user).build();
+                    BattleRoom battleRoom = BattleRoom.builder().user1(user).problemBanCheck(new HashMap<Integer, Boolean>()).problemList(new ArrayList<Problem>()).build();
                     sessionMap.put(userId, session);
                     sessionId2Obj.put(userId, battleRoom);
                     userId2Session.put(userId, session);
