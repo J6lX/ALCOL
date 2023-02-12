@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/log-service")
@@ -69,6 +70,13 @@ public class LogController
         log.info("LogController 의 getAllResultAndMmr 메소드 실행");
         List<LogDto.UserResultAndMmrDto> list = logService.getAllResultAndMmr();
         return list;
+    }
+
+    @PostMapping("/insertBattleLog")
+    public String insertBattleLog(@RequestBody Map<String, Object> map)
+    {
+        log.info("LogController 의 insertBattleLog 메소드 실행");
+        return "Log Service : battleLog Insert Success";
     }
 
 }
