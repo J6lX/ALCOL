@@ -460,12 +460,35 @@ public class WebSocket {
                      * err : 에러 발생 ?
                      * 몇개 맞았는지 보려면 info 안에 data 갯수 세고 그만큼 for문 돌면서 err 갯수 찾기 ?
                      */
+                    else if(submit_result==0)
+                    {
+                        HashMap<String,Object> fromdata_statistic_info = (HashMap<String, Object>)fromdata.get("statistic_info");
+
+                        HashMap<String,Object> fromdata_info = (HashMap<String, Object>)fromdata.get("info");
+                        List<HashMap<String,Object>> fromdata_info_data = (List<HashMap<String, Object>>) fromdata_info.get("data");
+                        System.out.println("맞았습니다.");
+                        System.out.println("테케 갯수 : "+fromdata_info_data.size());
+                        System.out.println("속도 :"+ fromdata_statistic_info.get("time_cost"));
+                        System.out.println("메모리 : "+fromdata_statistic_info.get("memory_cost"));
+                    }
                     else
                     {
                         System.out.println("빠져나옴");
                         HashMap<String,Object> fromdata_info = (HashMap<String, Object>)fromdata.get("info");
                         List<HashMap<String,Object>> fromdata_info_data = (List<HashMap<String, Object>>) fromdata_info.get("data");
                         System.out.println("채첨 케이스 갯수 : " + fromdata_info_data.size());
+                        int testCaseSize = fromdata_info_data.size();
+                        int errorCnt = 0;
+                        for(int i=0; i<testCaseSize; i++)
+                        {
+                            HashMap<String,String> fromdata_info_data_error = (HashMap<String, String>) fromdata_info_data.get(i).get("error");
+                            if(!fromdata_info_data_error.get("error").equals("0"))
+                            {
+                                errorCnt++;
+                            }
+                        }
+                        System.out.println(fromdata_info_data.size()+"개 중 "+errorCnt+"개 맞음");
+
 //                        System.out.println("빠져나옴"+fromdata);
 
                         break;
