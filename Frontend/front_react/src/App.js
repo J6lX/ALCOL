@@ -25,6 +25,7 @@ import LastSeason from "./components/mypage/LastSeason";
 import PracticePage from "./components/battle/PracticePage";
 import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
+import TestPageYH from "./components/TestPageYeonhwa";
 
 import { Layout } from "antd";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "./states/LoginState";
@@ -91,6 +92,9 @@ function App() {
 
             {/* 랭킹 조회 페이지 */}
             <Route path="/ranking" component={Ranking} />
+
+            {/* 랭킹 조회 페이지 */}
+            <Route path="/testpageyh" component={TestPageYH} />
 
             {/* 회원가입 페이지 */}
             <Route exact path="/register">

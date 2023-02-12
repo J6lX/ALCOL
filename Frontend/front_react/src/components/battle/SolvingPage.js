@@ -6,11 +6,10 @@ import Dots from "../../assets/dots.png";
 import CountDownTimer from "./CountDownTimer";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
-// import { oneDark } from "@codemirror/theme-one-dark";
+import { java } from "@codemirror/lang-java";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
-import { Button, message, Modal } from "antd";
-// import { selectedLanguage } from "../../states/atoms";
+import { Button} from "antd";
 
 let allheight = window.innerHeight;
 
@@ -34,23 +33,7 @@ const submitMessageState = atom({
   default: "",
 });
 
-const ResultMessage = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const success = () => {
-    messageApi.open({
-      type: "warning",
-      content: "맥주 5000cc님이 코드를 제출했습니다. (테스트케이스 50개 중 46개 정답)",
-      duration: 3,
-      style: { marginTop: "5.5vh" },
-    });
-  };
-  return (
-    <>
-      {contextHolder}
-      <Button onClick={success}>제출 소식</Button>
-    </>
-  );
-};
+
 
 const BattleNav = ({userInfo, mode}) => {
   // const mode = useRecoilValue(selectedMode);
@@ -82,7 +65,6 @@ const BattleNav = ({userInfo, mode}) => {
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
         {userInfo.user.nick}
         </p>
-        <ResultMessage className="MessageToast" />
       </div>
       <div style={{ width: "200px", height: "auto" }}>
         <CountDownTimer className="timer" />
@@ -156,7 +138,7 @@ const Problem = (problemInfo) => {
   );
 };
 
-const CodingPlace = ({ problemNumber, language, submitcode }) => {
+const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender }) => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
@@ -207,7 +189,6 @@ const CodingPlace = ({ problemNumber, language, submitcode }) => {
       setSubmitMessage("코드를 입력해주세요.");
     } else {
       let codedata = "";
-      // 내일 물어보기: tab이 spacebar로 이루어져 있는 것 같은데 탭도 꼭 개행문자가 필요한지. 현재 가능하긴 함.
       for (let i=0; i<code.length; i++) {
         if (code[i] === "\n") {
           codedata += "\n"
@@ -228,46 +209,11 @@ const CodingPlace = ({ problemNumber, language, submitcode }) => {
       }
       setTimeout(()=>{
         submitcode(codedata, problemNumber);}, 500);
-      // console.log(codedata)
-      // console.log(JSON.stringify({code: codedata}));
-      // const solving_data = {
-      //   messageType: "submit",
-      //   problem_id: problemNumber,
-      //   language: language,
-      //   code: code,
-      // };
-      // 나중에 recoil이나 shared로 뺄 수 있으면 빼기.
-      // const header = {
-      //   headers: {
-      //     access_token: "access_token",
-      //     refresh_token: "refresh_token",
-      //     user_id: "user_id",
-      //   },
-      // };
-
-      // console.log(solving_data, header);
-      // setSubmitMessage("뭔가 제출 했음");
-      // axios
-      //   .post(`http://i8b303.p.ssafy.io/submit/${problem_number}`, solving_data, header)
-      //   .then((response) => {
-      //     setSubmitMessage(response);
-      //   })
-      //   .catch((error) => {
-      //     setSubmitMessage(error);
-      //   });
     }
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+
+  console.log("참인가요?", language[0] === "Java", language)
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
@@ -286,10 +232,11 @@ const CodingPlace = ({ problemNumber, language, submitcode }) => {
           verticalAlign: "top",
         }}>
         <CodeMirror
+          id="IDE"
           value={code}
           width="69vw"
           height={`${solvingHeight}px`}
-          extensions={[python({ jsx: true })]}
+          extensions={language[0] === "Java"? [java({ jsx: true })] : [python({ jsx: true })]}
           onChange={onChange}
           theme={darcula}
         />
@@ -337,15 +284,12 @@ const CodingPlace = ({ problemNumber, language, submitcode }) => {
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSubmit}>
               제출
             </Button>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showModal}>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSurrender}>
               항복
             </Button>
           </div>
         </div>
       </div>
-      <Modal title="항복" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-        <p className="NanumSquare">정말로 항복하시겠습니까?</p>
-      </Modal>
     </div>
   );
 };
@@ -371,18 +315,8 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, goResultPage }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  // const showModal = () => {
-  //   setIsModalOpen(true);
-  // };
-  const handleOk = () => {
-    setIsModalOpen(false);
-    goResultPage();
-  };
-  // const handleCancel = () => {
-  //   setIsModalOpen(false);
-  // };
+const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, clickSurrender }) => {
+  
   const problemNumber = problemInfo.prob_no
 
   return (
@@ -402,7 +336,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} goResultPage={goResultPage} />
+                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} clickSurrender={clickSurrender} />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />
@@ -410,13 +344,6 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
           </div>
         </div>
-        <Modal title="제출 결과" open={isModalOpen} onOk={handleOk}>
-          <p>당신은 알고리즘의 신!</p>
-          <p>모든 정답을 맞췄습니다!</p>
-          <p>
-            <small>테스트 케이스 50/50</small>
-          </p>
-        </Modal>
       </RecoilRoot>
     </div>
   );
