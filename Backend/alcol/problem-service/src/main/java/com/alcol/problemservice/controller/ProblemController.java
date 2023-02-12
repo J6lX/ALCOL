@@ -44,8 +44,11 @@ public class ProblemController
     }
 
     @GetMapping("/getThreeProblem")
-    public ResponseEntity<List<Wait>> example(@RequestParam int mmr)
+    public ResponseEntity<List<Wait>> getThreeProblems(@RequestParam int mmr)
     {
+
+        problemService.getThreeProbList(1200);
+
         List<Wait> list = new ArrayList<>();
         List<String> cate = new ArrayList<>();
         cate.add("dfs");

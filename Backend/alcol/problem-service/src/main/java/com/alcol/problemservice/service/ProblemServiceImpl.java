@@ -3,23 +3,24 @@ package com.alcol.problemservice.service;
 import com.alcol.problemservice.dto.ProblemDto;
 import com.alcol.problemservice.entity.ProblemCategoryConnectEntity;
 import com.alcol.problemservice.entity.ProblemEntity;
+import com.alcol.problemservice.entity.ProblemTierEntity;
 import com.alcol.problemservice.repository.ProblemRepository;
+import com.alcol.problemservice.repository.TestRepo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ProblemServiceImpl implements ProblemService
 {
     private final ProblemRepository problemRepository;
-
-    public ProblemServiceImpl(ProblemRepository problemRepository)
-    {
-        this.problemRepository = problemRepository;
-    }
+    private final TestRepo t;
+    private final RestTemplate restTemplate;
 
     /**
      * 문제 번호 리스트를 받아서 문제 상세 정보(문제 이름, 문제 티어) 리스트를 반환
@@ -86,5 +87,28 @@ public class ProblemServiceImpl implements ProblemService
         }
 
         return allProbList;
+    }
+
+    public List<ProblemDto.ThreeProb> getThreeProbList(int mmr)
+    {
+        // 해당 mmr의 티어가 무엇인지 가져온다.
+        String url = "http://i8b303.p.ssafy.io:8000/user-service/getTier/" + mmr;
+        String tier =  restTemplate.getForObject(url, String.class);
+
+        // 티어에 해당하는 문제 가져오기
+
+        // 여기 t가 임시로 만든 testRepository
+//        System.out.println(t.findAllByTier(tier).get(0).getProbName());
+
+        ProblemTierEntity problemTierEntity = t.findByTier(tier);
+
+        List<ProblemEntity> list = problemTierEntity.getProblemEntityList();
+
+        for (ProblemEntity problemEntity : list)
+        {
+            log.info("문제 : " + problemEntity.getProbName());
+        }
+
+        return null;
     }
 }

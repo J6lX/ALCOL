@@ -9,4 +9,5 @@ public interface ProblemService
     List<ProblemDto.ProbNameTierDto> getProbNameTier(List<String> probNoList);
     ProblemDto.ProbDetail getProbDetail(Long probNo);
     List<ProblemDto.ProbList> getAllProbList();
+    List<ProblemDto.ThreeProb> getThreeProbList(int mmr);
 }
