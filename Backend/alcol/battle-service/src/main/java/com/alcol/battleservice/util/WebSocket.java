@@ -544,10 +544,6 @@ public class WebSocket {
                             {
                                 userId2Session.get(submitOtherId).getAsyncRemote().sendText(other_submit_result_send.toJSONString());
                             }
-//                            session.getAsyncRemote().sendText(user_submit_result_send.toJSONString());
-
-
-
                         }
                         break;
                     }
@@ -561,14 +557,14 @@ public class WebSocket {
                         int errorCnt = 0;
                         for(int i=0; i<testCaseSize; i++)
                         {
-                            int error_check = (int) fromdata_info_data.get(i).get("error");
+                            int error_check = (int) fromdata_info_data.get(i).get("result");
 //                            HashMap<String,Integer> fromdata_info_data_error = (HashMap<String,Integer>) fromdata_info_data.get(i).get("error");
-                            if(error_check!=0)
+                            if(error_check==-1)
                             {
                                 errorCnt++;
                             }
                         }
-                        System.out.println(fromdata_info_data.size()+"개 중 "+errorCnt+"개 맞음");
+                        System.out.println(fromdata_info_data.size()+"개 중 "+(fromdata_info_data.size()-errorCnt)+"개 맞음");
 
 //                        System.out.println("빠져나옴"+fromdata);
 
