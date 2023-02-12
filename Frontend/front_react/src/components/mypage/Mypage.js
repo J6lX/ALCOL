@@ -15,6 +15,7 @@ import diamondBadge from "../../assets/ALCOL tiers/bigtier_diamond.png";
 import alcolBadge from "../../assets/ALCOL tiers/bigtier_alcol.png";
 
 import { LoginState, BackupBattleRec, userBattleRec, UserInfoState } from "../../states/LoginState";
+import { LastSeasonState } from "../../states/RankingState";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 // 매치 기록 정렬 컬럼
@@ -221,18 +222,11 @@ function Mypage() {
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
   const [battleRec, setBattleRec] = useRecoilState(userBattleRec);
   const [BackupRec, setBackupRec] = useRecoilState(BackupBattleRec);
+  const [seasonInfo, setSeasonInfo] = useRecoilState(LastSeasonState);
 
   // 더 보기 단추
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
   const [resultCount, setResultCount] = useState(10);
-
-  // const dataLength = battleRec.length;
-  // // 모든 데이터를 불러왔음에도 '더 보기'를 누르는 경우 알림
-  // useEffect(() => {
-  //   if (resultCount - 10 >= dataLength) {
-  //     alert("전적을 모두 불러왔습니다.");
-  //   }
-  // });
 
   // 마이페이지에 표시할 정보 요청
   // 요청을 총 4번 해야 한다.
@@ -246,10 +240,11 @@ function Mypage() {
       .all([
         axios.post(`http://i8b303.p.ssafy.io:9000/user-service/getUserInfo`, requestBody),
         axios.post(`http://i8b303.p.ssafy.io:9000/user-service/getBattleLog`, requestBody),
+        axios.post(`http://i8b303.p.ssafy.io:9005/log-service/getPastSeasonLog`, requestBody),
       ])
       .then(
-        axios.spread((originUserInfo, originBattleRecord) => {
-          // 사용자 기본 정보를 recoil(userInfo)에 저장
+        axios.spread((originUserInfo, originBattleRecord, originLastSeason) => {
+          // 사용자 기본 정보를 recoil(userInfo)에 저장할 수 있게 정제
           const originUserData = {
             nickname: originUserInfo.data.nickname,
             profileImg: originUserInfo.data.stored_file_name,
@@ -258,8 +253,9 @@ function Mypage() {
             efficiencyTier: originUserInfo.data.optimization_tier,
           };
           setUserInfo(originUserData);
-          // 사용자 전적을 recoil(userBattleRec)에 저장
-          // 현재 지나치게 요청을 많이 하는 문제 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
+
+          // 사용자 전적을 recoil(userBattleRec)에 저장할 수 있게 정제
+          // 지나치게 요청을 많이 하는 현상 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
           const originBattleRec = originBattleRecord.data.map((record) => {
             return {
               battle_result: IsVictory(record.battle_result),
@@ -270,14 +266,22 @@ function Mypage() {
               record_date: CalculateDatediff(record.end_time),
             };
           });
+
+          // 사용자의 지난 시즌 정보를 recoil(LastSeasonState)에 저장할 수 있게 정제
+          console.log("지난 시즌:", originLastSeason);
+
+          // 정제한 정보들을 recoil에 반영
           setBattleRec(originBattleRec);
           setBackupRec(originBattleRec);
+          setSeasonInfo([]);
         })
       )
       .catch((error) => {
         console.log(error);
       });
-  }, [setBattleRec, setUserInfo, setBackupRec, userId]);
+  }, [setBattleRec, setUserInfo, setBackupRec, userId, setSeasonInfo]);
+
+  console.log(seasonInfo);
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
@@ -296,13 +300,12 @@ function Mypage() {
   // 서버에서 전적을 한 번에 불러온 후 10개씩 표시
   const refinedData = battleRec.slice(0, resultCount);
 
-  // 그래프 표시용 정보
+  // 그래프 표시용 정보 정제
   const graphData = battleRec.slice(0, 20);
-  // graphData의 정보 정제
-
   let wincount = 0;
   let losecount = 0;
 
+  // 정제된 정보를 바탕으로 승리 수와 패배 수 집계
   for (const recordCase of graphData) {
     if (recordCase.battle_result === "승리") {
       wincount++;
@@ -311,7 +314,7 @@ function Mypage() {
     }
   }
 
-  // 최근 20전 표시 데이터(임시)
+  // 최근 20전 표시 데이터
   const recentRecord = [
     {
       id: "win",

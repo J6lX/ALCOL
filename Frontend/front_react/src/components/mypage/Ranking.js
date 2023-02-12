@@ -115,6 +115,7 @@ function Ranking() {
 
   // 사용자(본인) 정보: 사용자의 랭킹 정보 요청
   useEffect(() => {
+    // 사용자 인증 정보 모음(액세스 토큰, 리프레시 토큰, 사용자 ID)
     const userAuth = {
       access_token: accessTokenData,
       refresh_token: refreshTokenData,
