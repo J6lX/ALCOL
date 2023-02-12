@@ -224,8 +224,10 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
+          // console.log(originData);
+
           const rankerData = originData.map((data) => {
-            // data.record(전적) 데이터가 균일하지 않는 현상 발생
+            // data.record(전적) 데이터가 없음(null)
             return {
               grade: data.grade,
               nickname: data.nickname,
@@ -251,7 +253,6 @@ function Ranking() {
   // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
-    console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
     setCurrent(page);
     axios
       .post(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`)
@@ -262,30 +263,31 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
-          const rankerData = originData
-            .map((data) => {
-              console.log(data);
-              return {
-                grade: data.grade,
-                nickname: data.nickname,
-                profile_img: data.profile_pic,
-                mmr: data.MMR,
-                level: data.level,
-                tier: data.tier,
-                record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-              };
-            })
-            //응답 실패 시
-            .catch((error) => {
-              console.log("응답 실패 : " + error);
-            });
+          const rankerData = originData.map((data) => {
+            console.log(data);
+            return {
+              grade: data.grade,
+              nickname: data.nickname,
+              profile_img: data.profile_pic,
+              mmr: data.MMR,
+              level: data.level,
+              tier: data.tier,
+              record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+            };
+          });
+
           return rankerData;
         } else if (response.data.customCode === "003") {
           // 랭킹 정보가 없는 경우
           alert("등록된 정보가 없습니다.");
         }
+        window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
+      })
+      //응답 실패 시
+      .catch((error) => {
+        alert("마지막 페이지입니다.");
+        console.log("응답 실패 : " + error);
       });
-    window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
 
   // 검색 정보: 유저 검색 시
@@ -315,6 +317,7 @@ function Ranking() {
       })
       //응답 실패 시
       .catch((error) => {
+        alert("존재하지 않는 닉네임입니다.");
         console.log("응답 실패 : " + error);
       });
   };
