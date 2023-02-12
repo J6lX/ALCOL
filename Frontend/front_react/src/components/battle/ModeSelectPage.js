@@ -13,6 +13,7 @@ import iconBackSmall from "../../assets/left-arrow-small.png";
 import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 import "./ModeSelectPage.css";
 import axios from "axios";
+import Cursor from "./Cursor";
 
 function UserInfo({ setMode, setLanguage }) {
   const [nickname, setNickname] = React.useState("a");
@@ -218,6 +219,94 @@ function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setM
   );
 }
 
+// function MouseCursor() {
+//   const coords = { x: 0, y: 0 };
+//   const circles = document.querySelectorAll(".circle");
+
+//   const colors = [
+//     "#ffb56b",
+//     "#fdaf69",
+//     "#f89d63",
+//     "#f59761",
+//     "#ef865e",
+//     "#ec805d",
+//     "#e36e5c",
+//     "#df685c",
+//     "#d5585c",
+//     "#d1525c",
+//     "#c5415d",
+//     "#c03b5d",
+//     "#b22c5e",
+//     "#ac265e",
+//     "#9c155f",
+//     "#950f5f",
+//     "#830060",
+//     "#7c0060",
+//     "#680060",
+//     "#60005f",
+//     "#48005f",
+//     "#3d005e",
+//   ];
+
+//   circles.forEach(function (circle, index) {
+//     circle.x = 0;
+//     circle.y = 0;
+//     circle.style.backgroundColor = "black"; // colors[index % colors.length];
+//   });
+
+//   window.addEventListener("mousemove", function (e) {
+//     coords.x = e.clientX;
+//     coords.y = e.clientY;
+//   });
+
+//   function animateCircles() {
+//     let x = coords.x;
+//     let y = coords.y;
+
+//     circles.forEach(function (circle, index) {
+//       circle.style.left = x - 12 + "px";
+//       circle.style.top = y - 12 + "px";
+
+//       circle.style.scale = (circles.length - index) / circles.length;
+
+//       circle.x = x;
+//       circle.y = y;
+
+//       const nextCircle = circles[index + 1] || circles[0];
+//       x += (nextCircle.x - x) * 0.3;
+//       y += (nextCircle.y - y) * 0.3;
+//     });
+
+//     requestAnimationFrame(animateCircles);
+//   }
+
+//   animateCircles();
+
+//   return (
+//     <div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//       <div className="circle"></div>
+//     </div>
+//   );
+// }
+
 function FixedText() {
   return (
     <h1
@@ -291,8 +380,36 @@ function App() {
     }
   }, [language, history]);
 
+  // const cursor = document.querySelector(".cursor");
+  // var timeout;
+
+  // //follow cursor on mousemove
+  // document.addEventListener("mousemove", (e) => {
+  //   let x = e.pageX;
+  //   let y = e.pageY;
+
+  //   cursor.style.top = y + "px";
+  //   cursor.style.left = x + "px";
+  //   cursor.style.display = "block";
+
+  //   //cursor effects when mouse stopped
+  //   function mouseStopped() {
+  //     cursor.style.display = "none";
+  //   }
+  //   clearTimeout(timeout);
+  //   timeout = setTimeout(mouseStopped, 1000);
+  // });
+
+  // //cursor effects when mouseout
+  // document.addEventListener("mouseout", () => {
+  //   cursor.style.display = "none";
+  // });
+
   return (
     <div className="battle_background animate__animated animate__fadeIn">
+      {/* <div className="cursor"></div> */}
+      {/* <MouseCursor /> */}
+      <Cursor />
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />
