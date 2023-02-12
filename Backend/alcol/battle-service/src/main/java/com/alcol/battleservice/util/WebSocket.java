@@ -586,15 +586,15 @@ public class WebSocket {
 //                            /**
 //                             * 배틀 정보를 Log Service로 넘기는 부분
 //                             */
-//                            url = "http://i8b303.p.ssafy.io:8000/log-service/insertBattleLog";
-////                            HttpEntity<String> entity =  new HttpEntity<>(bodyData, header);
-//                            JSONObject sendBattleLog = new JSONObject();
-//                            sendBattleLog.put("battleLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)));
-//                            String getBattleLogSaveResult = restTemplate.postForObject(
-//                                    url,
-//                                    sendBattleLog,
-//                                    String.class
-//                            );
+                            String url_log = "http://i8b303.p.ssafy.io:8000/log-service/insertBattleLog";
+                            JSONObject sendBattleLog = new JSONObject();
+                            sendBattleLog.put("battleLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)));
+                            String getBattleLogSaveResult = restTemplate.postForObject(
+                                    url_log,
+                                    sendBattleLog,
+                                    String.class
+                            );
+                            System.out.println(getBattleLogSaveResult);
                         }
                         break;
                     }
