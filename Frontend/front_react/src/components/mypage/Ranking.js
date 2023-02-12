@@ -128,14 +128,29 @@ function Ranking() {
     axios
       .post(
         `http://i8b303.p.ssafy.io:8000/rank-service/myRank`,
-        { body: { battle_mode: modeName } },
+        {
+          battle_mode: modeName,
+        },
         {
           headers: userAuth,
         }
       )
       .then((response) => {
-        console.log(response);
-        setUserData(response.data);
+        if (response.data.customCode === "000") {
+          // 로그인한 사용자 데이터(userData) 설정
+          const originData = response.data.bodyData;
+          const originUserData = {
+            grade: originData.grade,
+            nickname: originData.nickname,
+            profile_img: originData.stored_file_name,
+            mmr: originData.mmr,
+            level: originData.level,
+            tier: originData.tier,
+          };
+          setUserData(originUserData);
+        } else {
+          setUserData([]);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -170,22 +185,22 @@ function Ranking() {
       return (
         <Row align="center" style={{ padding: "4px" }}>
           <Col span={3}>
-            <p>MyRank</p>
+            <p>{userData.grade}</p>
           </Col>
           <Col span={1}>
-            <p>MyImg</p>
+            <p>{userData.profile_img}</p>
           </Col>
           <Col span={4}>
-            <p>MyName</p>
+            <p>{userData.nickname}</p>
           </Col>
           <Col span={3}>
-            <p>MyLevel</p>
+            <p>{userData.level}</p>
           </Col>
           <Col span={4}>
-            <p>MyMMR</p>
+            <p>{userData.mmr}</p>
           </Col>
           <Col span={4}>
-            <p>MyTier</p>
+            <p>{userData.tier}</p>
           </Col>
           <Col span={3}>
             <p>MyRecord</p>
