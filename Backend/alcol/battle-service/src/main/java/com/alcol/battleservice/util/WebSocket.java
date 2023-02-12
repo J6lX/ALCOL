@@ -398,6 +398,7 @@ public class WebSocket {
             else if (method.equals("submit"))
             {
                 String submitUserId = obj.get("userId").toString();
+                String submitOtherId = obj.get("otherId").toString();
                 String submitProblemNum = obj.get("problemNumber").toString();
                 String submitCode = obj.get("code").toString();
                 String submitBattleMode = obj.get("mode").toString();
@@ -516,12 +517,37 @@ public class WebSocket {
                             System.out.println("경기 후 user mmr : "+ change_user_mmr);
                             System.out.println("경기 전 other mmr : "+ other_mmr);
                             System.out.println("경기 후 other mmr : "+ change_other_mmr);
-                            JSONObject submit_result_send = new JSONObject();
-                            submit_result_send.put("messageType","battleResult");
-                            submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
-                            submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
-                            submit_result_send.put("changeMmr",change_user_mmr);
-//                            session.getAsyncRemote().sendText(submit_result_send.toJSONString());
+                            JSONObject user_submit_result_send = new JSONObject();
+                            user_submit_result_send.put("messageType","battleResult");
+                            user_submit_result_send.put("battleResult","win");
+                            user_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
+                            user_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
+                            user_submit_result_send.put("changeMmr",change_user_mmr);
+
+
+                            JSONObject other_submit_result_send = new JSONObject();
+                            other_submit_result_send.put("messageType","battleResult");
+                            other_submit_result_send.put("battleResult","lose");
+//                            other_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
+//                            other_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
+                            other_submit_result_send.put("changeMmr",change_other_mmr);
+                            /**
+                             * 스피드 전이니까, 끝나면 MMR, 경험치 계산 후
+                             * 나와 상대방에게 게임 끝 메시지를 보내고
+                             * 게임에 대한 모든 정보를 log 서버로 전송해야 함.
+                             */
+                            synchronized (session)
+                            {
+                                session.getAsyncRemote().sendText(user_submit_result_send.toJSONString());
+                            }
+                            synchronized (userId2Session.get(submitOtherId))
+                            {
+                                userId2Session.get(submitOtherId).getAsyncRemote().sendText(other_submit_result_send.toJSONString());
+                            }
+//                            session.getAsyncRemote().sendText(user_submit_result_send.toJSONString());
+
+
+
                         }
                         break;
                     }
