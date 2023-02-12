@@ -166,7 +166,7 @@ const ContinuousBattlePage = () => {
         setTimeout(() => {
           setIsConnected(true);
           setIsReady(true);
-        }, 3000);
+        }, 300);
       } else if (data.messageType === "exitResultOk") {
         const modaldata = {
           title: "배틀 종료 제안 수락!",
@@ -204,43 +204,15 @@ const ContinuousBattlePage = () => {
         info(modaldata)
       } else if (data.messageType === "exitSuggestion") {
         showModal()
-      } else if (data.messageType === "submit_success") {
-        if (data.result === "correct") {
-          const modaldata = {
-            title: "정답!",
-            content: (
-              <div>
-                <p>축하합니다!</p>
-                <p>모든 테스트케이스를 맞췄습니다!</p>
-                {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
-                {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
-                {battleMode === "optimization" && <p>빠르게 나아가는 {nickname} 님!!</p>}
-                {battleMode === "optimization" && <small>과연 더 효율적인 코드가 나올 수 있을까요??</small>}
-              </div>
-            ),
-            okText: "확인",
-            onOk() {
-              if (battleMode === "speed") {
-                socket.send(
-                  JSON.stringify({
-                  messageType: "finish",
-                  userId: userId,
-                  otherId: otherId
-                  })
-                )
-                setIsSolved(true);
-              } else if (battleMode === "optimization") {
-              }
-            },
-          }
-          info(modaldata)
-        } else if (data.result === "fail") {
+      } else if (data.messageType === "submitResult") {
+        if (battleMode === "speed") {
           const modaldata = {
             title: "오답!",
             content: (
               <div>
                 <p>틀렸습니다!</p>
                 <p>테스트케이스를 모두 맞추지 못했습니다.</p>
+                <p>{data.accepted} / {data.testcase}</p>
                 <p>그러나 {othernickname} 님은 긴장하고 있겠군요.</p>
                 <small>제출을 하면 상대방에게 소식이 전달됩니다.</small>
               </div>
@@ -250,15 +222,53 @@ const ContinuousBattlePage = () => {
           }
           info(modaldata)
         }
-      } else if (data.messageType === "oppsubmit_success") {
-        if (data.result === "correct") {
-          submitOther(data)
-          if (battleMode === "speed") {
-            showOppSubmitModal()
-          }
-        } else if (data.result === "fail") {
-          submitOther(data)
-        }
+        // if (data.result === "correct") {
+        //   const modaldata = {
+        //     title: "정답!",
+        //     content: (
+        //       <div>
+        //         <p>축하합니다!</p>
+        //         <p>모든 테스트케이스를 맞췄습니다!</p>
+        //         {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
+        //         {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
+        //         {battleMode === "optimization" && <p>빠르게 나아가는 {nickname} 님!!</p>}
+        //         {battleMode === "optimization" && <small>과연 더 효율적인 코드가 나올 수 있을까요??</small>}
+        //       </div>
+        //     ),
+        //     okText: "확인",
+        //     onOk() {
+        //       if (battleMode === "speed") {
+        //         socket.send(
+        //           JSON.stringify({
+        //           messageType: "finish",
+        //           userId: userId,
+        //           otherId: otherId
+        //           })
+        //         )
+        //         setIsSolved(true);
+        //       } else if (battleMode === "optimization") {
+        //       }
+        //     },
+        //   }
+        //   info(modaldata)
+        // } else if (data.result === "fail") {
+        //   const modaldata = {
+        //     title: "오답!",
+        //     content: (
+        //       <div>
+        //         <p>틀렸습니다!</p>
+        //         <p>테스트케이스를 모두 맞추지 못했습니다.</p>
+        //         <p>그러나 {othernickname} 님은 긴장하고 있겠군요.</p>
+        //         <small>제출을 하면 상대방에게 소식이 전달됩니다.</small>
+        //       </div>
+        //     ),
+        //     okText: "확인",
+        //     onOk() {},
+        //   }
+        //   info(modaldata)
+        // }
+      } else if (data.messageType === "otherSubmitResult") {
+        submitOther(data.testcase, data.accepted);
       } else if (data.messageType === "timeout") {
         const modaldata = {
           title: "배틀 시간 초과!",
@@ -286,7 +296,32 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "surrender") {
         showOppSurrenderModal()
       } else if (data.messageType === "battleResult") {
-        setIsSolved(true);
+        if (data.battleResult === "win") {
+          console.log(data)
+          const modaldata = {
+            title: "정답!",
+            content: (
+              <div>
+                <p>축하합니다!</p>
+                <p>모든 테스트케이스를 맞췄습니다!</p>
+                {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
+                {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
+                {battleMode === "optimization" && <p>빠르게 나아가는 {nickname} 님!!</p>}
+                {battleMode === "optimization" && <small>과연 더 효율적인 코드가 나올 수 있을까요??</small>}
+              </div>
+            ),
+            okText: "확인",
+            onOk() {
+              if (battleMode === "speed") {
+                setIsSolving(false)
+                setIsSolved(true);
+              }
+            },
+          }
+          info(modaldata)
+        } else if (data.battleResult === "lose") {
+          showOppSubmitModal()
+        }
       } else {
         console.log("뭐가 오긴 왔는데...");
         console.log(data);
@@ -344,6 +379,8 @@ const ContinuousBattlePage = () => {
       })
     )
     setIsOppSubmitModalOpen(false);
+    setIsSolving(false)
+    setIsSolved(true)
   };
 
   const [isSurrenderModalOpen, setIsSurrenderModalOpen] = useState(false);
@@ -395,11 +432,10 @@ const ContinuousBattlePage = () => {
   };
 
   const [messageApi, contextHolder] = message.useMessage();
-  const submitOther = (data) => {
-    console.log(data)
+  const submitOther = (testcase, accepted) => {
     messageApi.open({
       type: "warning",
-      content: "맥주 5000cc님이 코드를 제출했습니다. (테스트케이스 50개 중 46개 정답)",
+      content: `${othernickname}님이 코드를 제출했습니다. (테스트케이스 ${testcase}개 중 ${accepted}개 정답)`,
       duration: 3,
       style: { marginTop: "5.5vh" },
     });
@@ -441,7 +477,7 @@ $(function(){
   $(function(){
     $("#test").on("copy", function() {
         const data = {
-            title: '복사나 붙여넣기 불가!',
+            title: '복사 붙여넣기 불가!',
             content: (
               <div>
                   <p>배틀의 공평한 진행을 위해서</p>

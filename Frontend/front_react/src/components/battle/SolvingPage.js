@@ -212,6 +212,10 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender }) =>
     }
   };
 
+  const surrend = () => {
+    clickSurrender()
+  }
+
 
   console.log("참인가요?", language[0] === "Java", language)
 
@@ -284,7 +288,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender }) =>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSubmit}>
               제출
             </Button>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSurrender}>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
               항복
             </Button>
           </div>
@@ -319,6 +323,10 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
   
   const problemNumber = problemInfo.prob_no
 
+  const surrend = () => {
+    clickSurrender()
+  }
+
   return (
     <div id="allconsole">
       <RecoilRoot>
@@ -336,7 +344,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} clickSurrender={clickSurrender} />
+                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} clickSurrender={surrend} />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />

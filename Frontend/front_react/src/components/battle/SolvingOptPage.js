@@ -14,22 +14,22 @@ import { Button, message } from "antd";
 let allheight = window.innerHeight;
 
 const isClickState = atom({
-  key: "isClickState",
+  key: "isClickState2",
   default: false,
 });
 
 const solvingHeightState = atom({
-  key: "solvingHeightState",
+  key: "solvingHeightState2",
   default: allheight * 0.46,
 });
 
 const consoleHeightState = atom({
-  key: "consoleHeightState",
+  key: "consoleHeightState2",
   default: allheight * 0.35,
 });
 
 const submitMessageState = atom({
-  key: "submitMessageState",
+  key: "submitMessageState2",
   default: "",
 });
 
@@ -234,6 +234,10 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     sendexit()
   }
 
+  const surrend = () => {
+    clickSurrender()
+  }
+
   console.log("참인가요?", language[0] === "Java", language)
 
   return (
@@ -304,7 +308,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSubmit}>
               제출
             </Button>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSurrender}>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
               항복
             </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={sendExit}>
@@ -342,6 +346,10 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
   
   const problemNumber = problemInfo.prob_no
 
+  const surrend = () => {
+    clickSurrender()
+  }
+
   return (
     <div id="allconsole">
       <RecoilRoot>
@@ -359,7 +367,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} sendexit={sendExit} clickSurrender={clickSurrender} />
+                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} sendexit={sendExit} clickSurrender={surrend} />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />
