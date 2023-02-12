@@ -6,7 +6,7 @@ import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
-import { Button, Row, Col, Skeleton } from "antd";
+import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 import "animate.css";
 // import { constSelector } from "recoil";
@@ -62,7 +62,6 @@ const MainPage = () => {
 };
 
 const SpeedRanking = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [speed, setSpeedRanking] = useState([
     { storedFileName: "" },
     { storedFileName: "" },
@@ -81,17 +80,6 @@ const SpeedRanking = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []); // 1초 후 로딩완료
-
-  useEffect(() => {
-    console.log(speed);
-  }, [speed]);
-
   return (
     <div className="todaysRanking speedRanking" style={{ border: "5px solid #FAC557" }}>
       <h1
@@ -102,11 +90,8 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <Skeleton loading={isLoading} active avatar>
-          {speed && (
-            <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
-          )}
-        </Skeleton>
+        {speed && <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>}
+
         <div className="secondthirdLayout">
           {speed && (
             <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
@@ -121,6 +106,24 @@ const SpeedRanking = () => {
 };
 
 const EfficiencyRanking = ({ efficiencyRanking }) => {
+  const [efficiency, setEfficiencyRanking] = useState([
+    { storedFileName: "" },
+    { storedFileName: "" },
+    { storedFileName: "" },
+  ]);
+
+  useEffect(() => {
+    axios
+      .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
+      .then(function (response) {
+        console.log(response.data.bodyData);
+        setEfficiencyRanking(response.data.bodyData.speed);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="todaysRanking efficiencyRanking" style={{ border: "5px solid #5CFDFD" }}>
       <h1
@@ -131,10 +134,16 @@ const EfficiencyRanking = ({ efficiencyRanking }) => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div className="Circle firstUser"></div>
+        {efficiency && (
+          <img src={efficiency[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        )}
         <div className="secondthirdLayout">
-          <div className="Circle secondUser"></div>
-          <div className="Circle thirdUser"></div>
+          {efficiency && (
+            <img src={efficiency[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+          )}
+          {efficiency && (
+            <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+          )}
         </div>
       </div>
     </div>
