@@ -63,7 +63,11 @@ const MainPage = () => {
 
 const SpeedRanking = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [speed, setSpeedRanking] = useState();
+  const [speed, setSpeedRanking] = useState([
+    { storedFileName: "" },
+    { storedFileName: "" },
+    { storedFileName: "" },
+  ]);
 
   useEffect(() => {
     axios
@@ -76,6 +80,13 @@ const SpeedRanking = () => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []); // 1초 후 로딩완료
 
   useEffect(() => {
     console.log(speed);
@@ -91,13 +102,18 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
-        <img alt="rank" className="Circle firstUser"></img>
+        <Skeleton loading={isLoading} active avatar>
+          {speed && (
+            <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+          )}
+        </Skeleton>
         <div className="secondthirdLayout">
-          <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
-          <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
-          {/* <img alt="rank" className="Circle secondUser"></img> */}
-          {/* <img alt="rank" className="Circle thirdUser"></img> */}
+          {speed && (
+            <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+          )}
+          {speed && (
+            <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+          )}
         </div>
       </div>
     </div>
