@@ -173,7 +173,8 @@ public class WebSocket {
 
                                 }
                             }
-
+                            System.out.println("문제 밴 체크 : "+sessionId2Obj.get(userId).problemBanCheck);
+                            System.out.println("문제 리스트 맵 : "+getProblemListMap);
                             sessionId2Obj.get(userId).problemBanCheck = getProblemListMap;
                             sessionId2Obj.get(userId).problemList = getProblemList;
 
