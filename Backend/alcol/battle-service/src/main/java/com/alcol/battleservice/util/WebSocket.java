@@ -440,7 +440,7 @@ public class WebSocket {
                     System.out.println("data까지 : "+getSubmitResult.getBody().get("data"));
                     System.out.println("result까지 : "+fromdata.get("result"));
                     int submit_result = (int) fromdata.get("result");
-                    if(submit_result==6)
+                    if(submit_result==6||submit_result==7)
                     {
                         System.out.println("다시 돌아감");
                         Thread.sleep(3000);
