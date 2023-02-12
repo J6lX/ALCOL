@@ -7,7 +7,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
-import { RankerListState, SearchResultState } from "../../states/RankingState";
+import {
+  CurrentUserRankingState,
+  RankerListState,
+  SearchResultState,
+} from "../../states/RankingState";
 
 // 랭커 정보 컬럼(실제 서비스에서는 표시하지 않음)
 const rankingLabel = [
@@ -107,30 +111,36 @@ function Ranking() {
   }, [modeName]);
 
   // 사용자 정보 기록
-  let userData = null;
   const userId = useRecoilValue(LoginState);
   const accessTokenData = useRecoilValue(AccessTokenInfo);
   const refreshTokenData = useRecoilValue(RefreshTokenInfo);
 
-  // 사용자의 랭킹 정보 요청
+  const [userData, setUserData] = useRecoilState(CurrentUserRankingState);
+
+  // 사용자(본인) 정보: 사용자의 랭킹 정보 요청
   useEffect(() => {
     const userAuth = {
       access_token: accessTokenData,
       refresh_token: refreshTokenData,
       user_id: userId,
     };
-
+    // axios 요청(body: 모드, header: 사용자 인증 정보)
     axios
-      .post(`http://i8b303.p.ssafy.io:8000/myRank`, {
-        headers: userAuth,
-      })
+      .post(
+        `http://i8b303.p.ssafy.io:8000/rank-service/myRank`,
+        { body: { battle_mode: modeName } },
+        {
+          headers: userAuth,
+        }
+      )
       .then((response) => {
         console.log(response);
+        setUserData(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [accessTokenData, refreshTokenData, userId]);
+  }, [accessTokenData, refreshTokenData, userId, modeName, setUserData]);
 
   // 사용자 기록 표시
   function UserDisplay() {
@@ -223,7 +233,7 @@ function Ranking() {
       console.log("응답 실패 : " + error);
     });
 
-  // 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
+  // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
     console.log(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`);
@@ -267,13 +277,13 @@ function Ranking() {
   // 검색 결과를 recoil에 저장
   const [result, setResult] = useRecoilState(SearchResultState);
 
-  // 유저 검색 시
+  // 검색 정보: 유저 검색 시
   const onSearch = (values) => {
     const userNickname = values.keyword;
     // axios 통신 진행
     axios
       .get(
-        `http://i8b303.p.ssafy.io:8000/searchUser?battle_mode=${modeName}&nickname=${userNickname}`
+        `http://i8b303.p.ssafy.io:8000/rank-service/searchUser?battle_mode=${modeName}&nickname=${userNickname}`
       )
       // 응답 성공 시
       .then(function (response) {

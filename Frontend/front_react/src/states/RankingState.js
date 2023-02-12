@@ -22,3 +22,9 @@ export const CurrentUserState = atom({
   default: null,
   effects_UNSTABLE: [persistAtom],
 });
+
+// 현재 접속한 사용자 랭킹 정보 저장
+export const CurrentUserRankingState = atom({
+  key: "CurrentUserRankingState",
+  default: null,
+});
