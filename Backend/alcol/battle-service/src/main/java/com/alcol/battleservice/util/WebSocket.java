@@ -156,14 +156,14 @@ public class WebSocket {
                             for(int i=0; i<problems.size(); i++)
                             {
                                 Map<String,Object> prob = problems.get(i);
-                                System.out.println(prob.get("problem_no"));
-                                List<String> categorys = (List<String>) prob.get("problem_category");
+                                System.out.println(prob.get("prob_no"));
+                                List<String> categorys = (List<String>) prob.get("prob_category");
                                 System.out.println(categorys);
                                 Problem problem = Problem.builder()
-                                        .problemNum(Integer.parseInt(prob.get("problem_no").toString()))
-                                        .problemCategory((List<String>) prob.get("problem_category"))
+                                        .problemNum(Integer.parseInt(prob.get("prob_no").toString()))
+                                        .problemCategory((List<String>) prob.get("prob_category"))
                                         .build();
-                                getProblemListMap.put(Integer.parseInt(prob.get("problem_no").toString()),true);
+                                getProblemListMap.put(Integer.parseInt(prob.get("prob_no").toString()),true);
                                 getProblemList.add(problem);
                                 System.out.println("넣은 문제 : " + problem.toString());
                                 System.out.println("문제 번호 : " + problem.getProblemNum());
