@@ -18,4 +18,6 @@ public class BattleRoom {
     HashMap<Integer, Boolean> problemBanCheck = new HashMap<>();
     int problemNum;
     List<Problem> problemList = new ArrayList<>();
+
+    int timeOutCnt = 0;
 }
