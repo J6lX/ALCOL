@@ -133,6 +133,15 @@ function CalculateDatediff(startDate) {
   }
 }
 
+// 모드명 한글화(표시용)
+function translateModeName(mode) {
+  if (mode === "optimization") {
+    return "최적화";
+  } else {
+    return "효율성";
+  }
+}
+
 // 승/패 판단 함수
 function IsVictory(result) {
   if (result === 1) {
@@ -151,7 +160,7 @@ function ProfileImage() {
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
     .then(function (response) {
-      console.log(response.data);
+      console.log("Photo :", response.data);
       setProfileImage(response.data.storedFileName);
     })
     .catch((error) => {
@@ -268,12 +277,23 @@ function Mypage() {
           });
 
           // 사용자의 지난 시즌 정보를 recoil(LastSeasonState)에 저장할 수 있게 정제
-          console.log("지난 시즌:", originLastSeason);
+          const lastSeasonData = originLastSeason.data;
+          const refinedLastSeason = lastSeasonData.map((record) => {
+            return {
+              modeName: translateModeName(record.battle_mode),
+              season: record.season,
+              tier: record.tier,
+              ranking: record.ranking,
+              win: record.win_cnt,
+              lose: record.lose_cnt,
+              winrate: Math.round((record.win_cnt / (record.win_cnt + record.lose_cnt)) * 100),
+            };
+          });
 
           // 정제한 정보들을 recoil에 반영
           setBattleRec(originBattleRec);
           setBackupRec(originBattleRec);
-          setSeasonInfo([]);
+          setSeasonInfo(refinedLastSeason);
         })
       )
       .catch((error) => {
@@ -281,7 +301,7 @@ function Mypage() {
       });
   }, [setBattleRec, setUserInfo, setBackupRec, userId, setSeasonInfo]);
 
-  console.log(seasonInfo);
+  console.log("seasonInfo:", seasonInfo);
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
@@ -448,6 +468,68 @@ function Mypage() {
     );
   };
 
+  // 지난 시즌 요약 표시
+  function SeasonCollection() {
+    if (seasonInfo === []) {
+      return <p>시즌 정보가 없습니다.</p>;
+    } else {
+      return (
+        <>
+          {/* 한 줄에 3개씩 표시 */}
+          {seasonInfo.map((seasonData, key) => (
+            <Col span={24} align="middle" className="seasonGrid">
+              <Row align="middle">
+                <Col span={8} className="text">
+                  <img
+                    src={giveBadge(seasonData.tier.slice(0, 1))}
+                    alt="badge"
+                    style={{
+                      width: "120%",
+                      height: "120%",
+                    }}
+                  />
+                </Col>
+                <Col span={14} className="text">
+                  {/* 모드 이름 */}
+                  <Row>
+                    <Col>
+                      <p>{seasonData.modeName}</p>
+                    </Col>
+                  </Row>
+                  {/* 시즌 이름 */}
+                  <Row>
+                    <Col>
+                      <p>{seasonData.seasonName}</p>
+                    </Col>
+                  </Row>
+                  {/* 티어 이름 */}
+                  <Row>
+                    <Col>
+                      <p>{seasonData.tier}</p>
+                    </Col>
+                  </Row>
+                  {/* 마지막 랭킹 레이블 */}
+                  <Row>
+                    <Col>
+                      <p>{seasonData.ranking}위</p>
+                    </Col>
+                  </Row>
+                  {/* 시즌 이름 */}
+                  <Row>
+                    <Col>
+                      <p>{seasonData.ranking} 시즌</p>
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+              <hr />
+            </Col>
+          ))}
+        </>
+      );
+    }
+  }
+
   // 페이지 렌더링
   return (
     <div
@@ -586,12 +668,8 @@ function Mypage() {
             </Col>
           </Row>
 
-          {/* 친구 정보, 지난 시즌, 전적 표시 */}
-          <Row
-            justify="center"
-            style={{
-              padding: "5px",
-            }}>
+          {/* 지난 시즌, 전적 표시 */}
+          <Row justify="center">
             <Col
               xs={16}
               md={6}
@@ -605,7 +683,9 @@ function Mypage() {
                 <Col xs={24} className="miniBlock">
                   <p className="textHighlight">지난 시즌 기록</p>
                   <hr />
-                  <p className="textHighlight">시즌 기록 없음</p>
+                  <Row style={{ padding: "10px" }}>
+                    <SeasonCollection />
+                  </Row>
                 </Col>
               </Row>
             </Col>
