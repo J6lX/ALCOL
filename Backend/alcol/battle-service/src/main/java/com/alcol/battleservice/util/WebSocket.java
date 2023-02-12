@@ -405,7 +405,7 @@ public class WebSocket {
 //                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
                 HttpHeaders header = new HttpHeaders();
                 header.add("Cookie","sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
-
+                System.out.println(submitCode);
                 JSONObject bodyData = new JSONObject();
                 bodyData.put("problem_id", submitProblemNum);
                 bodyData.put("language",submitLanguage);
