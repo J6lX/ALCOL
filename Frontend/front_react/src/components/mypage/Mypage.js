@@ -1,9 +1,8 @@
 import { Row, Col, ConfigProvider, Table, theme } from "antd";
 import "./Mypage.css";
-import tempImg from "../../logo.svg";
 import { useParams, Link } from "react-router-dom";
 import { ResponsivePie } from "@nivo/pie";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { PieChart } from "react-minimal-pie-chart";
 import axios from "axios";
 
@@ -15,8 +14,8 @@ import platinumBadge from "../../assets/ALCOL tiers/bigtier_platinum.png";
 import diamondBadge from "../../assets/ALCOL tiers/bigtier_diamond.png";
 import alcolBadge from "../../assets/ALCOL tiers/bigtier_alcol.png";
 
-import { BackupBattleRec, userBattleRec, UserInfoState } from "../../states/LoginState";
-import { useRecoilState } from "recoil";
+import { LoginState, BackupBattleRec, userBattleRec, UserInfoState } from "../../states/LoginState";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 // 매치 기록 정렬 컬럼
 const matchCol = [
@@ -140,6 +139,77 @@ function IsVictory(result) {
   } else {
     return "패배";
   }
+}
+
+// 사진 데이터 편집 함수
+function ProfileImage() {
+  var userId = useRecoilValue(LoginState);
+  const [profileImage, setProfileImage] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+  );
+  axios
+    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
+    .then(function (response) {
+      console.log(response.data);
+      setProfileImage(response.data.storedFileName);
+    })
+    .catch((error) => {
+      let customCode = error.response.data.custom_code;
+      if (
+        customCode === "100" ||
+        customCode === "101" ||
+        customCode === "102" ||
+        customCode === "103" ||
+        customCode === "104" ||
+        customCode === "105"
+      ) {
+        alert(error.response.data.description);
+      }
+    });
+
+  const fileInput = useRef(null);
+  const onChange = (e) => {
+    if (e.target.files[0]) {
+      //사진을 선택했을때
+      setProfileImage(e.target.files[0]);
+      //--해야돼요--
+      //서버로 선택한 파일 보내기
+      //-----------
+    } else {
+      //취소했을때
+      setProfileImage(profileImage);
+      return;
+    }
+    //화면에 프로필 사진 표시
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setProfileImage(reader.result);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  return (
+    <div>
+      <img
+        src={ProfileImage}
+        alt="profile_image"
+        className="userImg"
+        onClick={() => {
+          fileInput.current.click();
+        }}
+      />
+      <input
+        type="file"
+        style={{ display: "none" }}
+        accept="image/jpg, image/png, image/jpeg"
+        name="profile_img"
+        onChange={onChange}
+        ref={fileInput}
+      />
+    </div>
+  );
 }
 
 // 페이지 렌더링 함수
@@ -375,6 +445,7 @@ function Mypage() {
     );
   };
 
+  // 페이지 렌더링
   return (
     <div
       className="pageBody"
@@ -391,15 +462,20 @@ function Mypage() {
             style={{
               padding: "5px",
             }}>
-            <Col xs={16} md={6} lg={4} className="text block">
-              {/* 개인 정보 표시 블록 */}
-              <Row
-                style={{
-                  display: "flex",
-                }}>
-                <Col justify="center" align="middle">
+            {/* 개인 정보 표시 블록 */}
+            <Col
+              xs={16}
+              md={6}
+              lg={4}
+              className="text block"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+              }}>
+              <Row>
+                <Col>
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
-                  <img src={tempImg} alt="프사" className="userImg" />
+                  <ProfileImage />
                   <h1>{userInfo.nickname}</h1>
                 </Col>
               </Row>
