@@ -108,7 +108,7 @@ public class BattleResultServiceImpl implements BattleResultService
         }
         catch (Exception e)
         {
-            log.error("유저 데이터를 user-service에서 받아오는 과정에서 오류 발생");
+            log.error("유저 데이터를 user-service에서 받아오는 과정에서 오류 발생!");
             return false;
         }
 
@@ -126,6 +126,7 @@ public class BattleResultServiceImpl implements BattleResultService
             return false;
         }
 
+        log.info("닉네임이 " + userData.getNickname() + "인 회원에 대한 정보를 redis에 저장하였습니다.");
         return true;
     }
 
