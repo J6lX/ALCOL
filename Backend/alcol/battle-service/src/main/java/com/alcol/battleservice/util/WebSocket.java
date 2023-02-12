@@ -152,6 +152,7 @@ public class WebSocket {
                             List<Map<String,Object>> problems = restTemplate.getForObject(url,List.class);
                             HashMap<Integer,Boolean> getProblemListMap = new HashMap<>();
                             List<Problem> getProblemList = new ArrayList<>();
+                            System.out.println(problems);
                             for(int i=0; i<problems.size(); i++)
                             {
                                 Map<String,Object> prob = problems.get(i);
