@@ -95,6 +95,39 @@ public class UserController
     }
 
     /**
+     * @param user_id
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    @PutMapping(value = "/", consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
+    public ResponseEntity<UserDto.ResponseDto<?>> updateUser(
+            @RequestPart String user_id,
+            @RequestPart @Nullable MultipartFile file
+    )
+            throws Exception
+    {
+        log.info("UserController 의 updateUser 메소드 실행");
+
+        String retVal = userService.updateUser(user_id, file);
+
+        if (retVal.equals("PICTURE_UPLOAD_FAILURE"))
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                    ApiUtils.error(CustomStatusCode.PICTURE_UPLOAD_FAILURE)
+            );
+        }
+
+        log.info("UserController 의 updateUser 메소드에서 회원 정보 수정 성공");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                ApiUtils.success(null, CustomStatusCode.UPDATE_USER_SUCCESS)
+        );
+    }
+
+    /**
      * @param request
      * @return 새로운 access token 발급
      */
