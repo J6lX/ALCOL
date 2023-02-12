@@ -404,6 +404,9 @@ public class WebSocket {
                 String url = "https://i8b303.p.ssafy.io:443/api/submission";
 //                ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
                 HttpHeaders header = new HttpHeaders();
+
+                /**문제 채점 항목에 대한 번호를 받아오는 곳*/
+
                 header.add("Cookie","sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
                 System.out.println(submitCode);
                 JSONObject bodyData = new JSONObject();
@@ -419,11 +422,13 @@ public class WebSocket {
 
                 System.out.println(getSubmitToken.get("data"));
 //                System.out.println(getSubmitToken.get("data").get());
+
+                /**
+                 * 문제 채점 번호로 조회 하는 곳
+                 * result = 6 , 7은 제외 0일때는 통과인듯.
+                 * */
                 Map<String,String> getSubmiTokenJson = (Map<String, String>) getSubmitToken.get("data");
                 String submissionId = getSubmiTokenJson.get("submission_id");
-
-//                JSONObject obj = (JSONObject) parser.parse(jsonMessage);
-//                 responseToken = getSubmitToken.getBody().get("data");
                 url = "https://i8b303.p.ssafy.io:443/api/submission?id="+submissionId;
                 while(true)
                 {
@@ -433,22 +438,36 @@ public class WebSocket {
                             entity,
                             JSONObject.class
                     );
-//                    Map<String,String> getSubmitResultMap = (Map<String, String>) getSubmitResult;
                     System.out.println("바디까지 : "+ getSubmitResult.getBody());
-//                    JSONObject fromdata = (JSONObject) getSubmitResult.getBody().get("data");
                     HashMap<String, Object> fromdata = (HashMap<String, Object>) getSubmitResult.getBody().get("data");
                     System.out.println("data까지 : "+getSubmitResult.getBody().get("data"));
                     System.out.println("result까지 : "+fromdata.get("result"));
                     int submit_result = (int) fromdata.get("result");
+                    /**
+                     * 채점이 완료되면 6이나 7이 안나옴. 그래서 반복요청 보냄
+                     * */
                     if(submit_result==6||submit_result==7)
                     {
                         System.out.println("다시 돌아감");
                         Thread.sleep(3000);
                         continue;
                     }
+
+                    /**
+                     * 채점 완료되고, 해당 항목을 불러올 수 있을 때. result가 아니라 for문으로 info를 봐야함.
+                     * statistic_info 안에 time_cost : 채점 돌아간 시간
+                     * statistic_info 안에 memory_cost : 사용 메모리
+                     * err : 에러 발생 ?
+                     * 몇개 맞았는지 보려면 info 안에 data 갯수 세고 그만큼 for문 돌면서 err 갯수 찾기 ?
+                     */
                     else
                     {
-                        System.out.println("빠져나옴"+fromdata);
+                        System.out.println("빠져나옴");
+                        JSONObject fromdata_info = (JSONObject) fromdata.get("info");
+                        JSONObject fromdata_info_data = (JSONObject) fromdata_info.get("data");
+                        System.out.println("채첨 케이스 갯수 : " + fromdata_info_data.size());
+//                        System.out.println("빠져나옴"+fromdata);
+
                         break;
                     }
                 }
