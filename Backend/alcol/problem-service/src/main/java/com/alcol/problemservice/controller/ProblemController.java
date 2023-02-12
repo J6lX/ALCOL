@@ -1,20 +1,15 @@
 package com.alcol.problemservice.controller;
 
-import com.alcol.problemservice.dto.Cate;
 import com.alcol.problemservice.dto.ProblemDto;
-import com.alcol.problemservice.dto.Wait;
 import com.alcol.problemservice.service.ProblemService;
 import com.alcol.problemservice.util.RestTemplateUtils;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Slf4j
@@ -44,38 +39,11 @@ public class ProblemController
     }
 
     @GetMapping("/getThreeProblem")
-    public ResponseEntity<List<Wait>> getThreeProblems(@RequestParam int mmr)
+    public ResponseEntity<List<ProblemDto.ThreeProb>> getThreeProblems(@RequestParam int mmr)
     {
+        List<ProblemDto.ThreeProb> threeProbs = problemService.getThreeProbList(mmr);
 
-        problemService.getThreeProbList(1200);
-
-        List<Wait> list = new ArrayList<>();
-        List<String> cate = new ArrayList<>();
-        cate.add("dfs");
-        cate.add("dddd");
-        cate.add("aaaa");
-
-        List<String> cate1 = new ArrayList<>();
-        cate1.add("안뇽");
-        cate1.add("댜쟈");
-        cate1.add("비타민조하");
-
-        List<String> cate2 = new ArrayList<>();
-        cate2.add("히힛");
-        cate2.add("화이땡!!");
-        cate2.add("유유유형");
-
-        Wait wait1 = new Wait(1, cate);
-        Wait wait2 = new Wait(2, cate1);
-        Wait wait3 = new Wait(3, cate2);
-
-
-        list.add(wait1);
-        list.add(wait2);
-        list.add(wait3);
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(threeProbs);
     }
 
     @GetMapping("/getProblemDetail/{probNum}")

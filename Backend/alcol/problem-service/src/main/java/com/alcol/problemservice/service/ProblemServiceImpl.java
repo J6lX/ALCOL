@@ -5,7 +5,7 @@ import com.alcol.problemservice.entity.ProblemCategoryConnectEntity;
 import com.alcol.problemservice.entity.ProblemEntity;
 import com.alcol.problemservice.entity.ProblemTierEntity;
 import com.alcol.problemservice.repository.ProblemRepository;
-import com.alcol.problemservice.repository.TestRepo;
+import com.alcol.problemservice.repository.TierRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.*;
 public class ProblemServiceImpl implements ProblemService
 {
     private final ProblemRepository problemRepository;
-    private final TestRepo t;
+    private final TierRepository tierRepository;
     private final RestTemplate restTemplate;
 
     /**
@@ -91,24 +91,49 @@ public class ProblemServiceImpl implements ProblemService
 
     public List<ProblemDto.ThreeProb> getThreeProbList(int mmr)
     {
+        List<ProblemDto.ThreeProb> threeProbList = new ArrayList<>();
+
         // 해당 mmr의 티어가 무엇인지 가져온다.
         String url = "http://i8b303.p.ssafy.io:8000/user-service/getTier/" + mmr;
         String tier =  restTemplate.getForObject(url, String.class);
 
+        List<ProblemEntity> problemEntityList = new ArrayList<>();
         // 티어에 해당하는 문제 가져오기
-
-        // 여기 t가 임시로 만든 testRepository
-//        System.out.println(t.findAllByTier(tier).get(0).getProbName());
-
-        ProblemTierEntity problemTierEntity = t.findByTier(tier);
-
-        List<ProblemEntity> list = problemTierEntity.getProblemEntityList();
-
-        for (ProblemEntity problemEntity : list)
+        try
         {
-            log.info("문제 : " + problemEntity.getProbName());
+            ProblemTierEntity problemTierEntity = tierRepository.findByTier(tier);
+            problemEntityList = problemTierEntity.getProblemEntityList();
+        }
+        catch (Exception e)
+        {
+            log.error("티어에 해당하는 문제를 가져오는 과정에서 문제 발생");
+            return null;
         }
 
-        return null;
+        // 세 문제 랜덤으로 뽑기
+        int cnt = 0;
+        int size = problemEntityList.size();
+
+        while(cnt < 3)
+        {
+            Random random = new Random();
+            int num = random.nextInt(size);
+            ProblemEntity selectedProb = problemEntityList.get(num);
+            List<ProblemCategoryConnectEntity> category = selectedProb.getProblemCategoryConnectEntityList();
+
+            List<String> categoryList = new ArrayList<>();
+            for(int i=0; i<category.size(); i++)
+            {
+                categoryList.add(category.get(i).getProblemCategoryEntity().getCategoryName());
+            }
+            cnt++;
+
+            threeProbList.add(ProblemDto.ThreeProb.builder()
+                    .prob_no(selectedProb.getProbNo())
+                    .prob_category(categoryList)
+                    .build());
+        }
+
+        return threeProbList;
     }
 }
