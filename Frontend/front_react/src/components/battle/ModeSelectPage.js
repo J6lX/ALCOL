@@ -13,78 +13,79 @@ import iconBackSmall from "../../assets/left-arrow-small.png";
 import "./ModeSelectPage.css";
 import axios from "axios";
 import Cursor from "./Cursor";
-// import tiers from "../../assets/ALCOL tiers/index.js"
 
 function UserInfo({ setMode, setLanguage }) {
   const [nickname, setNickname] = React.useState("");
   const [speedTier, setSpeedTier] = React.useState("");
   const [optTier, setOptTier] = React.useState("");
-  const [speedLV, setSpeedLv] = React.useState("-1");
-  const [optLV, setOptLv] = React.useState("-1");
-  const [urlSpeed, setUrlSpeed] = React.useState("../../assets/ALCOL tiers/tier_bronze_0.png");
-  const [urlOpt, setUrlOpt] = React.useState("../../assets/ALCOL tiers/tier_bronze_0.png");
+  const [urlSpeed, setUrlSpeed] = React.useState(
+    require("../../assets/ALCOL_tiers/tier_bronze_0.png")
+  );
+  const [urlOpt, setUrlOpt] = React.useState(require("../../assets/ALCOL_tiers/tier_bronze_0.png"));
 
   var userId = useRecoilValue(LoginState);
 
-  axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
-      user_id: userId,
-    })
-    .then(function (response) {
-      setNickname(response.data.nickname);
-      setSpeedTier(response.data.speed_tier);
-      setOptTier(response.data.optimization_tier);
-    })
-    .catch((error) => {
-      let customCode = error.response.data.custom_code;
-      if (
-        customCode === "100" ||
-        customCode === "101" ||
-        customCode === "102" ||
-        customCode === "103" ||
-        customCode === "104" ||
-        customCode === "105"
-      ) {
-        // 로그인 실패 시 표시하는 내용
-        alert(error.response.data.description);
-      }
-    });
+  useEffect(() => {
+    const fectchData = async () => {
+      await axios
+        .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
+          user_id: userId,
+        })
+        .then(function (response) {
+          setNickname(response.data.nickname);
+          setSpeedTier(response.data.speed_tier);
+          setOptTier(response.data.optimization_tier);
+        })
+        .catch((error) => {
+          let customCode = error.response.data.custom_code;
+          if (
+            customCode === "100" ||
+            customCode === "101" ||
+            customCode === "102" ||
+            customCode === "103" ||
+            customCode === "104" ||
+            customCode === "105"
+          ) {
+            // 로그인 실패 시 표시하는 내용
+            alert(error.response.data.description);
+          }
+        });
+    };
+    fectchData();
+  }, [userId]);
 
   useEffect(() => {}, [nickname]);
 
   useEffect(() => {
-    var tmpSpeedLV = "";
-    var tmpOptLV = "";
-
-    if (tmpSpeedLV === "" && tmpOptLV === "") {
-      console.log("--스피드 티어 정보--" + speedTier);
+    if (optTier !== "" || speedTier !== "") {
+      //티어 정보만 잘라오기
       var speed = speedTier.toLowerCase();
       speed = speed.substr(0, speed.length - 1);
-      tmpSpeedLV = speedTier.substr(speed.length, 1);
-      console.log(speed);
-      console.log(tmpSpeedLV);
-      setUrlSpeed(`../../assets/ALCOL tiers/tier_${speed}_${tmpSpeedLV}.png`);
-
-      console.log("--효율성 티어 정보--" + optTier);
-      var opt = optTier.toLocaleLowerCase();
+      var opt = optTier.toLowerCase();
       opt = opt.substr(0, opt.length - 1);
-      tmpOptLV = speedTier.substr(opt.length, 1);
-      console.log(opt);
-      console.log(tmpOptLV);
-      setUrlOpt(`../../assets/ALCOL tiers/tier_${opt}_${tmpOptLV}.png`);
-    }
 
-    //뽑아낸 정보 저장
-    if (speedLV === "-1" && optLV === "-1") {
-      setSpeedTier(speed);
-      setSpeedLv(tmpSpeedLV);
-      setOptTier(opt);
-      setOptLv(tmpOptLV);
-      console.log("정보 저장");
-      console.log(speedTier + speedLV);
-      console.log(optTier + optLV);
+      //레벨 정보만 잘라오기
+      var tmpSpeedLV = speedTier.substr(speed.length, 1);
+      var tmpOptLV = speedTier.substr(opt.length, 1);
+
+      const { speedImg } = require("../../assets/ALCOL_tiers/tier_" +
+        speed +
+        "_" +
+        tmpSpeedLV +
+        ".png");
+      setUrlSpeed(speedImg);
+
+      setUrlSpeed(require("../../assets/ALCOL_tiers/tier_" + speed + "_" + tmpSpeedLV + ".png"));
+      setUrlOpt(require("../../assets/ALCOL_tiers/tier_" + opt + "_" + tmpOptLV + ".png"));
     }
-  }, [speedTier, optTier, optLV, speedLV]);
+  }, [optTier, speedTier]);
+
+  useEffect(() => {
+    if (urlSpeed !== "" || urlOpt !== "") {
+      console.log(urlOpt);
+      console.log(urlSpeed);
+    }
+  }, [urlSpeed, urlOpt]);
 
   //페이지 이동 관련
   const history = useHistory();
@@ -94,12 +95,6 @@ function UserInfo({ setMode, setLanguage }) {
     setLanguage("-1");
     history.push("/");
   };
-
-  useEffect(() => {
-    console.log("url effect");
-    console.log(urlOpt);
-    console.log(urlSpeed);
-  }, [urlSpeed, urlOpt]);
 
   return (
     <Row justify="space-between" className="battle_user_info_row">
@@ -112,10 +107,10 @@ function UserInfo({ setMode, setLanguage }) {
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {speedLV !== "-1" && <img src={urlSpeed} alt="tier" className="icon_tier"></img>}
+        <img src={urlSpeed} alt="tier" className="mode_icon_tier" />
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {optLV !== "-1" && <img src={urlOpt} alt="tier" className="icon_tier"></img>}
+        <img src={urlOpt} alt="tier" className="mode_icon_tier" />
       </Col>
       <Col
         span={3}
@@ -340,7 +335,6 @@ function App() {
 
   return (
     <div className="battle_background animate__animated animate__fadeIn">
-      {/* <div className="cursor"></div> */}
       <UserInfo setMode={setMode} setLanguage={setLanguage} />
       {mode === "-1" ? (
         <SelectMode setMode={setMode} />

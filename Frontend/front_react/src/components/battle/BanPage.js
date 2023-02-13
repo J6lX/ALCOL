@@ -4,7 +4,7 @@ import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
+import iconTierBronze from "../../assets/ALCOL_tiers/tier_bronze_0.png";
 
 function UserInfo(userInfo) {
   console.log("userinfo", userInfo);

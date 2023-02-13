@@ -19,7 +19,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   // console.log("userInfo 왜 이러냐", userInfo)
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
-  // let clsName = "../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png";
+  // let clsName = "../../assets/ALCOL_tiers/tier_" + problem.problem_tier + "_0.png";
   const category = problem_category;
   // console.log("티어 정보가 어떻게 되어있니", problemInfo)
   let tier;
@@ -39,7 +39,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   let LV = problemInfo.prob_tier[problemInfo.prob_tier.length - 1];
   console.log(tier, LV);
 
-  const tierAddress = `../../assets/ALCOL tiers/tier_${tier}_${LV}.png`;
+  const tierAddress = `../../assets/ALCOL_tiers/tier_${tier}_${LV}.png`;
 
   const makeBadge = (category) => {
     const result = [];
