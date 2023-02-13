@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,27 +101,17 @@ public class LogController
         int winnerPrevMmr = (int)map.get("winnerPrevMmr");
         int winnerNowMmr = (int)map.get("winnerNowMmr");
 
-        log.info("LogController 분기 3");
-
-//        String loserUserId = (String)map.get("loserUserId");
-//        int loserPrevMmr = (int)map.get("loserPrevMmr");
-//        int loserNowMmr = (int)map.get("loserNowMmr");
-
-        log.info("LogController 분기 4");
+        String loserUserId = (String)map.get("loserUserId");
+        int loserPrevMmr = (int)map.get("loserPrevMmr");
+        int loserNowMmr = (int)map.get("loserNowMmr");
 
         List<Map<String, Object>> winnerSubmitLog = (List<Map<String, Object>>) map.get("winnerSubmitLog");
-//        List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
+        List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
 
-        log.info("LogController 분기 5");
+        log.info("LogController 분기 3");
 
-        for (Map<String, Object> map2 : winnerSubmitLog)
-        {
-            log.info("result : " + map2.get("result"));
-            log.info("time : " + map2.get("time"));
-            log.info("memory : " + map2.get("memory"));
-        }
-
-        log.info("LogController 분기 6");
+        List<LogDto.BattleProbSubmitLogDto> winnerSubmitLogList = new ArrayList<>();
+        List<LogDto.BattleProbSubmitLogDto> loserSubmitLogList = new ArrayList<>();
 
         LogDto.BattleLogDto winnerBattleLogDto = LogDto.BattleLogDto.builder()
                 .myUserId(winnerUserId)
@@ -144,7 +135,41 @@ public class LogController
                 .endTime(LocalDateTime.now())
                 .build();
 
-        logService.insertBattleLog(winnerBattleLogDto, loserBattleLogDto);
+        for (Map<String, Object> submitLog : winnerSubmitLog)
+        {
+            int isCorrect = submitLog.get("result").equals("Accepted") ? 1 : 0;
+            int time = Integer.parseInt(submitLog.get("time") + "");
+            int memory = Integer.parseInt(submitLog.get("memory") + "");
+
+            winnerSubmitLogList.add(
+                    LogDto.BattleProbSubmitLogDto.builder()
+                            .isCorrect(isCorrect)
+                            .probRunningTime(time)
+                            .probRunningMemory(memory)
+                            .submitTime(LocalDateTime.now())
+                            .build()
+            );
+        }
+
+        for (Map<String, Object> submitLog : loserSubmitLog)
+        {
+            int isCorrect = submitLog.get("result").equals("Accepted") ? 1 : 0;
+            int time = Integer.parseInt(submitLog.get("time") + "");
+            int memory = Integer.parseInt(submitLog.get("memory") + "");
+
+            loserSubmitLogList.add(
+                    LogDto.BattleProbSubmitLogDto.builder()
+                            .isCorrect(isCorrect)
+                            .probRunningTime(time)
+                            .probRunningMemory(memory)
+                            .submitTime(LocalDateTime.now())
+                            .build()
+            );
+        }
+
+        log.info("LogController 분기 4");
+
+        logService.insertBattleLog(winnerBattleLogDto, loserBattleLogDto, winnerSubmitLogList, loserSubmitLogList);
 
         log.info("LogController 의 insertBattleLog 메소드 실행 완료");
 
