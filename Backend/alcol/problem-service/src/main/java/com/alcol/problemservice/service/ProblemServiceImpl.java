@@ -284,6 +284,25 @@ public class ProblemServiceImpl implements ProblemService
         return null;
     }
 
+    public boolean recordLevelExp(String userId)
+    {
+        String url = "http://i8b303.p.ssafy.io:9005/log-service/insertExp";
+
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", userId);
+        map.put("add_exp", "75");
+
+        int response = restTemplate.postForObject(url, map, Integer.class);
+        if(response == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     private RestTemplate makeRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
         TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;

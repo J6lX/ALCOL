@@ -13,5 +13,6 @@ public interface ProblemService
     List<ProblemDto.ThreeProb> getThreeProbList(int mmr);
     String getSubmissionId(ScoreDto.Request problem);
     ScoreDto.Response getScoreResult(String submissionId);
+    boolean recordLevelExp(String userId);
 
 }
