@@ -1,12 +1,15 @@
 package com.alcol.logservice.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "battle_prob_submit_log_tb")
 public class BattleProbSubmitLogEntity
 {
