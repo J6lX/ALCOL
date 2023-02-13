@@ -598,10 +598,11 @@ public class WebSocket {
                              * 배틀 정보를 Log Service로 넘기는 부분
                              */
                             String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+                            BattleRoom battleRoomJson = sessionId2Obj.get(userId2SessionId.get(submitUserId));
                             Map<String, BattleRoom> sendBattleLog = new HashMap<>();
 //                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
                             System.out.println(sessionId2Obj.get(userId2SessionId.get(submitUserId)));
-                            sendBattleLog.put("battleLog", sessionId2Obj.get(userId2SessionId.get(submitUserId)));
+                            sendBattleLog.put("battleLog", battleRoomJson);
                             String getBattleLogSaveResult = restTemplate.postForObject(
                                     url_log,
                                     sendBattleLog,
