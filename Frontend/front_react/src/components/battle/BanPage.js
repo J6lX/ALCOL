@@ -7,9 +7,9 @@ import img_rightHand from "../../assets/rightHand.png";
 import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 
 function UserInfo(userInfo) {
-  console.log("userinfo", userInfo)
-  console.log(userInfo.userInfo.user.nick)
-  console.log(userInfo.userInfo.other.nick)
+  console.log("userinfo", userInfo);
+  console.log(userInfo.userInfo.user.nick);
+  console.log(userInfo.userInfo.other.nick);
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col
@@ -36,11 +36,11 @@ function UserInfo(userInfo) {
 
 function Top({ userInfo, timeOut }) {
   // const [secs, setTime] = React.useState(0);
-  console.log("TopuserInfo", userInfo)
-  let secs = 0
+  console.log("TopuserInfo", userInfo);
+  let secs = 0;
   const tick = () => {
     if (secs < 180) {
-      secs += 1
+      secs += 1;
     } else {
       timeOut("timeout");
     }
@@ -140,6 +140,7 @@ function App({ props, battleuserinfo, changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
   // var playerInfo = useRecoilValue(matchingPlayerInfo);
   // console.log(playerInfo.otherId);
+  const propsdata = props[0];
   const onClick = (event, category) => {
     console.log("선택한 문제는:" + category);
     setChoose(category);
@@ -163,9 +164,9 @@ function App({ props, battleuserinfo, changeBanProblem }) {
   // console.log(props);
   const [problem, setProblem] = React.useState();
   useEffect(() => {
-    setProblem(props);
-  }, [props]);
-  const keys = Object.keys(props);
+    setProblem(propsdata);
+  }, [propsdata]);
+  const keys = Object.keys(propsdata);
   useEffect(() => {
     if (choose === "1") {
       console.log("선택한 문제 번호는:" + keys[0]);
@@ -183,7 +184,7 @@ function App({ props, battleuserinfo, changeBanProblem }) {
     <div className="matching_background">
       <UserInfo userInfo={battleuserinfo} />
       <Top userInfo={battleuserinfo} timeOut={timeOut} />
-      <Mid props={props} onClick={onClick} setProblem={setProblem} />
+      <Mid props={propsdata} onClick={onClick} setProblem={setProblem} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Button
           className="NanumSquare"

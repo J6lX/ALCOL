@@ -144,7 +144,8 @@ const SelectedProblemPage = ({
   battleLanguage,
   battleuserinfo,
 }) => {
-  const problem_category = problems[problemInfo.prob_no];
+  console.log(problems, problemInfo);
+  const problem_category = problems[0][problemInfo.prob_no];
   // console.log("선택된 문제 정보", problemInfo)
   return (
     <div

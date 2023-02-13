@@ -136,7 +136,7 @@ const ContinuousBattlePage = () => {
         console.log("연결 완료! 아래와 같은 데이터를 받았습니다.");
         console.log(data);
         console.log("problems", problems);
-        if (problems.length === 0 || problems === {}) {
+        if (isReady === false) {
           setTimeout(() => {
             socket.send(
               JSON.stringify({
@@ -145,7 +145,7 @@ const ContinuousBattlePage = () => {
                 otherId: otherId,
               })
             );
-          }, 300);
+          }, 50);
         }
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
@@ -164,13 +164,16 @@ const ContinuousBattlePage = () => {
             setIsBanWait(false);
             setIsSelected(true);
             setTimeout(() => {
-              socket.send(
-                JSON.stringify({
-                  messageType: "battleStart",
-                  userId: userId,
-                  otherId: otherId,
-                })
-              );
+              if (isSolving === false) {
+                console.log("배틀 스타트 메세지 보낸다");
+                socket.send(
+                  JSON.stringify({
+                    messageType: "battleStart",
+                    userId: userId,
+                    otherId: otherId,
+                  })
+                );
+              }
               setIsSelected(false);
               setIsSolving(true);
             }, 10000);
@@ -181,12 +184,12 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "sendProblem") {
         console.log("밴할 문제 세 개를 받았습니다.");
         console.log(data.problems);
-        const problems = data.problems;
-        setProblems(problems);
+        const problemsdata = [data.problems];
+        setProblems(problemsdata);
         setTimeout(() => {
           setIsConnected(true);
           setIsReady(true);
-        }, 300);
+        }, 30);
       } else if (data.messageType === "exitResultOk") {
         const modaldata = {
           title: "배틀 종료 제안 수락!",
@@ -340,7 +343,7 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "surrender") {
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
-        if (data.battleMode === "speed") {
+        if (battleMode === "speed") {
           if (data.battleResult === "win") {
             console.log(data);
             const modaldata = {
@@ -363,7 +366,7 @@ const ContinuousBattlePage = () => {
                     time: data.time,
                     memory: data.memory,
                   };
-                  let resultList = resultListResult;
+                  let resultList = [...resultListResult];
                   resultList.push(result);
                   setResultListResult(resultList);
                   setIsSolving(false);
@@ -589,8 +592,8 @@ const ContinuousBattlePage = () => {
         messageType: "submit",
         userId: userId,
         otherId: otherId,
-        mode: battleModeInfo[0],
-        language: languageMode[0],
+        mode: battleModeInfo,
+        language: languageMode,
         problemNumber: problemNumber,
         code: codedata,
       })
