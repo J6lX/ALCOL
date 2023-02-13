@@ -13,14 +13,11 @@ import iconBackSmall from "../../assets/left-arrow-small.png";
 import "./ModeSelectPage.css";
 import axios from "axios";
 import Cursor from "./Cursor";
-// import tiers from "../../assets/ALCOL_tiers/index.js"
 
 function UserInfo({ setMode, setLanguage }) {
   const [nickname, setNickname] = React.useState("");
   const [speedTier, setSpeedTier] = React.useState("");
   const [optTier, setOptTier] = React.useState("");
-  const [speedLV, setSpeedLv] = React.useState("-1");
-  const [optLV, setOptLv] = React.useState("-1");
   const [urlSpeed, setUrlSpeed] = React.useState(
     require("../../assets/ALCOL_tiers/tier_bronze_0.png")
   );
@@ -56,65 +53,47 @@ function UserInfo({ setMode, setLanguage }) {
         });
     };
     fectchData();
-  }, []);
+  }, [userId]);
 
   useEffect(() => {}, [nickname]);
 
   useEffect(() => {
-    console.log(speedTier, optTier);
+    if (optTier !== "" || speedTier !== "") {
+      console.log(speedTier, optTier);
 
-    //티어 정보만 잘라오기
-    var speed = speedTier.toLowerCase();
-    speed = speed.substr(0, speed.length - 1);
-    var opt = optTier.toLowerCase();
-    opt = opt.substr(0, opt.length - 1);
+      //티어 정보만 잘라오기
+      var speed = speedTier.toLowerCase();
+      speed = speed.substr(0, speed.length - 1);
+      var opt = optTier.toLowerCase();
+      opt = opt.substr(0, opt.length - 1);
 
-    //레벨 정보만 잘라오기
-    var tmpSpeedLV = speedTier.substr(speed.length, 1);
-    var tmpOptLV = speedTier.substr(opt.length, 1);
+      //레벨 정보만 잘라오기
+      var tmpSpeedLV = speedTier.substr(speed.length, 1);
+      var tmpOptLV = speedTier.substr(opt.length, 1);
 
-    console.log(speed);
-    console.log(tmpSpeedLV);
-    console.log(opt);
-    console.log(tmpOptLV);
+      console.log(speed);
+      console.log(tmpSpeedLV);
+      console.log(opt);
+      console.log(tmpOptLV);
 
-    setUrlSpeed(require(`../../assets/ALCOL_tiers/tier_${speed}_${tmpSpeedLV}.png`));
-    setUrlSpeed(require(`../../assets/ALCOL_tiers/tier_${opt}_${tmpOptLV}.png`));
+      const { speedImg } = require("../../assets/ALCOL_tiers/tier_" +
+        speed +
+        "_" +
+        tmpSpeedLV +
+        ".png");
+      setUrlSpeed(speedImg);
 
-    // var tmpSpeedLV = "";
-    // var tmpOptLV = "";
-    // if (speedTier !== "" && optTier !== "") {
-    //   console.log("--스피드 티어 정보--" + speedTier);
-    //   var speed = speedTier.toLowerCase();
-    //   speed = speed.substr(0, speed.length - 1);
-    //   tmpSpeedLV = speedTier.substr(speed.length, 1);
-    //   console.log(speed);
-    //   console.log(tmpSpeedLV);
-    //   changeSpeedImg(`../assets/ALCOL_tiers/tier_${speed}_${tmpSpeedLV}.png`);
-    //   console.log("--효율성 티어 정보--" + optTier);
-    //   var opt = optTier.toLocaleLowerCase();
-    //   opt = opt.substr(0, opt.length - 1);
-    //   tmpOptLV = speedTier.substr(opt.length, 1);
-    //   console.log(opt);
-    //   console.log(tmpOptLV);
-    //   setUrlOpt(`../assets/ALCOL_tiers/tier_${opt}_${tmpOptLV}.png`);
-    // }
-    // //뽑아낸 정보 저장
-    // if (speedLV === "-1" && optLV === "-1") {
-    //   setSpeedTier(speed);
-    //   setSpeedLv(tmpSpeedLV);
-    //   setOptTier(opt);
-    //   setOptLv(tmpOptLV);
-    //   console.log("정보 저장");
-    //   console.log(speedTier + speedLV);
-    //   console.log(optTier + optLV);
-    // }
-  }, []);
+      setUrlSpeed(require("../../assets/ALCOL_tiers/tier_" + speed + "_" + tmpSpeedLV + ".png"));
+      setUrlOpt(require("../../assets/ALCOL_tiers/tier_" + opt + "_" + tmpOptLV + ".png"));
+    }
+  }, [optTier, speedTier]);
 
   useEffect(() => {
-    console.log("url effect");
-    console.log(urlOpt);
-    console.log(urlSpeed);
+    if (urlSpeed !== "" || urlOpt !== "") {
+      console.log("url effect");
+      console.log(urlOpt);
+      console.log(urlSpeed);
+    }
   }, [urlSpeed, urlOpt]);
 
   //페이지 이동 관련
@@ -137,14 +116,10 @@ function UserInfo({ setMode, setLanguage }) {
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {/* {src={require(`../images/${imageName}.png`).default}} */}
-        {speedLV === "-1" && (
-          <img src={urlSpeed} alt="tier" className="icon_tier"></img>
-          // <img key={Date.now()} src={urlSpeed} alt="tier" className="icon_tier"></img>
-        )}
+        <img src={urlSpeed} alt="tier" className="icon_tier" />
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        {optLV === "-1" && <img src={urlOpt} alt="tier" className="icon_tier"></img>}
+        <img src={urlOpt} alt="tier" className="icon_tier" />
       </Col>
       <Col
         span={3}
