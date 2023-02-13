@@ -272,7 +272,7 @@ public class LogServiceImpl implements LogService
         insertExpLogEntity.setCurExp(curExp + addExp);
 
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
-        redisExp.set("levelExp:" + userId, curExp + addExp);
+        redisExp.set("levelExp:" + userId, (curExp + addExp) + "");
 
         if (expLogRepository.save(insertExpLogEntity) != null)
         {
