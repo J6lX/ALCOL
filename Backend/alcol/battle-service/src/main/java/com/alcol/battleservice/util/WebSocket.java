@@ -416,6 +416,7 @@ public class WebSocket {
             {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
+                String battleMode = obj.get("mode").toString();
 
                 if(session==sessionId2Obj.get(userId2SessionId.get(userId)).user1.session
                         && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
@@ -425,7 +426,7 @@ public class WebSocket {
                     System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
                     System.out.println("저는 1번 유저입니다.");
                     timer = new Timer();
-                    timer.schedule(new SessionTimerTask(session,userId,otherUserId), 5000); // 1초마다 실행
+                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 5000); // 1초마다 실행
                     timerMap.put(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId,timer);
 
 
@@ -900,7 +901,7 @@ public class WebSocket {
         private String battleMode;
 
 
-        public SessionTimerTask(Session session,String userId, String otherId) {
+        public SessionTimerTask(Session session,String userId, String otherId,String battleMode) {
             this.session = session;
             this.userId = userId;
             this.otherId = otherId;
@@ -913,6 +914,7 @@ public class WebSocket {
             System.out.println(session+"배틀 종료할게요 ????????????????");
 //            String drawUserId = obj.get("userId").toString();
 //            String drawOtherId = obj.get("userId").toString();
+            String battle_mode = "";
             int user_mmr = 0;
             int other_mmr = 0;
             int user_time = -1;
@@ -920,6 +922,7 @@ public class WebSocket {
             int other_time = -1;
             int other_memory = -1;
             int other_battlelog_size = 0;
+
             /**
              * 현재 userId가 user1일 경우.
              */
@@ -950,7 +953,7 @@ public class WebSocket {
                 sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
 
                 Map<String, Object> sendBattleLog = new HashMap<>();
-                sendBattleLog.put("battleMode",battleMode);
+                sendBattleLog.put("battleMode",battle_mode);
                 sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(userId)).problemNum);
                 sendBattleLog.put("userId",userId);
                 sendBattleLog.put("otherId",otherId);
