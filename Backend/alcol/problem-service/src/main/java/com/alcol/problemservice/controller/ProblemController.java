@@ -1,11 +1,15 @@
 package com.alcol.problemservice.controller;
 
 import com.alcol.problemservice.dto.ProblemDto;
+import com.alcol.problemservice.dto.ScoreDto;
+import com.alcol.problemservice.error.CustomStatusCode;
 import com.alcol.problemservice.service.ProblemService;
+import com.alcol.problemservice.util.ApiUtils;
 import com.alcol.problemservice.util.RestTemplateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -61,5 +65,35 @@ public class ProblemController
     public ResponseEntity<List<ProblemDto.ProbList>> getAllProbList()
     {
         return ResponseEntity.status(HttpStatus.OK).body(problemService.getAllProbList());
+    }
+
+    @PostMapping("/practiceSubmit")
+    public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@RequestBody ScoreDto.Request req)
+    {
+        // 정답을 제출한 후 submission id를 요청한다.
+        String submissionId = problemService.getSubmissionId(req);
+        // submission id를 받아올 수 없다면 에러처리한다.
+        if(submissionId == null)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_SUBMISSION_ERROR));
+        }
+
+        // 코드를 채점하는 시간이 있으므로 5초 뒤에 요청한다.
+        try {
+            Thread.sleep(5000);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        // submission id로 제출 결과를 가져온다.
+        ScoreDto.Response response = problemService.getScoreResult(submissionId);
+        // 제출 결과를 받아올 수 없다면 에러처리한다.
+        if(response == null)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_RESULT_ERROR));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(response, CustomStatusCode.SCORE_SUCCESS));
     }
 }
