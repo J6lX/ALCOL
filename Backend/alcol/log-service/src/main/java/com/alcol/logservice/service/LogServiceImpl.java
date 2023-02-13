@@ -14,6 +14,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,18 +33,21 @@ public class LogServiceImpl implements LogService
     private final BattleLogRepository battleLogRepository;
     private final PastSeasonLogRepository pastSeasonLogRepository;
     private final RestTemplateUtils restTemplateUtils;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public LogServiceImpl(
             ExpLogRepository expLogRepository,
             BattleLogRepository battleLogRepository,
             PastSeasonLogRepository pastSeasonLogRepository,
-            RestTemplateUtils restTemplateUtils
+            RestTemplateUtils restTemplateUtils,
+            RedisTemplate<String, Object> redisTemplate
     )
     {
         this.expLogRepository = expLogRepository;
         this.battleLogRepository = battleLogRepository;
         this.pastSeasonLogRepository = pastSeasonLogRepository;
         this.restTemplateUtils = restTemplateUtils;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -249,6 +254,12 @@ public class LogServiceImpl implements LogService
         log.info("LogServiceImpl 의 insertBattleLog 메소드 실행 완료");
     }
 
+    /**
+     * 경험치 로그 저장
+     * @param userId
+     * @param addExp
+     * @return
+     */
     @Override
     public int insertExp(String userId, int addExp)
     {
@@ -259,6 +270,9 @@ public class LogServiceImpl implements LogService
         insertExpLogEntity.setUserId(userId);
         insertExpLogEntity.setAddExp(addExp);
         insertExpLogEntity.setCurExp(curExp + addExp);
+
+        ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
+        redisExp.set("levelExp:" + userId, curExp + addExp);
 
         if (expLogRepository.save(insertExpLogEntity) != null)
         {
