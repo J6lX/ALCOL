@@ -513,6 +513,16 @@ public class WebSocket {
                         System.out.println("속도 :"+ fromdata_statistic_info.get("time_cost"));
                         System.out.println("메모리 : "+fromdata_statistic_info.get("memory_cost"));
                         BattleLog userBattleLog = BattleLog.builder().result("Accepted").memory(fromdata_statistic_info.get("memory_cost").toString()).time(fromdata_statistic_info.get("time_cost").toString()).build();
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleResult="win";
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleResult="lose";
+                        }
+                        else
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleResult="win";
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleResult="lose";
+                        }
                         int user_mmr=0;
                         int other_mmr=0;
                         float user_odds=0;
