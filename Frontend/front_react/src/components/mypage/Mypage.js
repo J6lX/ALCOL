@@ -14,7 +14,13 @@ import platinumBadge from "../../assets/ALCOL tiers/bigtier_platinum.png";
 import diamondBadge from "../../assets/ALCOL tiers/bigtier_diamond.png";
 import alcolBadge from "../../assets/ALCOL tiers/bigtier_alcol.png";
 
-import { LoginState, BackupBattleRec, userBattleRec, UserInfoState } from "../../states/LoginState";
+import {
+  LoginState,
+  BackupBattleRec,
+  userBattleRec,
+  UserInfoState,
+  MMRState,
+} from "../../states/LoginState";
 import { LastSeasonState } from "../../states/RankingState";
 import { useRecoilState, useRecoilValue } from "recoil";
 
@@ -95,6 +101,11 @@ function giveColor(userTier) {
     return "white";
   }
 }
+
+// // 티어 진척도 계산
+// function TierGraphCalculate(target) {
+//   return
+// }
 
 // 날짜 차이 계산 함수
 function CalculateDatediff(startDate) {
@@ -242,6 +253,7 @@ function Mypage() {
   const [battleRec, setBattleRec] = useRecoilState(userBattleRec);
   const [BackupRec, setBackupRec] = useRecoilState(BackupBattleRec);
   const [seasonInfo, setSeasonInfo] = useRecoilState(LastSeasonState);
+  const [MMRList, setMMRList] = useRecoilState(MMRState);
 
   // 더 보기 단추
   // resultCount = 현재 몇 개의 전적 항목을 조회하는지 체크하는 용도
@@ -376,6 +388,27 @@ function Mypage() {
     },
   ];
 
+  // mmr 요청
+  useEffect(() => {
+    axios
+      .post(`http://i8b303.p.ssafy.io:9005/log-service/getExpAndMmr`, null, {
+        params: {
+          user_id: userId,
+        },
+      })
+      // 스피드전 MMR과 효율성전 MMR 반환
+      .then((response) => {
+        const mmrSrc = response.data;
+        const speedMMR = mmrSrc.speedMmr;
+        const efficiencyMMR = mmrSrc.optimizationMmr;
+        // mmr 정보 저장
+        setMMRList([speedMMR, efficiencyMMR]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [userId, setMMRList]);
+
   // 모드 선택에 따라 필터링 및 탭 스타일 변경 진행
   const [speedColor, setSpeedColor] = useState({ color: "white" });
   const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
@@ -478,6 +511,8 @@ function Mypage() {
       </>
     );
   };
+
+  // MMR을 이용해 티어 진척도 계산
 
   // 지난 시즌 요약 표시
   function SeasonCollection() {
