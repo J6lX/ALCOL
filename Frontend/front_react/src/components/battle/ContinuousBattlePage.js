@@ -15,12 +15,22 @@ import {
   selectedLanguage,
   matchingPlayerInfo,
   resultListResultInfo,
+  sendConnect,
+  sendGetProblem,
+  sendBattleStart,
 } from "../../states/atoms";
 
 // let submitResult = "";
 const serverAddress = "i8b303.p.ssafy.io:9002";
 const websocketAddress = "ws://" + serverAddress + "/websocket";
 let socket = null;
+
+function sleep(ms, func) {
+  return new Promise((r) => {
+    func();
+    setTimeout(r, ms);
+  });
+}
 
 const ContinuousBattlePage = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -32,12 +42,15 @@ const ContinuousBattlePage = () => {
   // const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const [problemInfo, setProblemInfo] = useState([]);
+  const [battleResult, setBattleResult] = useState([]);
   const [resultListResult, setResultListResult] = useRecoilState(resultListResultInfo);
+  const [checkConnect, setCheckConnect] = useRecoilState(sendConnect);
+  const [checkGetProblem, setCheckGetProblem] = useRecoilState(sendGetProblem);
+  const [checkBattleStart, setCheckBattleStart] = useRecoilState(sendBattleStart);
   const idInfo = useRecoilValue(matchingPlayerInfo);
   const battleModeInfo = useRecoilValue(selectedMode);
   const languageMode = useRecoilValue(selectedLanguage);
 
-  let battleResult;
   console.log(languageMode);
   const [nickname, setNickname] = useState("a");
   const [speedTier, setSpeedTier] = useState("a");
@@ -110,16 +123,18 @@ const ContinuousBattlePage = () => {
       });
   }, [userId, otherId]);
 
-  if (isConnected === false && nickname !== "a" && othernickname !== "b") {
+  if (isConnected === false && checkConnect === "-1" && nickname !== "a" && othernickname !== "b") {
     socket = new WebSocket(websocketAddress);
     console.log("socket", socket);
 
     socket.onopen = () => {
-      setTimeout(() => {
+      if (checkConnect === "-1") {
         console.log("소켓이 오픈되었습니다. 아래 데이터를 보냅니다.");
         console.log(messageType, userId, otherId, hostCheck, battleMode);
-
-        if (isConnected === false) {
+        sleep(500, () => {
+          setCheckConnect("0");
+        }).then(() => {
+          console.log("connect보낸다");
           socket.send(
             JSON.stringify({
               messageType: messageType,
@@ -129,8 +144,8 @@ const ContinuousBattlePage = () => {
               battleMode: battleMode,
             })
           );
-        }
-      }, 500);
+        });
+      }
     };
 
     socket.onmessage = (servermessage) => {
@@ -139,9 +154,11 @@ const ContinuousBattlePage = () => {
       if (data.messageType === "connect_success") {
         console.log("연결 완료! 아래와 같은 데이터를 받았습니다.");
         console.log(data);
-        console.log("problems", problems);
-        if (isConnected === false) {
-          setTimeout(() => {
+        if (checkGetProblem === "-1") {
+          sleep(500, () => {
+            setCheckGetProblem("0");
+          }).then(() => {
+            console.log("getProblem보낸다");
             socket.send(
               JSON.stringify({
                 messageType: "getProblem",
@@ -149,12 +166,11 @@ const ContinuousBattlePage = () => {
                 otherId: otherId,
               })
             );
-          }, 100);
+          });
         }
-        setIsConnected(true);
-        setTimeout(() => {
-          console.log("");
-        }, 300);
+        sleep(500, () => {
+          setIsConnected(true);
+        });
       } else if (data.messageType === "ban_success") {
         console.log("문제 밴 완료! 아래의 데이터를 받았습니다.");
         console.log(data);
@@ -174,21 +190,22 @@ const ContinuousBattlePage = () => {
               console.log("");
             }, 1000);
             setTimeout(() => {
-              if (isSelected === false) {
-                console.log("배틀 스타트 메세지 보낸다");
-                socket.send(
-                  JSON.stringify({
-                    messageType: "battleStart",
-                    userId: userId,
-                    otherId: otherId,
-                  })
-                );
+              if (checkBattleStart === "-1") {
+                sleep(500, () => {
+                  setCheckBattleStart("0");
+                }).then(() => {
+                  console.log("battleStart 보낸다");
+                  socket.send(
+                    JSON.stringify({
+                      messageType: "battleStart",
+                      userId: userId,
+                      otherId: otherId,
+                    })
+                  );
+                  setIsSelected(false);
+                  setIsSolving(true);
+                });
               }
-              setIsSelected(false);
-              setIsSolving(true);
-              setTimeout(() => {
-                console.log("");
-              }, 300);
             }, 10000);
           }, 1000);
         }, 1000);
@@ -360,7 +377,7 @@ const ContinuousBattlePage = () => {
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
         if (battleMode === "speed") {
-          battleResult = data;
+          setBattleResult(data);
           if (data.battleResult === "win") {
             console.log(data);
             const modaldata = {
@@ -424,6 +441,8 @@ const ContinuousBattlePage = () => {
         console.log(data);
       }
     };
+
+    console.log("배틀 결과 보이니", battleResult);
 
     socket.onclose = (message) => {
       console.log("closed!", message);
@@ -591,8 +610,12 @@ const ContinuousBattlePage = () => {
   });
 
   const changeBanProblem = (data) => {
+    if (data === "timeout") {
+      console.log(data);
+    }
     // setProblemNumber(data);
     if (isBanWait === false) {
+      console.log("ban 날린다");
       socket.send(
         JSON.stringify({
           messageType: "ban",

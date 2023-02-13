@@ -118,7 +118,8 @@ function ResultInfo({ sendResult }) {
             <Col span={2}>사진</Col>
             <Col span={22}>
               {sendResult.player_info}님의 {sendResult.result}코드 제출! 코드길이:
-              {sendResult.code_length} 메모리:{sendResult.memory} 걸린시간:{sendResult.time}
+              {sendResult.code_length} 메모리:{sendResult.memory / 1024000} 걸린시간:
+              {sendResult.time}
             </Col>
           </Row>
         </Col>
@@ -131,7 +132,7 @@ function ResultInfo({ sendResult }) {
 function ResultList() {
   //atoms에 저장한 battleResultList를 불러옵니다.
   const resultList = useRecoilValue(resultListResultInfo);
-  console.log(resultList);
+  console.log("자세히보기 정보", resultList);
   const printResults = () => {
     const result = [];
     for (let i = 0; i < resultList.length; i++) {

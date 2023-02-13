@@ -16,6 +16,25 @@ export const selectedLanguage = atom({
   key: "selectedLanguage",
   default: "-1",
 });
+
+//---------배틀 소켓 연결 메세지 보냈는지
+export const sendConnect = atom({
+  key: "sendConnect",
+  default: "-1",
+});
+
+//---------문제 얻는 메세지 보냈는지
+export const sendGetProblem = atom({
+  key: "sendGetProblem",
+  default: "-1",
+});
+
+//---------배틀 시작 메세지 보냈는지
+export const sendBattleStart = atom({
+  key: "sendBattleStart",
+  default: "-1",
+});
+
 //---------배틀 문제 정보
 export const battleProblemInfo = atom({
   key: "battleProblemInfo",
