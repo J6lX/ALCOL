@@ -147,10 +147,10 @@ public class UserServiceImpl implements UserService
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
         redisExp.set("levelExp:" + userEntity.getUserId(), "1");
-        redisMmr.add("speed", userEntity.getUserId(), 1000);
-        redisMmr.add("optimization", userEntity.getUserId(), 1000);
+        redisMmr.add("speed", userEntity.getUserId(), 1200);
+        redisMmr.add("optimization", userEntity.getUserId(), 1200);
 
-        log.info("UserServiceImpl 의 createUser 메소드에서 redis 에 사용자 경험치=1, mmr=1000 으로 저장");
+        log.info("UserServiceImpl 의 createUser 메소드에서 redis 에 사용자 경험치=1, mmr=1200 으로 저장");
 
         // 회원가입 정보 저장
         userRepository.save(userEntity);
