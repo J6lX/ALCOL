@@ -1,12 +1,16 @@
 package com.alcol.logservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "battle_prob_submit_log_tb")
 public class BattleProbSubmitLogEntity
 {
@@ -14,6 +18,7 @@ public class BattleProbSubmitLogEntity
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int battleProbSubmitLogNo;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "battle_log_no", nullable = false)
     private BattleLogEntity battleLogEntity;
