@@ -409,10 +409,10 @@ public class WebSocket {
             {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
-                if(session==userId2Session.get(userId))
+                if(session==sessionId2Obj.get(userId2SessionId.get(userId)))
                 {
                     timer = new Timer();
-                    timer.schedule(new SessionTimerTask(session), 3000); // 1초마다 실행
+                    timer.schedule(new SessionTimerTask(session), 5000); // 1초마다 실행
                 }
             }
             else if (method.equals("battleTimeOut"))
