@@ -15,7 +15,7 @@ public class BattleProbSubmitLogEntity
     private int battleProbSubmitLogNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "battleLogNo", nullable = false)
+    @JoinColumn(name = "battle_log_no", nullable = false)
     private BattleLogEntity battleLogEntity;
 
 //    @Column(nullable = false)
