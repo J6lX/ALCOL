@@ -7,9 +7,9 @@ import axios from "axios";
 import { useSetRecoilState } from "recoil";
 import {
   AccessTokenInfo,
-  CurrentNickname,
   LoginState,
   RefreshTokenInfo,
+  UserInfoState,
 } from "../../states/LoginState";
 
 function LoginPage() {
@@ -17,7 +17,7 @@ function LoginPage() {
   const setIsLoggedIn = useSetRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
-  const setUserNickname = useSetRecoilState(CurrentNickname);
+  const setUserInfo = useSetRecoilState(UserInfoState);
 
   // Login을 제출하면 실행되는 함수
   // 성공 시 localstorage에 토큰 발급
@@ -54,8 +54,14 @@ function LoginPage() {
             .post(`http://i8b303.p.ssafy.io:9000/user-service/getUserInfo`, { user_id: userId })
             .then(function (response) {
               // 사용자 기본 정보를 recoil(userInfo)에 저장
-              const userNickname = response.data.nickname;
-              setUserNickname(userNickname);
+              const receivedUserData = {
+                nickname: response.data.nickname,
+                profileImg: response.data.stored_file_name,
+                level: response.data.level,
+                speedTier: response.data.speed_tier,
+                efficiencyTier: response.data.optimization_tier,
+              };
+              setUserInfo(receivedUserData);
               window.location.reload();
             });
           // 로그인에 성공하면 메인 화면으로 리다이렉트

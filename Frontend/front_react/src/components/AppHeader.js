@@ -24,15 +24,14 @@ function LoginTag(props) {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
-  const [nickname, setUserNickname] = useRecoilState(CurrentNickname);
-  const userInfo = useRecoilValue(UserInfoState);
+  const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
   const photo = userInfo.profileImg;
 
   const logoutRequest = () => {
     setIsLoggedIn(false);
     setAccessTokenData("");
     setRefreshTokenData("");
-    setUserNickname("");
+    setUserInfo([]);
 
     // 메인 화면으로 리다이렉트
     window.location.reload();
@@ -72,7 +71,7 @@ function LoginTag(props) {
             textAlign: "center",
           }}>
           <Link to={`/mypage/${isLoggedIn}`} className="text">
-            {nickname}
+            {userInfo.nickname}
           </Link>
         </Col>
         <Col
