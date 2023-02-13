@@ -102,10 +102,42 @@ function giveColor(userTier) {
   }
 }
 
-// // 티어 진척도 계산
-// function TierGraphCalculate(target) {
-//   return
-// }
+// 티어 기준선 계산
+function TierBorder(tiercolor, tiernum) {
+  // startingPoint = 시작 지점(티어 색상)
+  const startingPoint = () => {
+    // 브론즈면 1000
+    if (tiercolor === "B") {
+      return 1000;
+    }
+    // 실버면 1250
+    else if (tiercolor === "S") {
+      return 1250;
+    }
+    // 골드면 1500
+    else if (tiercolor === "G") {
+      return 1500;
+    }
+    // 플래면 1750
+    else if (tiercolor === "P") {
+      return 1750;
+    }
+    // 다이아면 2000
+    else if (tiercolor === "D") {
+      return 2000;
+    }
+    // ALCOL이면 2250
+    else if (tiercolor === "A") {
+      return 2250;
+    }
+    // 무배치면 0
+    else {
+      return 0;
+    }
+  };
+  // 최종 티어 경계 = 시작 지점 + 50 * 티어 숫자
+  return startingPoint(tiercolor) + 50 * (5 - tiernum);
+}
 
 // 날짜 차이 계산 함수
 function CalculateDatediff(startDate) {
@@ -370,24 +402,6 @@ function Mypage() {
     },
   ];
 
-  // 스피드전 데이터
-  const speedData = [
-    {
-      value: 20,
-      color: giveColor(userSPDTier),
-      name: "name1",
-    },
-  ];
-
-  // 효율성전 데이터
-  const efficiencyData = [
-    {
-      value: 30,
-      color: giveColor(userEFFTier),
-      name: "name1",
-    },
-  ];
-
   // mmr 요청
   useEffect(() => {
     axios
@@ -408,6 +422,32 @@ function Mypage() {
         console.log(error);
       });
   }, [userId, setMMRList]);
+
+  // 모드 별 티어 시작점 구하기
+  const speedBorder = TierBorder(userSPDTier, userSPDnumber);
+  const efficiencyBorder = TierBorder(userEFFTier, userEFFnumber);
+
+  // 모드 별 현재 MMR
+  const spdMMR = MMRList[0];
+  const effMMR = MMRList[1];
+
+  // 스피드전 데이터
+  const speedData = [
+    {
+      value: (spdMMR - speedBorder) * 2,
+      color: giveColor(userSPDTier),
+      name: "name1",
+    },
+  ];
+
+  // 효율성전 데이터
+  const efficiencyData = [
+    {
+      value: (effMMR - efficiencyBorder) * 2,
+      color: giveColor(userEFFTier),
+      name: "name1",
+    },
+  ];
 
   // 모드 선택에 따라 필터링 및 탭 스타일 변경 진행
   const [speedColor, setSpeedColor] = useState({ color: "white" });
@@ -464,6 +504,7 @@ function Mypage() {
     const lose = recentRecord[1].value;
     const winrate = win + lose > 0 ? Math.round((win / total) * 100) : 0;
 
+    // 컴포넌트 반환
     return (
       <>
         <text
@@ -512,8 +553,6 @@ function Mypage() {
     );
   };
 
-  // MMR을 이용해 티어 진척도 계산
-
   // 지난 시즌 요약 표시
   function SeasonCollection() {
     if (seasonInfo === []) {
@@ -522,7 +561,7 @@ function Mypage() {
       return (
         <>
           {/* 한 줄에 1개씩 표시 */}
-          {seasonInfo.map((seasonData, key) => (
+          {seasonInfo.map((seasonData) => (
             <Col span={24} align="middle" className="seasonGrid">
               <Row justify="center" align="middle">
                 <Col span={8} className="text">
@@ -628,6 +667,7 @@ function Mypage() {
                         margin: "15px",
                         maxHeight: "240px",
                       }}>
+                      {/* 스피드전 진척도 그래프 */}
                       <PieChart
                         data={speedData}
                         reveal={speedData[0].value}
@@ -661,14 +701,14 @@ function Mypage() {
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>스피드전 요약</p>
                       <p>{userInfo.speedTier}</p>
-                      <p>MMR</p>
+                      <p>MMR {spdMMR}</p>
                       <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>최적화전 요약</p>
                       <p>{userInfo.efficiencyTier}</p>
-                      <p>MMR</p>
+                      <p>MMR {effMMR}</p>
                       <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
