@@ -16,6 +16,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  redis:
+    host: i8b303.p.ssafy.io
+    port: 6000
+    password: ehgud
 
 eureka:
   client:

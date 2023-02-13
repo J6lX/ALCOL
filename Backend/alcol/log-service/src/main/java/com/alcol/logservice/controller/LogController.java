@@ -194,4 +194,92 @@ public class LogController
         return "Log Service : battleLog Insert Success";
     }
 
+    @PostMapping("/insertBattleLogByDraw")
+    public String insertBattleLogByDraw(@RequestBody Map<String, Object> map)
+    {
+        log.info("LogController 의 insertBattleLogByDraw 메소드 실행");
+
+        log.info("insertBattleLogByDraw 분기 1");
+
+        String battleMode = (String)map.get("battleMode");
+        long probNum = new Long((int)map.get("probNum"));
+
+        log.info("insertBattleLogByDraw 분기 2");
+
+        String userId = (String)map.get("userId");
+        int userNowMmr = (int)map.get("userNowMmr");
+
+        String otherId = (String)map.get("otherId");
+        int otherNowMmr = (int)map.get("otherNowMmr");
+
+        List<Map<String, Object>> userSubmitLog = (List<Map<String, Object>>) map.get("userSubmitLog");
+        List<Map<String, Object>> otherSubmitLog = (List<Map<String, Object>>) map.get("otherSubmitLog");
+
+        log.info("insertBattleLogByDraw 분기 3");
+
+        List<LogDto.BattleProbSubmitLogDto> userSubmitLogList = new ArrayList<>();
+        List<LogDto.BattleProbSubmitLogDto> otherSubmitLogList = new ArrayList<>();
+
+        LogDto.BattleLogDto userBattleLogDto = LogDto.BattleLogDto.builder()
+                .myUserId(userId)
+                .otherUserId(otherId)
+                .battleMode(battleMode)
+                .probNo(probNum)
+                .battleResult(2)
+                .upDownMmr(0)
+                .nowMmr(userNowMmr)
+                .endTime(LocalDateTime.now())
+                .build();
+
+        LogDto.BattleLogDto otherBattleLogDto = LogDto.BattleLogDto.builder()
+                .myUserId(otherId)
+                .otherUserId(userId)
+                .battleMode(battleMode)
+                .probNo(probNum)
+                .battleResult(2)
+                .upDownMmr(0)
+                .nowMmr(otherNowMmr)
+                .endTime(LocalDateTime.now())
+                .build();
+
+        for (Map<String, Object> submitLog : userSubmitLog)
+        {
+            int isCorrect = submitLog.get("result").equals("Accepted") ? 1 : 0;
+            int time = Integer.parseInt(submitLog.get("time") + "");
+            int memory = Integer.parseInt(submitLog.get("memory") + "");
+
+            userSubmitLogList.add(
+                    LogDto.BattleProbSubmitLogDto.builder()
+                            .isCorrect(isCorrect)
+                            .probRunningTime(time)
+                            .probRunningMemory(memory)
+                            .submitTime(LocalDateTime.now())
+                            .build()
+            );
+        }
+
+        for (Map<String, Object> submitLog : otherSubmitLog)
+        {
+            int isCorrect = submitLog.get("result").equals("Accepted") ? 1 : 0;
+            int time = Integer.parseInt(submitLog.get("time") + "");
+            int memory = Integer.parseInt(submitLog.get("memory") + "");
+
+            otherSubmitLogList.add(
+                    LogDto.BattleProbSubmitLogDto.builder()
+                            .isCorrect(isCorrect)
+                            .probRunningTime(time)
+                            .probRunningMemory(memory)
+                            .submitTime(LocalDateTime.now())
+                            .build()
+            );
+        }
+
+        log.info("insertBattleLogByDraw 분기 4");
+
+        logService.insertBattleLog(userBattleLogDto, otherBattleLogDto, userSubmitLogList, otherSubmitLogList);
+
+        log.info("LogController 의 insertBattleLogByDraw 메소드 실행 완료");
+
+        return "Log Service : battleLog Insert By Draw Success";
+    }
 }
