@@ -209,4 +209,27 @@ public class LogServiceImpl implements LogService
         return userSeasonLogDtoList;
     }
 
+    @Override
+    public void insertBattleLog(LogDto.BattleLogDto winnerBattleLogDto, LogDto.BattleLogDto loserBattleLogDto)
+    {
+        log.info("LogServiceImpl 의 insertBattleLog 메소드 실행");
+
+        ModelMapper modelMapperByWinner = new ModelMapper();
+        modelMapperByWinner.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+
+        ModelMapper modelMapperByLoser = new ModelMapper();
+        modelMapperByLoser.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.STRICT)
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
+
+        battleLogRepository.save(modelMapperByWinner.map(winnerBattleLogDto, BattleLogEntity.class));
+        battleLogRepository.save(modelMapperByLoser.map(loserBattleLogDto, BattleLogEntity.class));
+
+        log.info("LogServiceImpl 의 insertBattleLog 메소드 실행 완료");
+    }
+
 }
