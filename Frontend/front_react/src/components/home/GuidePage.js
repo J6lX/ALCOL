@@ -483,7 +483,7 @@ const Guide5 = () => {
               </motion.div>
               <motion.div
                 className="friendBox"
-                style={{ marginLeft: "10vw", translateX: frientBoxValue2 }}>
+                style={{ marginLeft: "10vw", translateX: frientBoxValue3 }}>
                 <Col span={1}></Col>
                 <Col span={8}>
                   <div className="profileCircle"></div>
@@ -502,7 +502,7 @@ const Guide5 = () => {
                   </h1>
                 </Col>
               </motion.div>
-              <motion.div className="friendBox" style={{ translateX: frientBoxValue3 }}>
+              <motion.div className="friendBox" style={{ translateX: frientBoxValue2 }}>
                 <Col span={1}></Col>
                 <Col span={8}>
                   <div className="profileCircle"></div>
@@ -661,27 +661,27 @@ const GuidePage = () => {
     <div className="fullmiddle">
       <Guide1 />
       <div>
-        <div style={{ width: "100vw", height: "30vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "10vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide2 />
       <div>
-        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "10vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide3 />
       <div>
-        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "10vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide4 />
       <div>
-        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "10vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide5 />
       <div>
-        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "10vw", backgroundColor: "#16171B" }}></div>
       </div>
       <Guide6 />
       <div>
-        <div style={{ width: "100vw", height: "20vw", backgroundColor: "#16171B" }}></div>
+        <div style={{ width: "100vw", height: "10vw", backgroundColor: "#16171B" }}></div>
       </div>
     </div>
   );

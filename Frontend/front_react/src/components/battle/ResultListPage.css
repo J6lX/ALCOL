@@ -1,4 +1,6 @@
 .resultList_background {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   background: url(/src/assets/result_background.png);
   background-size: cover;
@@ -19,7 +21,7 @@
   font-size: 50px;
   color: white;
   text-align: center;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .result_icon_vs {
@@ -81,7 +83,6 @@
 .result_list_info {
   background-color: rgba(255, 255, 255, 0.5);
   margin-top: 0.5vh;
-  /* padding-left: 10px; */
   height: 5vh;
   line-height: 5vh;
 }
