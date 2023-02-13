@@ -236,6 +236,13 @@ public class ProblemServiceImpl implements ProblemService
             HashMap<String, Object> InfoData = (HashMap<String, Object>) submissionData.get("info");
             // 테스트케이스 리스트
             List<HashMap<String, Object>> testcaseList = (List<HashMap<String, Object>>) InfoData.get("data");
+
+            if(testcaseList == null)
+            {
+                return ScoreDto.Response.builder()
+                        .result("CompileError")
+                        .build();
+            }
             // 전체 테스트케이스 개수
             int allTestcaseCnt = testcaseList.size();
             // 맞은 테스트케이스 개수

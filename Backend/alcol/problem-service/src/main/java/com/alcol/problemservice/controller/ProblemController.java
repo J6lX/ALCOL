@@ -80,7 +80,7 @@ public class ProblemController
 
         // 코드를 채점하는 시간이 있으므로 5초 뒤에 요청한다.
         try {
-            Thread.sleep(5000);
+            Thread.sleep(4000);
         }
         catch (InterruptedException e)
         {
@@ -94,6 +94,12 @@ public class ProblemController
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_RESULT_ERROR));
         }
+        // 컴파일 에러일 때 에러 메시지를 보낸다.
+        if(response.getResult().equals("CompileError"))
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_COMPILE_ERROR));
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(response, CustomStatusCode.SCORE_SUCCESS));
     }
 }
