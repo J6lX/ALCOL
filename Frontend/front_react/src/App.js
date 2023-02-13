@@ -58,7 +58,7 @@ function App() {
         <hr
           style={{
             color: "white",
-            transform: "translate(0, 69px)",
+            transform: "translate(0, 64px)",
           }}
         />
         <Content
@@ -131,7 +131,7 @@ function App() {
             />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
-            <Route path="/mypage/:username" exact={true} component={Mypage} />
+            <PrivateRoute path="/mypage/:username" exact={true} component={Mypage} />
 
             {/* 404 페이지 */}
             <Route component={NotFound404} />

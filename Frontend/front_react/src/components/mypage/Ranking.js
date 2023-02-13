@@ -327,7 +327,7 @@ function Ranking() {
   return (
     <div
       style={{
-        paddingTop: "70px",
+        paddingTop: "65px",
       }}>
       {/* 페이지 제목(이미지 위에 띄우기) */}
       <img src={rankingHeader} alt="headerImage" className="headerImg"></img>
