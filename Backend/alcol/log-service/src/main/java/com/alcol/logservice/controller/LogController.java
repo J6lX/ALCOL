@@ -4,7 +4,6 @@ import com.alcol.logservice.dto.LogDto;
 import com.alcol.logservice.service.LogService;
 import com.alcol.logservice.util.RestTemplateUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
