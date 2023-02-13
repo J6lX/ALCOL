@@ -83,8 +83,10 @@ public class LogController
     @PostMapping("/insertExp")
     public int insertExp(@RequestBody Map<String, Object> map)
     {
+        log.info("LogController 의 insertExp 메소드 실행");
         String userId = map.get("user_id") + "";
         int addExp = Integer.parseInt(map.get("add_exp") + "");
+        log.info("LogController 의 insertExp 메소드 실행 완료");
         return logService.insertExp(userId, addExp);
     }
 
