@@ -51,6 +51,7 @@ public class WebSocket {
     private int userMmr;
     private int otherMmr;
     int mmrAvg;
+    private Timer timer;
     private static Set<String> sessionSet = new HashSet<String>();
     private static Map<String, Session> sessionMap = new HashMap<>();
     private static Map<String, BattleRoom> sessionId2Obj = new HashMap<>();
@@ -402,6 +403,16 @@ public class WebSocket {
             /**
              * 무승부
              */
+            else if (method.equals("battleStart"))
+            {
+                String userId = obj.get("userId").toString();
+                String otherUserId = obj.get("otherId").toString();
+                if(session==userId2Session.get(userId))
+                {
+                    timer = new Timer();
+                    timer.schedule(new SessionTimerTask(session), 0, 1000); // 1초마다 실행
+                }
+            }
             else if (method.equals("battleTimeOut"))
             {
                 String drowUserId = obj.get("userId").toString();
@@ -589,6 +600,7 @@ public class WebSocket {
                             String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
                             Map<String, BattleRoom> sendBattleLog = new HashMap<>();
 //                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
+                            System.out.println(sessionId2Obj.get(userId2SessionId.get(submitUserId)));
                             sendBattleLog.put("battleLog", sessionId2Obj.get(userId2SessionId.get(submitUserId)));
                             String getBattleLogSaveResult = restTemplate.postForObject(
                                     url_log,
@@ -668,7 +680,7 @@ public class WebSocket {
 //                    sb.append("[유저/").append(name).append("]");
                 }
                 sb.append(" : ").append(msg);
-                sendMessageToAll(sb.toString());
+//                sendMessageToAll(sb.toString());
             }
         }
     }
@@ -736,33 +748,33 @@ public class WebSocket {
         return this.sessionSet;
     }
 
-    private boolean sendMessageToAll(String message) {
-        int sessionCount = sessionSet.size();
-        if (sessionCount < 1) {
-            return false;
-        }
-
-        Session singleSession = null;
-
-        for (String name : sessionSet) {
-
-            singleSession = sessionMap.get(name);
-            if (singleSession == null) {
-                continue;
-            }
-            if (!singleSession.isOpen()) {
-                continue;
-            }
-            JSONObject send = new JSONObject();
-
-            send.put("method", "msg");
-            send.put("content",message);
-            singleSession.getAsyncRemote().sendText(send.toJSONString());
-
-        }
-
-        return true;
-    }
+//    private boolean sendMessageToAll(String message) {
+//        int sessionCount = sessionSet.size();
+//        if (sessionCount < 1) {
+//            return false;
+//        }
+//
+//        Session singleSession = null;
+//
+//        for (String name : sessionSet) {
+//
+//            singleSession = sessionMap.get(name);
+//            if (singleSession == null) {
+//                continue;
+//            }
+//            if (!singleSession.isOpen()) {
+//                continue;
+//            }
+//            JSONObject send = new JSONObject();
+//
+//            send.put("method", "msg");
+//            send.put("content",message);
+//            singleSession.getAsyncRemote().sendText(send.toJSONString());
+//
+//        }
+//
+//        return true;
+//    }
 
     private RestTemplate makeRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
@@ -786,6 +798,21 @@ public class WebSocket {
         requestFactory.setReadTimeout(3 * 1000);
 
         return new RestTemplate(requestFactory);
+    }
+
+    private class SessionTimerTask extends TimerTask {
+
+        private Session session;
+
+        public SessionTimerTask(Session session) {
+            this.session = session;
+        }
+
+        @Override
+        public void run() {
+            // 타이머가 실행될 때 수행할 작업
+
+        }
     }
 }
 
