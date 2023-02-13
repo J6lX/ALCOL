@@ -602,11 +602,42 @@ public class WebSocket {
                             String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
                             BattleRoom battleRoomJson = sessionId2Obj.get(userId2SessionId.get(submitUserId));
                             Map<String, Object> sendBattleLog = new HashMap<>();
-                            sendBattleLog.put("messageType","battleLog");
-                            sendBattleLog.put("userId",submitUserId);
-                            sendBattleLog.put("otherId",submitOtherId);
                             sendBattleLog.put("battleMode",submitBattleMode);
-//                            sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
+                            sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
+                            if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                            {
+                                if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleResult.equals("win"))
+                                {
+                                    sendBattleLog.put("winnerUserId",submitUserId);
+                                    sendBattleLog.put("loserUserId",submitOtherId);
+                                    sendBattleLog.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr);
+                                    sendBattleLog.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr);
+                                }
+                                else
+                                {
+                                    sendBattleLog.put("winnerUserId",submitOtherId);
+                                    sendBattleLog.put("loserUserId",submitUserId);
+                                    sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr);
+                                    sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr);
+                                }
+                            }
+                            else
+                            {
+                                if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleResult.equals("win"))
+                                {
+                                    sendBattleLog.put("winnerUserId",submitUserId);
+                                    sendBattleLog.put("loserUserId",submitOtherId);
+                                    sendBattleLog.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr);
+                                    sendBattleLog.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
+                                }
+                                else
+                                {
+                                    sendBattleLog.put("winnerUserId",submitOtherId);
+                                    sendBattleLog.put("loserUserId",submitUserId);
+                                    sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr);
+                                    sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
+                                }
+                            }
 //                            sendBattleLog.put("user1",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1);
 //                            sendBattleLog.put("user2",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2);
 //                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
