@@ -19,5 +19,7 @@ public class BattleRoom {
     int problemNum;
     List<Problem> problemList = new ArrayList<>();
 
+    int time_limit = 0;
+    int memory_limit = 0;
     int timeOutCnt = 0;
 }
