@@ -171,7 +171,10 @@ const ContinuousBattlePage = () => {
             setIsBanWait(false);
             setIsSelected(true);
             setTimeout(() => {
-              if (isSelected === true) {
+              console.log("");
+            }, 1000);
+            setTimeout(() => {
+              if (isSelected === false) {
                 console.log("배틀 스타트 메세지 보낸다");
                 socket.send(
                   JSON.stringify({
