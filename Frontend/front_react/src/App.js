@@ -55,7 +55,12 @@ function App() {
     <RecoilRoot>
       <Layout>
         <AppHeader />
-        <hr style={{ color: "white" }} />
+        <hr
+          style={{
+            color: "white",
+            transform: "translate(0, 69px)",
+          }}
+        />
         <Content
           style={{
             backgroundColor: "#16171B",
@@ -119,7 +124,11 @@ function App() {
             <Route path="/practice" component={PracticePage} />
 
             {/* 혼자 문제 푸는 페이지 */}
-            <PrivateRoute path="/solveprac" exact={true} component={PracticeSolvingPage} />
+            <PrivateRoute
+              path="/solveprac/:problemno"
+              exact={true}
+              component={PracticeSolvingPage}
+            />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
             <Route path="/mypage/:username" exact={true} component={Mypage} />

@@ -126,10 +126,12 @@ const CodingPlace = () => {
   //   // console.log(solvingHeight);
   // };
 
+  // 제출 이벤트
   const clickSubmit = () => {
     console.log("submit ", code);
   };
 
+  // 제출 확인 모달 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
