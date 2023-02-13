@@ -417,7 +417,7 @@ public class WebSocket {
                 String otherUserId = obj.get("otherId").toString();
                 System.out.println("타이머 시작");
                 System.out.println("나의 세션"+session);
-                System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId));
+                System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
 
                 if(session==sessionId2Obj.get(userId2SessionId.get(userId))
                         && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
