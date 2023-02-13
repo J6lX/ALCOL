@@ -58,7 +58,7 @@ function App() {
         <hr
           style={{
             color: "white",
-            transform: "translate(0, 69px)",
+            transform: "translate(0, 64px)",
           }}
         />
         <Content
