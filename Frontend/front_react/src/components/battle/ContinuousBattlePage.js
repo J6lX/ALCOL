@@ -36,7 +36,8 @@ const ContinuousBattlePage = () => {
   const idInfo = useRecoilValue(matchingPlayerInfo);
   const battleModeInfo = useRecoilValue(selectedMode);
   const languageMode = useRecoilValue(selectedLanguage);
-  // let problems;
+
+  let battleResult;
   console.log(languageMode);
   const [nickname, setNickname] = useState("a");
   const [speedTier, setSpeedTier] = useState("a");
@@ -117,15 +118,18 @@ const ContinuousBattlePage = () => {
       setTimeout(() => {
         console.log("소켓이 오픈되었습니다. 아래 데이터를 보냅니다.");
         console.log(messageType, userId, otherId, hostCheck, battleMode);
-        socket.send(
-          JSON.stringify({
-            messageType: messageType,
-            userId: userId,
-            otherId: otherId,
-            hostCheck: hostCheck,
-            battleMode: battleMode,
-          })
-        );
+
+        if (isConnected === false) {
+          socket.send(
+            JSON.stringify({
+              messageType: messageType,
+              userId: userId,
+              otherId: otherId,
+              hostCheck: hostCheck,
+              battleMode: battleMode,
+            })
+          );
+        }
       }, 500);
     };
 
@@ -136,7 +140,7 @@ const ContinuousBattlePage = () => {
         console.log("연결 완료! 아래와 같은 데이터를 받았습니다.");
         console.log(data);
         console.log("problems", problems);
-        if (isReady === false) {
+        if (isConnected === false) {
           setTimeout(() => {
             socket.send(
               JSON.stringify({
@@ -145,16 +149,19 @@ const ContinuousBattlePage = () => {
                 otherId: otherId,
               })
             );
-          }, 50);
+          }, 100);
         }
         setIsConnected(true);
+        setTimeout(() => {
+          console.log("");
+        }, 300);
       } else if (data.messageType === "ban_success") {
         console.log("문제 밴 완료! 아래의 데이터를 받았습니다.");
         console.log(data);
         setTimeout(() => {
           setIsReady(false);
           setIsBanWait(true);
-        }, 500);
+        }, 300);
       } else if (data.messageType === "select_success") {
         console.log("배틀에서 풀 문제 세부 정보를 받았습니다.", data.problem);
         setTimeout(() => {
@@ -164,7 +171,10 @@ const ContinuousBattlePage = () => {
             setIsBanWait(false);
             setIsSelected(true);
             setTimeout(() => {
-              if (isSolving === false) {
+              console.log("");
+            }, 1000);
+            setTimeout(() => {
+              if (isSelected === false) {
                 console.log("배틀 스타트 메세지 보낸다");
                 socket.send(
                   JSON.stringify({
@@ -176,6 +186,9 @@ const ContinuousBattlePage = () => {
               }
               setIsSelected(false);
               setIsSolving(true);
+              setTimeout(() => {
+                console.log("");
+              }, 300);
             }, 10000);
           }, 1000);
         }, 1000);
@@ -190,6 +203,9 @@ const ContinuousBattlePage = () => {
           setIsConnected(true);
           setIsReady(true);
         }, 30);
+        setTimeout(() => {
+          console.log("");
+        }, 300);
       } else if (data.messageType === "exitResultOk") {
         const modaldata = {
           title: "배틀 종료 제안 수락!",
@@ -237,7 +253,7 @@ const ContinuousBattlePage = () => {
             time: data.time,
             memory: data.memory,
           };
-          let resultList = resultListResult;
+          let resultList = [...resultListResult];
           resultList.push(result);
           const modaldata = {
             title: "오답!",
@@ -344,6 +360,7 @@ const ContinuousBattlePage = () => {
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
         if (battleMode === "speed") {
+          battleResult = data;
           if (data.battleResult === "win") {
             console.log(data);
             const modaldata = {
@@ -575,14 +592,19 @@ const ContinuousBattlePage = () => {
 
   const changeBanProblem = (data) => {
     // setProblemNumber(data);
-    socket.send(
-      JSON.stringify({
-        messageType: "ban",
-        userId: userId,
-        otherId: otherId,
-        problemNumber: data,
-      })
-    );
+    if (isBanWait === false) {
+      socket.send(
+        JSON.stringify({
+          messageType: "ban",
+          userId: userId,
+          otherId: otherId,
+          problemNumber: data,
+        })
+      );
+    }
+    setTimeout(() => {
+      console.log("");
+    }, 300);
   };
 
   const submit = (codedata, problemNumber) => {
@@ -676,7 +698,7 @@ const ContinuousBattlePage = () => {
             clickSurrender={clickSurrender}
           />
         )}
-        {isSolved && <ResultPage />}
+        {isSolved && <ResultPage props={battleResult} />}
       </div>
       <Modal
         title="배틀 종료 제안"

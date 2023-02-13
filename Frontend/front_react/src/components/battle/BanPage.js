@@ -86,12 +86,14 @@ function Mid({ props, onClick }) {
   const keys = Object.keys(problems);
   console.log(keys);
   const printProblems = (number) => {
-    const result = [];
+    if (keys.length !== 0) {
+      const result = [];
 
-    for (let i = 0; i < problems[keys[number]].length; i++) {
-      result.push(<div key={i}> {problems[keys[number]][i]} </div>);
+      for (let i = 0; i < problems[keys[number]].length; i++) {
+        result.push(<div key={i}> {problems[keys[number]][i]} </div>);
+      }
+      return result;
     }
-    return result;
   };
 
   useEffect(() => {
