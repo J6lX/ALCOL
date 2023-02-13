@@ -32,7 +32,6 @@ function UserInfo({ setMode, setLanguage }) {
           user_id: userId,
         })
         .then(function (response) {
-          console.log("유저 정보를 불러오는 useEffect");
           setNickname(response.data.nickname);
           setSpeedTier(response.data.speed_tier);
           setOptTier(response.data.optimization_tier);
@@ -59,8 +58,6 @@ function UserInfo({ setMode, setLanguage }) {
 
   useEffect(() => {
     if (optTier !== "" || speedTier !== "") {
-      console.log(speedTier, optTier);
-
       //티어 정보만 잘라오기
       var speed = speedTier.toLowerCase();
       speed = speed.substr(0, speed.length - 1);
@@ -70,11 +67,6 @@ function UserInfo({ setMode, setLanguage }) {
       //레벨 정보만 잘라오기
       var tmpSpeedLV = speedTier.substr(speed.length, 1);
       var tmpOptLV = speedTier.substr(opt.length, 1);
-
-      console.log(speed);
-      console.log(tmpSpeedLV);
-      console.log(opt);
-      console.log(tmpOptLV);
 
       const { speedImg } = require("../../assets/ALCOL_tiers/tier_" +
         speed +
@@ -90,7 +82,6 @@ function UserInfo({ setMode, setLanguage }) {
 
   useEffect(() => {
     if (urlSpeed !== "" || urlOpt !== "") {
-      console.log("url effect");
       console.log(urlOpt);
       console.log(urlSpeed);
     }
@@ -109,17 +100,17 @@ function UserInfo({ setMode, setLanguage }) {
     <Row justify="space-between" className="battle_user_info_row">
       <Col span={1} style={{ lineHeight: "50px" }}>
         <img
-          src={iconBack.default}
+          src={iconBack}
           alt="back icon"
           style={{ width: "80%", marginTop: "5px", marginLeft: "5px" }}
           onClick={handlePageBack}></img>
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={urlSpeed} alt="tier" className="icon_tier" />
+        <img src={urlSpeed} alt="tier" className="mode_icon_tier" />
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={urlOpt} alt="tier" className="icon_tier" />
+        <img src={urlOpt} alt="tier" className="mode_icon_tier" />
       </Col>
       <Col
         span={3}
