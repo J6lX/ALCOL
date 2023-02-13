@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -408,15 +409,20 @@ public class WebSocket {
                 }
             }
             /**
-             * 무승부
+             * 타이머 시작
              */
             else if (method.equals("battleStart"))
             {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
+                System.out.println("타이머 시작");
+                System.out.println("나의 세션"+session);
+                System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId));
+
                 if(session==sessionId2Obj.get(userId2SessionId.get(userId))
                         && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
                 {
+                    System.out.println("저는 1번 유저입니다.");
                     timer = new Timer();
                     timer.schedule(new SessionTimerTask(session,userId,otherUserId), 5000); // 1초마다 실행
                 }
