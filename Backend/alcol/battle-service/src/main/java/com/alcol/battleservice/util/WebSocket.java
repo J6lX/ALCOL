@@ -385,12 +385,11 @@ public class WebSocket {
                         synchronized (session)
                         {
                             session.getBasicRemote().sendText(data.toJSONString());
-
                         }
-                        synchronized (session)
-                        {
-                            userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
-                        }
+//                        synchronized (session)
+//                        {
+//                            userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
+//                        }
                     }
                     else
                     {
@@ -423,8 +422,10 @@ public class WebSocket {
                     System.out.println("나의 세션"+session);
                     System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
                     System.out.println("저는 1번 유저입니다.");
+                    Map<String,Timer> timerMap = new HashMap<>();
                     timer = new Timer();
                     timer.schedule(new SessionTimerTask(session,userId,otherUserId), 5000); // 1초마다 실행
+
                 }
             }
             else if (method.equals("battleTimeOut"))
@@ -525,6 +526,7 @@ public class WebSocket {
                         System.out.println("속도 :"+ fromdata_statistic_info.get("time_cost"));
                         System.out.println("메모리 : "+fromdata_statistic_info.get("memory_cost"));
                         BattleLog userBattleLog = BattleLog.builder().result("Accepted").memory(fromdata_statistic_info.get("memory_cost").toString()).time(fromdata_statistic_info.get("time_cost").toString()).build();
+
                         if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
                         {
                             sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleResult="win";
