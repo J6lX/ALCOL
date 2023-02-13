@@ -3,13 +3,13 @@ import styles from "./LastSeason.module.css";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import noBadge from "../../assets/ALCOL tiers/background.png";
-import bronzeBadge from "../../assets/ALCOL tiers/bigtier_bronze.png";
-import silverBadge from "../../assets/ALCOL tiers/bigtier_silver.png";
-import goldBadge from "../../assets/ALCOL tiers/bigtier_gold.png";
-import platinumBadge from "../../assets/ALCOL tiers/bigtier_platinum.png";
-import diamondBadge from "../../assets/ALCOL tiers/bigtier_diamond.png";
-import alcolBadge from "../../assets/ALCOL tiers/bigtier_alcol.png";
+import noBadge from "../../assets/ALCOL_tiers/background.png";
+import bronzeBadge from "../../assets/ALCOL_tiers/bigtier_bronze.png";
+import silverBadge from "../../assets/ALCOL_tiers/bigtier_silver.png";
+import goldBadge from "../../assets/ALCOL_tiers/bigtier_gold.png";
+import platinumBadge from "../../assets/ALCOL_tiers/bigtier_platinum.png";
+import diamondBadge from "../../assets/ALCOL_tiers/bigtier_diamond.png";
+import alcolBadge from "../../assets/ALCOL_tiers/bigtier_alcol.png";
 
 function getItem(label, key, icon, children) {
   return {
