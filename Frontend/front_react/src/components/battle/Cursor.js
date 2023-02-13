@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import "./ModeSelectPage";
+import confetti from "canvas-confetti";
 
 const Cursor = () => {
   const delay = 18;
@@ -92,7 +93,12 @@ const Cursor = () => {
   const toggleCursorSize = () => {
     if (cursorEnlarged.current) {
       dot.current.style.transform = "translate(-50%, -50%) scale(0.75)";
-      dotOutline.current.style.transform = "translate(-50%, -50%) scale(1.5)";
+      dotOutline.current.style.transform = "translate(-50%, -50%) scale(2.0)";
+      confetti({
+        particleCount: 10,
+        spread: 50,
+        origin: { x: endX.current / window.innerWidth, y: endY.current / window.innerHeight },
+      });
     } else {
       dot.current.style.transform = "translate(-50%, -50%) scale(1)";
       dotOutline.current.style.transform = "translate(-50%, -50%) scale(1)";
