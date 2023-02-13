@@ -18,8 +18,8 @@ public class BattleProbSubmitLogEntity
     @JoinColumn(name = "battleLogNo", nullable = false)
     private BattleLogEntity battleLogEntity;
 
-    @Column(nullable = false)
-    private int battleLogNo;
+//    @Column(nullable = false)
+//    private int battleLogNo;
 
     @Column(nullable = false)
     private int isCorrect;
