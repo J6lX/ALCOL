@@ -263,6 +263,8 @@ public class LogServiceImpl implements LogService
     @Override
     public int insertExp(String userId, int addExp)
     {
+        log.info("LogServiceImpl 의 insertExp 메소드 실행");
+
         ExpLogEntity expLogEntity = expLogRepository.findTopByUserIdOrderByExpLogNoDesc(userId);
         int curExp = expLogEntity == null ? 0 : expLogEntity.getCurExp();
 
@@ -276,6 +278,7 @@ public class LogServiceImpl implements LogService
 
         if (expLogRepository.save(insertExpLogEntity) != null)
         {
+            log.info("LogServiceImpl 의 insertExp 메소드 실행 완료");
             return 0;
         }
         else
