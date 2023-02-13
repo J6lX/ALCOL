@@ -92,7 +92,7 @@ public class LogController
         log.info("LogController 분기 1");
 
         String battleMode = (String)map.get("battleMode");
-        String probNum = (String)map.get("probNum");
+        Long probNum = Long.valueOf((int)map.get("probNum"));
 
         log.info("LogController 분기 2");
 
