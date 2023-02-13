@@ -424,29 +424,33 @@ public class WebSocket {
                     System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
                     System.out.println("저는 1번 유저입니다.");
                     timer = new Timer();
-                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 10000); // 1초마다 실행
+                    /**
+                     * 아래 시간 쪽에 게임 끝나는 시간 설정
+                     * 세션에 Timer 할당
+                     */
+                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 10000); //
                     timerMap.put(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId,timer);
                 }
             }
-            else if (method.equals("battleTimeOut"))
-            {
-                String drawUserId = obj.get("userId").toString();
-                String drawOtherId = obj.get("userId").toString();
-                int user_mmr = 0;
-                int other_mmr = 0;
-                if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.userId.equals(drawUserId))
-                {
-                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
-                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
-                }
-                else if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.userId.equals(drawUserId))
-                {
-                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
-                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
-                }
-                float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
-                int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
-            }
+//            else if (method.equals("battleTimeOut"))
+//            {
+//                String drawUserId = obj.get("userId").toString();
+//                String drawOtherId = obj.get("userId").toString();
+//                int user_mmr = 0;
+//                int other_mmr = 0;
+//                if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.userId.equals(drawUserId))
+//                {
+//                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
+//                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
+//                }
+//                else if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.userId.equals(drawUserId))
+//                {
+//                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
+//                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
+//                }
+//                float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+//                int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
+//            }
 
             /**문제를 제출했을 때 들어오는 곳, 채점서버로 요청 보내야 함.*/
             else if (method.equals("submit"))
@@ -508,7 +512,7 @@ public class WebSocket {
                     }
 
                     /**
-                     * 채점 완료되고, 해당 항목을 불러올 수 있을 때. result가 아니라 for문으로 info를 봐야함.
+                     * 채점 완료되고, 해당 항목을 불러올 수 있을 때. result도 보고 for문으로 info를 봐야함.
                      * statistic_info 안에 time_cost : 채점 돌아간 시간
                      * statistic_info 안에 memory_cost : 사용 메모리
                      * err : 에러 발생 ?
@@ -523,8 +527,9 @@ public class WebSocket {
 //                    }
                     else if(submit_result==0)
                     {
+                        //statistic_info 안에는 속도, 메모리에 관련된 내용이 들어 있음
                         HashMap<String,Object> fromdata_statistic_info = (HashMap<String, Object>)fromdata.get("statistic_info");
-
+                        //formdata_info에는 info 들이 들어있음. info 안에는 어떤 테케가 어떻게 됐는지 들어 있음
                         HashMap<String,Object> fromdata_info = (HashMap<String, Object>)fromdata.get("info");
                         List<HashMap<String,Object>> fromdata_info_data = (List<HashMap<String, Object>>) fromdata_info.get("data");
                         System.out.println("맞았습니다.");
@@ -534,6 +539,14 @@ public class WebSocket {
                         BattleLog userBattleLog = BattleLog.builder().result("Accepted").memory(fromdata_statistic_info.get("memory_cost").toString()).time(fromdata_statistic_info.get("time_cost").toString()).build();
 
 
+                        /**
+                         * 만약 스피드 모드라면, 채점이 완료 되었으니 끝나야 함
+                         * MMR 계산
+                         * BattleLog로 만든 후 User에 넣기
+                         * Log Service로 보내기
+                         * Rank Service로 보내기
+                         * 타이머 끄기
+                         */
                         if(submitBattleMode.equals("speed"))
                         {
 
@@ -625,7 +638,8 @@ public class WebSocket {
                             }
 
                             /**
-                             * 배틀 기록을 저장하는 부분
+                             * mmr을 저장하는 부분
+                             * Log Service로 보내기 위함
                              */
                             if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
                             {
@@ -640,7 +654,7 @@ public class WebSocket {
                             /**
                              * 배틀 정보를 Log Service로 넘기는 부분
                              */
-                            String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+
                             BattleRoom battleRoomJson = sessionId2Obj.get(userId2SessionId.get(submitUserId));
                             Map<String, Object> sendBattleLog = new HashMap<>();
                             sendBattleLog.put("battleMode",submitBattleMode);
@@ -653,8 +667,14 @@ public class WebSocket {
                             Map<String,String> sendBattleLogForRedis = new HashMap<>();
 
 
+                            /**
+                             * 만약 제출한 유저가 1번 유저라면 ?
+                             */
                             if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
                             {
+                                /**
+                                 * 제출한 1번 유저가 이겼다면 ?
+                                 */
                                 if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleResult.equals("win"))
                                 {
                                     sendBattleLogForRedis.put("user_id_1",submitUserId);
@@ -673,6 +693,9 @@ public class WebSocket {
                                     sendBattleLog.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
                                     sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog);
                                 }
+                                /**
+                                 * 제출한 1번 유저가 졌다면 ?
+                                 */
                                 else
                                 {
                                     sendBattleLogForRedis.put("user_id_1",submitUserId);
@@ -693,6 +716,9 @@ public class WebSocket {
 
                                 }
                             }
+                            /**
+                             * 만약 제출한 유저가 2번 유저라면 ?
+                             */
                             else
                             {
                                 if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleResult.equals("win"))
@@ -737,6 +763,7 @@ public class WebSocket {
 //                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
 //                            System.out.println(sessionId2Obj.get(userId2SessionId.get(submitUserId)));
 //                            sendBattleLog.put("battleLog", battleRoomJson);
+                            String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
                             String getBattleLogSaveResult = restTemplate.postForObject(
                                     url_log,
                                     sendBattleLog,
@@ -751,6 +778,21 @@ public class WebSocket {
                             );
                             System.out.println("레디스 서버에 전송 : "+sendRedisRankUpdate);
                             System.out.println(getBattleLogSaveResult);
+                        }
+                        else if(submitBattleMode.equals("optimization"))
+                        {
+                            if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                            {
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.accept_time = Integer.parseInt(userBattleLog.time);
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.accept_memory = Integer.parseInt(userBattleLog.memory);
+                            }
+                            else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                            {
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.accept_time = Integer.parseInt(userBattleLog.time);
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.accept_memory = Integer.parseInt(userBattleLog.memory);
+                            }
                         }
                         break;
 
@@ -803,27 +845,9 @@ public class WebSocket {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_fail_send.toJSONString());
                         }
 //                        System.out.println("빠져나옴"+fromdata);
-
                         break;
                     }
                 }
-
-//                System.out.println(getSubmitResult.getBody().get("data"));
-            }
-
-            else if (method.equals("msg"))
-            {
-                String msg = obj.get("msg").toString();
-                StringBuilder sb = new StringBuilder();
-                object = sessionId2Obj.get(session.getId());
-                if (object instanceof User)
-                {
-//                    String id = ((User) object).getId();
-//                    String name = userMap.get(id).getName();
-//                    sb.append("[유저/").append(name).append("]");
-                }
-                sb.append(" : ").append(msg);
-//                sendMessageToAll(sb.toString());
             }
         }
     }
@@ -886,39 +910,6 @@ public class WebSocket {
         System.out.println("------------------------------");
     }
 
-    public Set<String> getSessionSet()
-    {
-        return this.sessionSet;
-    }
-
-//    private boolean sendMessageToAll(String message) {
-//        int sessionCount = sessionSet.size();
-//        if (sessionCount < 1) {
-//            return false;
-//        }
-//
-//        Session singleSession = null;
-//
-//        for (String name : sessionSet) {
-//
-//            singleSession = sessionMap.get(name);
-//            if (singleSession == null) {
-//                continue;
-//            }
-//            if (!singleSession.isOpen()) {
-//                continue;
-//            }
-//            JSONObject send = new JSONObject();
-//
-//            send.put("method", "msg");
-//            send.put("content",message);
-//            singleSession.getAsyncRemote().sendText(send.toJSONString());
-//
-//        }
-//
-//        return true;
-//    }
-
     private RestTemplate makeRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
         TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
@@ -962,16 +953,12 @@ public class WebSocket {
         public void run() {
             // 타이머가 실행될 때 수행할 작업
             System.out.println(session+"배틀 종료할게요 ????????????????");
-//            String drawUserId = obj.get("userId").toString();
-//            String drawOtherId = obj.get("userId").toString();
-            String battle_mode = "";
             int user_mmr = 0;
             int other_mmr = 0;
             int user_time = -1;
             int user_memory = -1;
             int other_time = -1;
             int other_memory = -1;
-            int other_battlelog_size = 0;
 
             /**
              * 현재 userId가 user1일 경우.
@@ -1019,6 +1006,49 @@ public class WebSocket {
                 /**
                  * log-service로 전송하는 부분 추가
                  */
+                String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+                String getBattleLogSaveResult = restTemplate.postForObject(
+                        url_log,
+                        sendBattleLog,
+                        String.class
+                );
+                /**
+                 * 클라이언트로 전송하는 부분
+                 * 비겼고 제출 이력이 없어서 time , memory는 0으로
+                 */
+                JSONObject user_draw_result_send = new JSONObject();
+                user_draw_result_send.put("messageType","battleResult");
+                user_draw_result_send.put("battleResult","lose");
+                user_draw_result_send.put("time","0");
+                user_draw_result_send.put("memory","0");
+                user_draw_result_send.put("changeMmr",change_user_mmr);
+
+                JSONObject other_draw_result_send = new JSONObject();
+                other_draw_result_send.put("messageType","battleResult");
+                other_draw_result_send.put("battleResult","lose");
+                other_draw_result_send.put("time","0");
+                other_draw_result_send.put("memory","0");
+                other_draw_result_send.put("changeMmr",change_user_mmr);
+
+                synchronized (session)
+                {
+                    try {
+                        session.getBasicRemote().sendText(user_draw_result_send.toJSONString());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                synchronized (userId2Session.get(otherId))
+                {
+                    try {
+                        userId2Session.get(otherId).getBasicRemote().sendText(other_draw_result_send.toJSONString());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                /**
+                 * rank-service로 전송하는 부분 추가
+                 */
                 
             }
             /**
@@ -1055,6 +1085,59 @@ public class WebSocket {
                     sendBattleLogOptimazation.put("loserPrevMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr);
                     sendBattleLogOptimazation.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr);
                     sendBattleLogOptimazation.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user2.battleLog);
+
+                    String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+                    String getBattleLogSaveResult = restTemplate.postForObject(
+                            url_log,
+                            sendBattleLogOptimazation,
+                            String.class
+                    );
+
+                    /**
+                     * Rank service로 보낼 데이터
+                     */
+                    Map<String,String> sendBattleLogForRedis = new HashMap<>();
+                    sendBattleLogForRedis.put("user_id_1",userId);
+                    sendBattleLogForRedis.put("user_id_2",otherId);
+                    sendBattleLogForRedis.put("battle_mode",battleMode);
+                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
+                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
+                    sendBattleLogForRedis.put("winner","1");
+
+                    /**
+                     * 클라이언트로 보낼 데이터
+                     * 1번 유저가 이겼을 때
+                     */
+                    JSONObject user_win_result_send = new JSONObject();
+                    user_win_result_send.put("messageType","battleResult");
+                    user_win_result_send.put("battleResult","win");
+                    user_win_result_send.put("time",user_time);
+                    user_win_result_send.put("memory",user_memory);
+                    user_win_result_send.put("changeMmr",change_user_mmr);
+
+                    JSONObject other_lose_result_send = new JSONObject();
+                    other_lose_result_send.put("messageType","battleResult");
+                    other_lose_result_send.put("battleResult","lose");
+                    other_lose_result_send.put("time",other_time);
+                    other_lose_result_send.put("memory",other_memory);
+                    other_lose_result_send.put("changeMmr",change_user_mmr);
+
+                    synchronized (session)
+                    {
+                        try {
+                            session.getBasicRemote().sendText(user_win_result_send.toJSONString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    synchronized (userId2Session.get(otherId))
+                    {
+                        try {
+                            userId2Session.get(otherId).getBasicRemote().sendText(other_lose_result_send.toJSONString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
                 else if(user_score<other_score)
                 {
@@ -1078,6 +1161,58 @@ public class WebSocket {
                     sendBattleLogOptimazation.put("loserPrevMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr);
                     sendBattleLogOptimazation.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr);
                     sendBattleLogOptimazation.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user1.battleLog);
+
+                    String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+                    String getBattleLogSaveResult = restTemplate.postForObject(
+                            url_log,
+                            sendBattleLogOptimazation,
+                            String.class
+                    );
+
+                    /**
+                     * Rank service로 보낼 데이터
+                     */
+                    Map<String,String> sendBattleLogForRedis = new HashMap<>();
+                    sendBattleLogForRedis.put("user_id_1",userId);
+                    sendBattleLogForRedis.put("user_id_2",otherId);
+                    sendBattleLogForRedis.put("battle_mode",battleMode);
+                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
+                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
+                    sendBattleLogForRedis.put("winner","2");
+
+                    /**
+                     * 클라이언트로 보내기, 2번 유저가 이겼을 때.
+                     */
+                    JSONObject user_lose_result_send = new JSONObject();
+                    user_lose_result_send.put("messageType","battleResult");
+                    user_lose_result_send.put("battleResult","lose");
+                    user_lose_result_send.put("time",user_time);
+                    user_lose_result_send.put("memory",user_memory);
+                    user_lose_result_send.put("changeMmr",change_user_mmr);
+
+                    JSONObject other_win_result_send = new JSONObject();
+                    other_win_result_send.put("messageType","battleResult");
+                    other_win_result_send.put("battleResult","win");
+                    other_win_result_send.put("time",other_time);
+                    other_win_result_send.put("memory",other_memory);
+                    other_win_result_send.put("changeMmr",change_user_mmr);
+
+                    synchronized (session)
+                    {
+                        try {
+                            session.getBasicRemote().sendText(user_lose_result_send.toJSONString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    synchronized (userId2Session.get(otherId))
+                    {
+                        try {
+                            userId2Session.get(otherId).getBasicRemote().sendText(other_win_result_send.toJSONString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
                 else
                 {
@@ -1103,6 +1238,48 @@ public class WebSocket {
                     sendBattleLog.put("otherPrevMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.prevMmr);
                     sendBattleLog.put("otherNowMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.nowMmr);
                     sendBattleLog.put("otherSubmitLog",sessionId2Obj.get(userId2SessionId.get(otherId)).user2.battleLog);
+
+                    String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLogByDraw";
+                    String getBattleLogSaveResult = restTemplate.postForObject(
+                            url_log,
+                            sendBattleLog,
+                            String.class
+                    );
+
+                    /**
+                     * 클라이언트로 보낼 데이터
+                     * 무승부니까 둘다 패배로 보냄
+                     */
+                    JSONObject user_draw_result_send = new JSONObject();
+                    user_draw_result_send.put("messageType","battleResult");
+                    user_draw_result_send.put("battleResult","lose");
+                    user_draw_result_send.put("time",user_time);
+                    user_draw_result_send.put("memory",user_memory);
+                    user_draw_result_send.put("changeMmr",change_user_mmr);
+
+                    JSONObject other_draw_result_send = new JSONObject();
+                    other_draw_result_send.put("messageType","battleResult");
+                    other_draw_result_send.put("battleResult","lose");
+                    other_draw_result_send.put("time",other_time);
+                    other_draw_result_send.put("memory",other_memory);
+                    other_draw_result_send.put("changeMmr",change_user_mmr);
+
+                    synchronized (session)
+                    {
+                        try {
+                            session.getBasicRemote().sendText(user_draw_result_send.toJSONString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                    synchronized (userId2Session.get(otherId))
+                    {
+                        try {
+                            userId2Session.get(otherId).getBasicRemote().sendText(other_draw_result_send.toJSONString());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
             }
         }
