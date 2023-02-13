@@ -614,6 +614,7 @@ public class WebSocket {
                             Map<String, Object> sendBattleLog = new HashMap<>();
                             sendBattleLog.put("battleMode",submitBattleMode);
                             sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
+
                             if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
                             {
                                 if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleResult.equals("win"))
@@ -622,6 +623,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserUserId",submitOtherId);
                                     sendBattleLog.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr);
                                     sendBattleLog.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr);
+                                    sendBattleLog.put("winnerSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog);
                                 }
                                 else
                                 {
@@ -629,6 +631,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserUserId",submitUserId);
                                     sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr);
                                     sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr);
+                                    sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog);
                                 }
                             }
                             else
@@ -639,6 +642,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserUserId",submitOtherId);
                                     sendBattleLog.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr);
                                     sendBattleLog.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
+                                    sendBattleLog.put("winnerSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog);
                                 }
                                 else
                                 {
@@ -646,6 +650,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserUserId",submitUserId);
                                     sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr);
                                     sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
+                                    sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog);
                                 }
                             }
 //                            sendBattleLog.put("user1",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1);
@@ -661,6 +666,7 @@ public class WebSocket {
                             System.out.println(getBattleLogSaveResult);
                         }
                         break;
+
                     }
                     else
                     {
