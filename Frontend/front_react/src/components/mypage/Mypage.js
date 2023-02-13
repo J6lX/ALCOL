@@ -58,7 +58,7 @@ const matchCol = [
   },
 ];
 
-// 뱃지 주기
+// 뱃지 할당
 function giveBadge(userTier) {
   if (userTier === "B") {
     return bronzeBadge;
@@ -77,7 +77,7 @@ function giveBadge(userTier) {
   }
 }
 
-// 티어 별 색깔 주기
+// 티어 별 색상 할당
 function giveColor(userTier) {
   if (userTier === "B") {
     return "#ec9e73";
@@ -155,52 +155,60 @@ function IsVictory(result) {
 function ProfileImage() {
   // 서버에 저장되어있던 사용자의 프로필 사진 가져오기
   const userId = useRecoilValue(LoginState);
-  const [photo, setPhoto] = useState(
-    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
-  );
-  axios
-    .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
-    .then(function (response) {
-      setPhoto(response.data.stored_file_name);
-    })
-    .catch((error) => {
-      const customCode = error.response.data.custom_code;
-      if (
-        customCode === "100" ||
-        customCode === "101" ||
-        customCode === "102" ||
-        customCode === "103" ||
-        customCode === "104" ||
-        customCode === "105"
-      ) {
-        alert(error.response.data.description);
-      }
-    });
+  const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
+  const [photo, setPhoto] = useState(userInfo.profileImg);
 
   const fileInput = useRef(null);
   const onChange = (e) => {
-    if (e.target.files[0]) {
+    const uploadFile = e.target.files[0];
+    if (uploadFile) {
       //사진을 선택했을때
-      setPhoto(e.target.files[0]);
-      //--해야돼요--
-      //서버로 선택한 파일 보내기
-      //-----------
+      setPhoto(uploadFile);
+      //서버로 전송하는 형식 설정
+      let formData = new FormData();
+      // const userIdForUpload = new Blob(userId);
+      formData.append("file", uploadFile);
+      const userData = JSON.stringify({
+        userId: userId,
+      });
+      formData.append("userUpdateDto", new Blob([userData], { type: "application/json" }));
+
+      // 서버로 선택한 파일 보내기
+      axios
+        .put(`http://i8b303.p.ssafy.io:9000/user-service/`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((response) => {
+          if (response.data.custom_code === "007") {
+            alert("수정 완료되었습니다.");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       //취소했을때
       setPhoto(photo);
       return;
     }
+    // recoil에 저장된 userInfo중 사진 정보만 업데이트
+
     //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
       if (reader.readyState === 2) {
         setPhoto(reader.result);
+        setUserInfo({
+          nickname: userInfo.nickname,
+          profileImg: reader.result,
+          level: userInfo.level,
+          speedTier: userInfo.speedTier,
+          efficiencyTier: userInfo.efficiencyTier,
+        });
       }
     };
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(uploadFile);
   };
-
-  console.log(photo);
 
   return (
     <div>
@@ -302,8 +310,6 @@ function Mypage() {
         console.log(error);
       });
   }, [setBattleRec, setUserInfo, setBackupRec, userId, setSeasonInfo]);
-
-  console.log("seasonInfo:", seasonInfo);
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
@@ -480,10 +486,10 @@ function Mypage() {
     } else {
       return (
         <>
-          {/* 한 줄에 3개씩 표시 */}
+          {/* 한 줄에 1개씩 표시 */}
           {seasonInfo.map((seasonData, key) => (
             <Col span={24} align="middle" className="seasonGrid">
-              <Row align="middle">
+              <Row justify="center" align="middle">
                 <Col span={8} className="text">
                   <img
                     src={giveBadge(seasonData.tier.slice(0, 1))}
@@ -494,35 +500,35 @@ function Mypage() {
                     }}
                   />
                 </Col>
-                <Col span={14} className="text">
+                <Col xs={22} xl={14} className="text">
                   {/* 모드 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.modeName}</p>
                     </Col>
                   </Row>
                   {/* 시즌 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.seasonName}</p>
                     </Col>
                   </Row>
                   {/* 티어 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.tier}</p>
                     </Col>
                   </Row>
                   {/* 마지막 랭킹 레이블 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.ranking}위</p>
                     </Col>
                   </Row>
                   {/* 시즌 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
-                      <p>{seasonData.ranking} 시즌</p>
+                      <p>시즌 {seasonData.season}</p>
                     </Col>
                   </Row>
                 </Col>
