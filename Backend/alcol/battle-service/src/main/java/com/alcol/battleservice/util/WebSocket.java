@@ -976,7 +976,87 @@ public class WebSocket {
             /**
              * 제출 기록이 있는 경우,
              */
+            else
+            {
+                int user_time_per = ((user_time/(sessionId2Obj.get(userId2SessionId.get(userId)).time_limit*1000))*100);
+                int other_time_per = ((other_time/(sessionId2Obj.get(userId2SessionId.get(userId)).time_limit*1000))*100);
+                int user_memory_per = ((user_memory/(sessionId2Obj.get(userId2SessionId.get(userId)).memory_limit*1024))*100);
+                int other_memory_per = ((other_memory/(sessionId2Obj.get(userId2SessionId.get(userId)).memory_limit*1024))*100);
+                int user_score = user_time_per+user_memory_per;
+                int other_score = other_time_per+other_memory_per;
+                Map<String, Object> sendBattleLogOptimazation = new HashMap<>();
+                if(user_score>other_score)
+                {
+                    System.out.println("유저 1번이 이겼습니다.");
+                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                    int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
 
+                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                    int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
+
+
+                    sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
+                    sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
+                    sendBattleLogOptimazation.put("battleMode",battleMode);
+                    sendBattleLogOptimazation.put("probNum",sessionId2Obj.get(userId2SessionId.get(userId)).problemNum);
+                    sendBattleLogOptimazation.put("winnerUserId",userId);
+                    sendBattleLogOptimazation.put("loserUserId",otherId);
+                    sendBattleLogOptimazation.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr);
+                    sendBattleLogOptimazation.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr);
+                    sendBattleLogOptimazation.put("winnerSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user1.battleLog);
+                    sendBattleLogOptimazation.put("loserPrevMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr);
+                    sendBattleLogOptimazation.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr);
+                    sendBattleLogOptimazation.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user2.battleLog);
+                }
+                else if(user_score<other_score)
+                {
+                    System.out.println("유저 2번이 이겼습니다.");
+                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                    int change_user_mmr = (int) (user_mmr+30*(0-user_odds));
+
+                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                    int change_other_mmr = (int) (other_mmr+30*(1-other_odds));
+
+
+                    sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
+                    sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
+                    sendBattleLogOptimazation.put("battleMode",battleMode);
+                    sendBattleLogOptimazation.put("probNum",sessionId2Obj.get(userId2SessionId.get(userId)).problemNum);
+                    sendBattleLogOptimazation.put("winnerUserId",otherId);
+                    sendBattleLogOptimazation.put("loserUserId",userId);
+                    sendBattleLogOptimazation.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr);
+                    sendBattleLogOptimazation.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr);
+                    sendBattleLogOptimazation.put("winnerSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user2.battleLog);
+                    sendBattleLogOptimazation.put("loserPrevMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr);
+                    sendBattleLogOptimazation.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr);
+                    sendBattleLogOptimazation.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user1.battleLog);
+                }
+                else
+                {
+                    System.out.println("최적화전 비겼습니다.");
+                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                    int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
+
+                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                    int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
+
+
+                    sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
+                    sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
+
+                    Map<String, Object> sendBattleLog = new HashMap<>();
+                    sendBattleLog.put("battleMode",battleMode);
+                    sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(userId)).problemNum);
+                    sendBattleLog.put("userId",userId);
+                    sendBattleLog.put("otherId",otherId);
+                    sendBattleLog.put("userPrevMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr);
+                    sendBattleLog.put("userNowMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr);
+                    sendBattleLog.put("userSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user1.battleLog);
+                    sendBattleLog.put("otherPrevMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.prevMmr);
+                    sendBattleLog.put("otherNowMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.nowMmr);
+                    sendBattleLog.put("otherSubmitLog",sessionId2Obj.get(userId2SessionId.get(otherId)).user2.battleLog);
+                }
+            }
 
 
 
