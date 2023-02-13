@@ -414,28 +414,28 @@ public class WebSocket {
             {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
-                if(session==sessionId2Obj.get(userId2SessionId.get(userId)))
+                if(session==sessionId2Obj.get(userId2SessionId.get(userId))
+                        && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
                 {
                     timer = new Timer();
                     timer.schedule(new SessionTimerTask(session,userId,otherUserId), 5000); // 1초마다 실행
                 }
-
             }
             else if (method.equals("battleTimeOut"))
             {
-                String drowUserId = obj.get("userId").toString();
-                String drowOtherId = obj.get("userId").toString();
+                String drawUserId = obj.get("userId").toString();
+                String drawOtherId = obj.get("userId").toString();
                 int user_mmr = 0;
                 int other_mmr = 0;
-                if(sessionId2Obj.get(userId2SessionId.get(drowUserId)).user1.userId.equals(drowUserId))
+                if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.userId.equals(drawUserId))
                 {
-                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drowUserId)).user1.prevMmr;
-                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drowUserId)).user2.prevMmr;
+                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
+                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
                 }
-                else if(sessionId2Obj.get(userId2SessionId.get(drowUserId)).user2.userId.equals(drowUserId))
+                else if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.userId.equals(drawUserId))
                 {
-                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drowUserId)).user2.prevMmr;
-                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drowUserId)).user1.prevMmr;
+                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
+                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
                 }
                 float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                 int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
@@ -607,9 +607,11 @@ public class WebSocket {
                             if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
                             {
                                 sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr = change_user_mmr;
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr = change_other_mmr;
                             }
                             else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
                             {
+                                sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr = change_other_mmr;
                                 sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr = change_user_mmr;
                             }
                             /**
@@ -892,22 +894,66 @@ public class WebSocket {
         public void run() {
             // 타이머가 실행될 때 수행할 작업
             System.out.println(session+"배틀 종료할게요 ????????????????");
-//            String drowUserId = obj.get("userId").toString();
-//            String drowOtherId = obj.get("userId").toString();
+//            String drawUserId = obj.get("userId").toString();
+//            String drawOtherId = obj.get("userId").toString();
             int user_mmr = 0;
             int other_mmr = 0;
-            if(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
-            {
+            int user_time = -1;
+            int user_memory = -1;
+            int other_time = -1;
+            int other_memory = -1;
+            int other_battlelog_size = 0;
+            /**
+             * 현재 userId가 user1일 경우.
+             */
+
+                user_time =sessionId2Obj.get(userId2SessionId.get(userId)).user1.accept_time;
+                user_memory =sessionId2Obj.get(userId2SessionId.get(userId)).user1.accept_memory;
+                other_time = sessionId2Obj.get(userId2SessionId.get(userId)).user2.accept_time;
+                other_memory = sessionId2Obj.get(userId2SessionId.get(userId)).user2.accept_memory;
                 user_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr;
                 other_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr;
-            }
-            else if(sessionId2Obj.get(userId2SessionId.get(userId)).user2.userId.equals(userId))
+
+
+            /**
+             * 둘 다 제출 기록이 없으면 무승부
+             * 배틀 룸에 저장부터 해야함.
+             */
+            if((user_time==-1 && user_memory==-1) && (other_time==-1 && other_memory==-1))
             {
-                user_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr;
-                other_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr;
+                System.out.println("두명 다 제출기록이 없습니다. 무승부 입니다.");
+                float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
+
+                float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
+
+
+                sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
+                sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
+
+                Map<String, Object> sendBattleLog = new HashMap<>();
+                sendBattleLog.put("battleMode",battleMode);
+                sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(userId)).problemNum);
+                sendBattleLog.put("userId",userId);
+                sendBattleLog.put("otherId",otherId);
+                sendBattleLog.put("userPrevMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr);
+                sendBattleLog.put("userNowMmr",sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr);
+                sendBattleLog.put("userSubmitLog",sessionId2Obj.get(userId2SessionId.get(userId)).user1.battleLog);
+                sendBattleLog.put("otherPrevMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.prevMmr);
+                sendBattleLog.put("otherNowMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.nowMmr);
+                sendBattleLog.put("otherSubmitLog",sessionId2Obj.get(userId2SessionId.get(otherId)).user2.battleLog);
+                System.out.println("배틀에 대한 기록입니다." + sendBattleLog);
             }
-            float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
-            int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
+            /**
+             * 제출 기록이 있는 경우,
+             */
+            {
+
+            }
+
+
+
 
         }
     }
