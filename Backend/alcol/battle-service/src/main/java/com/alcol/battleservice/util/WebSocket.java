@@ -358,10 +358,12 @@ public class WebSocket {
                             Random random = new Random();
                             int randomIndex = random.nextInt(noSelectedProblemNumber.size());
                             selectProblemResult = noSelectedProblemNumber.get(randomIndex);
+                            sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = selectProblemResult;
                         }
                         else
                         {
                             selectProblemResult = noSelectedProblemNumber.get(0);
+                            sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = selectProblemResult;
                         }
                         String url = "http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/"+selectProblemResult;
                         ResponseEntity<HashMap> problems = restTemplate.getForEntity(url,HashMap.class);
@@ -599,10 +601,17 @@ public class WebSocket {
                              */
                             String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
                             BattleRoom battleRoomJson = sessionId2Obj.get(userId2SessionId.get(submitUserId));
-                            Map<String, BattleRoom> sendBattleLog = new HashMap<>();
+                            Map<String, Object> sendBattleLog = new HashMap<>();
+                            sendBattleLog.put("messageType","battleLog");
+                            sendBattleLog.put("userId",submitUserId);
+                            sendBattleLog.put("otherId",submitOtherId);
+                            sendBattleLog.put("battleMode",submitBattleMode);
+                            sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
+                            sendBattleLog.put("user1",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1);
+                            sendBattleLog.put("user2",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2);
 //                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
-                            System.out.println(sessionId2Obj.get(userId2SessionId.get(submitUserId)));
-                            sendBattleLog.put("battleLog", battleRoomJson);
+//                            System.out.println(sessionId2Obj.get(userId2SessionId.get(submitUserId)));
+//                            sendBattleLog.put("battleLog", battleRoomJson);
                             String getBattleLogSaveResult = restTemplate.postForObject(
                                     url_log,
                                     sendBattleLog,
