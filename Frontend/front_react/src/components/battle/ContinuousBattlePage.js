@@ -36,7 +36,8 @@ const ContinuousBattlePage = () => {
   const idInfo = useRecoilValue(matchingPlayerInfo);
   const battleModeInfo = useRecoilValue(selectedMode);
   const languageMode = useRecoilValue(selectedLanguage);
-  // let problems;
+
+  let battleResult;
   console.log(languageMode);
   const [nickname, setNickname] = useState("a");
   const [speedTier, setSpeedTier] = useState("a");
@@ -136,7 +137,7 @@ const ContinuousBattlePage = () => {
         console.log("연결 완료! 아래와 같은 데이터를 받았습니다.");
         console.log(data);
         console.log("problems", problems);
-        if (isReady === false) {
+        if (problems.length === 0) {
           setTimeout(() => {
             socket.send(
               JSON.stringify({
@@ -145,7 +146,7 @@ const ContinuousBattlePage = () => {
                 otherId: otherId,
               })
             );
-          }, 50);
+          }, 100);
         }
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
@@ -154,7 +155,7 @@ const ContinuousBattlePage = () => {
         setTimeout(() => {
           setIsReady(false);
           setIsBanWait(true);
-        }, 500);
+        }, 100);
       } else if (data.messageType === "select_success") {
         console.log("배틀에서 풀 문제 세부 정보를 받았습니다.", data.problem);
         setTimeout(() => {
@@ -237,7 +238,7 @@ const ContinuousBattlePage = () => {
             time: data.time,
             memory: data.memory,
           };
-          let resultList = resultListResult;
+          let resultList = [...resultListResult];
           resultList.push(result);
           const modaldata = {
             title: "오답!",
@@ -344,6 +345,7 @@ const ContinuousBattlePage = () => {
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
         if (battleMode === "speed") {
+          battleResult = data;
           if (data.battleResult === "win") {
             console.log(data);
             const modaldata = {
@@ -676,7 +678,7 @@ const ContinuousBattlePage = () => {
             clickSurrender={clickSurrender}
           />
         )}
-        {isSolved && <ResultPage />}
+        {isSolved && <ResultPage props={battleResult} />}
       </div>
       <Modal
         title="배틀 종료 제안"

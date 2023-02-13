@@ -6,17 +6,10 @@ import img_defeat from "../../assets/result_defeat.gif";
 import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
-function App() {
-  // eslint-disable-next-line
-  const [result, setResult] = React.useState({
-    battle_result: "win",
-    get_exp: "300",
-    get_mmr: "25",
-  });
-
+function App(data) {
   const printResult = () => {
     var img = "";
-    if (result.battle_result === "win") {
+    if (data.battleResult === "win") {
       img = <img src={img_victory} alt="result" className="result_title" />;
       var defaults = {
         spread: 360,
@@ -77,7 +70,7 @@ function App() {
               걸린 시간
             </Col>
             <Col className="result_text" span={10}>
-              {result.battle_result}
+              아직 안 받음
             </Col>
           </Row>
         </div>
@@ -87,7 +80,7 @@ function App() {
               얻은 경험치
             </Col>
             <Col className="result_text" span={10}>
-              {result.get_exp}
+              이것도 아직임
             </Col>
           </Row>
         </div>
@@ -97,7 +90,7 @@ function App() {
               얻은 점수
             </Col>
             <Col className="result_text" span={10}>
-              {result.get_mmr}
+              {data.changeMmr}
             </Col>
           </Row>
         </div>
