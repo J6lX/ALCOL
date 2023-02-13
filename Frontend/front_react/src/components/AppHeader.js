@@ -25,7 +25,10 @@ function LoginTag(props) {
     setIsLoggedIn(false);
     setAccessTokenData("");
     setRefreshTokenData("");
-    setUserInfo([]);
+    setUserInfo({
+      speedTier: "UNRANKED 1",
+      efficiencyTier: "UNRANKED 1",
+    });
 
     // 메인 화면으로 리다이렉트
     window.location.reload();

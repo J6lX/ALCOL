@@ -46,6 +46,13 @@ export const CurrentNickname = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+// mmr만 저장
+
+export const MMRState = atom({
+  key: "MMRState",
+  default: "",
+});
+
 // 백업용 전적을 리스트로 저장
 export const BackupBattleRec = atom({
   key: "BackupBattleRec",

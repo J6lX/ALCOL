@@ -12,6 +12,19 @@ import {
   UserInfoState,
 } from "../../states/LoginState";
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
+// 페이지 렌더링 함수
 function LoginPage() {
   // 로그인 상태 관리(LoginState의 데이터를 변경)
   const setIsLoggedIn = useSetRecoilState(LoginState);
@@ -56,7 +69,8 @@ function LoginPage() {
               // 사용자 기본 정보를 recoil(userInfo)에 저장
               const receivedUserData = {
                 nickname: response.data.nickname,
-                profileImg: response.data.stored_file_name,
+                // 저장된 이미지가 없으면(신규 회원인 경우 등) 기본 이미지로 대체
+                profileImg: isNew(response.data.stored_file_name),
                 level: response.data.level,
                 speedTier: response.data.speed_tier,
                 efficiencyTier: response.data.optimization_tier,
