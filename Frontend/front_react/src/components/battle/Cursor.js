@@ -97,6 +97,8 @@ const Cursor = () => {
       confetti({
         particleCount: 10,
         spread: 50,
+        gravity: 4,
+        // tricks: 100,
         origin: { x: endX.current / window.innerWidth, y: endY.current / window.innerHeight },
       });
     } else {
