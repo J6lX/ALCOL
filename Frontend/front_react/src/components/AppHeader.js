@@ -3,16 +3,10 @@ import { Link, useLocation } from "react-router-dom";
 import "./HeaderFooter.css";
 import alcol from "../assets/alcol_empty_white.png";
 
-import { Layout, Button, Row, Col, Avatar, Menu } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Layout, Button, Row, Col, Menu } from "antd";
 import { useState, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import {
-  AccessTokenInfo,
-  CurrentNickname,
-  LoginState,
-  RefreshTokenInfo,
-} from "../states/LoginState";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo, UserInfoState } from "../states/LoginState";
 
 const { Header } = Layout;
 
@@ -24,13 +18,14 @@ function LoginTag(props) {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
-  const [nickname, setUserNickname] = useRecoilState(CurrentNickname);
+  const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
+  const photo = userInfo.profileImg;
 
   const logoutRequest = () => {
     setIsLoggedIn(false);
     setAccessTokenData("");
     setRefreshTokenData("");
-    setUserNickname("");
+    setUserInfo([]);
 
     // 메인 화면으로 리다이렉트
     window.location.reload();
@@ -51,7 +46,16 @@ function LoginTag(props) {
             height: "64px",
           }}>
           <Link to={`/mypage/${isLoggedIn}`}>
-            <Avatar size={44} icon={<UserOutlined />} />
+            <img
+              src={photo}
+              alt="profile"
+              style={{
+                width: "48px",
+                height: "48px",
+                borderRadius: "100%",
+                marginTop: "8px",
+              }}
+            />
           </Link>
         </Col>
         <Col
@@ -61,7 +65,7 @@ function LoginTag(props) {
             textAlign: "center",
           }}>
           <Link to={`/mypage/${isLoggedIn}`} className="text">
-            {nickname}
+            {userInfo.nickname}
           </Link>
         </Col>
         <Col
@@ -163,7 +167,7 @@ function HeaderData() {
         style={{
           position: "fixed",
           zIndex: "10",
-          backgroundColor: "#17181c",
+          backgroundColor: "#161718",
           width: "100vw",
           height: "auto",
         }}>
@@ -267,8 +271,7 @@ function AppHeader() {
     locationNow.pathname !== "/mode" &&
     locationNow.pathname !== "/solve" &&
     locationNow.pathname !== "/solveprac" &&
-    locationNow.pathname !== "/battle" &&
-    locationNow.pathname !== "/resultList"
+    locationNow.pathname !== "/battle"
   )
     return <HeaderData />;
 }

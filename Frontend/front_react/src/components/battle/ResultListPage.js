@@ -42,20 +42,20 @@ function GameInfo() {
   const ModeInfo = useRecoilValue(resultListModeInfo);
   console.log(ModeInfo);
   const gameInfoTitle = {
-    padding: "4px 0",
+    padding: "10px 0",
     background: "rgba(0,0,0,0.5)",
     color: "white",
     textAlign: "center",
-    lineHeight: "8px",
+    lineHeight: "12px",
     fontWeight: "bold",
   };
   const gameInfoList = {
     padding: "8px 0",
     background: "rgba(0,0,0,0.5)",
     color: "white",
-    height: "7em",
+    height: "10em",
     textAlign: "center",
-    lineHeight: "7em",
+    lineHeight: "10em",
   };
   return (
     <div>
@@ -176,7 +176,7 @@ function App() {
           fontSize: "40px",
           fontWeight: "bold",
           color: "white",
-          // marginTop: "50px",
+          marginTop: "90px",
         }}>
         결과 상세정보
       </div>

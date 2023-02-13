@@ -51,3 +51,9 @@ export const BackupBattleRec = atom({
   key: "BackupBattleRec",
   default: [],
 });
+
+// 다른 유저 정보를 저장(프로필 조회용)
+export const OtherUserInfoState = atom({
+  key: "OtherUserInfoState",
+  default: [],
+});
