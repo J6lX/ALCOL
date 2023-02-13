@@ -1,5 +1,6 @@
 package com.alcol.logservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ public class BattleLogEntity
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long battleLogNo;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "battleLogEntity", cascade = CascadeType.ALL)
     private Set<BattleProbSubmitLogEntity> battleProbSubmitLogEntityList = new LinkedHashSet<>();
 
