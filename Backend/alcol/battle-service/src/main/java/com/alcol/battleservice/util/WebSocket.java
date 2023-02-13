@@ -376,16 +376,15 @@ public class WebSocket {
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
 
-                        synchronized (session) {
-//                    session.sendMessage(message);
+                        synchronized (session)
+                        {
                             session.getAsyncRemote().sendText(data.toJSONString());
+
+                        }
+                        synchronized (userId2Session.get(otherId))
+                        {
                             userId2Session.get(otherId).getAsyncRemote().sendText(data.toJSONString());
                         }
-                        synchronized (session) {
-//                    session.sendMessage(message);
-//                            userId2Session.get(userId2SessionId.get(otherId)).getAsyncRemote().sendText(data.toJSONString());
-                        }
-//                        session.getAsyncRemote().sendText(data.toJSONString());
                     }
                     else
                     {
