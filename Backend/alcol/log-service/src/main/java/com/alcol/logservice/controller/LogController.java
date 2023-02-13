@@ -89,19 +89,29 @@ public class LogController
         log.info("loserNowMmr : " + map.get("loserNowMmr"));
         log.info("loserSubmitLog : " + map.get("loserSubmitLog"));
 
+        log.info("LogController 분기 1");
+
         String battleMode = (String)map.get("battleMode");
         String probNum = (String)map.get("probNum");
+
+        log.info("LogController 분기 2");
 
         String winnerUserId = (String)map.get("winnerUserId");
         String winnerPrevMmr = (String)map.get("winnerPrevMmr");
         String winnerNowMmr = (String)map.get("winnerNowMmr");
 
+        log.info("LogController 분기 3");
+
         String loserUserId = (String)map.get("loserUserId");
         String loserPrevMmr = (String)map.get("loserPrevMmr");
         String loserNowMmr = (String)map.get("loserNowMmr");
 
+        log.info("LogController 분기 4");
+
         List<Map<String, Object>> winnerSubmitLog = (List<Map<String, Object>>) map.get("winnerSubmitLog");
         List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
+
+        log.info("LogController 분기 5");
 
         for (Map<String, Object> map2 : winnerSubmitLog)
         {
@@ -109,6 +119,8 @@ public class LogController
             log.info("time : " + map2.get("time"));
             log.info("memory : " + map2.get("memory"));
         }
+
+        log.info("LogController 분기 6");
 
         LogDto.BattleLogDto winnerBattleLogDto = LogDto.BattleLogDto.builder()
                 .myUserId(winnerUserId)
