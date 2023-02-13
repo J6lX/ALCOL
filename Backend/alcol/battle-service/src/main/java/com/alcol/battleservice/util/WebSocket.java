@@ -382,14 +382,14 @@ public class WebSocket {
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
 
-                        synchronized (session)
-                        {
-                            session.getBasicRemote().sendText(data.toJSONString());
-                        }
 //                        synchronized (session)
 //                        {
-//                            userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
+//                            session.getBasicRemote().sendText(data.toJSONString());
 //                        }
+                        synchronized (session)
+                        {
+                            userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
+                        }
                     }
                     else
                     {
