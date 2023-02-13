@@ -144,7 +144,7 @@ function LastSeason() {
               <Row style={{ padding: "10px" }}>
                 {/* 한 줄에 3개씩 표시 */}
                 {badgeMap.map((seasonData, key) => (
-                  <Col xs={24} lg={12} xl={8} align="middle" className={styles.seasonGrid}>
+                  <Col span={24} align="middle" className={styles.seasonGrid}>
                     <Row align="middle">
                       <Col span={8} className={styles.text}>
                         <img

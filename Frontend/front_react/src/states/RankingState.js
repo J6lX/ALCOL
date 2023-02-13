@@ -28,3 +28,9 @@ export const CurrentUserRankingState = atom({
   key: "CurrentUserRankingState",
   default: null,
 });
+
+// 지난 시즌 시즌 정보 저장
+export const LastSeasonState = atom({
+  key: "LastSeasonState",
+  default: [],
+});
