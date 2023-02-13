@@ -115,7 +115,8 @@ const ContinuousBattlePage = () => {
 
     socket.onopen = () => {
       setTimeout(() => {
-        console.log("여길 봐", userId, otherId, hostCheck, battleMode);
+        console.log("소켓이 오픈되었습니다. 아래 데이터를 보냅니다.");
+        console.log(messageType, userId, otherId, hostCheck, battleMode);
         socket.send(
           JSON.stringify({
             messageType: messageType,
@@ -129,29 +130,33 @@ const ContinuousBattlePage = () => {
     };
 
     socket.onmessage = (servermessage) => {
-      console.log(servermessage);
+      console.log("서버에서 메세지를 받았습니다.", servermessage);
       const data = JSON.parse(servermessage.data);
       if (data.messageType === "connect_success") {
-        console.log("연결 완료!");
+        console.log("연결 완료! 아래와 같은 데이터를 받았습니다.");
         console.log(data);
-        setTimeout(() => {
-          socket.send(
-            JSON.stringify({
-              messageType: "getProblem",
-              userId: userId,
-              otherId: otherId,
-            })
-          );
-        }, 300);
+        console.log("problems", problems);
+        if (problems.length === 0 || problems === {}) {
+          setTimeout(() => {
+            socket.send(
+              JSON.stringify({
+                messageType: "getProblem",
+                userId: userId,
+                otherId: otherId,
+              })
+            );
+          }, 300);
+        }
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
-        console.log("문제 선택 완료!");
+        console.log("문제 밴 완료! 아래의 데이터를 받았습니다.");
+        console.log(data);
         setTimeout(() => {
           setIsReady(false);
           setIsBanWait(true);
         }, 500);
       } else if (data.messageType === "select_success") {
-        console.log("이게 날라왔어", data.problem);
+        console.log("배틀에서 풀 문제 세부 정보를 받았습니다.", data.problem);
         setTimeout(() => {
           setProblemInfo(data.problem);
           setTimeout(() => {
@@ -174,6 +179,7 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "closed") {
         socket.close();
       } else if (data.messageType === "sendProblem") {
+        console.log("밴할 문제 세 개를 받았습니다.");
         console.log(data.problems);
         const problems = data.problems;
         setProblems(problems);

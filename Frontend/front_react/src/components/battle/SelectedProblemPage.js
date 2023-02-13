@@ -16,12 +16,12 @@ function Top() {
 }
 
 function SelectedProblem({ problemInfo, problem_category, userInfo }) {
-  console.log("userInfo 왜 이러냐", userInfo)
+  // console.log("userInfo 왜 이러냐", userInfo)
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
   // let clsName = "../../assets/ALCOL tiers/tier_" + problem.problem_tier + "_0.png";
   const category = problem_category;
-  console.log("티어 정보가 어떻게 되어있니", problemInfo)
+  // console.log("티어 정보가 어떻게 되어있니", problemInfo)
   let tier;
   if (problemInfo.prob_tier[0] === "B") {
     tier = "bronze";
@@ -36,22 +36,17 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   } else if (problemInfo.prob_tier[0] === "A") {
     tier = "alcol";
   }
-  let LV = problemInfo.prob_tier[problemInfo.prob_tier.length-1];
-  console.log(tier, LV)
+  let LV = problemInfo.prob_tier[problemInfo.prob_tier.length - 1];
+  console.log(tier, LV);
 
   const tierAddress = `../../assets/ALCOL tiers/tier_${tier}_${LV}.png`;
-  
+
   const makeBadge = (category) => {
     const result = [];
 
     for (let i = 0; i < problem_category.length; i++) {
       result.push(
-        <Badge
-          key={i}
-          count={problem_category[i]}
-          color="#faad14"
-          style={{ margin: "10px" }}
-        />
+        <Badge key={i} count={problem_category[i]} color="#faad14" style={{ margin: "10px" }} />
       );
     }
     return result;
@@ -125,11 +120,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
               style={{ color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
               문제 {problemInfo.prob_no}. {problemInfo.prob_name}
             </p>
-            <img
-              src={tierAddress}
-              alt="tier"
-              style={{ width: "40px" }}
-            />
+            <img src={tierAddress} alt="tier" style={{ width: "40px" }} />
           </div>
           <div>{makeBadge(category)}</div>
           <Col style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -146,9 +137,15 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   );
 }
 
-const SelectedProblemPage = ({problems, problemInfo, battleMode, battleLanguage, battleuserinfo}) => {
-  const problem_category = problems[problemInfo.prob_no]
-  console.log("선택된 문제 정보", problemInfo)
+const SelectedProblemPage = ({
+  problems,
+  problemInfo,
+  battleMode,
+  battleLanguage,
+  battleuserinfo,
+}) => {
+  const problem_category = problems[problemInfo.prob_no];
+  // console.log("선택된 문제 정보", problemInfo)
   return (
     <div
       id="problem_category"
@@ -156,7 +153,11 @@ const SelectedProblemPage = ({problems, problemInfo, battleMode, battleLanguage,
       style={{ boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)" }}>
       <Top />
       <br />
-      <SelectedProblem problemInfo={problemInfo} problem_category={problem_category} userInfo={battleuserinfo} />
+      <SelectedProblem
+        problemInfo={problemInfo}
+        problem_category={problem_category}
+        userInfo={battleuserinfo}
+      />
     </div>
   );
 };
