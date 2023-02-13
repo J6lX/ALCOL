@@ -175,11 +175,10 @@ function ProfileImage() {
 
       // 서버로 선택한 파일 보내기
       axios
-        .put(`http://i8b303.p.ssafy.io:9000/user-service`, formData, {
+        .put(`http://i8b303.p.ssafy.io:9000/user-service/`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((response) => {
-          console.log(response);
           if (response.data.custom_code === "007") {
             alert("수정 완료되었습니다.");
           }
@@ -192,15 +191,23 @@ function ProfileImage() {
       setPhoto(photo);
       return;
     }
+    // recoil에 저장된 userInfo중 사진 정보만 업데이트
+
     //화면에 프로필 사진 표시
     const reader = new FileReader();
-    console.log("reader:", reader);
     reader.onload = () => {
       if (reader.readyState === 2) {
         setPhoto(reader.result);
+        setUserInfo({
+          nickname: userInfo.nickname,
+          profileImg: reader.result,
+          level: userInfo.level,
+          speedTier: userInfo.speedTier,
+          efficiencyTier: userInfo.efficiencyTier,
+        });
       }
     };
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(uploadFile);
   };
 
   return (
