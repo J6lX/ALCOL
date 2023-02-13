@@ -230,7 +230,7 @@ public class WebSocket {
                 data.put("messageType","connect_success");
                 synchronized (session) {
 //                    session.sendMessage(message);
-                    session.getAsyncRemote().sendText(data.toJSONString());
+                    session.getBasicRemote().sendText(data.toJSONString());
                 }
 
 
@@ -268,7 +268,7 @@ public class WebSocket {
                 problems_json.put("problems",problems_category);
                 synchronized (session) {
 //                    session.sendMessage(message);
-                    session.getAsyncRemote().sendText(problems_json.toJSONString());
+                    session.getBasicRemote().sendText(problems_json.toJSONString());
                 }
 //                sendProblems(session, problems_json);
 
@@ -377,18 +377,18 @@ public class WebSocket {
                         System.out.println(problems.getBody().get("prob_name"));
                         data.put("messageType","select_success");
                         data.put("problem",problems.getBody());
-                        userId2Session.get(userId).getAsyncRemote().sendText(data.toJSONString());
+                        userId2Session.get(userId).getBasicRemote().sendText(data.toJSONString());
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
 
                         synchronized (session)
                         {
-                            session.getAsyncRemote().sendText(data.toJSONString());
+                            session.getBasicRemote().sendText(data.toJSONString());
 
                         }
                         synchronized (session)
                         {
-                            userId2Session.get(otherId).getAsyncRemote().sendText(data.toJSONString());
+                            userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
                         }
                     }
                     else
@@ -398,7 +398,7 @@ public class WebSocket {
                         data.put("messageType","ban_success");
                         synchronized (session) {
 //                    session.sendMessage(message);
-                            session.getAsyncRemote().sendText(data.toJSONString());
+                            session.getBasicRemote().sendText(data.toJSONString());
                         }
                     }
                 }
@@ -593,11 +593,11 @@ public class WebSocket {
                              */
                             synchronized (session)
                             {
-                                session.getAsyncRemote().sendText(user_submit_result_send.toJSONString());
+                                session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
                             }
                             synchronized (userId2Session.get(submitOtherId))
                             {
-                                userId2Session.get(submitOtherId).getAsyncRemote().sendText(other_submit_result_send.toJSONString());
+                                userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                             }
 
                             /**
@@ -716,10 +716,10 @@ public class WebSocket {
                         }
 
                         synchronized (session){
-                            session.getAsyncRemote().sendText(submit_fail_send.toJSONString());
+                            session.getBasicRemote().sendText(submit_fail_send.toJSONString());
                         }
                         synchronized (userId2Session.get(submitOtherId)){
-                            userId2Session.get(submitOtherId).getAsyncRemote().sendText(other_submit_fail_send.toJSONString());
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_fail_send.toJSONString());
                         }
 //                        System.out.println("빠져나옴"+fromdata);
 
