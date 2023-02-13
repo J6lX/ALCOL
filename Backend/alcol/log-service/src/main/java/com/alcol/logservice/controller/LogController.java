@@ -102,14 +102,14 @@ public class LogController
 
         log.info("LogController 분기 3");
 
-        String loserUserId = (String)map.get("loserUserId");
-        int loserPrevMmr = (int)map.get("loserPrevMmr");
-        int loserNowMmr = (int)map.get("loserNowMmr");
+//        String loserUserId = (String)map.get("loserUserId");
+//        int loserPrevMmr = (int)map.get("loserPrevMmr");
+//        int loserNowMmr = (int)map.get("loserNowMmr");
 
         log.info("LogController 분기 4");
 
         List<Map<String, Object>> winnerSubmitLog = (List<Map<String, Object>>) map.get("winnerSubmitLog");
-        List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
+//        List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
 
         log.info("LogController 분기 5");
 
