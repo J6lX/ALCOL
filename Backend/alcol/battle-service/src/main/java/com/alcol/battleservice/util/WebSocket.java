@@ -426,10 +426,8 @@ public class WebSocket {
                     System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
                     System.out.println("저는 1번 유저입니다.");
                     timer = new Timer();
-                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 5000); // 1초마다 실행
+                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 10000); // 1초마다 실행
                     timerMap.put(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId,timer);
-
-
                 }
             }
             else if (method.equals("battleTimeOut"))
@@ -519,6 +517,12 @@ public class WebSocket {
                      * 몇개 맞았는지 보려면 info 안에 data 갯수 세고 그만큼 for문 돌면서 err 갯수 찾기 ?
                      * 스피드전에서 result 가 0이라면 승리를 의미. 바로 MMR 계산.
                      */
+//                    else if(submit_result==1)
+//                    {
+//                        JSONObject submit_error_send = new JSONObject();
+//                        submit_error_send.put("messageType","error");
+//                        submit_error_send.put("errorMessage","");
+//                    }
                     else if(submit_result==0)
                     {
                         HashMap<String,Object> fromdata_statistic_info = (HashMap<String, Object>)fromdata.get("statistic_info");
@@ -964,13 +968,15 @@ public class WebSocket {
                 sendBattleLog.put("otherNowMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.nowMmr);
                 sendBattleLog.put("otherSubmitLog",sessionId2Obj.get(userId2SessionId.get(otherId)).user2.battleLog);
                 System.out.println("배틀에 대한 기록입니다." + sendBattleLog);
+                /**
+                 * log-service로 전송하는 부분 추가
+                 */
+                
             }
             /**
              * 제출 기록이 있는 경우,
              */
-            {
 
-            }
 
 
 
