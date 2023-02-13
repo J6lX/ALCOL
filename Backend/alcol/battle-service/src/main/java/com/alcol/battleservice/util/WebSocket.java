@@ -953,7 +953,7 @@ public class WebSocket {
                 sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
 
                 Map<String, Object> sendBattleLog = new HashMap<>();
-                sendBattleLog.put("battleMode",battle_mode);
+                sendBattleLog.put("battleMode",battleMode);
                 sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(userId)).problemNum);
                 sendBattleLog.put("userId",userId);
                 sendBattleLog.put("otherId",otherId);
