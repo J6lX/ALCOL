@@ -135,7 +135,7 @@ public class WebSocket {
 
 
 
-                User user = User.builder().session(session).userId(userId).accept_time(-1).accept_memory(-1).prevMmr(userMmr).battleLog(new ArrayList<>()).battleMode(battleMode).build();
+                User user = User.builder().session(session).battleMode(battleMode).userId(userId).accept_time(-1).accept_memory(-1).prevMmr(userMmr).battleLog(new ArrayList<>()).battleMode(battleMode).build();
                 if(hostCheck.equals("false"))
                 {
                     while(true)
