@@ -73,15 +73,15 @@ public class RankServiceImpl implements RankService{
             lose = Integer.parseInt(winLoseCount.get(key, "lose"));
             winningRate = win / (win + lose) * 100;
         }
-        catch (NullPointerException nullPointerException)
+        catch (Exception e)
         {
             log.warn("해당 유저의 승패 정보가 존재하지 않음");
-            return null;
-        }
-        catch (NumberFormatException numberFormatException)
-        {
-            log.warn("해당 유저의 승패 정보가 존재하지 않음");
-            return null;
+            e.printStackTrace();
+            return RankDto.WinLoseCount.builder()
+                    .win(0)
+                    .lose(0)
+                    .winningRate(0)
+                    .build();
         }
 
         return RankDto.WinLoseCount.builder()
