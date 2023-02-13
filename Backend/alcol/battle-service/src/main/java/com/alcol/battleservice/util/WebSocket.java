@@ -181,7 +181,9 @@ public class WebSocket {
                             sessionId2Obj.get(otherUserId).problemList = getProblemList;
 
                             synchronized (session) {
+                                session.getAsyncRemote().sendText(data.toJSONString());
                                 userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
+//                                userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                                session.getAsyncRemote().sendText(data.toJSONString());
                             }
                             break;
