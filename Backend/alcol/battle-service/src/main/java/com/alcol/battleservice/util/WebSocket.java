@@ -416,7 +416,7 @@ public class WebSocket {
             {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
-                String battleMode = obj.get("mode").toString();
+                String battleMode = sessionId2Obj.get(userId2SessionId.get(userId)).user1.battleMode;
 
                 if(session==sessionId2Obj.get(userId2SessionId.get(userId)).user1.session
                         && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
