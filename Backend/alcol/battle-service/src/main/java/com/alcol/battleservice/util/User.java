@@ -22,5 +22,7 @@ public class User {
     int banProblemNum;
     List<BattleLog> battleLog = new ArrayList<>();
 
+    int accept_time=-1;
+    int accept_memory=-1;
 
 }
