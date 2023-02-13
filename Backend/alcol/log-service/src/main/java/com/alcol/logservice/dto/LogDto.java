@@ -1,10 +1,11 @@
 package com.alcol.logservice.dto;
 
+import com.alcol.logservice.entity.BattleLogEntity;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 public class LogDto
@@ -54,6 +55,19 @@ public class LogDto
         private int upDownMmr;
         private int nowMmr;
         private LocalDateTime endTime;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class BattleProbSubmitLogDto
+    {
+        private int isCorrect;
+        private int probRunningTime;
+        private int probRunningMemory;
+        private LocalDateTime submitTime;
     }
 
     @Getter

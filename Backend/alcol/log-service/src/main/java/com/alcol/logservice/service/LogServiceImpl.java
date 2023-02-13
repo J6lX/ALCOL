@@ -2,6 +2,7 @@ package com.alcol.logservice.service;
 
 import com.alcol.logservice.dto.LogDto;
 import com.alcol.logservice.entity.BattleLogEntity;
+import com.alcol.logservice.entity.BattleProbSubmitLogEntity;
 import com.alcol.logservice.entity.ExpLogEntity;
 import com.alcol.logservice.entity.PastSeasonLogEntity;
 import com.alcol.logservice.repository.BattleLogRepository;
@@ -210,24 +211,40 @@ public class LogServiceImpl implements LogService
     }
 
     @Override
-    public void insertBattleLog(LogDto.BattleLogDto winnerBattleLogDto, LogDto.BattleLogDto loserBattleLogDto)
+    public void insertBattleLog(
+            LogDto.BattleLogDto winnerBattleLogDto,
+            LogDto.BattleLogDto loserBattleLogDto,
+            List<LogDto.BattleProbSubmitLogDto> winnerSubmitLogList,
+            List<LogDto.BattleProbSubmitLogDto> loserSubmitLogList
+    )
     {
         log.info("LogServiceImpl 의 insertBattleLog 메소드 실행");
 
-        ModelMapper modelMapperByWinner = new ModelMapper();
-        modelMapperByWinner.getConfiguration()
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
                 .setFieldMatchingEnabled(true);
 
-        ModelMapper modelMapperByLoser = new ModelMapper();
-        modelMapperByLoser.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT)
-                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-                .setFieldMatchingEnabled(true);
+        BattleLogEntity winner = modelMapper.map(winnerBattleLogDto, BattleLogEntity.class);
+        BattleLogEntity loser = modelMapper.map(loserBattleLogDto, BattleLogEntity.class);
 
-        battleLogRepository.save(modelMapperByWinner.map(winnerBattleLogDto, BattleLogEntity.class));
-        battleLogRepository.save(modelMapperByLoser.map(loserBattleLogDto, BattleLogEntity.class));
+        for (LogDto.BattleProbSubmitLogDto battleProbSubmitLogDto : winnerSubmitLogList)
+        {
+            winner.addBattleProbSubmitLogEntity(
+                    modelMapper.map(battleProbSubmitLogDto, BattleProbSubmitLogEntity.class)
+            );
+        }
+
+        for (LogDto.BattleProbSubmitLogDto battleProbSubmitLogDto : loserSubmitLogList)
+        {
+            loser.addBattleProbSubmitLogEntity(
+                    modelMapper.map(battleProbSubmitLogDto, BattleProbSubmitLogEntity.class)
+            );
+        }
+
+        battleLogRepository.save(winner);
+        battleLogRepository.save(loser);
 
         log.info("LogServiceImpl 의 insertBattleLog 메소드 실행 완료");
     }
