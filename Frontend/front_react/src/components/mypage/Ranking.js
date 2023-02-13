@@ -209,9 +209,8 @@ function Ranking() {
 
   const [rankerList, setRankerList] = useRecoilState(RankerListState);
 
+  // 첫 화면에 표시할 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
   useEffect(() => {
-    // 랭커 정보를 recoil에 저장
-    // 첫 화면에 표시할 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
     // axios 통신 진행
     axios
       .get(
@@ -237,6 +236,9 @@ function Ranking() {
               // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
             };
           });
+          console.log("response accepted");
+          // 랭커 정보를 recoil에 저장
+
           setRankerList(rankerData);
         } else if (response.data.customCode === "003") {
           // 랭킹 정보가 없는 경우

@@ -5,14 +5,8 @@ import alcol from "../assets/alcol_empty_white.png";
 
 import { Layout, Button, Row, Col, Menu } from "antd";
 import { useState, useEffect } from "react";
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
-import {
-  AccessTokenInfo,
-  CurrentNickname,
-  LoginState,
-  RefreshTokenInfo,
-  UserInfoState,
-} from "../states/LoginState";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo, UserInfoState } from "../states/LoginState";
 
 const { Header } = Layout;
 
