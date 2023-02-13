@@ -78,17 +78,17 @@ public class WebSocket {
             System.out.println("이것은 세션 아이디이다."+sessionId);
             printInfo();
 
-            if (!runCheck) {
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                    }
-                };
-                runCheck = true;
-                Timer timer = new Timer(true);
-                timer.scheduleAtFixedRate(task, 0, 15000);
-
-            }
+//            if (!runCheck) {
+//                TimerTask task = new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                    }
+//                };
+//                runCheck = true;
+//                Timer timer = new Timer(true);
+//                timer.scheduleAtFixedRate(task, 0, 15000);
+//
+//            }
             ;
         }
     }
@@ -109,7 +109,6 @@ public class WebSocket {
             // 처음 입장할 때
             if (method.equals("connect"))
             {
-
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
                 String battleMode = obj.get("battleMode").toString();
@@ -181,7 +180,9 @@ public class WebSocket {
                             sessionId2Obj.get(otherUserId).problemList = getProblemList;
 
                             synchronized (session) {
+                                System.out.println("1번유저에게 리턴");
                                 session.getAsyncRemote().sendText(data.toJSONString());
+                                System.out.println("2번유저에게 리턴");
                                 userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                                userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                                session.getAsyncRemote().sendText(data.toJSONString());
