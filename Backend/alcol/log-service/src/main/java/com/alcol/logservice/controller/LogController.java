@@ -4,6 +4,7 @@ import com.alcol.logservice.dto.LogDto;
 import com.alcol.logservice.service.LogService;
 import com.alcol.logservice.util.RestTemplateUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -97,23 +98,12 @@ public class LogController
     {
         log.info("LogController 의 insertBattleLog 메소드 실행");
 
-        log.info("battleMode : " + map.get("battleMode"));
-        log.info("probNum : " + map.get("probNum"));
-        log.info("winnerUserId : " + map.get("winnerUserId"));
-        log.info("winnerPrevMmr : " + map.get("winnerPrevMmr"));
-        log.info("winnerNowMmr : " + map.get("winnerNowMmr"));
-        log.info("winnerSubmitLog : " + map.get("winnerSubmitLog"));
-        log.info("loserUserId : " + map.get("loserUserId"));
-        log.info("loserPrevMmr : " + map.get("loserPrevMmr"));
-        log.info("loserNowMmr : " + map.get("loserNowMmr"));
-        log.info("loserSubmitLog : " + map.get("loserSubmitLog"));
-
-        log.info("LogController 분기 1");
+        log.info("insertBattleLog 분기 1");
 
         String battleMode = (String)map.get("battleMode");
         long probNum = new Long((int)map.get("probNum"));
 
-        log.info("LogController 분기 2");
+        log.info("insertBattleLog 분기 2");
 
         String winnerUserId = (String)map.get("winnerUserId");
         int winnerPrevMmr = (int)map.get("winnerPrevMmr");
@@ -126,7 +116,7 @@ public class LogController
         List<Map<String, Object>> winnerSubmitLog = (List<Map<String, Object>>) map.get("winnerSubmitLog");
         List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
 
-        log.info("LogController 분기 3");
+        log.info("insertBattleLog 분기 3");
 
         List<LogDto.BattleProbSubmitLogDto> winnerSubmitLogList = new ArrayList<>();
         List<LogDto.BattleProbSubmitLogDto> loserSubmitLogList = new ArrayList<>();
@@ -185,7 +175,11 @@ public class LogController
             );
         }
 
-        log.info("LogController 분기 4");
+        // 승리한 유저는 경험치 100, 패배한 유저는 경험치 50 을 획득
+        logService.insertExp(winnerUserId, 100);
+        logService.insertExp(loserUserId, 50);
+
+        log.info("insertBattleLog 분기 4");
 
         logService.insertBattleLog(winnerBattleLogDto, loserBattleLogDto, winnerSubmitLogList, loserSubmitLogList);
 
@@ -194,6 +188,11 @@ public class LogController
         return "Log Service : battleLog Insert Success";
     }
 
+    /**
+     * 배틀 로그 저장(무)
+     * @param map
+     * @return
+     */
     @PostMapping("/insertBattleLogByDraw")
     public String insertBattleLogByDraw(@RequestBody Map<String, Object> map)
     {
@@ -273,6 +272,10 @@ public class LogController
                             .build()
             );
         }
+
+        // 무승부 시 두 명의 유저 모두 경험치 75 획득
+        logService.insertExp(userId, 75);
+        logService.insertExp(otherId, 75);
 
         log.info("insertBattleLogByDraw 분기 4");
 
