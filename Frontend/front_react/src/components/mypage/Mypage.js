@@ -483,7 +483,7 @@ function Mypage() {
           {/* 한 줄에 1개씩 표시 */}
           {seasonInfo.map((seasonData, key) => (
             <Col span={24} align="middle" className="seasonGrid">
-              <Row align="middle">
+              <Row justify="center" align="middle">
                 <Col span={8} className="text">
                   <img
                     src={giveBadge(seasonData.tier.slice(0, 1))}
@@ -494,35 +494,35 @@ function Mypage() {
                     }}
                   />
                 </Col>
-                <Col span={14} className="text">
+                <Col xs={22} xl={14} className="text">
                   {/* 모드 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.modeName}</p>
                     </Col>
                   </Row>
                   {/* 시즌 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.seasonName}</p>
                     </Col>
                   </Row>
                   {/* 티어 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.tier}</p>
                     </Col>
                   </Row>
                   {/* 마지막 랭킹 레이블 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
                       <p>{seasonData.ranking}위</p>
                     </Col>
                   </Row>
                   {/* 시즌 이름 */}
-                  <Row>
+                  <Row justify="center">
                     <Col>
-                      <p>{seasonData.ranking} 시즌</p>
+                      <p>시즌 {seasonData.season}</p>
                     </Col>
                   </Row>
                 </Col>
