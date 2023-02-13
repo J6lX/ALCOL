@@ -84,7 +84,7 @@ public class LogServiceImpl implements LogService
         log.info("LogServiceImpl 의 getBattleLog 메소드 실행");
 
         List<BattleLogEntity> battleLogEntityList =
-                battleLogRepository.findTop10ByMyUserIdOrderByBattleLogNoDesc(userId);
+                battleLogRepository.findAllByMyUserIdOrderByBattleLogNoDesc(userId);
 
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration()

@@ -16,7 +16,7 @@ public interface BattleLogRepository extends CrudRepository<BattleLogEntity, Lon
     BattleLogEntity findTopByMyUserIdAndBattleModeOrderByBattleLogNoDesc(String userId, String battleMode);
 
     // 사용자의 최신 배틀 로그 10 개 가져오기
-    List<BattleLogEntity> findTop10ByMyUserIdOrderByBattleLogNoDesc(String userId);
+    List<BattleLogEntity> findAllByMyUserIdOrderByBattleLogNoDesc(String userId);
 
     // 사용자의 모드별 승리, 패배수 가져오기
     Long countByMyUserIdAndBattleModeAndBattleResult(String userId, String battleMode, int battleResult);
