@@ -67,17 +67,29 @@ public class ProblemController
         return ResponseEntity.status(HttpStatus.OK).body(problemService.getAllProbList());
     }
 
-    @PostMapping("/practiceSubmit/{probNum}")
-    public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@PathVariable("probNum") Long probNum, @RequestBody ScoreDto.Request req)
+    @PostMapping("/practiceSubmit")
+    public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@RequestBody ScoreDto.Request req)
     {
-//        String submissionId = problemService.getSubmissionId(req);
-//        // submission id를 받아올 수 없다면 에러처리한다.
-//        if(submissionId == null)
-//        {
-//            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_SUBMISSION_ERROR));
-//        }
-//        System.out.println(submissionId);
-        ScoreDto.Response response = problemService.getScoreResult("ba1c6dfdc9578abe9aa09ffe0fd9b825");
+        // 정답을 제출한 후 submission id를 요청한다.
+        String submissionId = problemService.getSubmissionId(req);
+        // submission id를 받아올 수 없다면 에러처리한다.
+        if(submissionId == null)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_SUBMISSION_ERROR));
+        }
+
+        // 코드를 채점하는 시간이 있으므로 5초 뒤에 요청한다.
+        try {
+            Thread.sleep(5000);
+        }
+        catch (InterruptedException e)
+        {
+            e.printStackTrace();
+        }
+
+        // submission id로 제출 결과를 가져온다.
+        ScoreDto.Response response = problemService.getScoreResult(submissionId);
+        // 제출 결과를 받아올 수 없다면 에러처리한다.
         if(response == null)
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_RESULT_ERROR));

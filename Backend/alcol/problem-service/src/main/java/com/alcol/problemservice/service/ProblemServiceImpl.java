@@ -201,70 +201,80 @@ public class ProblemServiceImpl implements ProblemService
 
     public ScoreDto.Response getScoreResult(String submissionId)
     {
-        // submission id로 채점 결과를 가져온다.
-        ResponseEntity<JSONObject> response;
-        try {
-            String url = "https://i8b303.p.ssafy.io:443/api/submission?id=" + submissionId;
-            HttpHeaders header = new HttpHeaders();
-            header.add("Cookie", "sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
-            HttpEntity request = new HttpEntity(header);
+        int round = 3; // 최대 3번만 요청한다.
+        while(round --> 0) {
+            // submission id로 채점 결과를 가져온다.
+            ResponseEntity<JSONObject> response;
+            try {
+                String url = "https://i8b303.p.ssafy.io:443/api/submission?id=" + submissionId;
+                HttpHeaders header = new HttpHeaders();
+                header.add("Cookie", "sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
+                HttpEntity request = new HttpEntity(header);
 
-            response = restTemplateForHttps.exchange(url, HttpMethod.GET, request, JSONObject.class);
-        }
-        catch (Exception e)
-        {
-            log.error("채점 결과를 받아오는 것에서 오류 발생");
-            return null;
-        }
-
-        HashMap<String, Object> submissionData = (HashMap<String, Object>) response.getBody().get("data");
-
-        // 채점 결과가 0이면 맞은거고 나머지는 틀린거임
-        int result = (int)submissionData.get("result");
-        HashMap<String, Object> InfoData = (HashMap<String, Object>) submissionData.get("info");
-        // 테스트케이스 리스트
-        List<HashMap<String, Object>> testcaseList = (List<HashMap<String, Object>>) InfoData.get("data");
-        // 전체 테스트케이스 개수
-        int allTestcaseCnt = testcaseList.size();
-        // 맞은 테스트케이스 개수
-        int successTestcaseCnt = testcaseList.size();
-
-        // 시간, 메모리 복잡도가 들은 statistic_info 뽑기
-        HashMap<String, Object> statisticInfoData = (HashMap<String, Object>) submissionData.get("statistic_info");
-        int time = -1;
-        int memory = -1;
-
-        // 정답이 맞았을 경우
-        if(result == 0)
-        {
-            time = (int)statisticInfoData.get("time_cost");
-            memory = (int)statisticInfoData.get("memory_cost");
-        }
-        // 틀렸을 경우
-        else
-        {
-            int success = 0;
-            // 테스트케이스 리스트를 돌면서 맞았는지 확인한다.
-            for(int i=0; i<allTestcaseCnt; i++)
-            {
-                if((int)testcaseList.get(i).get("result") == 0)
-                {
-                    success += 1;
-                }
+                response = restTemplateForHttps.exchange(url, HttpMethod.GET, request, JSONObject.class);
+            } catch (Exception e) {
+                log.error("채점 결과를 받아오는 것에서 오류 발생");
+                return null;
             }
 
-            successTestcaseCnt = success;
+            HashMap<String, Object> submissionData = (HashMap<String, Object>) response.getBody().get("data");
+
+            // 채점 결과가 0이면 맞은거고 나머지는 틀린거임
+            int result = (int) submissionData.get("result");
+
+            // 채점 결과가 6이나 7이면 채점이 진행되고 있다는 뜻이므로 정보를 다시 요청한다.
+            if (result == 6 || result == 7) {
+                // 3초 뒤에 다시 요청한다.
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    log.error("코드 채점 3초 뒤에 다시 결과를 가져오는 과정에서 오류 발생");
+                }
+                continue;
+            }
+
+            HashMap<String, Object> InfoData = (HashMap<String, Object>) submissionData.get("info");
+            // 테스트케이스 리스트
+            List<HashMap<String, Object>> testcaseList = (List<HashMap<String, Object>>) InfoData.get("data");
+            // 전체 테스트케이스 개수
+            int allTestcaseCnt = testcaseList.size();
+            // 맞은 테스트케이스 개수
+            int successTestcaseCnt = testcaseList.size();
+
+            // 시간, 메모리 복잡도가 들은 statistic_info 뽑기
+            HashMap<String, Object> statisticInfoData = (HashMap<String, Object>) submissionData.get("statistic_info");
+            int time = -1;
+            int memory = -1;
+
+            // 정답이 맞았을 경우
+            if (result == 0) {
+                time = (int) statisticInfoData.get("time_cost");
+                memory = (int) statisticInfoData.get("memory_cost");
+            }
+            // 틀렸을 경우
+            else {
+                int success = 0;
+                // 테스트케이스 리스트를 돌면서 맞았는지 확인한다.
+                for (int i = 0; i < allTestcaseCnt; i++) {
+                    if ((int) testcaseList.get(i).get("result") == 0) {
+                        success += 1;
+                    }
+                }
+
+                successTestcaseCnt = success;
+            }
+
+            String resultToString = result == 0 ? "success" : "fail";
+
+            return ScoreDto.Response.builder()
+                    .result(resultToString)
+                    .all_testcase_cnt(allTestcaseCnt)
+                    .success_testcase_cnt(successTestcaseCnt)
+                    .time(time)
+                    .memory(memory / 1024)
+                    .build();
         }
-
-        String resultToString = result == 0 ? "success" : "fail";
-
-        return ScoreDto.Response.builder()
-                .result(resultToString)
-                .all_testcase_cnt(allTestcaseCnt)
-                .success_testcase_cnt(successTestcaseCnt)
-                .time(time)
-                .memory(memory / 1024)
-                .build();
+        return null;
     }
 
     private RestTemplate makeRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
