@@ -76,6 +76,20 @@ public class LogController
     public String insertBattleLog(@RequestBody Map<String, Object> map)
     {
         log.info("LogController 의 insertBattleLog 메소드 실행");
+
+        log.info("battleMode : " + map.get("battleMode"));
+        log.info("probNum : " + map.get("probNum"));
+
+        log.info("winnerUserId : " + map.get("winnerUserId"));
+        log.info("winnerPrevMmr : " + map.get("winnerPrevMmr"));
+        log.info("winnerNowMmr : " + map.get("winnerNowMmr"));
+        log.info("winnerSubmitLog : " + map.get("winnerSubmitLog"));
+
+        log.info("loserUserId : " + map.get("loserUserId"));
+        log.info("loserPrevMmr : " + map.get("loserPrevMmr"));
+        log.info("loserNowMmr : " + map.get("loserNowMmr"));
+        log.info("loserSubmitLog : " + map.get("loserSubmitLog"));
+
         return "Log Service : battleLog Insert Success";
     }
 
