@@ -12,6 +12,7 @@ import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, Modal } from "antd";
 import { userCode } from "../../states/atoms";
+import 'animate.css';
 
 let allheight = window.innerHeight;
 
@@ -377,7 +378,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
   });
 
   return (
-    <div id="allconsole">
+    <div id="allconsole" className="animate__animated animate__fadeIn">
       <RecoilRoot>
         <div>
           <BattleNav userInfo={battleuserinfo} mode={battleMode} />

@@ -394,7 +394,7 @@ const SolvingPage = ({
   };
 
   return (
-    <div id="allconsole">
+    <div id="allconsole" className="animate__animated animate__fadeIn">
       <RecoilRoot>
         <div>
           <BattleNav userInfo={battleuserinfo} mode={battleMode} />

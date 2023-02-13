@@ -1,5 +1,6 @@
 import React from "react";
 import { Row, Col, Badge } from "antd";
+import video from "../../assets/count_down.mp4";
 import versus from "../../assets/versus.png";
 // import $ from "jquery";
 import "./SelectedProblemPage.css";
@@ -89,6 +90,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           width: "600px",
           height: "300px",
           border: "3px solid white",
+          boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}>
         <h1
@@ -150,15 +152,18 @@ const SelectedProblemPage = ({
   return (
     <div
       id="problem_category"
-      className="fullmiddle_selected backgroundimg"
-      style={{ boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)" }}>
-      <Top />
-      <br />
-      <SelectedProblem
-        problemInfo={problemInfo}
-        problem_category={problem_category}
-        userInfo={battleuserinfo}
-      />
+      className="fullmiddle_selected"
+      style={{ backgroundColor: "black", height: "100vh" }}>
+      <video src={video} autoPlay muted className="bgvideo backgroundimg" style={{ zIndex: "1" }}></video>
+      <div className="middlemiddle">
+        <Top />
+        <br />
+        <SelectedProblem
+          problemInfo={problemInfo}
+          problem_category={problem_category}
+          userInfo={battleuserinfo}
+        />
+      </div>
     </div>
   );
 };

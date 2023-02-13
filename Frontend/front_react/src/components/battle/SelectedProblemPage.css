@@ -1,10 +1,4 @@
 .backgroundimg {
-  height: 100vh;
-  background: url(/src/assets/battle_background.png);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-
   /* overflow-y: scroll; */
 
   -ms-overflow-style: none; /* 인터넷 익스플로러 */
@@ -28,3 +22,9 @@
   width: 100vw;
 }
 
+.middlemiddle {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
