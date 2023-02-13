@@ -133,7 +133,7 @@ public class WebSocket {
 
 
 
-                User user = User.builder().session(session).userId(userId).prevMmr(userMmr).battleLog(new ArrayList<>()).battleMode(battleMode).build();
+                User user = User.builder().session(session).userId(userId).accept_time(-1).accept_memory(-1).prevMmr(userMmr).battleLog(new ArrayList<>()).battleMode(battleMode).build();
                 if(hostCheck.equals("false"))
                 {
                     while(true)
@@ -225,13 +225,13 @@ public class WebSocket {
 //                    {
 
 //                    }
-                }
-                System.out.println();
-                JSONObject data = new JSONObject();
-                data.put("messageType","connect_success");
-                synchronized (session) {
+                    System.out.println();
+                    JSONObject data = new JSONObject();
+                    data.put("messageType","connect_success");
+                    synchronized (session) {
 //                    session.sendMessage(message);
-                    session.getBasicRemote().sendText(data.toJSONString());
+                        session.getBasicRemote().sendText(data.toJSONString());
+                    }
                 }
 
 
@@ -415,13 +415,13 @@ public class WebSocket {
             {
                 String userId = obj.get("userId").toString();
                 String otherUserId = obj.get("otherId").toString();
-                System.out.println("타이머 시작");
-                System.out.println("나의 세션"+session);
-                System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
 
                 if(session==sessionId2Obj.get(userId2SessionId.get(userId)).user1.session
                         && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
                 {
+                    System.out.println("타이머 시작");
+                    System.out.println("나의 세션"+session);
+                    System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
                     System.out.println("저는 1번 유저입니다.");
                     timer = new Timer();
                     timer.schedule(new SessionTimerTask(session,userId,otherUserId), 5000); // 1초마다 실행
@@ -894,6 +894,9 @@ public class WebSocket {
 
         public SessionTimerTask(Session session,String userId, String otherId) {
             this.session = session;
+            this.userId = userId;
+            this.otherId = otherId;
+            this.battleMode = battleMode;
         }
 
         @Override
