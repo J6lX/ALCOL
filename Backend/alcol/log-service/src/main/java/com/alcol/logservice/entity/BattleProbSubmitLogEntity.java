@@ -15,16 +15,13 @@ import java.time.LocalDateTime;
 public class BattleProbSubmitLogEntity
 {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int battleProbSubmitLogNo;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "battle_log_no", nullable = false)
     private BattleLogEntity battleLogEntity;
-
-//    @Column(nullable = false)
-//    private int battleLogNo;
 
     @Column(nullable = false)
     private int isCorrect;

@@ -16,7 +16,7 @@ import java.util.Set;
 public class BattleLogEntity
 {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long battleLogNo;
 
     @JsonManagedReference
