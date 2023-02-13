@@ -95,12 +95,14 @@ public class UserController
     }
 
     /**
+     * 회원 정보 수정 요청
      * @param user_id
      * @param file
      * @return
      * @throws Exception
      */
     @PutMapping(value = "/", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
             MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<UserDto.ResponseDto<?>> updateUser(
