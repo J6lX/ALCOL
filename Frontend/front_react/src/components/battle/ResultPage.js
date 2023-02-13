@@ -7,6 +7,7 @@ import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
 function App(data) {
+  console.log("이게 배틀 종료 데이터", data);
   const printResult = () => {
     var img = "";
     if (data.battleResult === "win") {
