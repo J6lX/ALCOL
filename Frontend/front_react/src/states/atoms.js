@@ -59,36 +59,7 @@ export const resultListModeInfo = atom({
 //---------배틀 결과) 게임 결과 정보
 export const resultListResultInfo = atom({
   key: "resultListResultInfo",
-  default: [
-    {
-      player_info: "player1",
-      result: "오답",
-      code_length: "3000",
-      memory: "300",
-      time: "00:30",
-    },
-    {
-      player_info: "player2",
-      result: "오답",
-      code_length: "3000",
-      memory: "300",
-      time: "00:30",
-    },
-    {
-      player_info: "player2",
-      result: "오답",
-      code_length: "3000",
-      memory: "300",
-      time: "00:30",
-    },
-    {
-      player_info: "player1",
-      result: "정답",
-      code_length: "3000",
-      memory: "300",
-      time: "00:30",
-    },
-  ],
+  default: [],
 });
 
 //---------매칭 결과) 플레이어 정보

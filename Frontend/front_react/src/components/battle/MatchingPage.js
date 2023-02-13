@@ -68,98 +68,100 @@ function App() {
   //matching 관련
   var userId = useRecoilValue(LoginState);
   const [playerInfo, setPlayerInfo] = useRecoilState(matchingPlayerInfo);
-  
+
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const history = useHistory();
-    
-    
-    // useEffect(() => {
-    //   if (playerInfo.otherId !== "") {
-    //     console.log("나는 useEffect playerInfo를 바꿔요");
-    //     console.log(playerInfo);
-    //     console.log(playerInfo.otherId);
-    //   }
-    // }, [playerInfo]);
 
-    console.log("<< 매칭페이지 >>");
-    console.log(userSelectedMode);
-    console.log(userSelectLanguage);
+  // useEffect(() => {
+  //   if (playerInfo.otherId !== "") {
+  //     console.log("나는 useEffect playerInfo를 바꿔요");
+  //     console.log(playerInfo);
+  //     console.log(playerInfo.otherId);
+  //   }
+  // }, [playerInfo]);
 
+  console.log("<< 매칭페이지 >>");
+  console.log(userSelectedMode);
+  console.log(userSelectLanguage);
 
+  var obj;
 
-    var obj;
-    
-    if (playerInfo.otherId === ""){
-      //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
-      // useEffect(()=>{const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`)}, [])
-      const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`)
-      console.log("소켓 만들어짐?", socket)
+  if (playerInfo.otherId === "") {
+    //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
+    // useEffect(()=>{const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`)}, [])
+    const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`);
+    console.log("소켓 만들어짐?", socket);
 
-      socket.addEventListener("open", () => {
-          console.log("---서버와 연결 됨---");
-          const mode = userSelectedMode;
-          const mmr = "1200";
-          const id = userId;
-          const language = userSelectLanguage;
-          const type = "1";
-          const data = JSON.stringify({
-            method: "init",
-            // 'name': name,
-            type: type,
-            Mode: mode,
-            MMR: mmr,
-            id: id,
-            Language: language,
-          });
-          socket.send(data);
-        });
-      //message를 받을 때 발생
+    socket.addEventListener("open", () => {
+      console.log("---서버와 연결 됨---");
+      const mode = userSelectedMode;
+      const mmr = "1200";
+      const id = userId;
+      const language = userSelectLanguage;
+      const type = "1";
+      const data = JSON.stringify({
+        method: "init",
+        // 'name': name,
+        type: type,
+        Mode: mode,
+        MMR: mmr,
+        id: id,
+        Language: language,
+      });
+      socket.send(data);
+    });
+    //message를 받을 때 발생
     socket.addEventListener("message", (message) => {
       console.log("서버로 부터 메세지를 받았습니다", message.data);
       obj = JSON.parse(message.data);
 
-      if (obj !== null && playerInfo.otherId === "" && playerInfo.userId === "" && playerInfo.hostCheck === "") {
+      if (
+        obj !== null &&
+        playerInfo.otherId === "" &&
+        playerInfo.userId === "" &&
+        playerInfo.hostCheck === ""
+      ) {
         onHandlePlayerGet();
       }
     });
 
     function onHandlePlayerGet() {
-      setPlayerInfo(obj)
+      setPlayerInfo(obj);
       setTimeout(() => {
-        socket.close()
+        socket.close();
         console.log("플레이어 정보를 저장했다");
         console.log(playerInfo);
-        history.push("/battle");}, 
-        2000)
-    };
+        history.push("/battle");
+      }, 2000);
+    }
 
     //서버가 오프라인일때 발생하는 코드
     socket.addEventListener("close", () => {
       console.log("---서버와 연결 끊김---");
       // socket.send(JSON.stringify("끊어주세요"));
     });
-    };
-//Modal 선택 관련
-const showModal = () => {
-  setIsModalOpen(true);
-};
-const handleOk = () => {
-  setIsModalOpen(false);
-};
-const handleCancle = () => {
-  //초기화
-  // socket.close();
-  setuserSelectedMode("-1");
-  setuserSelectLanguage("-1");
-  setPlayerInfo({ userId: "", otherId: "", hostCheck: "" });
-  history.push("/");
-  setIsModalOpen(false);
-};
+  }
+  //Modal 선택 관련
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancle = () => {
+    //초기화
+    // socket.close();
+    setuserSelectedMode("-1");
+    setuserSelectLanguage("-1");
+    setPlayerInfo({ userId: "", otherId: "", hostCheck: "" });
+    history.push("/");
+    setIsModalOpen(false);
+  };
 
-function handleHistoryMatchCancel() {
-  showModal();
-}
-    
+  function handleHistoryMatchCancel() {
+    showModal();
+  }
+
   return (
     <div className="matching_background">
       <UserInfo />
@@ -192,7 +194,8 @@ function handleHistoryMatchCancel() {
       <div className="matching_helper">
         <div style={{ color: "white", fontFamily: "NanumSquareNeo" }}>그거 아셨나요?</div>
         <div style={{ color: "white", fontFamily: "NanumSquareNeo", fontWeight: "lighter" }}>
-          이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..이것저것..
+          공평성을 위해 코드를 복사 붙여넣기 할 수 없어요... 하지만 자신의 코드를 가지고 싶으신 분을
+          위해 배틀이 끝나면 자신의 코드를 복사해갈 수 있게 해드릴게요!
         </div>
       </div>
       <div className="matchingButton" onClick={handleHistoryMatchCancel}>

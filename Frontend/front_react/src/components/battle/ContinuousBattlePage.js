@@ -8,15 +8,19 @@ import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import SolvingOptPage from "./SolvingOptPage";
 import ResultPage from "./ResultPage";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { message, Modal } from "antd";
-import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
+import {
+  selectedMode,
+  selectedLanguage,
+  matchingPlayerInfo,
+  resultListResultInfo,
+} from "../../states/atoms";
 
 // let submitResult = "";
 const serverAddress = "i8b303.p.ssafy.io:9002";
 const websocketAddress = "ws://" + serverAddress + "/websocket";
-let socket = null
-
+let socket = null;
 
 const ContinuousBattlePage = () => {
   const [isConnected, setIsConnected] = useState(false);
@@ -28,9 +32,10 @@ const ContinuousBattlePage = () => {
   // const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const [problemInfo, setProblemInfo] = useState([]);
-  const idInfo = useRecoilState(matchingPlayerInfo);
-  const battleModeInfo = useRecoilState(selectedMode);
-  const languageMode = useRecoilState(selectedLanguage);
+  const [resultListResult, setResultListResult] = useRecoilState(resultListResultInfo);
+  const idInfo = useRecoilValue(matchingPlayerInfo);
+  const battleModeInfo = useRecoilValue(selectedMode);
+  const languageMode = useRecoilValue(selectedLanguage);
   // let problems;
   console.log(languageMode);
   const [nickname, setNickname] = useState("a");
@@ -45,13 +50,12 @@ const ContinuousBattlePage = () => {
   console.log(problems);
 
   const messageType = "connect";
-  const userId = idInfo[0].userId;
-  const otherId = idInfo[0].otherId;
-  const hostCheck = idInfo[0].hostCheck;
-  const battleMode = battleModeInfo[0];
+  const userId = idInfo.userId;
+  const otherId = idInfo.otherId;
+  const hostCheck = idInfo.hostCheck;
+  const battleMode = battleModeInfo;
   console.log(messageType, userId, otherId, hostCheck, battleMode);
 
-  
   // let score = ""
 
   useEffect(() => {
@@ -60,7 +64,7 @@ const ContinuousBattlePage = () => {
         user_id: userId,
       })
       .then(function (response) {
-        console.log("내 정보 가져오기 axios 날림")
+        console.log("내 정보 가져오기 axios 날림");
         setNickname(response.data.nickname);
         setSpeedTier(response.data.speed_tier);
         setOptTier(response.data.optimization_tier);
@@ -84,7 +88,7 @@ const ContinuousBattlePage = () => {
         user_id: otherId,
       })
       .then(function (response) {
-        console.log("상대 정보 가져오기 axios 날림")
+        console.log("상대 정보 가져오기 axios 날림");
         setOtherNickname(response.data.nickname);
         setOtherSpeedTier(response.data.speed_tier);
         setOtherOptTier(response.data.optimization_tier);
@@ -108,10 +112,10 @@ const ContinuousBattlePage = () => {
   if (isConnected === false && nickname !== "a" && othernickname !== "b") {
     socket = new WebSocket(websocketAddress);
     console.log("socket", socket);
-    
+
     socket.onopen = () => {
       setTimeout(() => {
-        console.log("여길 봐", userId, otherId, hostCheck, battleMode)
+        console.log("여길 봐", userId, otherId, hostCheck, battleMode);
         socket.send(
           JSON.stringify({
             messageType: messageType,
@@ -120,9 +124,9 @@ const ContinuousBattlePage = () => {
             hostCheck: hostCheck,
             battleMode: battleMode,
           })
-        )
-      }, 500)
-    }
+        );
+      }, 500);
+    };
 
     socket.onmessage = (servermessage) => {
       console.log(servermessage);
@@ -130,22 +134,24 @@ const ContinuousBattlePage = () => {
       if (data.messageType === "connect_success") {
         console.log("연결 완료!");
         console.log(data);
-          setTimeout(()=>{
-            socket.send(
+        setTimeout(() => {
+          socket.send(
             JSON.stringify({
               messageType: "getProblem",
               userId: userId,
               otherId: otherId,
             })
-          );}, 300)
+          );
+        }, 300);
         setIsConnected(true);
       } else if (data.messageType === "ban_success") {
         console.log("문제 선택 완료!");
-        setTimeout(()=>{
-        setIsReady(false);
-        setIsBanWait(true);}, 500);
+        setTimeout(() => {
+          setIsReady(false);
+          setIsBanWait(true);
+        }, 500);
       } else if (data.messageType === "select_success") {
-        console.log("이게 날라왔어", data.problem)
+        console.log("이게 날라왔어", data.problem);
         setTimeout(() => {
           setProblemInfo(data.problem);
           setTimeout(() => {
@@ -153,8 +159,16 @@ const ContinuousBattlePage = () => {
             setIsBanWait(false);
             setIsSelected(true);
             setTimeout(() => {
+              socket.send(
+                JSON.stringify({
+                  messageType: "battleStart",
+                  userId: userId,
+                  otherId: otherId,
+                })
+              );
               setIsSelected(false);
-              setIsSolving(true);}, 10000)
+              setIsSolving(true);
+            }, 10000);
           }, 1000);
         }, 1000);
       } else if (data.messageType === "closed") {
@@ -180,13 +194,14 @@ const ContinuousBattlePage = () => {
           onOk() {
             socket.send(
               JSON.stringify({
-              messageType: "finish",
-              userId: userId,
-              otherId: otherId
+                messageType: "finish",
+                userId: userId,
+                otherId: otherId,
               })
-          )},
-        }
-        info(modaldata)
+            );
+          },
+        };
+        info(modaldata);
       } else if (data.messageType === "exitResultNo") {
         const modaldata = {
           title: "시간이 더 필요해요...",
@@ -200,28 +215,51 @@ const ContinuousBattlePage = () => {
           ),
           okText: "확인",
           onOk() {},
-        }
-        info(modaldata)
+        };
+        info(modaldata);
       } else if (data.messageType === "exitSuggestion") {
-        showModal()
+        showModal();
       } else if (data.messageType === "submitResult") {
         if (battleMode === "speed") {
+          const result = {
+            mode: battleMode,
+            language: languageMode,
+            result: `${data.accepted} / ${data.testcase}`,
+            time: data.time,
+            memory: data.memory,
+          };
+          let resultList = resultListResult;
+          resultList.push(result);
           const modaldata = {
             title: "오답!",
             content: (
               <div>
                 <p>틀렸습니다!</p>
                 <p>테스트케이스를 모두 맞추지 못했습니다.</p>
-                <p>{data.accepted} / {data.testcase}</p>
+                <p>
+                  {data.accepted} / {data.testcase}
+                </p>
                 <p>그러나 {othernickname} 님은 긴장하고 있겠군요.</p>
                 <small>제출을 하면 상대방에게 소식이 전달됩니다.</small>
               </div>
             ),
             okText: "확인",
             onOk() {},
-          }
-          info(modaldata)
-        }
+          };
+          info(modaldata);
+          setResultListResult(resultList);
+        } // 최적화전이면 정답, 오답만 나눠서 atom에 저장
+        // const result = {
+        //   mode: battleMode,
+        //   language: languageMode,
+        //   result: "accepted",
+        //   time: data.time,
+        //   memory: data.memory,
+        // }
+        // let resultList = resultListResult
+        // resultList.push(result)
+        // setResultListResult(resultList)
+
         // if (data.result === "correct") {
         //   const modaldata = {
         //     title: "정답!",
@@ -282,52 +320,85 @@ const ContinuousBattlePage = () => {
           onOk() {
             socket.send(
               JSON.stringify({
-              messageType: "finish",
-              userId: userId,
-              otherId: otherId
+                messageType: "finish",
+                userId: userId,
+                otherId: otherId,
               })
-            )
+            );
             setIsSolved(true);
           },
-        }
-        info(modaldata)
+        };
+        info(modaldata);
       } else if (data.messageType === "error") {
-        showSocketErrorModal()
+        showSocketErrorModal();
       } else if (data.messageType === "surrender") {
-        showOppSurrenderModal()
+        showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
-        if (data.battleResult === "win") {
-          console.log(data)
-          const modaldata = {
-            title: "정답!",
-            content: (
-              <div>
-                <p>축하합니다!</p>
-                <p>모든 테스트케이스를 맞췄습니다!</p>
-                {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
-                {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
-                {battleMode === "optimization" && <p>빠르게 나아가는 {nickname} 님!!</p>}
-                {battleMode === "optimization" && <small>과연 더 효율적인 코드가 나올 수 있을까요??</small>}
-              </div>
-            ),
-            okText: "확인",
-            onOk() {
-              if (battleMode === "speed") {
-                setIsSolving(false)
-                setIsSolved(true);
-              }
-            },
+        if (data.battleMode === "speed") {
+          if (data.battleResult === "win") {
+            console.log(data);
+            const modaldata = {
+              title: "정답!",
+              content: (
+                <div>
+                  <p>축하합니다!</p>
+                  <p>모든 테스트케이스를 맞췄습니다!</p>
+                  {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
+                  {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
+                </div>
+              ),
+              okText: "확인",
+              onOk() {
+                if (battleMode === "speed") {
+                  const result = {
+                    mode: battleMode,
+                    language: languageMode,
+                    result: "accepted",
+                    time: data.time,
+                    memory: data.memory,
+                  };
+                  let resultList = resultListResult;
+                  resultList.push(result);
+                  setResultListResult(resultList);
+                  setIsSolving(false);
+                  setIsSolved(true);
+                }
+              },
+            };
+            info(modaldata);
+          } else if (data.battleResult === "lose") {
+            showOppSubmitModal();
           }
-          info(modaldata)
-        } else if (data.battleResult === "lose") {
-          showOppSubmitModal()
+        } else if (battleMode === "optimization") {
+          if (data.battleResult === "win") {
+            console.log(data);
+            const modaldata = {
+              title: "승리!",
+              content: (
+                <div>
+                  <p>축하합니다!</p>
+                  <p>승리했습니다!</p>
+                  <p>승리를 거머쥔 {nickname} 님!!</p>
+                  <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>
+                </div>
+              ),
+              okText: "확인",
+              onOk() {
+                setIsSolving(false);
+                setIsSolved(true);
+              },
+            };
+            info(modaldata);
+          } else if (data.battleResult === "lose") {
+            showOppSubmitModal();
+          }
         }
       } else {
         console.log("뭐가 오긴 왔는데...");
         console.log(data);
       }
     };
-  
+
     socket.onclose = (message) => {
       console.log("closed!", message);
       // setTimeout(() => {
@@ -347,22 +418,22 @@ const ContinuousBattlePage = () => {
   const handleOk = () => {
     socket.send(
       JSON.stringify({
-      messageType: "exitOk",
-      userId: userId,
-      otherId: otherId
+        messageType: "exitOk",
+        userId: userId,
+        otherId: otherId,
       })
-    )
+    );
     setIsModalOpen(false);
     setIsSolved(true);
   };
   const handleCancel = () => {
     socket.send(
       JSON.stringify({
-      messageType: "exitNo",
-      userId: userId,
-      otherId: otherId
+        messageType: "exitNo",
+        userId: userId,
+        otherId: otherId,
       })
-    )
+    );
     setIsModalOpen(false);
   };
 
@@ -373,14 +444,14 @@ const ContinuousBattlePage = () => {
   const oppSubmitHandleOk = () => {
     socket.send(
       JSON.stringify({
-      messageType: "finish",
-      userId: userId,
-      otherId: otherId
+        messageType: "finish",
+        userId: userId,
+        otherId: otherId,
       })
-    )
+    );
     setIsOppSubmitModalOpen(false);
-    setIsSolving(false)
-    setIsSolved(true)
+    setIsSolving(false);
+    setIsSolved(true);
   };
 
   const [isSurrenderModalOpen, setIsSurrenderModalOpen] = useState(false);
@@ -392,9 +463,9 @@ const ContinuousBattlePage = () => {
       JSON.stringify({
         messageType: "surrender",
         userId: userId,
-        otherId: otherId
+        otherId: otherId,
       })
-    )
+    );
     setIsSurrenderModalOpen(false);
   };
   const surrenderHandleCancel = () => {
@@ -408,11 +479,11 @@ const ContinuousBattlePage = () => {
   const oppSurrenderHandleOk = () => {
     socket.send(
       JSON.stringify({
-      messageType: "finish",
-      userId: userId,
-      otherId: otherId
+        messageType: "finish",
+        userId: userId,
+        otherId: otherId,
       })
-    )
+    );
     setIsOppSurrenderModalOpen(false);
   };
 
@@ -423,11 +494,11 @@ const ContinuousBattlePage = () => {
   const socketErrorHandleOk = () => {
     socket.send(
       JSON.stringify({
-      messageType: "finish",
-      userId: userId,
-      otherId: otherId
+        messageType: "finish",
+        userId: userId,
+        otherId: otherId,
       })
-    )
+    );
     setIsSocketErrorModalOpen(false);
   };
 
@@ -455,44 +526,44 @@ const ContinuousBattlePage = () => {
     Modal.info(data);
   };
 
-$(function(){
-    $("#test").on("paste", function() {
-        const data = {
-            title: '복사나 붙여넣기 불가!',
-            content: (
-              <div>
-                  <p>배틀의 공평한 진행을 위해서</p>
-                  <p>복사나 붙여넣기는 불가능합니다!</p>
-                  <p>코드를 직접 타이핑해주세요.</p>
-              </div>
-            ),
-            okText: "확인",
-            onOk() {},
-          }
-        info(data)
-        return false;
+  $(function () {
+    $("#test").on("paste", function () {
+      const data = {
+        title: "복사나 붙여넣기 불가!",
+        content: (
+          <div>
+            <p>배틀의 공평한 진행을 위해서</p>
+            <p>복사나 붙여넣기는 불가능합니다!</p>
+            <p>코드를 직접 타이핑해주세요.</p>
+          </div>
+        ),
+        okText: "확인",
+        onOk() {},
+      };
+      info(data);
+      return false;
     });
   });
 
-  $(function(){
-    $("#test").on("copy", function() {
-        const data = {
-            title: '복사 붙여넣기 불가!',
-            content: (
-              <div>
-                  <p>배틀의 공평한 진행을 위해서</p>
-                  <p>복사나 붙여넣기는 불가능합니다!</p>
-                  <p>코드를 직접 타이핑해주세요.</p>
-              </div>
-            ),
-            okText: "확인",
-            onOk() {},
-          }
-        info(data)
-        return false;
+  $(function () {
+    $("#test").on("copy", function () {
+      const data = {
+        title: "복사 붙여넣기 불가!",
+        content: (
+          <div>
+            <p>배틀의 공평한 진행을 위해서</p>
+            <p>복사나 붙여넣기는 불가능합니다!</p>
+            <p>코드를 직접 타이핑해주세요.</p>
+          </div>
+        ),
+        okText: "확인",
+        onOk() {},
+      };
+      info(data);
+      return false;
     });
   });
-  
+
   const changeBanProblem = (data) => {
     // setProblemNumber(data);
     socket.send(
@@ -506,7 +577,7 @@ $(function(){
   };
 
   const submit = (codedata, problemNumber) => {
-    console.log(battleModeInfo, languageMode, problemNumber, codedata)
+    console.log(battleModeInfo, languageMode, problemNumber, codedata);
     socket.send(
       JSON.stringify({
         messageType: "submit",
@@ -518,33 +589,33 @@ $(function(){
         code: codedata,
       })
     );
-  }
+  };
 
   const sendExit = () => {
     socket.send(
       JSON.stringify({
         messageType: "exitSuggestion",
         userId: userId,
-        otherId: otherId
+        otherId: otherId,
       })
-    )
-  }
+    );
+  };
 
   const clickSurrender = () => {
-    showSurrenderModal()
-  }
+    showSurrenderModal();
+  };
 
   const copyCode = () => {
     const codetext = document.getElementById("IDE");
     codetext.select();
     document.execCommand("copy");
-    copySuccess()
-  }
+    copySuccess();
+  };
 
   return (
     <div>
       <div>
-      {contextHolder}
+        {contextHolder}
         {!isConnected && <ReadyPage />}
         {isConnected && isReady && (
           <BanPage
@@ -570,57 +641,93 @@ $(function(){
           />
         )}
         {isConnected && isSolving && battleMode === "speed" && (
-          <SolvingPage 
-          problemInfo={problemInfo}
-          battleMode={battleModeInfo}
-          battleLanguage={languageMode}
-          battleuserinfo={{
-            user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-            other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
-          }} 
-          submit={submit}
-          clickSurrender={clickSurrender} />
+          <SolvingPage
+            problemInfo={problemInfo}
+            battleMode={battleModeInfo}
+            battleLanguage={languageMode}
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }}
+            submit={submit}
+            clickSurrender={clickSurrender}
+          />
         )}
         {isConnected && isSolving && battleMode === "optimization" && (
-          <SolvingOptPage 
-          problemInfo={problemInfo}
-          battleMode={battleModeInfo}
-          battleLanguage={languageMode}
-          battleuserinfo={{
-            user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-            other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
-          }} 
-          submit={submit}
-          sendExit={sendExit}
-          clickSurrender={clickSurrender} />
+          <SolvingOptPage
+            problemInfo={problemInfo}
+            battleMode={battleModeInfo}
+            battleLanguage={languageMode}
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }}
+            submit={submit}
+            sendExit={sendExit}
+            clickSurrender={clickSurrender}
+          />
         )}
         {isSolved && <ResultPage />}
       </div>
-      <Modal title="배틀 종료 제안" open={isModalOpen} onOk={handleOk} okText="네" onCancel={handleCancel} cancelText="아니오">
+      <Modal
+        title="배틀 종료 제안"
+        open={isModalOpen}
+        onOk={handleOk}
+        okText="네"
+        onCancel={handleCancel}
+        cancelText="아니오">
         <p>{othernickname}님이 배틀을 끝내자고 요청하셨습니다.</p>
         <p>배틀을 끝내시겠습니까?</p>
         <small>'네'를 누르면 배틀이 종료됩니다.</small>
         <small>지금 끝내고 싶지 않으시면 '아니오'를 눌러주세요.</small>
       </Modal>
-      <Modal title={`${othernickname}의 네트워크 오류`} open={isSocketErrorModalOpen} onOk={socketErrorHandleOk} okText="확인" onCancel={copyCode} cancelText="코드 복사" closable="false">
+      <Modal
+        title={`${othernickname}의 네트워크 오류`}
+        open={isSocketErrorModalOpen}
+        onOk={socketErrorHandleOk}
+        okText="확인"
+        onCancel={copyCode}
+        cancelText="코드 복사"
+        closable="false">
         {contextCopyHolder}
         <p>상대방 "{othernickname} 님"의 인터넷 연결이 이상합니다.</p>
         <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
         <p>확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
-      <Modal title="패배..." open={isOppSubmitModalOpen} onOk={oppSubmitHandleOk} okText="확인" onCancel={copyCode} cancelText="코드 복사" closable="false">
+      <Modal
+        title="패배..."
+        open={isOppSubmitModalOpen}
+        onOk={oppSubmitHandleOk}
+        okText="확인"
+        onCancel={copyCode}
+        cancelText="코드 복사"
+        closable="false">
         {contextCopyHolder}
-        <p>상대방 "{othernickname} 님"이 먼저 문제를 풀었습니다.</p>
+        {battleMode === "speed" && <p>상대방 "{othernickname} 님"이 먼저 문제를 풀었습니다.</p>}
+        {battleMode === "optimiztion" && (
+          <p>상대방 "{othernickname} 님"이 더 효율적으로 풀었습니다.</p>
+        )}
         <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
         <p>확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
-      <Modal title={`${othernickname} 님의 항복 선언!`} open={isOppSurrenderModalOpen} onOk={oppSurrenderHandleOk} okText="확인" onCancel={copyCode} cancelText="코드 복사" closable="false">
+      <Modal
+        title={`${othernickname} 님의 항복 선언!`}
+        open={isOppSurrenderModalOpen}
+        onOk={oppSurrenderHandleOk}
+        okText="확인"
+        onCancel={copyCode}
+        cancelText="코드 복사"
+        closable="false">
         {contextCopyHolder}
         <p>상대방 "{othernickname} 님"이 항복을 선언했습니다.</p>
         <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
         <p>확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
-      <Modal title="항복" open={isSurrenderModalOpen} onOk={surrenderHandleOk} onCancel={surrenderHandleCancel}>
+      <Modal
+        title="항복"
+        open={isSurrenderModalOpen}
+        onOk={surrenderHandleOk}
+        onCancel={surrenderHandleCancel}>
         <p className="NanumSquare">정말로 항복하시겠습니까?</p>
       </Modal>
     </div>

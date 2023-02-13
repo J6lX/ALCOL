@@ -9,7 +9,8 @@ import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
-import { Button, message } from "antd";
+import { Button, message, Modal } from "antd";
+import { resultListResultInfo } from "../../states/atoms";
 
 let allheight = window.innerHeight;
 
@@ -51,18 +52,18 @@ const ResultMessage = () => {
   );
 };
 
-const BattleNav = ({userInfo, mode}) => {
+const BattleNav = ({ userInfo, mode }) => {
   // const mode = useRecoilValue(selectedMode);
-  let battlemode
+  let battlemode;
   if (mode[0] === "speed") {
-    battlemode = "스피드"
+    battlemode = "스피드";
   } else if (mode[0] === "optimization") {
-    battlemode = "최적화"
+    battlemode = "최적화";
   }
 
-  console.log("배틀 모드", mode)
+  console.log("배틀 모드", mode);
 
-  console.log("userInfosolving", userInfo)
+  console.log("userInfosolving", userInfo);
   return (
     <div className="BattleNav">
       <img src={Logo} alt="alcol_logo_black" style={{ height: "5vh", marginLeft: "20px" }} />
@@ -79,7 +80,7 @@ const BattleNav = ({userInfo, mode}) => {
           Vs.
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-        {userInfo.user.nick}
+          {userInfo.user.nick}
         </p>
         <ResultMessage className="MessageToast" />
       </div>
@@ -91,7 +92,7 @@ const BattleNav = ({userInfo, mode}) => {
 };
 
 const Problem = (problemInfo) => {
-  const problem = problemInfo.problemInfo
+  const problem = problemInfo.problemInfo;
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
@@ -163,7 +164,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
   const setSubmitMessage = useSetRecoilState(submitMessageState);
   // const problem_number = 1;
 
-  console.log("배틀 언어", language)
+  console.log("배틀 언어", language);
 
   const onChange = (newValue) => {
     console.log(newValue);
@@ -207,38 +208,63 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     } else {
       let codedata = "";
       // 내일 물어보기: tab이 spacebar로 이루어져 있는 것 같은데 탭도 꼭 개행문자가 필요한지. 현재 가능하긴 함.
-      for (let i=0; i<code.length; i++) {
+      for (let i = 0; i < code.length; i++) {
         if (code[i] === "\n") {
-          codedata += "\n"
-          console.log("enter", code[i])
-          for (let j=1; j<code.length-i-1; j+=2) {
-            if (code[i+j] === " " && code[i+j+1] === " ") {
-              codedata += "\t"
-              console.log("tab", code[i+j])
+          codedata += "\n";
+          console.log("enter", code[i]);
+          for (let j = 1; j < code.length - i - 1; j += 2) {
+            if (code[i + j] === " " && code[i + j + 1] === " ") {
+              codedata += "\t";
+              console.log("tab", code[i + j]);
             } else {
-              i += j-1
-              break
+              i += j - 1;
+              break;
             }
           }
         } else {
-          console.log(code[i])
-          codedata += code[i]
+          console.log(code[i]);
+          codedata += code[i];
         }
       }
-      setTimeout(()=>{
-        submitcode(codedata, problemNumber);}, 500);
+      setTimeout(() => {
+        submitcode(codedata, problemNumber);
+      }, 500);
     }
   };
 
-  const sendExit = () => {
-    sendexit()
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
+  const showResultModal = () => {
+    setIsResultModalOpen(true);
+  };
+  const handleResultOk = () => {
+    setIsResultModalOpen(false);
+  };
+  const handleResultCancel = () => {
+    setIsResultModalOpen(false);
+  };
+
+  const resultList = useRecoilValue(resultListResultInfo);
+  console.log("뭐가 들어있냐면", resultList);
+  const result = [];
+  console.log(result);
+  for (let i = resultList.length - 1; i >= 0; i--) {
+    result.push(
+      <p>
+        {resultList[i].time} || 코드길이:{resultList[i].code_length} 메모리:{resultList[i].memory}
+      </p>
+    );
   }
+  console.log(result);
+
+  const sendExit = () => {
+    sendexit();
+  };
 
   const surrend = () => {
-    clickSurrender()
-  }
+    clickSurrender();
+  };
 
-  console.log("참인가요?", language[0] === "Java", language)
+  console.log("참인가요?", language[0] === "Java", language);
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
@@ -260,7 +286,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
           value={code}
           width="69vw"
           height={`${solvingHeight}px`}
-          extensions={language[0] === "Java"? [java({ jsx: true })] : [python({ jsx: true })]}
+          extensions={language[0] === "Java" ? [java({ jsx: true })] : [python({ jsx: true })]}
           onChange={onChange}
           theme={darcula}
         />
@@ -311,12 +337,22 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
               항복
             </Button>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showResultModal}>
+              제출 결과 확인
+            </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={sendExit}>
               배틀 종료 제안
             </Button>
           </div>
         </div>
       </div>
+      <Modal
+        title="제출 결과 확인"
+        open={isResultModalOpen}
+        onOk={handleResultOk}
+        onCancel={handleResultCancel}>
+        {result}
+      </Modal>
     </div>
   );
 };
@@ -342,13 +378,20 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, sendExit, clickSurrender }) => {
-  
-  const problemNumber = problemInfo.prob_no
+const SolvingPage = ({
+  problemInfo,
+  battleMode,
+  battleLanguage,
+  battleuserinfo,
+  submit,
+  sendExit,
+  clickSurrender,
+}) => {
+  const problemNumber = problemInfo.prob_no;
 
   const surrend = () => {
-    clickSurrender()
-  }
+    clickSurrender();
+  };
 
   return (
     <div id="allconsole">
@@ -367,7 +410,13 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} sendexit={sendExit} clickSurrender={surrend} />
+                <CodingPlace
+                  problemNumber={problemNumber}
+                  language={battleLanguage}
+                  submitcode={submit}
+                  sendexit={sendExit}
+                  clickSurrender={surrend}
+                />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />
