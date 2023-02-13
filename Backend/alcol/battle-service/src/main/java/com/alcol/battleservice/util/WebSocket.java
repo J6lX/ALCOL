@@ -419,7 +419,7 @@ public class WebSocket {
                 System.out.println("나의 세션"+session);
                 System.out.println("저장되어 있는 세션 : " +sessionId2Obj.get(userId2SessionId.get(userId)));
 
-                if(session==sessionId2Obj.get(userId2SessionId.get(userId))
+                if(session==sessionId2Obj.get(userId2SessionId.get(userId)).user1.session
                         && sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
                 {
                     System.out.println("저는 1번 유저입니다.");
