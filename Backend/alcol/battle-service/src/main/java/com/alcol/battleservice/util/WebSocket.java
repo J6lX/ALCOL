@@ -412,7 +412,7 @@ public class WebSocket {
                 if(session==userId2Session.get(userId))
                 {
                     timer = new Timer();
-                    timer.schedule(new SessionTimerTask(session), 0, 1000); // 1초마다 실행
+                    timer.schedule(new SessionTimerTask(session), 3000); // 1초마다 실행
                 }
             }
             else if (method.equals("battleTimeOut"))
@@ -868,7 +868,7 @@ public class WebSocket {
         @Override
         public void run() {
             // 타이머가 실행될 때 수행할 작업
-
+            System.out.println(session+"배틀 종료할게요 ????????????????");
         }
     }
 }
