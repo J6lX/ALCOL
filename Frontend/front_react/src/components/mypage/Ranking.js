@@ -29,6 +29,19 @@ const rankingLabel = [
     dataIndex: "profile_img",
     title: "Image",
     render: (profile_img) => (
+      // //화면에 프로필 사진 표시
+      // const reader = new FileReader();
+      // reader.onload = () => {
+      //   if (reader.readyState === 2) {
+      //     setPhoto(reader.result);
+      //     setUserInfo({
+      //       nickname: userInfo.nickname,
+      //       profileImg: reader.result,
+      //       level: userInfo.level,
+      //       speedTier: userInfo.speedTier,
+      //       efficiencyTier: userInfo.efficiencyTier,
+      //     });
+      //   }
       <img
         src={profile_img}
         alt="profile"
