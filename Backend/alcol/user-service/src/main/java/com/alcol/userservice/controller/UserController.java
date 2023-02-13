@@ -96,7 +96,7 @@ public class UserController
 
     /**
      * 회원 정보 수정 요청
-     * @param user_id
+     * @param userUpdateDto
      * @param file
      * @return
      * @throws Exception
@@ -106,14 +106,14 @@ public class UserController
             MediaType.MULTIPART_FORM_DATA_VALUE
     })
     public ResponseEntity<UserDto.ResponseDto<?>> updateUser(
-            @RequestPart String user_id,
+            @RequestPart UserDto.UserUpdateDto userUpdateDto,
             @RequestPart @Nullable MultipartFile file
     )
             throws Exception
     {
         log.info("UserController 의 updateUser 메소드 실행");
 
-        String retVal = userService.updateUser(user_id, file);
+        String retVal = userService.updateUser(userUpdateDto.getUserId(), file);
 
         if (retVal.equals("PICTURE_UPLOAD_FAILURE"))
         {

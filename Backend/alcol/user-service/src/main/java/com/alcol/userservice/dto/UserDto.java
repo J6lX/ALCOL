@@ -62,6 +62,15 @@ public class UserDto
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class UserUpdateDto
+    {
+        private String userId;
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class LoginDto
     {
         private String email;
