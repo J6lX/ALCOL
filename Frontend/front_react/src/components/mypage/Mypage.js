@@ -168,12 +168,11 @@ function ProfileImage() {
       let formData = new FormData();
       // const userIdForUpload = new Blob(userId);
       formData.append("file", uploadFile);
-      formData.append("user_id", userId, { type: "application/json" });
+      const userData = JSON.stringify({
+        userId: userId,
+      });
+      formData.append("userUpdateDto", new Blob([userData], { type: "application/json" }));
 
-      // 전송하려는 데이터 목록 조회
-      for (var key of formData.entries()) {
-        console.log(key[0] + ", " + key[1]);
-      }
       // 서버로 선택한 파일 보내기
       axios
         .put(`http://i8b303.p.ssafy.io:9000/user-service`, formData, {
