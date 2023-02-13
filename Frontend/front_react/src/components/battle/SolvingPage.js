@@ -1,6 +1,7 @@
-import { React, useState } from "react";
+import { React } from "react";
 import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 // import axios from "axios";
+import $ from "jquery";
 import Logo from "../../assets/alcol_empty_black.png";
 import Dots from "../../assets/dots.png";
 import CountDownTimer from "./CountDownTimer";
@@ -9,7 +10,8 @@ import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
-import { Button} from "antd";
+import { Button, Modal } from "antd";
+import { userCode } from "../../states/atoms";
 
 let allheight = window.innerHeight;
 
@@ -138,21 +140,20 @@ const Problem = (problemInfo) => {
   );
 };
 
-const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender }) => {
+const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, codeEmit }) => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useRecoilState(userCode);
   const setSubmitMessage = useSetRecoilState(submitMessageState);
   // const problem_number = 1;
 
   console.log("배틀 언어", language)
 
   const onChange = (newValue) => {
-    console.log(newValue);
-
     setCode(newValue);
-    // console.log(newValue);
+    codeEmit(newValue);
+    console.log(newValue);
     // console.log("code ", code);
   };
 
@@ -319,13 +320,61 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, clickSurrender }) => {
+const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, clickSurrender, codeEmit }) => {
   
   const problemNumber = problemInfo.prob_no
 
   const surrend = () => {
     clickSurrender()
   }
+  
+  const codeUpdate = (code) => {
+    codeEmit(code)
+  }
+
+  const info = (data) => {
+    Modal.info(data);
+  };
+
+  $(function () {
+    $("#IDE").on("paste", function (event) {
+      event.preventDefault()
+      const data = {
+        title: "복사나 붙여넣기 불가!",
+        content: (
+          <div>
+            <p>배틀의 공평한 진행을 위해서</p>
+            <p>복사나 붙여넣기는 불가능합니다!</p>
+            <p>코드를 직접 타이핑해주세요.</p>
+          </div>
+        ),
+        okText: "확인",
+        onOk() {},
+      };
+      info(data);
+      return false;
+    });
+  });
+
+  $(function () {
+    $("#IDE").on("copy", function (event) {
+      event.preventDefault()
+      const data = {
+        title: "복사 붙여넣기 불가!",
+        content: (
+          <div>
+            <p>배틀의 공평한 진행을 위해서</p>
+            <p>복사나 붙여넣기는 불가능합니다!</p>
+            <p>코드를 직접 타이핑해주세요.</p>
+          </div>
+        ),
+        okText: "확인",
+        onOk() {},
+      };
+      info(data);
+      return false;
+    });
+  });
 
   return (
     <div id="allconsole">
@@ -344,7 +393,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} clickSurrender={surrend} />
+                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} clickSurrender={surrend} codeEmit={codeUpdate} />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />

@@ -6,9 +6,9 @@ import img_defeat from "../../assets/result_defeat.gif";
 import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
-function App(props) {
+function App({props, showDetailResult}) {
   console.log("이게 배틀 종료 데이터", props);
-  const data = props.props;
+  const data = props;
   const printResult = () => {
     var img = "";
     if (data.battleResult === "win") {
@@ -48,15 +48,19 @@ function App(props) {
     return img;
   };
 
+  const showDetail = () => {
+    showDetailResult()
+  }
+
   //페이지 이동 관련 함수/변수
   const history = useHistory();
 
   function hanleHistoryMatchAgain() {
     history.push("/mode");
   }
-  function hanleHistoryResultList() {
-    history.push("/resultList");
-  }
+  // function hanleHistoryResultList() {
+  //   history.push("/resultList");
+  // }
   function hanleHistoryMain() {
     history.push("/");
   }
@@ -100,7 +104,7 @@ function App(props) {
       <div>
         <Row justify="space-between" style={{ marginTop: "30px" }}>
           <Col span={8}></Col>
-          <Col span={2} className="result_button" onClick={hanleHistoryResultList}>
+          <Col span={2} className="result_button" onClick={showDetail}>
             자세히보기
           </Col>
           <Col span={2} className="result_button" onClick={hanleHistoryMatchAgain}>

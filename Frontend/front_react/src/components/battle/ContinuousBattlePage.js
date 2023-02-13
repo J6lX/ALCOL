@@ -8,6 +8,7 @@ import SelectedProblemPage from "./SelectedProblemPage";
 import SolvingPage from "./SolvingPage";
 import SolvingOptPage from "./SolvingOptPage";
 import ResultPage from "./ResultPage";
+import ResultListPage from "./ResultListPage";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { message, Modal } from "antd";
 import {
@@ -24,6 +25,7 @@ import {
 const serverAddress = "i8b303.p.ssafy.io:9002";
 const websocketAddress = "ws://" + serverAddress + "/websocket";
 let socket = null;
+let code = "";
 
 function sleep(ms, func) {
   return new Promise((r) => {
@@ -39,6 +41,7 @@ const ContinuousBattlePage = () => {
   const [isSelected, setIsSelected] = useState(false);
   const [isSolving, setIsSolving] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
+  const [isOpenDetail, setIsOpenDetail] = useState(false);
   // const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const [problemInfo, setProblemInfo] = useState([]);
@@ -47,6 +50,7 @@ const ContinuousBattlePage = () => {
   const [checkConnect, setCheckConnect] = useRecoilState(sendConnect);
   const [checkGetProblem, setCheckGetProblem] = useRecoilState(sendGetProblem);
   const [checkBattleStart, setCheckBattleStart] = useRecoilState(sendBattleStart);
+  // const code = useRecoilValue(userCode);
   const idInfo = useRecoilValue(matchingPlayerInfo);
   const battleModeInfo = useRecoilValue(selectedMode);
   const languageMode = useRecoilValue(selectedLanguage);
@@ -264,6 +268,7 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "submitResult") {
         if (battleMode === "speed") {
           const result = {
+            nick: nickname,
             mode: battleMode,
             language: languageMode,
             result: `${data.accepted} / ${data.testcase}`,
@@ -348,7 +353,18 @@ const ContinuousBattlePage = () => {
         //   info(modaldata)
         // }
       } else if (data.messageType === "otherSubmitResult") {
+        const result = {
+          nick: othernickname,
+          mode: battleMode,
+          language: languageMode,
+          result: `${data.accepted} / ${data.testcase}`,
+          time: data.time,
+          memory: data.memory,
+        };
+        let resultList = [...resultListResult];
+        resultList.push(result);
         submitOther(data.testcase, data.accepted);
+        setResultListResult(resultList);
       } else if (data.messageType === "timeout") {
         const modaldata = {
           title: "배틀 시간 초과!",
@@ -394,6 +410,7 @@ const ContinuousBattlePage = () => {
               onOk() {
                 if (battleMode === "speed") {
                   const result = {
+                    nick: nickname,
                     mode: battleMode,
                     language: languageMode,
                     result: "accepted",
@@ -659,12 +676,29 @@ const ContinuousBattlePage = () => {
     showSurrenderModal();
   };
 
+  const codeEmit = (codedata) => {
+    code = codedata
+  }
+
   const copyCode = () => {
-    const codetext = document.getElementById("IDE");
-    codetext.select();
-    document.execCommand("copy");
+    const element = document.createElement('textarea');
+    element.value = code;
+    console.log(element)
+    console.log(code)
+    element.setAttribute('readonly', '');
+    element.style.position = 'absolute';
+    element.style.left = '-9999px';
+    document.body.appendChild(element);
+    element.select();
+    document.execCommand('copy');
+    document.body.removeChild(element);
     copySuccess();
   };
+
+  const showDetailResult = () => {
+    setIsSolved(false)
+    setIsOpenDetail(true)
+  }
 
   return (
     <div>
@@ -705,6 +739,7 @@ const ContinuousBattlePage = () => {
             }}
             submit={submit}
             clickSurrender={clickSurrender}
+            codeEmit={codeEmit}
           />
         )}
         {isConnected && isSolving && battleMode === "optimization" && (
@@ -721,7 +756,15 @@ const ContinuousBattlePage = () => {
             clickSurrender={clickSurrender}
           />
         )}
-        {isSolved && <ResultPage props={battleResult} />}
+        {isSolved && <ResultPage props={battleResult} showDetailResult={showDetailResult} /> }
+        {isOpenDetail && <ResultListPage 
+          problemInfo={problemInfo}
+          battleMode={battleModeInfo}
+          battleLanguage={languageMode}
+          battleuserinfo={{
+            user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+            other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+          }} /> }
       </div>
       <Modal
         title="배틀 종료 제안"
@@ -742,7 +785,7 @@ const ContinuousBattlePage = () => {
         okText="확인"
         onCancel={copyCode}
         cancelText="코드 복사"
-        closable="false">
+        closable={false}>
         {contextCopyHolder}
         <p>상대방 "{othernickname} 님"의 인터넷 연결이 이상합니다.</p>
         <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
@@ -755,7 +798,7 @@ const ContinuousBattlePage = () => {
         okText="확인"
         onCancel={copyCode}
         cancelText="코드 복사"
-        closable="false">
+        closable={false}>
         {contextCopyHolder}
         {battleMode === "speed" && <p>상대방 "{othernickname} 님"이 먼저 문제를 풀었습니다.</p>}
         {battleMode === "optimiztion" && (
@@ -771,7 +814,7 @@ const ContinuousBattlePage = () => {
         okText="확인"
         onCancel={copyCode}
         cancelText="코드 복사"
-        closable="false">
+        closable={false}>
         {contextCopyHolder}
         <p>상대방 "{othernickname} 님"이 항복을 선언했습니다.</p>
         <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
