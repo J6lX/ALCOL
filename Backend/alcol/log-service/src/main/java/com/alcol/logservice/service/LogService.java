@@ -14,4 +14,6 @@ public interface LogService
     List<LogDto.UserResultAndMmrDto> getAllResultAndMmr() throws URISyntaxException;
 
     List<LogDto.UserSeasonLogDto> getPastSeasonLog(String user_id);
+
+    void insertBattleLog(LogDto.BattleLogDto winnerBattleLogDto, LogDto.BattleLogDto loserBattleLogDto);
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 public class LogDto
@@ -34,6 +35,24 @@ public class LogDto
         private Long probNo;
         private String probName;
         private String probTier;
+        private LocalDateTime endTime;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class BattleLogDto
+    {
+        private String myUserId;
+        private String otherUserId;
+        private String battleMode;
+        private Long probNo;
+        private int battleResult;
+        private int upDownMmr;
+        private int nowMmr;
         private LocalDateTime endTime;
     }
 

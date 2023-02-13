@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,16 +80,61 @@ public class LogController
 
         log.info("battleMode : " + map.get("battleMode"));
         log.info("probNum : " + map.get("probNum"));
-
         log.info("winnerUserId : " + map.get("winnerUserId"));
         log.info("winnerPrevMmr : " + map.get("winnerPrevMmr"));
         log.info("winnerNowMmr : " + map.get("winnerNowMmr"));
         log.info("winnerSubmitLog : " + map.get("winnerSubmitLog"));
-
         log.info("loserUserId : " + map.get("loserUserId"));
         log.info("loserPrevMmr : " + map.get("loserPrevMmr"));
         log.info("loserNowMmr : " + map.get("loserNowMmr"));
         log.info("loserSubmitLog : " + map.get("loserSubmitLog"));
+
+        String battleMode = (String)map.get("battleMode");
+        String probNum = (String)map.get("probNum");
+
+        String winnerUserId = (String)map.get("winnerUserId");
+        String winnerPrevMmr = (String)map.get("winnerPrevMmr");
+        String winnerNowMmr = (String)map.get("winnerNowMmr");
+
+        String loserUserId = (String)map.get("loserUserId");
+        String loserPrevMmr = (String)map.get("loserPrevMmr");
+        String loserNowMmr = (String)map.get("loserNowMmr");
+
+        List<Map<String, Object>> winnerSubmitLog = (List<Map<String, Object>>) map.get("winnerSubmitLog");
+        List<Map<String, Object>> loserSubmitLog = (List<Map<String, Object>>) map.get("loserSubmitLog");
+
+        for (Map<String, Object> map2 : winnerSubmitLog)
+        {
+            log.info("result : " + map2.get("result"));
+            log.info("time : " + map2.get("time"));
+            log.info("memory : " + map2.get("memory"));
+        }
+
+        LogDto.BattleLogDto winnerBattleLogDto = LogDto.BattleLogDto.builder()
+                .myUserId(winnerUserId)
+                .otherUserId(loserUserId)
+                .battleMode(battleMode)
+                .probNo(Long.parseLong(probNum))
+                .battleResult(1)
+                .upDownMmr(Integer.parseInt(winnerNowMmr) - Integer.parseInt(winnerPrevMmr))
+                .nowMmr(Integer.parseInt(winnerNowMmr))
+                .endTime(LocalDateTime.now())
+                .build();
+
+        LogDto.BattleLogDto loserBattleLogDto = LogDto.BattleLogDto.builder()
+                .myUserId(loserUserId)
+                .otherUserId(winnerUserId)
+                .battleMode(battleMode)
+                .probNo(Long.parseLong(probNum))
+                .battleResult(0)
+                .upDownMmr(Integer.parseInt(loserNowMmr) - Integer.parseInt(loserPrevMmr))
+                .nowMmr(Integer.parseInt(loserNowMmr))
+                .endTime(LocalDateTime.now())
+                .build();
+
+        logService.insertBattleLog(winnerBattleLogDto, loserBattleLogDto);
+
+        log.info("LogController 의 insertBattleLog 메소드 실행 완료");
 
         return "Log Service : battleLog Insert Success";
     }
