@@ -74,6 +74,24 @@ public class LogController
         return list;
     }
 
+    /**
+     * 경험치 저장
+     * @param map
+     * @return 성공 시 0, 실패 시 1
+     */
+    @PostMapping("/insertExp")
+    public int insertExp(@RequestBody Map<String, Object> map)
+    {
+        String userId = map.get("user_id") + "";
+        int addExp = Integer.parseInt(map.get("add_exp") + "");
+        return logService.insertExp(userId, addExp);
+    }
+
+    /**
+     * 배틀 로그 저장(승, 패)
+     * @param map
+     * @return
+     */
     @PostMapping("/insertBattleLog")
     public String insertBattleLog(@RequestBody Map<String, Object> map)
     {

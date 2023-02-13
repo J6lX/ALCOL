@@ -249,4 +249,25 @@ public class LogServiceImpl implements LogService
         log.info("LogServiceImpl 의 insertBattleLog 메소드 실행 완료");
     }
 
+    @Override
+    public int insertExp(String userId, int addExp)
+    {
+        ExpLogEntity expLogEntity = expLogRepository.findTopByUserIdOrderByExpLogNoDesc(userId);
+        int curExp = expLogEntity == null ? 0 : expLogEntity.getCurExp();
+
+        ExpLogEntity insertExpLogEntity = new ExpLogEntity();
+        insertExpLogEntity.setUserId(userId);
+        insertExpLogEntity.setAddExp(addExp);
+        insertExpLogEntity.setCurExp(curExp + addExp);
+
+        if (expLogRepository.save(insertExpLogEntity) != null)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
 }
