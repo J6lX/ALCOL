@@ -1006,7 +1006,7 @@ public class WebSocket {
                 /**
                  * log-service로 전송하는 부분 추가
                  */
-                String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+                String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLogByDraw";
                 String getBattleLogSaveResult = restTemplate.postForObject(
                         url_log,
                         sendBattleLog,
