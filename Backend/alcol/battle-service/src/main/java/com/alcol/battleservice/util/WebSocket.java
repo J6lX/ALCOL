@@ -606,9 +606,9 @@ public class WebSocket {
                             sendBattleLog.put("userId",submitUserId);
                             sendBattleLog.put("otherId",submitOtherId);
                             sendBattleLog.put("battleMode",submitBattleMode);
-                            sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
-                            sendBattleLog.put("user1",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1);
-                            sendBattleLog.put("user2",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2);
+//                            sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
+//                            sendBattleLog.put("user1",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1);
+//                            sendBattleLog.put("user2",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2);
 //                            BattleRoom sendBattleLog = sessionId2Obj.get(userId2SessionId.get(submitUserId));
 //                            System.out.println(sessionId2Obj.get(userId2SessionId.get(submitUserId)));
 //                            sendBattleLog.put("battleLog", battleRoomJson);
