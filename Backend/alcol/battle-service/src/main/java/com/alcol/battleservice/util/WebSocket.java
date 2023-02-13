@@ -139,7 +139,7 @@ public class WebSocket {
                     {
                         if(sessionMap.containsKey(otherUserId))
                         {
-                            Thread.sleep(500);
+                            Thread.sleep(1000);
                             sessionId2Obj.get(otherUserId).user2 = user;
                             userId2Session.put(userId, session);
                             session2UserId.put(session, userId);
