@@ -266,7 +266,7 @@ public class LogServiceImpl implements LogService
         log.info("LogServiceImpl 의 insertExp 메소드 실행");
 
         ExpLogEntity expLogEntity = expLogRepository.findTopByUserIdOrderByExpLogNoDesc(userId);
-        int curExp = expLogEntity == null ? 0 : expLogEntity.getCurExp();
+        int curExp = expLogEntity == null ? 1 : expLogEntity.getCurExp();
 
         ExpLogEntity insertExpLogEntity = new ExpLogEntity();
         insertExpLogEntity.setUserId(userId);
