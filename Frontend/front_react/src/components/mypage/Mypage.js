@@ -245,7 +245,7 @@ function ProfileImage() {
     //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
-      if (reader.readyState === 2 && currentUserId === userId) {
+      if (reader.readyState === 2) {
         setPhoto(reader.result);
         setUserInfo({
           nickname: userInfo.nickname,
@@ -255,8 +255,8 @@ function ProfileImage() {
           efficiencyTier: userInfo.efficiencyTier,
         });
       }
+      reader.readAsDataURL(uploadFile);
     };
-    reader.readAsDataURL(uploadFile);
   };
 
   return (
@@ -708,14 +708,12 @@ function Mypage() {
                       <p>스피드전 요약</p>
                       <p>{userInfo.speedTier}</p>
                       <p>MMR {spdMMR}</p>
-                      <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
                       <p>최적화전 요약</p>
                       <p>{userInfo.efficiencyTier}</p>
                       <p>MMR {effMMR}</p>
-                      <p>1000위(상위 20%)</p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col
