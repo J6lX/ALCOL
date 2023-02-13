@@ -381,7 +381,7 @@ public class WebSocket {
                             session.getAsyncRemote().sendText(data.toJSONString());
 
                         }
-                        synchronized (userId2Session.get(otherId))
+                        synchronized (session)
                         {
                             userId2Session.get(otherId).getAsyncRemote().sendText(data.toJSONString());
                         }
