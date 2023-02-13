@@ -19,6 +19,47 @@ const Cursor = () => {
   const requestRef = useRef(null);
 
   useEffect(() => {
+    const mouseOverEvent = () => {
+      cursorEnlarged.current = true;
+      toggleCursorSize();
+    };
+
+    const mouseOutEvent = () => {
+      cursorEnlarged.current = false;
+      toggleCursorSize();
+    };
+
+    const mouseEnterEvent = () => {
+      cursorVisible.current = true;
+      toggleCursorVisibility();
+    };
+
+    const mouseLeaveEvent = () => {
+      cursorVisible.current = false;
+      toggleCursorVisibility();
+    };
+
+    const mouseMoveEvent = (e) => {
+      cursorVisible.current = true;
+      toggleCursorVisibility();
+
+      endX.current = e.pageX;
+      endY.current = e.pageY;
+
+      dot.current.style.top = endY.current + "px";
+      dot.current.style.left = endX.current + "px";
+    };
+
+    const animateDotOutline = () => {
+      _x.current += (endX.current - _x.current) / delay;
+      _y.current += (endY.current - _y.current) / delay;
+
+      dotOutline.current.style.top = _y.current + "px";
+      dotOutline.current.style.left = _x.current + "px";
+
+      requestRef.current = requestAnimationFrame(animateDotOutline);
+    };
+
     document.addEventListener("mousedown", mouseOverEvent);
     document.addEventListener("mouseup", mouseOutEvent);
     document.addEventListener("mousemove", mouseMoveEvent);
@@ -56,47 +97,6 @@ const Cursor = () => {
       dot.current.style.transform = "translate(-50%, -50%) scale(1)";
       dotOutline.current.style.transform = "translate(-50%, -50%) scale(1)";
     }
-  };
-
-  const mouseOverEvent = () => {
-    cursorEnlarged.current = true;
-    toggleCursorSize();
-  };
-
-  const mouseOutEvent = () => {
-    cursorEnlarged.current = false;
-    toggleCursorSize();
-  };
-
-  const mouseEnterEvent = () => {
-    cursorVisible.current = true;
-    toggleCursorVisibility();
-  };
-
-  const mouseLeaveEvent = () => {
-    cursorVisible.current = false;
-    toggleCursorVisibility();
-  };
-
-  const mouseMoveEvent = (e) => {
-    cursorVisible.current = true;
-    toggleCursorVisibility();
-
-    endX.current = e.pageX;
-    endY.current = e.pageY;
-
-    dot.current.style.top = endY.current + "px";
-    dot.current.style.left = endX.current + "px";
-  };
-
-  const animateDotOutline = () => {
-    _x.current += (endX.current - _x.current) / delay;
-    _y.current += (endY.current - _y.current) / delay;
-
-    dotOutline.current.style.top = _y.current + "px";
-    dotOutline.current.style.left = _x.current + "px";
-
-    requestRef.current = requestAnimationFrame(animateDotOutline);
   };
 
   return (

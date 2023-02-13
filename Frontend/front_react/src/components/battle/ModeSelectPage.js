@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -219,140 +219,6 @@ function SelectBox({ gameMode, gameModeIcon, gameInfo1, gameInfo2, avgTime, setM
   );
 }
 
-function MouseCursor() {
-  //마우스 위치
-  const endX = useRef(window.innerWidth / 2);
-  const endY = useRef(window.innerHeight / 2);
-
-  const coords = { x: 0, y: 0 };
-  const circles = document.querySelectorAll(".circle");
-
-  // const requestRef = useRef(null);
-
-  // const mouseMoveEvent = (e) => {
-  //   cursorVisible.current = true;
-  //   toggleCursorVisibility();
-
-  //   endX.current = e.pageX;
-  //   endY.current = e.pageY;
-
-  //   dot.current.style.top = endY.current + "px";
-  //   dot.current.style.left = endX.current + "px";
-  // };
-
-  useEffect((e) => {
-    const mouseMoveEvent = (e) => {
-      endX.current = e.pageX;
-      endY.current = e.pageY;
-
-      function animateCircles() {
-        let x = coords.x;
-        let y = coords.y;
-
-        circles.forEach(function (circle, index) {
-          circle.style.left = x - 12 + "px";
-          circle.style.top = y - 12 + "px";
-
-          circle.style.scale = (circles.length - index) / circles.length;
-
-          circle.x = x;
-          circle.y = y;
-
-          const nextCircle = circles[index + 1] || circles[0];
-          x += (nextCircle.x - x) * 0.3;
-          y += (nextCircle.y - y) * 0.3;
-        });
-
-        requestAnimationFrame(animateCircles);
-      }
-      animateCircles();
-    };
-    document.addEventListener("mousemove", mouseMoveEvent);
-
-    // return () => {
-    //   document.removeEventListener("mousemove", mouseMoveEvent);
-    // };
-  }, []);
-
-  const colors = [
-    "#ffb56b",
-    "#fdaf69",
-    "#f89d63",
-    "#f59761",
-    "#ef865e",
-    "#ec805d",
-    "#e36e5c",
-    "#df685c",
-    "#d5585c",
-    "#d1525c",
-    "#c5415d",
-    "#c03b5d",
-    "#b22c5e",
-    "#ac265e",
-    "#9c155f",
-    "#950f5f",
-    "#830060",
-    "#7c0060",
-    "#680060",
-    "#60005f",
-    "#48005f",
-    "#3d005e",
-  ];
-
-  circles.forEach(function (circle, index) {
-    circle.x = 0;
-    circle.y = 0;
-    circle.style.backgroundColor = colors[index % colors.length];
-  });
-
-  // function animateCircles() {
-  //   let x = coords.x;
-  //   let y = coords.y;
-
-  //   circles.forEach(function (circle, index) {
-  //     circle.style.left = x - 12 + "px";
-  //     circle.style.top = y - 12 + "px";
-
-  //     circle.style.scale = (circles.length - index) / circles.length;
-
-  //     circle.x = x;
-  //     circle.y = y;
-
-  //     const nextCircle = circles[index + 1] || circles[0];
-  //     x += (nextCircle.x - x) * 0.3;
-  //     y += (nextCircle.y - y) * 0.3;
-  //   });
-
-  //   requestAnimationFrame(animateCircles);
-  // }
-
-  // animateCircles();
-
-  return (
-    <div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-      <div className="circle"></div>
-    </div>
-  );
-}
-
 function FixedText() {
   return (
     <h1
@@ -468,7 +334,6 @@ function App() {
 
       <FixedText />
       <Cursor />
-      <MouseCursor />
     </div>
   );
 }
