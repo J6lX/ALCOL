@@ -1,11 +1,15 @@
 package com.alcol.problemservice.controller;
 
 import com.alcol.problemservice.dto.ProblemDto;
+import com.alcol.problemservice.dto.ScoreDto;
+import com.alcol.problemservice.error.CustomStatusCode;
 import com.alcol.problemservice.service.ProblemService;
+import com.alcol.problemservice.util.ApiUtils;
 import com.alcol.problemservice.util.RestTemplateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -61,5 +65,23 @@ public class ProblemController
     public ResponseEntity<List<ProblemDto.ProbList>> getAllProbList()
     {
         return ResponseEntity.status(HttpStatus.OK).body(problemService.getAllProbList());
+    }
+
+    @PostMapping("/practiceSubmit/{probNum}")
+    public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@PathVariable("probNum") Long probNum, @RequestBody ScoreDto.Request req)
+    {
+//        String submissionId = problemService.getSubmissionId(req);
+//        // submission id를 받아올 수 없다면 에러처리한다.
+//        if(submissionId == null)
+//        {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_SUBMISSION_ERROR));
+//        }
+//        System.out.println(submissionId);
+        ScoreDto.Response response = problemService.getScoreResult("ba1c6dfdc9578abe9aa09ffe0fd9b825");
+        if(response == null)
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_RESULT_ERROR));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(response, CustomStatusCode.SCORE_SUCCESS));
     }
 }
