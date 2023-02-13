@@ -9,7 +9,6 @@ import GuidePage from "./GuidePage";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 import "animate.css";
-// import { constSelector } from "recoil";
 
 const MainPage = () => {
   const changeColor = (event) => {
@@ -151,23 +150,6 @@ const EfficiencyRanking = ({ efficiencyRanking }) => {
 };
 
 const RankingPage = () => {
-  // const [speed, setSpeedRanking] = useState("");
-  // const [efficiency, setEfficiencyRanking] = useState("");
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
-  //     .then(function (response) {
-  //       console.log("여기는 랭킹2");
-  //       console.log(response.data.bodyData.speed);
-  //       setSpeedRanking(response.data.bodyData.speed);
-  //       setEfficiencyRanking(response.data.bodyData.optimization);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
   return (
     <div className="fullmiddle" style={{ height: "100%", backgroundColor: "#16171B" }}>
       <br />

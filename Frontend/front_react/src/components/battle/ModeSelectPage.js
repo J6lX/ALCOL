@@ -10,18 +10,21 @@ import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
 import iconBack from "../../assets/left-arrow.png";
 import iconBackSmall from "../../assets/left-arrow-small.png";
-import iconTierBronze from "../../assets/ALCOL tiers/tier_bronze_0.png";
 import "./ModeSelectPage.css";
 import axios from "axios";
 import Cursor from "./Cursor";
+// import tiers from "../../assets/ALCOL tiers/index.js"
 
 function UserInfo({ setMode, setLanguage }) {
-  const [nickname, setNickname] = React.useState("a");
-  const [speedTier, setSpeedTier] = React.useState("a");
-  const [optTier, setOptTier] = React.useState("a");
-  var userId = useRecoilValue(LoginState);
+  const [nickname, setNickname] = React.useState("");
+  const [speedTier, setSpeedTier] = React.useState("");
+  const [optTier, setOptTier] = React.useState("");
+  const [speedLV, setSpeedLv] = React.useState("-1");
+  const [optLV, setOptLv] = React.useState("-1");
+  const [urlSpeed, setUrlSpeed] = React.useState("../../assets/ALCOL tiers/tier_bronze_0.png");
+  const [urlOpt, setUrlOpt] = React.useState("../../assets/ALCOL tiers/tier_bronze_0.png");
 
-  useEffect(() => {}, [nickname, speedTier, optTier]);
+  var userId = useRecoilValue(LoginState);
 
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
@@ -47,6 +50,43 @@ function UserInfo({ setMode, setLanguage }) {
       }
     });
 
+  useEffect(() => {}, [nickname]);
+
+  useEffect(() => {
+    var tmpSpeedLV = "";
+    var tmpOptLV = "";
+
+    if (tmpSpeedLV === "" && tmpOptLV === "") {
+      console.log("--스피드 티어 정보--" + speedTier);
+      var speed = speedTier.toLowerCase();
+      speed = speed.substr(0, speed.length - 1);
+      tmpSpeedLV = speedTier.substr(speed.length, 1);
+      console.log(speed);
+      console.log(tmpSpeedLV);
+      setUrlSpeed(`../../assets/ALCOL tiers/tier_${speed}_${tmpSpeedLV}.png`);
+
+      console.log("--효율성 티어 정보--" + optTier);
+      var opt = optTier.toLocaleLowerCase();
+      opt = opt.substr(0, opt.length - 1);
+      tmpOptLV = speedTier.substr(opt.length, 1);
+      console.log(opt);
+      console.log(tmpOptLV);
+      setUrlOpt(`../../assets/ALCOL tiers/tier_${opt}_${tmpOptLV}.png`);
+    }
+
+    //뽑아낸 정보 저장
+    if (speedLV === "-1" && optLV === "-1") {
+      setSpeedTier(speed);
+      setSpeedLv(tmpSpeedLV);
+      setOptTier(opt);
+      setOptLv(tmpOptLV);
+      console.log("정보 저장");
+      console.log(speedTier + speedLV);
+      console.log(optTier + optLV);
+    }
+  }, [speedTier, optTier, optLV, speedLV]);
+
+  //페이지 이동 관련
   const history = useHistory();
 
   const handlePageBack = () => {
@@ -54,6 +94,12 @@ function UserInfo({ setMode, setLanguage }) {
     setLanguage("-1");
     history.push("/");
   };
+
+  useEffect(() => {
+    console.log("url effect");
+    console.log(urlOpt);
+    console.log(urlSpeed);
+  }, [urlSpeed, urlOpt]);
 
   return (
     <Row justify="space-between" className="battle_user_info_row">
@@ -66,10 +112,10 @@ function UserInfo({ setMode, setLanguage }) {
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
+        {speedLV !== "-1" && <img src={urlSpeed} alt="tier" className="icon_tier"></img>}
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
+        {optLV !== "-1" && <img src={urlOpt} alt="tier" className="icon_tier"></img>}
       </Col>
       <Col
         span={3}
@@ -291,31 +337,6 @@ function App() {
       console.log("언어 선택 완료! language:" + language);
     }
   }, [language, history]);
-
-  // const cursor = document.querySelector(".cursor");
-  // var timeout;
-
-  // //follow cursor on mousemove
-  // document.addEventListener("mousemove", (e) => {
-  //   let x = e.pageX;
-  //   let y = e.pageY;
-
-  //   cursor.style.top = y + "px";
-  //   cursor.style.left = x + "px";
-  //   cursor.style.display = "block";
-
-  //   //cursor effects when mouse stopped
-  //   function mouseStopped() {
-  //     cursor.style.display = "none";
-  //   }
-  //   clearTimeout(timeout);
-  //   timeout = setTimeout(mouseStopped, 1000);
-  // });
-
-  // //cursor effects when mouseout
-  // document.addEventListener("mouseout", () => {
-  //   cursor.style.display = "none";
-  // });
 
   return (
     <div className="battle_background animate__animated animate__fadeIn">
