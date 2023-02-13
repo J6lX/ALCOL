@@ -236,10 +236,6 @@ public class WebSocket {
                     }
                 }
 
-
-
-
-
             }
             /**벤픽 시작 전 3문제 얻어오기 요청 수행 (problem Service로 요청 전달)*/
             else if (method.equals("getProblem"))
@@ -378,6 +374,8 @@ public class WebSocket {
                         ResponseEntity<HashMap> problems = restTemplate.getForEntity(url,HashMap.class);
                         System.out.println(problems.getBody().toString());
                         System.out.println(problems.getBody().get("prob_name"));
+                        sessionId2Obj.get(userId2SessionId.get(userId)).time_limit = (int) problems.getBody().get("prob_time_limit");
+                        sessionId2Obj.get(userId2SessionId.get(userId)).memory_limit = (int) problems.getBody().get("prob_memory_limit");
                         data.put("messageType","select_success");
                         data.put("problem",problems.getBody());
                         userId2Session.get(userId).getBasicRemote().sendText(data.toJSONString());
@@ -968,6 +966,8 @@ public class WebSocket {
                 sendBattleLog.put("otherNowMmr", sessionId2Obj.get(userId2SessionId.get(otherId)).user2.nowMmr);
                 sendBattleLog.put("otherSubmitLog",sessionId2Obj.get(userId2SessionId.get(otherId)).user2.battleLog);
                 System.out.println("배틀에 대한 기록입니다." + sendBattleLog);
+                System.out.println("시간 제한 : "+sessionId2Obj.get(userId2SessionId.get(userId)).time_limit);
+                System.out.println("메모리 제한 : "+sessionId2Obj.get(userId2SessionId.get(userId)).memory_limit);
                 /**
                  * log-service로 전송하는 부분 추가
                  */
