@@ -181,9 +181,11 @@ public class WebSocket {
 
                             synchronized (session) {
                                 System.out.println("1번유저에게 리턴");
-                                session.getAsyncRemote().sendText(data.toJSONString());
+                                session.getBasicRemote().sendText(data.toJSONString());
                                 System.out.println("2번유저에게 리턴");
-                                userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
+                                userId2Session.get(otherUserId).getBasicRemote().sendText(data.toJSONString());
+//                                userId2Session.get(otherUserId).getBasicRemote().sendText();
+                                System.out.println("리턴 완료");
 //                                userId2Session.get(otherUserId).getAsyncRemote().sendText(data.toJSONString());
 //                                session.getAsyncRemote().sendText(data.toJSONString());
                             }
