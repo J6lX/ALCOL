@@ -114,6 +114,7 @@ public class WebSocket {
                 String otherUserId = obj.get("otherId").toString();
                 String battleMode = obj.get("battleMode").toString();
                 String hostCheck = obj.get("hostCheck").toString();
+                System.out.println("커넥트가 두번인가 ??");
                 ranking = redisTemplate.opsForZSet();
                 try
                 {
