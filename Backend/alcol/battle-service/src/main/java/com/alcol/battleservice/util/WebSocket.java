@@ -137,9 +137,8 @@ public class WebSocket {
                 {
                     while(true)
                     {
-                        if(sessionMap.containsKey(otherUserId))
+                        if(sessionId2Obj.containsKey(otherUserId))
                         {
-                            Thread.sleep(1000);
                             sessionId2Obj.get(otherUserId).user2 = user;
                             userId2Session.put(userId, session);
                             session2UserId.put(session, userId);
