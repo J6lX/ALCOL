@@ -39,8 +39,8 @@ export const userBattleRec = atom({
   default: [],
 });
 
-// 닉네임만 저장
-export const CurrentNickname = atom({
+// 현재 접속한 유저 정보 저장
+export const CurrentUserInfoState = atom({
   key: "userNickname",
   default: "",
   effects_UNSTABLE: [persistAtom],
@@ -56,11 +56,5 @@ export const MMRState = atom({
 // 백업용 전적을 리스트로 저장
 export const BackupBattleRec = atom({
   key: "BackupBattleRec",
-  default: [],
-});
-
-// 다른 유저 정보를 저장(프로필 조회용)
-export const OtherUserInfoState = atom({
-  key: "OtherUserInfoState",
   default: [],
 });

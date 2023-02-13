@@ -197,14 +197,15 @@ function IsVictory(result) {
 // 사진 데이터 관리 함수
 function ProfileImage() {
   // 서버에 저장되어있던 사용자의 프로필 사진 가져오기
-  const userId = useRecoilValue(LoginState);
+  const userId = useParams().username;
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
   const [photo, setPhoto] = useState(userInfo.profileImg);
+  const currentUserId = useRecoilValue(LoginState);
 
   const fileInput = useRef(null);
   const onChange = (e) => {
     const uploadFile = e.target.files[0];
-    if (uploadFile) {
+    if (uploadFile && currentUserId === userId) {
       //사진을 선택했을때
       setPhoto(uploadFile);
       //서버로 전송하는 형식 설정
@@ -229,8 +230,13 @@ function ProfileImage() {
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      //취소했을때
+    }
+    // 권한 없는 사용자가 수정 시도했을 때
+    else if (currentUserId !== userId) {
+      alert("수정 권한이 없습니다.");
+    }
+    // 취소했을 때
+    else {
       setPhoto(photo);
       return;
     }
@@ -239,7 +245,7 @@ function ProfileImage() {
     //화면에 프로필 사진 표시
     const reader = new FileReader();
     reader.onload = () => {
-      if (reader.readyState === 2) {
+      if (reader.readyState === 2 && currentUserId === userId) {
         setPhoto(reader.result);
         setUserInfo({
           nickname: userInfo.nickname,
@@ -315,7 +321,6 @@ function Mypage() {
             speedTier: originUserInfo.data.speed_tier,
             efficiencyTier: originUserInfo.data.optimization_tier,
           };
-          setUserInfo(originUserData);
 
           // 사용자 전적을 recoil(userBattleRec)에 저장할 수 있게 정제
           // 지나치게 요청을 많이 하는 현상 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
@@ -345,6 +350,7 @@ function Mypage() {
           });
 
           // 정제한 정보들을 recoil에 반영
+          setUserInfo(originUserData);
           setBattleRec(originBattleRec);
           setBackupRec(originBattleRec);
           setSeasonInfo(refinedLastSeason);
@@ -840,7 +846,7 @@ function Mypage() {
                     theme={{
                       // algorithm : AntD에서 기본적으로 제공하는 다크 모드 테마
                       algorithm: theme.darkAlgorithm,
-                      // token : AntD의 기본 색상 테마 설정(기존 : 파란색)
+                      // token : 테마 기준 색상 설정(기본 : 파란색)
                       token: {
                         colorPrimary: "#FAC557",
                       },

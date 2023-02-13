@@ -9,7 +9,7 @@ import {
   AccessTokenInfo,
   LoginState,
   RefreshTokenInfo,
-  UserInfoState,
+  CurrentUserInfoState,
 } from "../../states/LoginState";
 
 // 사진이 없는 경우 기본 사진을 반환하는 용도
@@ -30,7 +30,7 @@ function LoginPage() {
   const setIsLoggedIn = useSetRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo); // 토큰 데이터를 변경하고, 변경이 성공적으로 적용되었는지 확인
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
-  const setUserInfo = useSetRecoilState(UserInfoState);
+  const setUserInfo = useSetRecoilState(CurrentUserInfoState);
 
   // Login을 제출하면 실행되는 함수
   // 성공 시 localstorage에 토큰 발급
@@ -76,9 +76,9 @@ function LoginPage() {
                 efficiencyTier: response.data.optimization_tier,
               };
               setUserInfo(receivedUserData);
+              // 로그인에 성공하면 메인 화면으로 리다이렉트
               window.location.reload();
             });
-          // 로그인에 성공하면 메인 화면으로 리다이렉트
         }
       })
       //로그인 실패 시

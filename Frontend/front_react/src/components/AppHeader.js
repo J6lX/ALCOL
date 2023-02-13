@@ -6,7 +6,12 @@ import alcol from "../assets/alcol_empty_white.png";
 import { Layout, Button, Row, Col, Menu } from "antd";
 import { useState, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { AccessTokenInfo, LoginState, RefreshTokenInfo, UserInfoState } from "../states/LoginState";
+import {
+  AccessTokenInfo,
+  LoginState,
+  RefreshTokenInfo,
+  CurrentUserInfoState,
+} from "../states/LoginState";
 
 const { Header } = Layout;
 
@@ -18,17 +23,14 @@ function LoginTag(props) {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);
-  const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
-  const photo = userInfo.profileImg;
+  const [currentUserInfo, setCurrentUserInfo] = useRecoilState(CurrentUserInfoState);
+  const photo = currentUserInfo.profileImg;
 
   const logoutRequest = () => {
     setIsLoggedIn(false);
     setAccessTokenData("");
     setRefreshTokenData("");
-    setUserInfo({
-      speedTier: "UNRANKED 1",
-      efficiencyTier: "UNRANKED 1",
-    });
+    setCurrentUserInfo([]);
 
     // 메인 화면으로 리다이렉트
     window.location.reload();
@@ -43,6 +45,7 @@ function LoginTag(props) {
         style={{
           height: "64px",
         }}>
+        {/* 프사 표시 */}
         <Col
           align="center"
           style={{
@@ -61,6 +64,7 @@ function LoginTag(props) {
             />
           </Link>
         </Col>
+        {/* 닉네임 표시 */}
         <Col
           justify="center"
           style={{
@@ -68,9 +72,10 @@ function LoginTag(props) {
             textAlign: "center",
           }}>
           <Link to={`/mypage/${isLoggedIn}`} className="text">
-            {userInfo.nickname}
+            {currentUserInfo.nickname}
           </Link>
         </Col>
+        {/* 로그아웃 단추 표시 */}
         <Col
           align="center"
           style={{

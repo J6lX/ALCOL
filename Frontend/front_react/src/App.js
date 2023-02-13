@@ -131,7 +131,7 @@ function App() {
             />
 
             {/* 마이페이지(사용자 정보 열람 페이지) */}
-            <PrivateRoute path="/mypage/:username" exact={true} component={Mypage} />
+            <Route path="/mypage/:username" exact={true} component={Mypage} />
 
             {/* 404 페이지 */}
             <Route component={NotFound404} />
