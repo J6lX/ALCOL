@@ -16,4 +16,6 @@ public interface LogService
     List<LogDto.UserSeasonLogDto> getPastSeasonLog(String user_id);
 
     void insertBattleLog(LogDto.BattleLogDto winnerBattleLogDto, LogDto.BattleLogDto loserBattleLogDto, List<LogDto.BattleProbSubmitLogDto> winnerSubmitLogList, List<LogDto.BattleProbSubmitLogDto> loserSubmitLogList);
+
+    int insertExp(String userId, int addExp);
 }
