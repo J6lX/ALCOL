@@ -97,14 +97,14 @@ public class LogController
         log.info("LogController 분기 2");
 
         String winnerUserId = (String)map.get("winnerUserId");
-        String winnerPrevMmr = (String)map.get("winnerPrevMmr");
-        String winnerNowMmr = (String)map.get("winnerNowMmr");
+        int winnerPrevMmr = (int)map.get("winnerPrevMmr");
+        int winnerNowMmr = (int)map.get("winnerNowMmr");
 
         log.info("LogController 분기 3");
 
         String loserUserId = (String)map.get("loserUserId");
-        String loserPrevMmr = (String)map.get("loserPrevMmr");
-        String loserNowMmr = (String)map.get("loserNowMmr");
+        int loserPrevMmr = (int)map.get("loserPrevMmr");
+        int loserNowMmr = (int)map.get("loserNowMmr");
 
         log.info("LogController 분기 4");
 
@@ -128,8 +128,8 @@ public class LogController
                 .battleMode(battleMode)
                 .probNo(Long.parseLong(probNum))
                 .battleResult(1)
-                .upDownMmr(Integer.parseInt(winnerNowMmr) - Integer.parseInt(winnerPrevMmr))
-                .nowMmr(Integer.parseInt(winnerNowMmr))
+                .upDownMmr(winnerNowMmr - winnerPrevMmr)
+                .nowMmr(winnerNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
 
@@ -139,8 +139,8 @@ public class LogController
                 .battleMode(battleMode)
                 .probNo(Long.parseLong(probNum))
                 .battleResult(0)
-                .upDownMmr(Integer.parseInt(loserNowMmr) - Integer.parseInt(loserPrevMmr))
-                .nowMmr(Integer.parseInt(loserNowMmr))
+                .upDownMmr(loserNowMmr - loserPrevMmr)
+                .nowMmr(loserNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
 
