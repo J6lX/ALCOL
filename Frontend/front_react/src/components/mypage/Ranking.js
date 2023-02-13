@@ -236,7 +236,6 @@ function Ranking() {
               // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
             };
           });
-          console.log("response accepted");
           // 랭커 정보를 recoil에 저장
 
           setRankerList(rankerData);
