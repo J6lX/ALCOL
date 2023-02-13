@@ -192,7 +192,7 @@ public class WebSocket {
                         else {
                             try
                             {
-                                Thread.sleep(100);
+                                Thread.sleep(300);
                             }catch (InterruptedException e)
                             {
                                 e.printStackTrace();
@@ -207,7 +207,7 @@ public class WebSocket {
                 else
                 {
 //                    User user = User.builder().session(session).userId(userId).prevMmr(mmr).build();
-                    BattleRoom battleRoom = BattleRoom.builder().user1(user).problemBanCheck(new HashMap<Integer, Boolean>()).problemList(new ArrayList<Problem>()).build();
+                    BattleRoom battleRoom = BattleRoom.builder().user1(user).user2(user).problemBanCheck(new HashMap<Integer, Boolean>()).problemList(new ArrayList<Problem>()).build();
                     sessionMap.put(userId, session);
                     sessionId2Obj.put(userId, battleRoom);
                     userId2Session.put(userId, session);
@@ -415,7 +415,7 @@ public class WebSocket {
                 if(session==sessionId2Obj.get(userId2SessionId.get(userId)))
                 {
                     timer = new Timer();
-                    timer.schedule(new SessionTimerTask(session), 5000); // 1초마다 실행
+                    timer.schedule(new SessionTimerTask(session,userId,otherUserId), 5000); // 1초마다 실행
                 }
             }
             else if (method.equals("battleTimeOut"))
@@ -863,8 +863,12 @@ public class WebSocket {
     private class SessionTimerTask extends TimerTask {
 
         private Session session;
+        private String userId;
+        private String otherId;
+        private String battleMode;
 
-        public SessionTimerTask(Session session) {
+
+        public SessionTimerTask(Session session,String userId, String otherId) {
             this.session = session;
         }
 
@@ -872,6 +876,22 @@ public class WebSocket {
         public void run() {
             // 타이머가 실행될 때 수행할 작업
             System.out.println(session+"배틀 종료할게요 ????????????????");
+//            String drowUserId = obj.get("userId").toString();
+//            String drowOtherId = obj.get("userId").toString();
+            int user_mmr = 0;
+            int other_mmr = 0;
+            if(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId.equals(userId))
+            {
+                user_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr;
+                other_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr;
+            }
+            else if(sessionId2Obj.get(userId2SessionId.get(userId)).user2.userId.equals(userId))
+            {
+                user_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user2.prevMmr;
+                other_mmr = sessionId2Obj.get(userId2SessionId.get(userId)).user1.prevMmr;
+            }
+            float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+            int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
         }
     }
 }
