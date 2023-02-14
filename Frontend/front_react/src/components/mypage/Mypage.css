@@ -16,7 +16,8 @@
 
 /* 친구 목록, 지난 시즌 조회용 블록 CSS */
 .miniBlock {
-  background-color: #1d1e22;
+  /* background-color: #1d1e22; */
+  background-color: pink;
   border: 1px solid white;
   border-radius: 15px;
   text-align: center;
@@ -153,4 +154,8 @@
   display: block;
   margin: auto;
   align-items: center;
+}
+
+.mypage_record_wrap_box {
+  background-color: orange;
 }

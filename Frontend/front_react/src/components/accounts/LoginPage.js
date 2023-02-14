@@ -1,6 +1,7 @@
-import { React } from "react";
+import React, { useEffect } from "react";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Modal } from "antd";
+import { useHistory } from "react-router-dom";
 import loginBg from "../../assets/loginbg.jpg";
 import "./LoginPage.css";
 import axios from "axios";
@@ -50,7 +51,7 @@ function LoginPage() {
       // 로그인 성공 시(커스텀 코드 006)
       .then(function (response) {
         if (response.data.custom_code === "001") {
-          alert(response.data.description);
+          // alert(response.data.description);
           //access-token, refresh-token, userId 저장
           // 이 데이터들을 리코일에 저장하면 됨
           const accessToken = response.data.body_data.access_token;
@@ -66,6 +67,7 @@ function LoginPage() {
           axios
             .post(`http://i8b303.p.ssafy.io:9000/user-service/getUserInfo`, { user_id: userId })
             .then(function (response) {
+              hanleResigerWarning();
               // 사용자 기본 정보를 recoil(userInfo)에 저장
               const receivedUserData = {
                 nickname: response.data.nickname,
@@ -77,21 +79,45 @@ function LoginPage() {
                 efficiencyTier: response.data.optimization_tier,
               };
               setUserInfo(receivedUserData);
-              window.location.reload();
+              setResult("로그인 성공!");
+              // setResult(response.data.description);
+              // window.location.reload();
             });
           // 로그인에 성공하면 메인 화면으로 리다이렉트
         }
       })
       //로그인 실패 시
       .catch((error) => {
+        hanleResigerWarning();
         console.log("로그인 실패1 : " + error);
         if (error.response.data.custom_code === "006") {
           console.log("로그인 실패2 : " + error);
+          setResult("로그인 실패...");
           // 로그인 실패 시 표시하는 내용
-          alert(error.response.data.description);
+          // alert(error.response.data.description);
         }
       });
   };
+  const history = useHistory();
+  const hanleResigerWarning = () => {
+    showModal();
+  };
+  //Modal 선택 관련
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [result, setResult] = React.useState();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    if (result === "로그인 성공!") {
+      history.push("/");
+    }
+    setIsModalOpen(false);
+  };
+  useEffect(() => {
+    console.log("나는 useEffect");
+    console.log(result);
+  }, [result]);
 
   return (
     <div className="fullmiddle_login" style={{ backgroundColor: "black" }}>
@@ -172,6 +198,21 @@ function LoginPage() {
                 </a>
               </Form.Item>
             </Form>
+            <Modal
+              title="😮"
+              open={isModalOpen}
+              closable={false}
+              width={300}
+              centered
+              footer={null}
+              style={{ textAlign: "center" }}>
+              <p style={{ textAlign: "center" }}>{result}</p>
+              <div style={{ marginTop: "10px" }}>
+                <Button style={{ background: "#FEF662" }} onClick={handleOk}>
+                  확인
+                </Button>
+              </div>
+            </Modal>
           </div>
         </div>
       </span>

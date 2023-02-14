@@ -92,7 +92,7 @@ function App() {
         console.log(response);
         if (response.data.custom_code === "000") {
           console.log("회원 가입 성공 2 :" + response);
-          alert("회원가입 성공");
+          // alert("회원가입 성공");
           setResult(response.data.description);
         }
       })

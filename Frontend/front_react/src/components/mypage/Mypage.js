@@ -652,6 +652,7 @@ function Mypage() {
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                   <ProfileImage />
                   <h1>{userInfo.nickname}</h1>
+                  <div style={{ color: "white", marginTop: "-10px" }}>LV. {userInfo.level}</div>
                 </Col>
               </Row>
             </Col>
@@ -710,6 +711,7 @@ function Mypage() {
                       <p>{userInfo.speedTier}</p>
                       <p>MMR {spdMMR}</p>
                       <p>1000위(상위 20%)</p>
+                      <p>다음 티어까지 {speedData[0].value}% 달성</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
@@ -717,6 +719,7 @@ function Mypage() {
                       <p>{userInfo.efficiencyTier}</p>
                       <p>MMR {effMMR}</p>
                       <p>1000위(상위 20%)</p>
+                      <p>다음 티어까지 {efficiencyData[0].value}% 달성</p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col
@@ -766,7 +769,7 @@ function Mypage() {
           </Row>
 
           {/* 지난 시즌, 전적 표시 */}
-          <Row justify="center">
+          <Row justify="center" className="mypage_record_wrap_box">
             <Col
               xs={16}
               md={6}
