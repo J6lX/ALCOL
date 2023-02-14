@@ -78,8 +78,6 @@ function ProfileImage(urlSrc) {
     photo = `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
   }
 
-  console.log("사진 데이터:", photo);
-
   return (
     <img
       src={photo}
@@ -118,12 +116,9 @@ function Ranking() {
     if (modeName === "speed") {
       setSpeedColor({ color: "#94D6FB" });
       setEfficiencyColor({ color: "white" });
-    } else if (modeName === "efficiency") {
+    } else if (modeName === "optimization") {
       setEfficiencyColor({ color: "#94d6f8" });
       setSpeedColor({ color: "white" });
-    } else if (modeName === "level") {
-      setSpeedColor({ color: "white" });
-      setEfficiencyColor({ color: "white" });
     }
   }, [modeName]);
 
@@ -242,10 +237,15 @@ function Ranking() {
     }
   }
 
+  // 랭커 목록
   const [rankerList, setRankerList] = useRecoilState(RankerListState);
+
+  // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
+  const [current, setCurrent] = useState(pageNo);
 
   // 첫 화면에 표시할 기본 정보: 파라미터를 바탕으로 서버에 랭커 정보 요청
   useEffect(() => {
+    setCurrent(pageNo);
     // axios 통신 진행
     axios
       .get(
@@ -284,10 +284,7 @@ function Ranking() {
       });
   }, [modeName, pageNo, setRankerList]);
 
-  console.log("랭커 목록:", rankerList);
-
-  // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
-  const [current, setCurrent] = useState(pageNo);
+  // 페이지 이동 시(페이지네이션 선택 시)
   const pageMove = (page) => {
     setCurrent(page);
     axios
@@ -349,7 +346,6 @@ function Ranking() {
           // record: `${dataBody.record.win}승 ${dataBody.record.lose}패(${dataBody.record.winningRate}%)`,
         };
         setRankerList([searchResponse]);
-        console.log("table:", rankerList);
         // window.location.replace(`/ranking/search?mode=${modeName}&username=${dataBody.nickname}`);
       })
       //응답 실패 시
@@ -414,7 +410,7 @@ function Ranking() {
                       </Link>
                     </Col>
                     <Col span={12}>
-                      <Link to="/ranking?mode=efficiency&page=1" style={efficiencyColor}>
+                      <Link to="/ranking?mode=optimization&page=1" style={efficiencyColor}>
                         <span className="filterText">최적화</span>
                       </Link>
                     </Col>

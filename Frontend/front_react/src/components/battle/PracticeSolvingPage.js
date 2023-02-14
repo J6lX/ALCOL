@@ -188,8 +188,6 @@ const CodingPlace = () => {
     setLang(value);
   };
 
-  console.log(lang);
-
   // 코딩 영역 페이지 렌더링
   return (
     <div>
