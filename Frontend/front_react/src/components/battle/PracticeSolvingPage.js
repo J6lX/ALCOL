@@ -5,6 +5,7 @@ import Logo from "../../assets/alcol_empty_black.png";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
 // import { oneDark } from "@codemirror/theme-one-dark";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./PracticeSolvingPage.css";
@@ -12,7 +13,8 @@ import { Button, Modal, Select } from "antd";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { PracticeProblemState } from "../../states/ProblemBank";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 // 배틀 화면 네비게이션 바
 const BattleNav = () => {
@@ -37,6 +39,21 @@ const BattleNav = () => {
   );
 };
 
+// 언어명을 채점 서버에서 요구하는 형식에 맞게 수정해 주는 함수
+function DefineLanguage(language) {
+  // python은 Python3으로 수정
+  if (language === "python") {
+    return "Python3";
+  }
+  // java는 Java로 수정
+  else if (language === "java") {
+    return "Java";
+    // cpp는 C++로 수정
+  } else if (language === "cpp") {
+    return "C++";
+  }
+}
+
 // 문제 표시 영역
 const Problem = () => {
   // 파라미터로 문제 번호 가져오기
@@ -49,7 +66,6 @@ const Problem = () => {
     axios
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/${problemId}`)
       .then((response) => {
-        console.log(response.data);
         // 응답받은 데이터 정제
         const originProblemData = {
           // 문제 번호
@@ -133,8 +149,16 @@ const Problem = () => {
   );
 };
 
-// 코딩 영역(IDE)
+// 코딩 영역(IDE) 페이지 렌더링
 const CodingPlace = () => {
+  // 현재 접속한 사용자 정보
+  const accessToken = useRecoilValue(AccessTokenInfo);
+  const refreshToken = useRecoilValue(RefreshTokenInfo);
+  const userId = useRecoilValue(LoginState);
+
+  // 문제 번호 정보
+  const problemId = useParams().problemno;
+
   // let allheight = window.innerHeight
   // let height = allheight * 0.46
   // console.log(height)
@@ -165,19 +189,53 @@ const CodingPlace = () => {
 
   // 제출 이벤트
   const clickSubmit = () => {
-    console.log("submit ", code);
+    // code : 사용자가 IDE에 입력한 코드
+    const formData = {
+      problem_id: problemId,
+      language: DefineLanguage(lang),
+      code: code,
+    };
+    console.log("form:", formData);
+    axios
+      .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
+        headers: {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          user_id: userId,
+        },
+      })
+      .then((response) => {
+        const submitResult = response.data;
+        console.log(submitResult);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  // 제출 확인 모달 관리
+  // 나가기 확인 모달 창 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
+  // 나가기 모달에서 '예' 눌렀을 때
   const handleOk = () => {
     setIsModalOpen(false);
+    // 연습문제 서버로 리다이렉트
+    window.location.href = "/practice";
   };
+  // 나가기 모달에서 '아니오' 눌렀을 때
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  // 승리(정답) 모달 창 관리
+  const gameVictory = () => {
+    setIsModalOpen(true);
+  };
+  // 승리(정답) 모달에서 '예' 눌렀을 때
+  const leaveOk = () => {
+    window.location.href = "/practice";
   };
 
   // lang에 할당된 값을 선택 상자를 기준으로 동적으로(파이썬/자바) 변동시키면 된다.
@@ -209,6 +267,10 @@ const CodingPlace = () => {
               value: "java",
               label: "Java",
             },
+            {
+              value: "cpp",
+              label: "C++",
+            },
           ]}></Select>
       </div>
       <div
@@ -234,6 +296,16 @@ const CodingPlace = () => {
             width="70vw"
             height="46vh"
             extensions={[java({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
+        {lang === "cpp" && (
+          <CodeMirror
+            value={code}
+            width="70vw"
+            height="46vh"
+            extensions={[cpp({ jsx: true })]}
             onChange={onChange}
             theme={darcula}
           />
@@ -270,6 +342,9 @@ const CodingPlace = () => {
         </div>
       </div>
       <Modal title="나가기" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p className="NanumSquare">정말로 나가시겠습니까?</p>
+      </Modal>
+      <Modal title="게임 종료" open={gameVictory} onOk={leaveOk}>
         <p className="NanumSquare">정말로 나가시겠습니까?</p>
       </Modal>
     </div>
