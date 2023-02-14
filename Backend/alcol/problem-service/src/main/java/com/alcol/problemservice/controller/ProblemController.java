@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -75,14 +76,8 @@ public class ProblemController
      * @return ScoreDto.ResponseDto<?>
      */
     @PostMapping("/practiceSubmit")
-    public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@RequestBody ScoreDto.Request req)
+    public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@RequestBody ScoreDto.Request req, @RequestHeader Map<String, String> header)
     {
-        // 빈 코드를 제출했을 경우에 대해 먼저 처리해준다.
-        if(req.getCode().equals(""))
-        {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_CODE_ISEMPTY));
-        }
-
         // 정답을 제출한 후 submission id를 요청한다.
         String submissionId = problemService.getSubmissionId(req);
         // submission id를 받아올 수 없다면 에러처리한다.
@@ -111,6 +106,19 @@ public class ProblemController
         if(response.getResult().equals("CompileError"))
         {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_COMPILE_ERROR));
+        }
+
+        // 정답을 맞혔을 경우 levelExp를 log-service로 보낸다.
+        if(response.getResult().equals("success"))
+        {
+            if(problemService.recordLevelExp(header.get("user_id")))
+            {
+                log.info("맞힌 정답 기록 log-service로 전달 완료");
+            }
+            else
+            {
+                log.error("log-service로 전달되지 않음");
+            }
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(response, CustomStatusCode.SCORE_SUCCESS));
