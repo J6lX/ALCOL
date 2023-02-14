@@ -30,8 +30,8 @@ public class RankingController
     private final RankService rankService;
 
     @PostMapping("/battleResult")
-    public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
-    {
+    public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult) {
+
         // 승패 count를 세기 위해 redis에 저장하는 작업
         WinLoseDto winLose = new WinLoseDto(battleResult.getUser_id_1(), battleResult.getBattle_mode(), Integer.parseInt(battleResult.getWinner()));
         // 승패수를 기록하는 과정에서 오류가 발생했을 시
@@ -121,4 +121,5 @@ public class RankingController
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(top3List, CustomStatusCode.SEARCH_TOP3_EXIST));
     }
+
 }

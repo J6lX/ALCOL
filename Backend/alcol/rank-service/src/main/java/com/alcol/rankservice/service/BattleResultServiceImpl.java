@@ -123,6 +123,7 @@ public class BattleResultServiceImpl implements BattleResultService
         catch (Exception e)
         {
             log.error("유저 정보를 redis에 저장하는 과정에서 에러 발생!");
+            e.printStackTrace();
             return false;
         }
 
