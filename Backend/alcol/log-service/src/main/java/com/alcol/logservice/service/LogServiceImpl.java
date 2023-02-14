@@ -72,9 +72,9 @@ public class LogServiceImpl implements LogService
 
         return LogDto.UserPlayDto.builder()
                 .exp(expLogEntity == null ? 1 : expLogEntity.getCurExp())
-                .speedMmr(battleLogEntityBySpeed == null ? 1000 : battleLogEntityBySpeed.getNowMmr())
+                .speedMmr(battleLogEntityBySpeed == null ? 1200 : battleLogEntityBySpeed.getNowMmr())
                 .optimizationMmr(
-                        battleLogEntityByOptimization == null ? 1000 : battleLogEntityByOptimization.getNowMmr()
+                        battleLogEntityByOptimization == null ? 1200 : battleLogEntityByOptimization.getNowMmr()
                 )
                 .build();
     }
