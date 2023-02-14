@@ -244,7 +244,7 @@ public class RankServiceImpl implements RankService{
         modeTop3.put("speed", speedTop3);
 
         // 최적화전 top3의 userId 받아오기
-        Set<Object> optRankUserIds= ranking.reverseRange("optimization", 1,3);
+        Set<Object> optRankUserIds= ranking.reverseRange("optimization", 0,2);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(optRankUserIds.isEmpty()){
             log.warn("최적화 모드에 대한 랭킹 정보가 존재하지 않습니다.");
