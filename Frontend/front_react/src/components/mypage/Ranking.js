@@ -103,7 +103,6 @@ function Ranking() {
   // 탭 선택 여부에 따라 스타일링
   const [speedColor, setSpeedColor] = useState({ color: "white" });
   const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
-  const [levelColor, setLevelColor] = useState({ color: "white" });
 
   // 검색어 입력 관리
   const [search, setSearch] = useState("");
@@ -119,15 +118,12 @@ function Ranking() {
     if (modeName === "speed") {
       setSpeedColor({ color: "#94D6FB" });
       setEfficiencyColor({ color: "white" });
-      setLevelColor({ color: "white" });
     } else if (modeName === "efficiency") {
       setEfficiencyColor({ color: "#94d6f8" });
       setSpeedColor({ color: "white" });
-      setLevelColor({ color: "white" });
     } else if (modeName === "level") {
       setSpeedColor({ color: "white" });
       setEfficiencyColor({ color: "white" });
-      setLevelColor({ color: "#94d6f8" });
     }
   }, [modeName]);
 
