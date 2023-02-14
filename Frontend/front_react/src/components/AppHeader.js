@@ -12,9 +12,7 @@ const { Header } = Layout;
 
 // LoginTag === 로그인 상태에 따라 헤더 우측에 표시할 데이터를 결정하는 함수
 function LoginTag(props) {
-  // isLoggedIn === 로그인 상태 체크
-
-  // 로그아웃 정보 반영
+  // 현재 로그인한 사용자 정보
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LoginState);
   const setAccessTokenData = useSetRecoilState(AccessTokenInfo);
   const setRefreshTokenData = useSetRecoilState(RefreshTokenInfo);

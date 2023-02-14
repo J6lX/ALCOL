@@ -23,7 +23,7 @@ const problemLabel = [
   {
     title: "문제 유형",
     dataIndex: "problem_type",
-    key: "problemNo",
+    key: "problemType",
     align: "center",
   },
   {
@@ -61,7 +61,7 @@ function Ranking() {
           return {
             problem_number: problem.prob_no,
             problem_name: problem.prob_name,
-            problem_type: problem.prob_category,
+            problem_type: problem.prob_category.join(", "),
             problem_difficulty: problem.prob_tier,
           };
         });
