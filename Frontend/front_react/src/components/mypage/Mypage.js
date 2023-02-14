@@ -61,6 +61,7 @@ const matchCol = [
     key: "recordDate",
     title: "일시",
     align: "center",
+    render: (record_date) => CalculateDatediff(record_date),
   },
 ];
 
@@ -106,44 +107,50 @@ function giveColor(userTier) {
 function TierBorder(tiercolor, tiernum) {
   // startingPoint = 시작 지점(티어 색상)
   const startingPoint = () => {
-    // 브론즈면 1000
+    // 브론즈면 800
     if (tiercolor === "B") {
       return 1000;
     }
-    // 실버면 1250
+    // 실버면 1150
     else if (tiercolor === "S") {
-      return 1250;
+      return 1150;
     }
     // 골드면 1500
     else if (tiercolor === "G") {
       return 1500;
     }
-    // 플래면 1750
+    // 플래면 1850
     else if (tiercolor === "P") {
-      return 1750;
+      return 1850;
     }
-    // 다이아면 2000
+    // 다이아면 2200
     else if (tiercolor === "D") {
-      return 2000;
+      return 2200;
     }
-    // ALCOL이면 2250
+    // ALCOL이면 2750
     else if (tiercolor === "A") {
-      return 2250;
+      return 2750;
     }
     // 무배치면 0
     else {
       return 0;
     }
   };
-  // 최종 티어 경계 = 시작 지점 + 50 * 티어 숫자
-  return startingPoint(tiercolor) + 50 * (5 - tiernum);
+  // 최종 티어 경계 = 시작 지점 + 75 * 티어 숫자(단, 브5는 0)
+  if (tiercolor === "B" && Number(tiernum) === 5) {
+    return 0;
+  } else {
+    return startingPoint(tiercolor) + 75 * (5 - tiernum);
+  }
+}
+
+// 날짜 값(value) 계산 함수
+function GetDateDiffValue(startDate) {
+  return new Date() - new Date(startDate);
 }
 
 // 날짜 차이 계산 함수
-function CalculateDatediff(startDate) {
-  // datediffValue = 날짜 계산 차이 값(단위 : ms)
-  const datediffValue = new Date() - new Date(startDate);
-
+function CalculateDatediff(datediffValue) {
   // dateDivider = ms 단위를 일 단위로 환산하는 용도
   const dateDivider = 24 * 60 * 60 * 1000;
   // hourDivider = ms 단위를 시간 단위로 환산하는 용도
@@ -328,8 +335,14 @@ function Mypage() {
               opponent: record.other_user_nickname,
               prob_name: record.prob_name,
               prob_tier: record.prob_tier,
-              record_date: CalculateDatediff(record.end_time),
+              // 기록일(record_date는 datediffValue로 받기)
+              record_date: GetDateDiffValue(record.end_time),
             };
+          });
+
+          // originBattleRec 배열을 날짜 값 기준으로 오름차순 정렬
+          originBattleRec.sort(function (case1, case2) {
+            return case1.record_date - case2.record_date;
           });
 
           // 사용자의 지난 시즌 정보를 recoil(LastSeasonState)에 저장할 수 있게 정제
@@ -344,6 +357,11 @@ function Mypage() {
               lose: record.lose_cnt,
               winrate: Math.round((record.win_cnt / (record.win_cnt + record.lose_cnt)) * 100),
             };
+          });
+
+          // 시즌 정보를 시즌 값 기준으로 오름차순 정렬
+          refinedLastSeason.sort(function (seasonA, seasonB) {
+            return seasonA.season - seasonB.season;
           });
 
           // 정제한 정보들을 recoil에 반영
@@ -715,7 +733,9 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => `${userSPDTier}${userSPDnumber}`}
+                        label={({ dataEntry }) =>
+                          userSPDTier === "A" ? `${userSPDTier}` : `${userSPDTier}${userSPDnumber}`
+                        }
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
@@ -788,7 +808,9 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => `${userEFFTier}${userEFFnumber}`}
+                        label={({ dataEntry }) =>
+                          userEFFTier === "A" ? `${userEFFTier}` : `${userEFFTier}${userEFFnumber}`
+                        }
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
