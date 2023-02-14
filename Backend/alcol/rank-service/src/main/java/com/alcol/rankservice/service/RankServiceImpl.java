@@ -223,7 +223,7 @@ public class RankServiceImpl implements RankService{
         List<RankDto.Top3Ranking> optTop3 = new ArrayList<>();
 
         // 스피드전 top3의 userId 받아오기
-        Set<Object> speedRankUserIds= ranking.reverseRange("speed", 1,3);
+        Set<Object> speedRankUserIds= ranking.reverseRange("speed", 0,2);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(speedRankUserIds.isEmpty()){
             log.warn("스피드 모드에 대한 랭킹 정보가 존재하지 않습니다.");
