@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/problem-service")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProblemController
 {
     private final ProblemService problemService;
@@ -67,9 +68,21 @@ public class ProblemController
         return ResponseEntity.status(HttpStatus.OK).body(problemService.getAllProbList());
     }
 
+
+    /**
+     * 문제 채점 요청
+     * @param req
+     * @return ScoreDto.ResponseDto<?>
+     */
     @PostMapping("/practiceSubmit")
     public ResponseEntity<ScoreDto.ResponseDto<?>> getScoreResult(@RequestBody ScoreDto.Request req)
     {
+        // 빈 코드를 제출했을 경우에 대해 먼저 처리해준다.
+        if(req.getCode().equals(""))
+        {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiUtils.error(CustomStatusCode.SCORE_CODE_ISEMPTY));
+        }
+
         // 정답을 제출한 후 submission id를 요청한다.
         String submissionId = problemService.getSubmissionId(req);
         // submission id를 받아올 수 없다면 에러처리한다.
