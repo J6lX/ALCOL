@@ -194,8 +194,8 @@ function App() {
       <div className="matching_helper">
         <div style={{ color: "white", fontFamily: "NanumSquareNeo" }}>그거 아셨나요?</div>
         <div style={{ color: "white", fontFamily: "NanumSquareNeo", fontWeight: "lighter" }}>
-          공평성을 위해 코드를 복사 붙여넣기 할 수 없어요... 하지만 자신의 코드를 가지고 싶으신 분을
-          위해 배틀이 끝나면 자신의 코드를 복사해갈 수 있게 해드릴게요!
+          배틀에서는 공평성을 위해 코드를 복사 붙여넣기 할 수 없어요... 
+          자신의 코드가 필요하시다면 배틀이 끝나고 나서 자신의 코드를 복사해갈 수 있어요!
         </div>
       </div>
       <div className="matchingButton" onClick={handleHistoryMatchCancel}>

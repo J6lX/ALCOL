@@ -72,6 +72,7 @@
 
 .gradientBox {
   position: absolute;
+  top: 1%;
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 85%, #16171b 95.17%);

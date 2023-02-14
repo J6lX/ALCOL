@@ -4,7 +4,8 @@ import practiceHeader from "../../assets/practice_header.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-// import { useRecoilState s} from "recoil";
+// import { PracticeProblemState } from "../../states/ProblemBank";
+// import { useRecoilState } from "recoil";
 
 // 연습 문제 분류(구분 컬럼)
 const problemLabel = [
@@ -58,11 +59,11 @@ const problemData = {
 
 // 페이지 렌더링
 function Ranking() {
-  // 데이터 상태 관리(임시 코드)
-  const [refinedData, setRefinedData] = useState(problemData.bodyData);
+  // 연습 문제 데이터 상태 관리
+  const [refinedData, setRefinedData] = useState([]);
 
-  // // 연습 문제 상태 관리(서버 연결 시 사용)
-  // const [practiceProblem, setPracticeProblem] = useRecoilState();
+  // 사용자가 풀려 하는 연습 문제 상태 관리
+  // const [practiceProblem, setPracticeProblem] = useRecoilState(PracticeProblemState);
 
   // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");
@@ -76,11 +77,19 @@ function Ranking() {
   // 서버에서 연습 문제 목록 요청
   // 현재 구현 중(404 Not Found)
   axios
-    .get(`http://i8b303.p.ssafy.io:8000/problemList`)
+    .get(`http://i8b303.p.ssafy.io:8000/problem-service/problemList`)
     .then((response) => {
       console.log(response);
       // // 문제 소스는 .bodyData에 담아서 전송됨
-      // const originData = response.bodyData
+      const originData = response.data.map((problem) => {
+        return {
+          problem_number: problem.prob_no,
+          problem_name: problem.prob_name,
+          problem_type: problem.prob_category,
+          problem_difficulty: problem.prob_tier,
+        };
+      });
+      setRefinedData(originData);
     })
     .catch((error) => {
       console.log(error);

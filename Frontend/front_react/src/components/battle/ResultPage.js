@@ -6,17 +6,12 @@ import img_defeat from "../../assets/result_defeat.gif";
 import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
-function App() {
-  // eslint-disable-next-line
-  const [result, setResult] = React.useState({
-    battle_result: "win",
-    get_exp: "300",
-    get_mmr: "25",
-  });
-
+function App({props, showDetailResult}) {
+  console.log("이게 배틀 종료 데이터", props);
+  const data = props;
   const printResult = () => {
     var img = "";
-    if (result.battle_result === "win") {
+    if (data.battleResult === "win") {
       img = <img src={img_victory} alt="result" className="result_title" />;
       var defaults = {
         spread: 360,
@@ -53,15 +48,19 @@ function App() {
     return img;
   };
 
+  const showDetail = () => {
+    showDetailResult()
+  }
+
   //페이지 이동 관련 함수/변수
   const history = useHistory();
 
   function hanleHistoryMatchAgain() {
     history.push("/mode");
   }
-  function hanleHistoryResultList() {
-    history.push("/resultList");
-  }
+  // function hanleHistoryResultList() {
+  //   history.push("/resultList");
+  // }
   function hanleHistoryMain() {
     history.push("/");
   }
@@ -77,7 +76,7 @@ function App() {
               걸린 시간
             </Col>
             <Col className="result_text" span={10}>
-              {result.battle_result}
+              아직 안 받음
             </Col>
           </Row>
         </div>
@@ -87,7 +86,7 @@ function App() {
               얻은 경험치
             </Col>
             <Col className="result_text" span={10}>
-              {result.get_exp}
+              이것도 아직임
             </Col>
           </Row>
         </div>
@@ -97,7 +96,7 @@ function App() {
               얻은 점수
             </Col>
             <Col className="result_text" span={10}>
-              {result.get_mmr}
+              {data.changeMmr}
             </Col>
           </Row>
         </div>
@@ -105,7 +104,7 @@ function App() {
       <div>
         <Row justify="space-between" style={{ marginTop: "30px" }}>
           <Col span={8}></Col>
-          <Col span={2} className="result_button" onClick={hanleHistoryResultList}>
+          <Col span={2} className="result_button" onClick={showDetail}>
             자세히보기
           </Col>
           <Col span={2} className="result_button" onClick={hanleHistoryMatchAgain}>

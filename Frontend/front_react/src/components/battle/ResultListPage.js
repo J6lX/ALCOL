@@ -6,38 +6,40 @@ import { useRecoilValue } from "recoil";
 import icon_vs from "../../assets/vs.png";
 import { resultListPlayerInfo, resultListModeInfo, resultListResultInfo } from "../../states/atoms";
 
-function PlayerInfo() {
+function PlayerInfo({battleuserinfo, battleMode}) {
   //atoms에 저장한 playerInfo를 불러옵니다.
   const playerInfo = useRecoilValue(resultListPlayerInfo);
-  console.log(playerInfo);
+  console.log(battleuserinfo);
   return (
     <Row justify="space-between">
       <Col span={6} className="result_user_info">
-        {playerInfo.player1_info}
+        {battleuserinfo.user.nick}
       </Col>
       <Col span={2} className="result_user_info">
         {playerInfo.player1_level}
       </Col>
       <Col span={2} className="result_user_info">
-        {playerInfo.player1_tier}
+        {battleMode === "speed" && battleuserinfo.user.speedTier}
+        {battleMode === "optimization" && battleuserinfo.user.optTier}
       </Col>
       <Col span={3} className="result_icon_vs">
         <img src={icon_vs} alt="vs"></img>
       </Col>
       <Col span={2} className="result_enemy_info">
-        {playerInfo.player2_tier}
+        {battleMode === "speed" && battleuserinfo.other.speedTier}
+        {battleMode === "optimization" && battleuserinfo.other.optTier}
       </Col>
       <Col span={2} className="result_enemy_info">
         {playerInfo.player2_level}
       </Col>
       <Col span={6} className="result_enemy_info">
-        {playerInfo.player2_info}
+        {battleuserinfo.other.nick}
       </Col>
     </Row>
   );
 }
 
-function GameInfo() {
+function GameInfo({ battleuserinfo, problemInfo, battleMode, battleLanguage }) {
   //atoms에 저장한 battleModeInfo를 불러옵니다.
   const ModeInfo = useRecoilValue(resultListModeInfo);
   console.log(ModeInfo);
@@ -57,10 +59,16 @@ function GameInfo() {
     textAlign: "center",
     lineHeight: "10em",
   };
+  let mode = ""
+  if (battleMode === "speed") {
+    mode = "스피드"
+  } else if (battleMode === "optimization") {
+    mode = "최적화"
+  }
   return (
     <div>
-      <div className="result_game_mode">스피드</div>
-      <PlayerInfo />
+      <div className="result_game_mode">{mode}</div>
+      <PlayerInfo battleuserinfo={battleuserinfo} battleMode={battleMode} />
       <Divider style={{ backgroundColor: "white" }} />
       <Row gutter={[8, 8]} style={{ marginLeft: "10px", marginRight: "10px" }}>
         <Col className="gutter-row" span={6}>
@@ -76,10 +84,10 @@ function GameInfo() {
           <div style={gameInfoTitle}>걸린 시간</div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div style={gameInfoList}>{ModeInfo.problem_difficulty}</div>
+          <div style={gameInfoList}>{problemInfo.prob_tier}</div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div style={gameInfoList}>{ModeInfo.used_language}</div>
+          <div style={gameInfoList}>{battleLanguage}</div>
         </Col>
         <Col className="gutter-row" span={6}>
           <div style={gameInfoList}>{ModeInfo.avg_try}</div>
@@ -106,6 +114,12 @@ function ResultPlayerInfo() {
 }
 
 function ResultInfo({ sendResult }) {
+  let result = "";
+  if (sendResult.result === "accepted") {
+    result = "성공적인 "
+  } else {
+    result = "아쉬웠던 "
+  }
   return (
     <div style={{ clear: "both" }}>
       <Row justify="space-between">
@@ -117,8 +131,9 @@ function ResultInfo({ sendResult }) {
           <Row>
             <Col span={2}>사진</Col>
             <Col span={22}>
-              {sendResult.player_info}님의 {sendResult.result}코드 제출! 코드길이:
-              {sendResult.code_length} 메모리:{sendResult.memory} 걸린시간:{sendResult.time}
+              {sendResult.nick}님의 {result}코드 제출! 코드길이:
+              {sendResult.code_length} 메모리: {sendResult.memory && sendResult.memory / 1024000} MB 실행시간:
+              {sendResult.time} ms
             </Col>
           </Row>
         </Col>
@@ -131,7 +146,7 @@ function ResultInfo({ sendResult }) {
 function ResultList() {
   //atoms에 저장한 battleResultList를 불러옵니다.
   const resultList = useRecoilValue(resultListResultInfo);
-  console.log(resultList);
+  console.log("자세히보기 정보", resultList);
   const printResults = () => {
     const result = [];
     for (let i = 0; i < resultList.length; i++) {
@@ -167,7 +182,7 @@ function ResultButton() {
   );
 }
 
-function App() {
+function App({ problemInfo, battleMode, battleLanguage, battleuserinfo }) {
   return (
     <div className="resultList_background">
       <div
@@ -189,7 +204,7 @@ function App() {
           xl={7}
           className="result_list_wrap"
           style={{ overflow: "auto" }}>
-          <GameInfo />
+          <GameInfo battleuserinfo={battleuserinfo} problemInfo={problemInfo} battleMode={battleMode} battleLanguage={battleLanguage} />
         </Col>
         <Col
           sm={24}
