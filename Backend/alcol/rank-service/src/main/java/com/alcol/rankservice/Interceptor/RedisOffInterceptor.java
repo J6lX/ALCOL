@@ -36,11 +36,10 @@ public class RedisOffInterceptor extends HandlerInterceptorAdapter
             ranking = redisTemplate.opsForZSet();
 
             // redis 가 내려가면 데이터를 다시 log-service 의 log table 에서 긁어와서 넣어준다.
-            String url = "http://i8b303.p.ssafy.io:8000/log-service/getAllResultAndMmr";
+            String url = "http://i8b303.p.ssafy.io:9005/log-service/getAllResultAndMmr";
             List<Map<String, String>> informations = restTemplate.getForObject(url, List.class);
 
-            for (int i = 0; i < informations.size(); i++)
-            {
+            for (int i = 0; i < informations.size(); i++) {
                 Map<String, String> info = informations.get(i);
 
                 String userId = info.get("userId");
