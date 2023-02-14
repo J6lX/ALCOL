@@ -80,10 +80,7 @@ function LoginPage() {
               };
               setUserInfo(receivedUserData);
               setResult("로그인 성공!");
-              // setResult(response.data.description);
-              // window.location.reload();
             });
-          // 로그인에 성공하면 메인 화면으로 리다이렉트
         }
       })
       //로그인 실패 시

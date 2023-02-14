@@ -253,6 +253,8 @@ function ProfileImage() {
     reader.readAsDataURL(uploadFile);
   };
 
+  console.log("마이페이지 사진:", photo);
+
   return (
     <div className="mypage_useImg_box">
       <img

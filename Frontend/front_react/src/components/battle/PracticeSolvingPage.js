@@ -132,6 +132,8 @@ const Problem = () => {
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           {problemData.problemInputContent}
+          <br />
+          ex. {problemData.problemInputTC}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -143,28 +145,8 @@ const Problem = () => {
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           {problemData.problemOutputContent}
-        </p>
-        <br />
-        <hr style={{ height: "1px", background: "gray" }} />
-        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
-          입력 테스트 케이스
-        </p>
-        <hr style={{ color: "gray" }} />
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problemData.problemInputTC}
-        </p>
-        <br />
-        <hr style={{ height: "1px", background: "gray" }} />
-        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
-          출력 테스트 케이스
-        </p>
-        <hr style={{ color: "gray" }} />
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problemData.problemOutputTC}
+          <br />
+          ex. {problemData.problemOutputTC}
         </p>
       </div>
     </div>
