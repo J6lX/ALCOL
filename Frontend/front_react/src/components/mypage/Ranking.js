@@ -97,6 +97,18 @@ function ProfileImage(urlSrc) {
   );
 }
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
 // 페이지 렌더링 함수
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
@@ -171,13 +183,14 @@ function Ranking() {
           const originUserData = {
             grade: originData.grade,
             nickname: originData.nickname,
-            profile_img: originData.profile_pic,
+            profile_img: isNew(originData.profile_pic),
             mmr: originData.mmr,
             level: originData.level,
             tier: originData.tier,
             record: `${winpoint}승 ${losepoint}패(${winrate}%)`,
           };
           setUserData(originUserData);
+          console.log("사용자 정보:", originUserData);
         } else {
           setUserData([]);
         }
