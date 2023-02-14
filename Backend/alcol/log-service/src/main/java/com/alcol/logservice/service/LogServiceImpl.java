@@ -107,6 +107,11 @@ public class LogServiceImpl implements LogService
             probNoList.add(battleLogEntity.getProbNo() + "");
         }
 
+        if (battleLogDtoList.size() == 0)
+        {
+            return battleLogDtoList;
+        }
+
         // log-service -> problem-service
         // param : probNoList
         // return : prob name, prob tier 가 있는 dto 리스트를 리턴
