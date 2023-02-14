@@ -5,14 +5,14 @@ import com.alcol.rankservice.dto.RankDto;
 import com.alcol.rankservice.dto.WinLoseDto;
 import com.alcol.rankservice.service.BattleResultService;
 import com.alcol.rankservice.service.RankService;
-import error.CustomStatusCode;
+import com.alcol.rankservice.error.CustomStatusCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import util.ApiUtils;
+import com.alcol.rankservice.util.ApiUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

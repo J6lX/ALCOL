@@ -1,4 +1,4 @@
-package error;
+package com.alcol.rankservice.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
