@@ -56,7 +56,6 @@ function Ranking() {
     axios
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/problemList`)
       .then((response) => {
-        console.log(response);
         // // 문제 소스는 .bodyData에 담아서 전송됨
         const originData = response.data.map((problem) => {
           return {
