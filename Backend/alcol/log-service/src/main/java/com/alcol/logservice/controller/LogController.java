@@ -208,9 +208,11 @@ public class LogController
 
         String userId = (String)map.get("userId");
         int userNowMmr = (int)map.get("userNowMmr");
+        int userPrevMmr = (int)map.get("userPrevMmr");
 
         String otherId = (String)map.get("otherId");
         int otherNowMmr = (int)map.get("otherNowMmr");
+        int otherPrevMmr = (int)map.get("otherPrevMmr");
 
         List<Map<String, Object>> userSubmitLog = (List<Map<String, Object>>) map.get("userSubmitLog");
         List<Map<String, Object>> otherSubmitLog = (List<Map<String, Object>>) map.get("otherSubmitLog");
@@ -226,7 +228,7 @@ public class LogController
                 .battleMode(battleMode)
                 .probNo(probNum)
                 .battleResult(2)
-                .upDownMmr(0)
+                .upDownMmr(userNowMmr - userPrevMmr)
                 .nowMmr(userNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
@@ -237,7 +239,7 @@ public class LogController
                 .battleMode(battleMode)
                 .probNo(probNum)
                 .battleResult(2)
-                .upDownMmr(0)
+                .upDownMmr(otherNowMmr - otherPrevMmr)
                 .nowMmr(otherNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
