@@ -19,38 +19,17 @@ const rankingLabel = [
     hidden: true,
   },
   {
+    dataIndex: "profile_img",
+    title: "Image",
+    render: (profile_img) => ProfileImage(profile_img),
+    width: "50px",
+  },
+  {
     dataIndex: "nickname",
     key: "nickname",
     title: "닉네임",
-    align: "center",
+    align: "left",
     hidden: true,
-  },
-  {
-    dataIndex: "profile_img",
-    title: "Image",
-    render: (profile_img) => (
-      // //화면에 프로필 사진 표시
-      // const reader = new FileReader();
-      // reader.onload = () => {
-      //   if (reader.readyState === 2) {
-      //     setPhoto(reader.result);
-      //     setUserInfo({
-      //       nickname: userInfo.nickname,
-      //       profileImg: reader.result,
-      //       level: userInfo.level,
-      //       speedTier: userInfo.speedTier,
-      //       efficiencyTier: userInfo.efficiencyTier,
-      //     });
-      //   }
-      <img
-        src={profile_img}
-        alt="profile"
-        style={{
-          width: "32px",
-          height: "32px",
-        }}
-      />
-    ),
   },
   {
     dataIndex: "level",
@@ -82,6 +61,39 @@ const rankingLabel = [
   },
 ];
 
+// 사진 데이터 관리 함수
+function ProfileImage(urlSrc) {
+  let photo = urlSrc;
+
+  //화면에 프로필 사진 표시
+  if (urlSrc) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        photo = reader.result;
+      }
+    };
+    reader.readAsDataURL(new Blob(urlSrc));
+  } else {
+    photo = `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+
+  console.log(photo);
+
+  return (
+    <img
+      src={photo}
+      alt="profile"
+      style={{
+        width: "32px",
+        height: "32px",
+        borderRadius: "100%",
+      }}
+    />
+  );
+}
+
+// 페이지 렌더링 함수
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
@@ -235,7 +247,6 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
-          console.log("원본 데이터:", originData);
 
           const rankerData = originData.map((data) => {
             // data.record(전적) 데이터가 없음(null)
@@ -262,6 +273,8 @@ function Ranking() {
         console.log("응답 실패 : " + error);
       });
   }, [modeName, pageNo, setRankerList]);
+
+  console.log(rankerList);
 
   // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
@@ -335,7 +348,6 @@ function Ranking() {
       });
   };
 
-  console.log(rankerList);
   // 페이지 렌더링
   return (
     <div
@@ -439,10 +451,6 @@ function Ranking() {
                           // expandable={{
                           //   innerRow,
                           //   defaultExpandedRowKeys: ["0"],
-                          // }}
-                          // pagination={{
-                          //   position: ["bottomCenter"],
-                          //   defaultPageSize: 10,
                           // }}
                         />
                         <Pagination
