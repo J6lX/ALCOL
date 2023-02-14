@@ -39,7 +39,7 @@ function Top({ userInfo, timeOut }) {
   console.log("TopuserInfo", userInfo);
   let secs = 0;
   const tick = () => {
-    if (secs < 180) {
+    if (secs < 30) {
       secs += 1;
     } else {
       timeOut("timeout");
@@ -65,7 +65,7 @@ function Top({ userInfo, timeOut }) {
           <div style={{ width: "25vw" }}>
             <Progress
               style={{ zIndex: "10" }}
-              percent={(secs / 181) * 100}
+              percent={(secs / 31) * 100}
               showInfo={false}
               strokeColor={{
                 "0%": "#5CFDFD",

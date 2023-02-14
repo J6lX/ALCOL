@@ -75,7 +75,6 @@ const ContinuousBattlePage = () => {
   console.log(messageType, userId, otherId, hostCheck, battleMode);
 
   // let score = ""
-
   useEffect(() => {
     axios
       .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
@@ -348,27 +347,7 @@ const ContinuousBattlePage = () => {
         submitOther(data.testcase, data.accepted);
         setResultListResult(resultList);
       } else if (data.messageType === "timeout") {
-        const modaldata = {
-          title: "배틀 시간 초과!",
-          content: (
-            <div>
-              <p>배틀 시간이 종료되었습니다.</p>
-              <p>확인을 누르시면 배틀이 종료됩니다.</p>
-            </div>
-          ),
-          okText: "확인",
-          onOk() {
-            socket.send(
-              JSON.stringify({
-                messageType: "finish",
-                userId: userId,
-                otherId: otherId,
-              })
-            );
-            setIsSolved(true);
-          },
-        };
-        info(modaldata);
+        showTimeOutModal();
       } else if (data.messageType === "error") {
         showSocketErrorModal();
       } else if (data.messageType === "surrender") {
@@ -428,9 +407,6 @@ const ContinuousBattlePage = () => {
 
     socket.onclose = (message) => {
       console.log("closed!", message);
-      // setTimeout(() => {
-      //   isConnected(false)
-      // }, 100)
     };
     socket.onSocketerror = (message) => {
       console.log("Socketerror", message);
@@ -552,6 +528,23 @@ const ContinuousBattlePage = () => {
     setIsSolved(true);
   };
 
+  const [isTimeOutModalOpen, setIsTimeOutModalOpen] = useState(false);
+  const showTimeOutModal = () => {
+    setIsTimeOutModalOpen(true);
+  };
+  const timeOutHandleOk = () => {
+    socket.send(
+      JSON.stringify({
+        messageType: "finish",
+        userId: userId,
+        otherId: otherId,
+      })
+    );
+    setIsTimeOutModalOpen(false);
+    setIsSolving(false);
+    setIsSolved(true);
+  };
+
   const [isSurrenderModalOpen, setIsSurrenderModalOpen] = useState(false);
   const showSurrenderModal = () => {
     setIsSurrenderModalOpen(true);
@@ -666,7 +659,15 @@ const ContinuousBattlePage = () => {
 
   const changeBanProblem = (data) => {
     if (data === "timeout") {
-      console.log(data);
+      console.log("timeout");
+      // socket.send(
+      //   JSON.stringify({
+      //     messageType: "banTimeout",
+      //     userId: userId,
+      //     otherId: otherId,
+      //     problemNumber: data,
+      //   })
+      // );
     }
     // setProblemNumber(data);
     if (isBanWait === false) {
@@ -913,9 +914,24 @@ const ContinuousBattlePage = () => {
         title="항복"
         open={isSurrenderModalOpen}
         onOk={surrenderHandleOk}
-        onCancel={surrenderHandleCancel}>
+        okText="항복"
+        onCancel={surrenderHandleCancel}
+        cancelText="취소">
         <p className="NanumSquare">정말로 항복하시겠습니까?</p>
-        <p>항복하시면 배틀이 종료됩니다.</p>
+        <p className="NanumSquare">항복하시면 배틀이 종료됩니다.</p>
+      </Modal>
+      <Modal
+        title="배틀 시간 초과..."
+        open={isTimeOutModalOpen}
+        onOk={timeOutHandleOk}
+        okText="확인"
+        onCancel={copyCode}
+        cancelText="코드 복사"
+        closable={false}>
+        {contextCopyHolder}
+        <p>배틀 시간이 초과되었습니다.</p>
+        <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
+        <p>확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
     </div>
   );

@@ -6,6 +6,7 @@ import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
+import Entrance from "./Entrance";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 import "animate.css";
@@ -104,7 +105,7 @@ const SpeedRanking = () => {
   );
 };
 
-const EfficiencyRanking = ({ efficiencyRanking }) => {
+const EfficiencyRanking = () => {
   const [efficiency, setEfficiencyRanking] = useState([
     { storedFileName: "" },
     { storedFileName: "" },
@@ -116,7 +117,7 @@ const EfficiencyRanking = ({ efficiencyRanking }) => {
       .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
       .then(function (response) {
         console.log(response.data.bodyData);
-        setEfficiencyRanking(response.data.bodyData.speed);
+        setEfficiencyRanking(response.data.bodyData.optimization);
       })
       .catch((error) => {
         console.log(error);
@@ -203,6 +204,7 @@ const RankingPage = () => {
 const HomePage = () => {
   return (
     <div style={{ zIndex: "-2" }}>
+      <Entrance />
       <MainPage />
       <RankingPage />
       <GuidePage />

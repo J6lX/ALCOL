@@ -189,6 +189,8 @@ function HeaderData() {
             </Link>
           </Col>
 
+          <Col lg={3}></Col>
+
           {/* 메뉴(Problem, Ranking, Battle) */}
           <Col xs={4} md={6} lg={11} xl={12} justify="center" align="middle">
             <Link to="/practice" className="textDark menus">
