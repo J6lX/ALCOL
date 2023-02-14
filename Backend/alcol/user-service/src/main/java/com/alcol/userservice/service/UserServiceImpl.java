@@ -287,6 +287,14 @@ public class UserServiceImpl implements UserService
             optimizationTier = "BRONZE5";
         }
 
+        log.info("exp: " + curExp);
+        log.info("speedMmr : " + curSpeedMmr);
+        log.info("optimizationMmr : " + curOptimizationMmr);
+
+        log.info("level : " + level);
+        log.info("speedTier: " + speedTier);
+        log.info("optimizationTier : " + optimizationTier);
+
         log.info("UserServiceImpl 의 getUserInfo 메소드에서 사용자 레벨, 티어 정보 가져오기 성공");
 
         return UserDto.UserInfoDto.builder()
