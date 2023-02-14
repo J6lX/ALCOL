@@ -888,8 +888,8 @@ public class WebSocket {
                                     sendBattleLogForRedis.put("user_id_1",submitOtherId);
                                     sendBattleLogForRedis.put("user_id_2",submitUserId);
                                     sendBattleLogForRedis.put("battle_mode",submitBattleMode);
-                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
-                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
                                     sendBattleLogForRedis.put("winner","2");
 
                                     sendBattleLog.put("winnerUserId",submitUserId);
@@ -907,8 +907,8 @@ public class WebSocket {
                                     sendBattleLogForRedis.put("user_id_1",submitOtherId);
                                     sendBattleLogForRedis.put("user_id_2",submitUserId);
                                     sendBattleLogForRedis.put("battle_mode",submitBattleMode);
-                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
-                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
                                     sendBattleLogForRedis.put("winner","1");
 
                                     sendBattleLog.put("winnerUserId",submitOtherId);
