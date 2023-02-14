@@ -2,10 +2,8 @@ import { Button, Row, Col, Input, Table, ConfigProvider, theme, Form } from "ant
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-// import { PracticeProblemState } from "../../states/ProblemBank";
-// import { useRecoilState } from "recoil";
 
 // 연습 문제 분류(구분 컬럼)
 const problemLabel = [
@@ -37,33 +35,12 @@ const problemLabel = [
 ];
 
 // 연습 문제 데이터(샘플)
-const problemData = {
-  success: true,
-  bodyData: [
-    {
-      problem_number: 1,
-      problem_name: "수지는 짱구를 좋아해",
-      problem_type: ["dfs", "bfs", "수학"],
-      problem_difficulty: "GOLD1",
-    },
-    {
-      problem_number: 2,
-      problem_name: "형만이랑 미선이는 결혼을 했어",
-      problem_type: ["dfs", "bfs", "수학"],
-      problem_difficulty: "SILVER2",
-    },
-  ],
-  customCode: "000",
-  description: "문제 리스트가 존재합니다.",
-};
 
 // 페이지 렌더링
 function Ranking() {
   // 연습 문제 데이터 상태 관리
   const [refinedData, setRefinedData] = useState([]);
-
-  // 사용자가 풀려 하는 연습 문제 상태 관리
-  // const [practiceProblem, setPracticeProblem] = useRecoilState(PracticeProblemState);
+  const [problemData, setProblemData] = useState([]);
 
   // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");
@@ -75,25 +52,29 @@ function Ranking() {
   };
 
   // 서버에서 연습 문제 목록 요청
-  // 현재 구현 중(404 Not Found)
-  axios
-    .get(`http://i8b303.p.ssafy.io:8000/problem-service/problemList`)
-    .then((response) => {
-      console.log(response);
-      // // 문제 소스는 .bodyData에 담아서 전송됨
-      const originData = response.data.map((problem) => {
-        return {
-          problem_number: problem.prob_no,
-          problem_name: problem.prob_name,
-          problem_type: problem.prob_category,
-          problem_difficulty: problem.prob_tier,
-        };
+  useEffect(() => {
+    axios
+      .get(`http://i8b303.p.ssafy.io:8000/problem-service/problemList`)
+      .then((response) => {
+        console.log(response);
+        // // 문제 소스는 .bodyData에 담아서 전송됨
+        const originData = response.data.map((problem) => {
+          return {
+            problem_number: problem.prob_no,
+            problem_name: problem.prob_name,
+            problem_type: problem.prob_category,
+            problem_difficulty: problem.prob_tier,
+          };
+        });
+        // 연습 문제 전체 풀은 problemData에 저장
+        setProblemData(originData);
+        // refinedData는 현재 페이지에서만 사용
+        setRefinedData(originData);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      setRefinedData(originData);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  }, []);
 
   // 엔터키 입력 또는 검색 버튼 클릭 시 문제 제목 기준으로 필터링
   const onSearch = (values) => {

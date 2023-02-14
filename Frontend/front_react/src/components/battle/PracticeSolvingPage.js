@@ -1,13 +1,20 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 // import { RecoilRoot, atom, useRecoilState } from "recoil";
 
 import Logo from "../../assets/alcol_empty_black.png";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
+import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
 // import { oneDark } from "@codemirror/theme-one-dark";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./PracticeSolvingPage.css";
-import { Button, Modal } from "antd";
+import { Button, Modal, Select } from "antd";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { PracticeProblemState } from "../../states/ProblemBank";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "../../states/LoginState";
 
 // 배틀 화면 네비게이션 바
 const BattleNav = () => {
@@ -32,15 +39,70 @@ const BattleNav = () => {
   );
 };
 
+// 언어명을 채점 서버에서 요구하는 형식에 맞게 수정해 주는 함수
+function DefineLanguage(language) {
+  // python은 Python3으로 수정
+  if (language === "python") {
+    return "Python3";
+  }
+  // java는 Java로 수정
+  else if (language === "java") {
+    return "Java";
+    // cpp는 C++로 수정
+  } else if (language === "cpp") {
+    return "C++";
+  }
+}
+
 // 문제 표시 영역
 const Problem = () => {
+  // 파라미터로 문제 번호 가져오기
+  const problemId = useParams().problemno;
+  // PracticeProblemState에는 현재 조회(풀이)중인 연습문제 저장
+  const [problemData, setProblemData] = useRecoilState(PracticeProblemState);
+
+  // 문제 번호로 요청해서 문제 정보를 받기
+  useEffect(() => {
+    axios
+      .get(`http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/${problemId}`)
+      .then((response) => {
+        // 응답받은 데이터 정제
+        const originProblemData = {
+          // 문제 번호
+          problemNo: response.data.prob_no,
+          // 문제 이름
+          problemName: response.data.prob_name,
+          // 문제 설명(body)
+          problemContent: response.data.prob_content,
+          // 입력 데이터에 대한 설명
+          problemInputContent: response.data.prob_input_content,
+          // 입력 테스트 케이스
+          problemInputTC: response.data.prob_input_testcase,
+          // 문제 난이도(티어)
+          problemTier: response.data.prob_tier,
+          // 출력 데이터에 대한 설명
+          problemOutputContent: response.data.prob_output_content,
+          // 출력 테스트 케이스
+          problemOutputTC: response.data.problem_output_testcase,
+          // 메모리 제한
+          problemMemoryLimit: response.data.problem_memory_liimt,
+        };
+        // 정제한 데이터를 recoil에 저장
+        setProblemData(originProblemData);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [problemId, setProblemData]);
+
+  // 문제 표시 영역 렌더링
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2.5vh", fontWeight: "bold", padding: "2%" }}>
-          이상한 술집
+          {problemData.problemName}
         </p>
       </div>
       <div
@@ -58,16 +120,7 @@ const Problem = () => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          프로그래밍 대회 전날, 은상과 친구들은 이상한 술집에 모였다. 이 술집에서 막걸리를 시키면
-          주전자의 용량은 똑같았으나 안에 들어 있는 막걸리 용량은 랜덤이다. 즉 한 번 주문에 막걸리
-          용량이 802ml 이기도 1002ml가 나오기도 한다. 은상은 막걸리 N 주전자를 주문하고, 자신을
-          포함한 친구들 K명에게 막걸리를 똑같은 양으로 나눠주려고 한다. 그런데 은상과 친구들은 다른
-          주전자의 막걸리가 섞이는 것이 싫어서, 분배 후 주전자에 막걸리가 조금 남아 있다면 그냥
-          막걸리를 버리기로 한다. (즉, 한 번 주문한 막걸리에 남은 것을 모아서 친구들에게 다시 주는
-          경우는 없다. 예를 들어 5명이 3 주전자를 주문하여 1002, 802, 705 ml의 막걸리가 각 주전자에
-          담겨져 나왔고, 이것을 401ml로 동등하게 나눴을 경우 각각 주전자에서 200ml, 0m, 304ml 만큼은
-          버린다.) 이럴 때 K명에게 최대한의 많은 양의 막걸리를 분배할 수 있는 용량 ml는 무엇인지
-          출력해주세요.
+          {problemData.problemContent}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -78,10 +131,7 @@ const Problem = () => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          첫째 줄에는 은상이가 주문한 막걸리 주전자의 개수 N, 그리고 은상이를 포함한 친구들의 수 K가
-          주어진다. 둘째 줄부터 N개의 줄에 차례로 주전자의 용량이 주어진다. N은 10000이하의
-          정수이고, K는 1,000,000이하의 정수이다. 막걸리의 용량은 2의 23 빼기 1 보다 작거나 같은
-          자연수 또는 0이다. 단, 항상 N ≤ K 이다. 즉, 주전자의 개수가 사람 수보다 많을 수는 없다.
+          {problemData.problemInputContent}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -92,15 +142,23 @@ const Problem = () => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          첫째 줄에 K명에게 나눠줄 수 있는 최대의 막걸리 용량 ml 를 출력한다.
+          {problemData.problemOutputContent}
         </p>
       </div>
     </div>
   );
 };
 
-// 코딩 영역(IDE)
+// 코딩 영역(IDE) 페이지 렌더링
 const CodingPlace = () => {
+  // 현재 접속한 사용자 정보
+  const accessToken = useRecoilValue(AccessTokenInfo);
+  const refreshToken = useRecoilValue(RefreshTokenInfo);
+  const userId = useRecoilValue(LoginState);
+
+  // 문제 번호 정보
+  const problemId = useParams().problemno;
+
   // let allheight = window.innerHeight
   // let height = allheight * 0.46
   // console.log(height)
@@ -131,30 +189,89 @@ const CodingPlace = () => {
 
   // 제출 이벤트
   const clickSubmit = () => {
-    console.log("submit ", code);
+    // code : 사용자가 IDE에 입력한 코드
+    const formData = {
+      problem_id: problemId,
+      language: DefineLanguage(lang),
+      code: code,
+    };
+    console.log("form:", formData);
+    axios
+      .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
+        headers: {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          user_id: userId,
+        },
+      })
+      .then((response) => {
+        const submitResult = response.data;
+        console.log(submitResult);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
-  // 제출 확인 모달 관리
+  // 나가기 확인 모달 창 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
   };
+  // 나가기 모달에서 '예' 눌렀을 때
   const handleOk = () => {
     setIsModalOpen(false);
+    // 연습문제 서버로 리다이렉트
+    window.location.href = "/practice";
   };
+  // 나가기 모달에서 '아니오' 눌렀을 때
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  // 승리(정답) 모달 창 관리
+  const gameVictory = () => {
+    setIsModalOpen(true);
+  };
+  // 승리(정답) 모달에서 '예' 눌렀을 때
+  const leaveOk = () => {
+    window.location.href = "/practice";
+  };
+
+  // lang에 할당된 값을 선택 상자를 기준으로 동적으로(파이썬/자바) 변동시키면 된다.
+  const [lang, setLang] = useState("python");
+
+  // 선택 상자 변화 반영
+  const handleChange = (value) => {
+    setLang(value);
   };
 
   // 코딩 영역 페이지 렌더링
   return (
     <div>
       <div style={{ width: "70vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
-        <p
+        {/* <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2vh", height: "100%", padding: "2%" }}>
-          코딩할 언어: python
-        </p>
+          코딩할 언어
+        </p> */}
+        <Select
+          defaultValue="python"
+          onChange={handleChange}
+          options={[
+            {
+              value: "python",
+              label: "Python",
+            },
+            {
+              value: "java",
+              label: "Java",
+            },
+            {
+              value: "cpp",
+              label: "C++",
+            },
+          ]}></Select>
       </div>
       <div
         id="console"
@@ -163,14 +280,36 @@ const CodingPlace = () => {
           height: "46vh",
           verticalAlign: "top",
         }}>
-        <CodeMirror
-          value={code}
-          width="70vw"
-          height="46vh"
-          extensions={[python({ jsx: true })]}
-          onChange={onChange}
-          theme={darcula}
-        />
+        {lang === "python" && (
+          <CodeMirror
+            value={code}
+            width="70vw"
+            height="46vh"
+            extensions={[python({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
+        {lang === "java" && (
+          <CodeMirror
+            value={code}
+            width="70vw"
+            height="46vh"
+            extensions={[java({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
+        {lang === "cpp" && (
+          <CodeMirror
+            value={code}
+            width="70vw"
+            height="46vh"
+            extensions={[cpp({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
       </div>
       {/* onMouseDown={downMouse} onMouseUp={upMouse} onMouseMove={moveHeight}   */}
       <div style={{ width: "70vw", height: "0.7vh", background: "gray" }}></div>
@@ -203,6 +342,9 @@ const CodingPlace = () => {
         </div>
       </div>
       <Modal title="나가기" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p className="NanumSquare">정말로 나가시겠습니까?</p>
+      </Modal>
+      <Modal title="게임 종료" open={gameVictory} onOk={leaveOk}>
         <p className="NanumSquare">정말로 나가시겠습니까?</p>
       </Modal>
     </div>

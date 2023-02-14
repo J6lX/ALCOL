@@ -120,10 +120,10 @@ function App() {
             {/* 배틀 상세 결과 페이지 */}
             <PrivateRoute path="/resultList" exact={true} component={ResultListPage} />
 
-            {/* 문제 페이지(연습모드 진입) */}
+            {/* 문제 페이지(연습문제 열람) */}
             <Route path="/practice" component={PracticePage} />
 
-            {/* 혼자 문제 푸는 페이지 */}
+            {/* 혼자 문제 푸는 페이지(연습모드 진입) */}
             <PrivateRoute
               path="/solveprac/:problemno"
               exact={true}
