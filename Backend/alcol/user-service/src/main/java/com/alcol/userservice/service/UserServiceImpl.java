@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService
             }
         }
 
-        // redis 에 사용자 경험치를 1 으로 저장, mmr 은 1000 으로 저장
+        // redis 에 사용자 경험치를 1 으로 저장, mmr 은 1200 으로 저장
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         ZSetOperations<String, Object> redisMmr = redisTemplate.opsForZSet();
         redisExp.set("levelExp:" + userEntity.getUserId(), "1");
