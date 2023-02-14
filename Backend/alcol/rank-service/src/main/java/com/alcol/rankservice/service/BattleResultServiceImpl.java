@@ -75,6 +75,11 @@ public class BattleResultServiceImpl implements BattleResultService
         String zMember = userId;
         int zScore = mmr;
 
+        // mmr은 0미만으로 떨어질 수 없게함
+        if(zScore < 0) {
+            zScore = 0;
+        }
+
         try
         {
             // redis ranking data update
