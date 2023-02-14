@@ -48,7 +48,7 @@ function Top({ userInfo, timeOut }) {
 
   useEffect(() => {
     //1초
-    const timerId = setInterval(() => tick(), 1000);
+    const timerId = setInterval(() => tick(), 999);
     return () => clearInterval(timerId);
   });
 

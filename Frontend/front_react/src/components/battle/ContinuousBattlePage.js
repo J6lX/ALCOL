@@ -42,6 +42,7 @@ const ContinuousBattlePage = () => {
   const [isSolving, setIsSolving] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
   const [isOpenDetail, setIsOpenDetail] = useState(false);
+  const [isSendTimeout, setIsSendTimeout] = useState(false);
   // const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const [problemInfo, setProblemInfo] = useState([]);
@@ -432,7 +433,8 @@ const ContinuousBattlePage = () => {
               },
             };
             info(modaldata);
-          }
+          } else if (data.battleResult === "") {
+          } //여기 바꿔
         } else if (battleMode === "optimization") {
           if (data.battleResult === "win") {
             console.log(data);
@@ -674,7 +676,8 @@ const ContinuousBattlePage = () => {
   });
 
   const changeBanProblem = (data) => {
-    if (data === "timeout") {
+    if (data === "timeout" && isSendTimeout === false) {
+      setIsSendTimeout(true);
       socket.send(
         JSON.stringify({
           messageType: "banTimeout",
@@ -685,7 +688,7 @@ const ContinuousBattlePage = () => {
       );
     }
     // setProblemNumber(data);
-    if (isBanWait === false) {
+    if (data !== "timeout" && isBanWait === false) {
       console.log("ban 날린다");
       socket.send(
         JSON.stringify({
