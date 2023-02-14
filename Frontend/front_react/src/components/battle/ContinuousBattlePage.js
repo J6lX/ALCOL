@@ -10,7 +10,7 @@ import SolvingOptPage from "./SolvingOptPage";
 import ResultPage from "./ResultPage";
 import ResultListPage from "./ResultListPage";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { message, Modal, Spin } from "antd";
+import { message, Modal } from "antd";
 import {
   selectedMode,
   selectedLanguage,
@@ -75,6 +75,7 @@ const ContinuousBattlePage = () => {
   console.log(messageType, userId, otherId, hostCheck, battleMode);
 
   // let score = ""
+
   useEffect(() => {
     axios
       .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
@@ -227,7 +228,26 @@ const ContinuousBattlePage = () => {
           console.log("");
         }, 300);
       } else if (data.messageType === "exitResultOk") {
-        showSuggestionOkModal();
+        const modaldata = {
+          title: "배틀 종료 제안 수락!",
+          content: (
+            <div>
+              <p>배틀 종료 제안이 수락되었습니다.</p>
+              <p>확인을 누르시면 배틀이 종료됩니다.</p>
+            </div>
+          ),
+          okText: "확인",
+          onOk() {
+            socket.send(
+              JSON.stringify({
+                messageType: "finish",
+                userId: userId,
+                otherId: otherId,
+              })
+            );
+          },
+        };
+        info(modaldata);
       } else if (data.messageType === "exitResultNo") {
         const modaldata = {
           title: "시간이 더 필요해요...",
@@ -246,7 +266,6 @@ const ContinuousBattlePage = () => {
       } else if (data.messageType === "exitSuggestion") {
         showModal();
       } else if (data.messageType === "submitResult") {
-        toggleSpin(false);
         if (battleMode === "speed") {
           const result = {
             nick: nickname,
@@ -347,29 +366,66 @@ const ContinuousBattlePage = () => {
         submitOther(data.testcase, data.accepted);
         setResultListResult(resultList);
       } else if (data.messageType === "timeout") {
-        showTimeOutModal();
+        const modaldata = {
+          title: "배틀 시간 초과!",
+          content: (
+            <div>
+              <p>배틀 시간이 종료되었습니다.</p>
+              <p>확인을 누르시면 배틀이 종료됩니다.</p>
+            </div>
+          ),
+          okText: "확인",
+          onOk() {
+            socket.send(
+              JSON.stringify({
+                messageType: "finish",
+                userId: userId,
+                otherId: otherId,
+              })
+            );
+            setIsSolved(true);
+          },
+        };
+        info(modaldata);
       } else if (data.messageType === "error") {
         showSocketErrorModal();
       } else if (data.messageType === "surrender") {
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
-        toggleSpin(false);
         if (battleMode === "speed") {
           setBattleResult(data);
           if (data.battleResult === "win") {
-            showSpeedWinModal();
             console.log(data);
-            const result = {
-              nick: nickname,
-              mode: battleMode,
-              language: languageMode,
-              result: "accepted",
-              time: data.time,
-              memory: data.memory,
+            const modaldata = {
+              title: "정답!",
+              content: (
+                <div>
+                  <p>축하합니다!</p>
+                  <p>모든 테스트케이스를 맞췄습니다!</p>
+                  {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
+                  {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
+                </div>
+              ),
+              okText: "확인",
+              onOk() {
+                if (battleMode === "speed") {
+                  const result = {
+                    nick: nickname,
+                    mode: battleMode,
+                    language: languageMode,
+                    result: "accepted",
+                    time: data.time,
+                    memory: data.memory,
+                  };
+                  let resultList = [...resultListResult];
+                  resultList.push(result);
+                  setResultListResult(resultList);
+                  setIsSolving(false);
+                  setIsSolved(true);
+                }
+              },
             };
-            let resultList = [...resultListResult];
-            resultList.push(result);
-            setResultListResult(resultList);
+            info(modaldata);
           } else if (data.battleResult === "lose") {
             showOppSubmitModal();
           }
@@ -407,31 +463,14 @@ const ContinuousBattlePage = () => {
 
     socket.onclose = (message) => {
       console.log("closed!", message);
+      // setTimeout(() => {
+      //   isConnected(false)
+      // }, 100)
     };
     socket.onSocketerror = (message) => {
       console.log("Socketerror", message);
     };
   }
-
-  // 배틀 종료 제안할 때
-  const [isSuggestionModalOpen, setIsSuggestionModalOpen] = useState(false);
-  const showSuggestionModal = () => {
-    setIsSuggestionModalOpen(true);
-  };
-  const suggestionHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "exitSuggestion",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
-    setIsSuggestionModalOpen(false);
-    setIsSolved(true);
-  };
-  const suggestionHandleCancel = () => {
-    setIsSuggestionModalOpen(false);
-  };
 
   // 배틀 종료 제안이 왔을 때
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -446,7 +485,6 @@ const ContinuousBattlePage = () => {
         otherId: otherId,
       })
     );
-    showFinishModal();
     setIsModalOpen(false);
     setIsSolved(true);
   };
@@ -459,56 +497,6 @@ const ContinuousBattlePage = () => {
       })
     );
     setIsModalOpen(false);
-  };
-
-  // 상대방이 배틀 종료를 수락했을 때
-  const [isSuggestionOkModalOpen, setIsSuggestionOkModalOpen] = useState(false);
-  const showSuggestionOkModal = () => {
-    setIsSuggestionOkModalOpen(true);
-  };
-  const suggestionOkHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "finish",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
-    setIsSuggestionOkModalOpen(false);
-    setIsSolving(false);
-    setIsSolved(true);
-  };
-
-  // 상대방이 배틀 종료를 수락했을 때
-  const [speedWinModalOpen, setSpeedWinModalOpen] = useState(false);
-  const showSpeedWinModal = () => {
-    setSpeedWinModalOpen(true);
-  };
-  const speedWinHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "finish",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
-    setSpeedWinModalOpen(false);
-    setIsSolving(false);
-    setIsSolved(true);
-  };
-
-  setIsSolving(false);
-  setIsSolved(true);
-
-  // 배틀 종료 시
-  const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
-  const showFinishModal = () => {
-    setIsFinishModalOpen(true);
-  };
-  const finishHandleOk = () => {
-    setIsFinishModalOpen(false);
-    setIsSolving(false);
-    setIsSolved(true);
   };
 
   const [isOppSubmitModalOpen, setIsOppSubmitModalOpen] = useState(false);
@@ -528,23 +516,6 @@ const ContinuousBattlePage = () => {
     setIsSolved(true);
   };
 
-  const [isTimeOutModalOpen, setIsTimeOutModalOpen] = useState(false);
-  const showTimeOutModal = () => {
-    setIsTimeOutModalOpen(true);
-  };
-  const timeOutHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "finish",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
-    setIsTimeOutModalOpen(false);
-    setIsSolving(false);
-    setIsSolved(true);
-  };
-
   const [isSurrenderModalOpen, setIsSurrenderModalOpen] = useState(false);
   const showSurrenderModal = () => {
     setIsSurrenderModalOpen(true);
@@ -555,8 +526,6 @@ const ContinuousBattlePage = () => {
         messageType: "surrender",
         userId: userId,
         otherId: otherId,
-        mode: battleMode,
-        language: languageMode,
       })
     );
     setIsSurrenderModalOpen(false);
@@ -659,15 +628,7 @@ const ContinuousBattlePage = () => {
 
   const changeBanProblem = (data) => {
     if (data === "timeout") {
-      console.log("timeout");
-      // socket.send(
-      //   JSON.stringify({
-      //     messageType: "banTimeout",
-      //     userId: userId,
-      //     otherId: otherId,
-      //     problemNumber: data,
-      //   })
-      // );
+      console.log(data);
     }
     // setProblemNumber(data);
     if (isBanWait === false) {
@@ -686,14 +647,8 @@ const ContinuousBattlePage = () => {
     }, 300);
   };
 
-  const [isSpin, setIsSpin] = useState(false);
-  const toggleSpin = (data) => {
-    setIsSpin(data);
-  };
-
   const submit = (codedata, problemNumber) => {
     console.log(battleModeInfo, languageMode, problemNumber, codedata);
-    toggleSpin(true);
     socket.send(
       JSON.stringify({
         messageType: "submit",
@@ -708,7 +663,13 @@ const ContinuousBattlePage = () => {
   };
 
   const sendExit = () => {
-    showSuggestionModal();
+    socket.send(
+      JSON.stringify({
+        messageType: "exitSuggestion",
+        userId: userId,
+        otherId: otherId,
+      })
+    );
   };
 
   const clickSurrender = () => {
@@ -767,36 +728,34 @@ const ContinuousBattlePage = () => {
             }}
           />
         )}
-        <Spin spinning={isSpin}>
-          {isConnected && isSolving && battleMode === "speed" && (
-            <SolvingPage
-              problemInfo={problemInfo}
-              battleMode={battleModeInfo}
-              battleLanguage={languageMode}
-              battleuserinfo={{
-                user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-                other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
-              }}
-              submit={submit}
-              clickSurrender={clickSurrender}
-              codeEmit={codeEmit}
-            />
-          )}
-          {isConnected && isSolving && battleMode === "optimization" && (
-            <SolvingOptPage
-              problemInfo={problemInfo}
-              battleMode={battleModeInfo}
-              battleLanguage={languageMode}
-              battleuserinfo={{
-                user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-                other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
-              }}
-              submit={submit}
-              sendExit={sendExit}
-              clickSurrender={clickSurrender}
-            />
-          )}
-        </Spin>
+        {isConnected && isSolving && battleMode === "speed" && (
+          <SolvingPage
+            problemInfo={problemInfo}
+            battleMode={battleModeInfo}
+            battleLanguage={languageMode}
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }}
+            submit={submit}
+            clickSurrender={clickSurrender}
+            codeEmit={codeEmit}
+          />
+        )}
+        {isConnected && isSolving && battleMode === "optimization" && (
+          <SolvingOptPage
+            problemInfo={problemInfo}
+            battleMode={battleModeInfo}
+            battleLanguage={languageMode}
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }}
+            submit={submit}
+            sendExit={sendExit}
+            clickSurrender={clickSurrender}
+          />
+        )}
         {isSolved && <ResultPage props={battleResult} showDetailResult={showDetailResult} />}
         {isOpenDetail && (
           <ResultListPage
@@ -811,17 +770,6 @@ const ContinuousBattlePage = () => {
         )}
       </div>
       <Modal
-        title="배틀을 종료하자고 제안하시겠습니까?"
-        open={isSuggestionModalOpen}
-        onOk={suggestionHandleOk}
-        okText="네"
-        onCancel={suggestionHandleCancel}
-        cancelText="취소">
-        <p>상대방의 동의를 얻으면 배틀을 종료할 수 있습니다.</p>
-        <p>배틀 종료를 제안한 후, 상대방의 응답까지 시간이 조금 걸릴 수 있습니다.</p>
-        <small>'네'를 누르면 {othernickname} 님에게 배틀 종료 제안이 전달됩니다.</small>
-      </Modal>
-      <Modal
         title="배틀 종료 제안"
         open={isModalOpen}
         onOk={handleOk}
@@ -832,41 +780,6 @@ const ContinuousBattlePage = () => {
         <p>배틀을 끝내시겠습니까?</p>
         <small>'네'를 누르면 배틀이 종료됩니다.</small>
         <small>지금 끝내고 싶지 않으시면 '아니오'를 눌러주세요.</small>
-      </Modal>
-      <Modal
-        title="배틀 종료!!"
-        open={isFinishModalOpen}
-        onOk={finishHandleOk}
-        okText="확인"
-        onCancel={copyCode}
-        cancelText="복사하기">
-        <p>오늘도 즐거운 알고리즘 배틀하셨나요?</p>
-        <p>코드를 복사하고 싶다면 복사하기 버튼을 눌러주세요!</p>
-        <small>'확인'을 누르면 배틀 결과를 확인할 수 있습니다.</small>
-      </Modal>
-      <Modal
-        title="배틀 종료 제안 수락!"
-        open={isSuggestionOkModalOpen}
-        onOk={suggestionOkHandleOk}
-        okText="확인"
-        onCancel={copyCode}
-        cancelText="복사하기">
-        <p>배틀 종료 제안이 수락되었습니다.</p>
-        <p>확인을 누르시면 배틀이 종료됩니다.</p>
-        <p>코드를 복사하고 싶다면 복사하기 버튼을 눌러주세요!</p>
-      </Modal>
-      <Modal
-        title="정답!"
-        open={speedWinModalOpen}
-        onOk={speedWinHandleOk}
-        okText="확인"
-        onCancel={copyCode}
-        cancelText="복사하기">
-        <p>축하합니다!</p>
-        <p>모든 테스트케이스를 맞췄습니다!</p>
-        <p>승리를 거머쥔 {nickname} 님!!</p>
-        <p>코드를 복사하고 싶다면 복사하기 버튼을 눌러주세요!</p>
-        <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>
       </Modal>
       <Modal
         title={`${othernickname}의 네트워크 오류`}
@@ -914,24 +827,8 @@ const ContinuousBattlePage = () => {
         title="항복"
         open={isSurrenderModalOpen}
         onOk={surrenderHandleOk}
-        okText="항복"
-        onCancel={surrenderHandleCancel}
-        cancelText="취소">
+        onCancel={surrenderHandleCancel}>
         <p className="NanumSquare">정말로 항복하시겠습니까?</p>
-        <p className="NanumSquare">항복하시면 배틀이 종료됩니다.</p>
-      </Modal>
-      <Modal
-        title="배틀 시간 초과..."
-        open={isTimeOutModalOpen}
-        onOk={timeOutHandleOk}
-        okText="확인"
-        onCancel={copyCode}
-        cancelText="코드 복사"
-        closable={false}>
-        {contextCopyHolder}
-        <p>배틀 시간이 초과되었습니다.</p>
-        <p>지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
-        <p>확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
     </div>
   );
