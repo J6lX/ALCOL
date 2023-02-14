@@ -961,7 +961,7 @@ public class WebSocket {
                             user_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
 
                             JSONObject other_submit_result_send = new JSONObject();
-                            other_submit_result_send.put("messageType","submitResult");
+                            other_submit_result_send.put("messageType","otherSubmitResult");
                             other_submit_result_send.put("submitResult","accept");
                             other_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
                             other_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
@@ -1004,7 +1004,7 @@ public class WebSocket {
 
                         JSONObject other_submit_fail_send = new JSONObject();
                         other_submit_fail_send.put("messageType","otherSubmitResult");
-                        other_submit_fail_send.put("otherSubmitResult","fail");
+                        other_submit_fail_send.put("submitResult","fail");
                         other_submit_fail_send.put("testcase",fromdata_info_data.size());
                         other_submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
 
@@ -1202,20 +1202,41 @@ public class WebSocket {
                  * 비겼고 제출 이력이 없어서 time , memory는 0으로
                  */
                 JSONObject user_draw_result_send = new JSONObject();
-                user_draw_result_send.put("messageType","battleResult");
-                user_draw_result_send.put("battleResult","draw");
-                user_draw_result_send.put("time","0");
-                user_draw_result_send.put("memory","0");
-                user_draw_result_send.put("changeExp","75");
-                user_draw_result_send.put("changeMmr",result_user_mmr);
-
                 JSONObject other_draw_result_send = new JSONObject();
-                other_draw_result_send.put("messageType","battleResult");
-                other_draw_result_send.put("battleResult","draw");
-                other_draw_result_send.put("time","0");
-                other_draw_result_send.put("memory","0");
-                other_draw_result_send.put("changeExp","75");
-                other_draw_result_send.put("changeMmr",result_user_mmr);
+                if(battleMode.equals("speed"))
+                {
+
+                    user_draw_result_send.put("messageType","battleResult");
+                    user_draw_result_send.put("battleResult","draw");
+                    user_draw_result_send.put("time","0");
+                    user_draw_result_send.put("memory","0");
+                    user_draw_result_send.put("changeExp","75");
+                    user_draw_result_send.put("changeMmr",result_user_mmr);
+
+
+                    other_draw_result_send.put("messageType","battleResult");
+                    other_draw_result_send.put("battleResult","draw");
+                    other_draw_result_send.put("time","0");
+                    other_draw_result_send.put("memory","0");
+                    other_draw_result_send.put("changeExp","75");
+                    other_draw_result_send.put("changeMmr",result_other_mmr);
+                }
+                else if(battleMode.equals("optimization"))
+                {
+                    user_draw_result_send.put("messageType","battleResult");
+                    user_draw_result_send.put("battleResult","draw_timeout");
+                    user_draw_result_send.put("time","0");
+                    user_draw_result_send.put("memory","0");
+                    user_draw_result_send.put("changeExp","75");
+                    user_draw_result_send.put("changeMmr",result_user_mmr);
+
+                    other_draw_result_send.put("messageType","battleResult");
+                    other_draw_result_send.put("battleResult","draw_timeout");
+                    other_draw_result_send.put("time","0");
+                    other_draw_result_send.put("memory","0");
+                    other_draw_result_send.put("changeExp","75");
+                    other_draw_result_send.put("changeMmr",result_other_mmr);
+                }
 
                 synchronized (session)
                 {
@@ -1445,7 +1466,7 @@ public class WebSocket {
 
                     /**
                      * 클라이언트로 보낼 데이터
-                     * 무승부니까 둘다 패배로 보냄
+                     * 무승부니까 둘다 draw로 보냄
                      */
                     JSONObject user_draw_result_send = new JSONObject();
                     user_draw_result_send.put("messageType","battleResult");
