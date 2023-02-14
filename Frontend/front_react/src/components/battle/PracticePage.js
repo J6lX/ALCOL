@@ -89,21 +89,24 @@ function Ranking() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        paddingTop: "64px",
+      }}>
       {/* 페이지 제목(이미지 위에 띄우기) */}
       <Row justify="center">
+        <img
+          src={practiceHeader}
+          alt="rankingHeader"
+          className="headerImg"
+          style={{
+            maxWidth: "100%",
+            maxHeight: "100%",
+          }}></img>
         <Col align="middle" span={16} className="title">
           <h1>연습 문제 풀기</h1>
         </Col>
       </Row>
-      <img
-        src={practiceHeader}
-        alt="rankingHeader"
-        className="headerImg"
-        style={{
-          maxWidth: "100%",
-          maxHeight: "100%",
-        }}></img>
       <Row justify="space-around" className="bodyblock">
         <Col span={16}>
           {/* 검색 상자 */}
@@ -122,15 +125,15 @@ function Ranking() {
                         value={search}
                         onChange={inputChange}
                         style={{
-                          margin: "5px",
+                          margin: "2px",
                         }}
                       />
                     </Form.Item>
                   </Col>
                   <Col
                     style={{
-                      marginLeft: "5px",
-                      padding: "5px",
+                      marginLeft: "3px",
+                      padding: "2px",
                     }}
                     xs={3}
                     lg={6}>
