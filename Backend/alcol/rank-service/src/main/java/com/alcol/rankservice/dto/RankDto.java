@@ -27,9 +27,9 @@ public class RankDto
         {
                 private String nickname;
                 private int level;
-                private String speedTier;
-                private String optimizationTier;
-                private String storedFileName;
+                private String speed_tier;
+                private String optimization_tier;
+                private String stored_file_name;
         }
 
         @Getter
