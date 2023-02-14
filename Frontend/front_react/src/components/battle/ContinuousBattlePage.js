@@ -295,98 +295,87 @@ const ContinuousBattlePage = () => {
           };
           info(modaldata);
           setResultListResult(resultList);
-        } // 최적화전이면 정답, 오답만 나눠서 atom에 저장
-        // const result = {
-        //   mode: battleMode,
-        //   language: languageMode,
-        //   result: "accepted",
-        //   time: data.time,
-        //   memory: data.memory,
-        // }
-        // let resultList = resultListResult
-        // resultList.push(result)
-        // setResultListResult(resultList)
-
-        // if (data.result === "correct") {
-        //   const modaldata = {
-        //     title: "정답!",
-        //     content: (
-        //       <div>
-        //         <p>축하합니다!</p>
-        //         <p>모든 테스트케이스를 맞췄습니다!</p>
-        //         {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
-        //         {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
-        //         {battleMode === "optimization" && <p>빠르게 나아가는 {nickname} 님!!</p>}
-        //         {battleMode === "optimization" && <small>과연 더 효율적인 코드가 나올 수 있을까요??</small>}
-        //       </div>
-        //     ),
-        //     okText: "확인",
-        //     onOk() {
-        //       if (battleMode === "speed") {
-        //         socket.send(
-        //           JSON.stringify({
-        //           messageType: "finish",
-        //           userId: userId,
-        //           otherId: otherId
-        //           })
-        //         )
-        //         setIsSolved(true);
-        //       } else if (battleMode === "optimization") {
-        //       }
-        //     },
-        //   }
-        //   info(modaldata)
-        // } else if (data.result === "fail") {
-        //   const modaldata = {
-        //     title: "오답!",
-        //     content: (
-        //       <div>
-        //         <p>틀렸습니다!</p>
-        //         <p>테스트케이스를 모두 맞추지 못했습니다.</p>
-        //         <p>그러나 {othernickname} 님은 긴장하고 있겠군요.</p>
-        //         <small>제출을 하면 상대방에게 소식이 전달됩니다.</small>
-        //       </div>
-        //     ),
-        //     okText: "확인",
-        //     onOk() {},
-        //   }
-        //   info(modaldata)
-        // }
+        } else if (battleMode === "optimization") {
+          if (data.submitResult === "accept") {
+            const result = {
+              nick: nickname,
+              mode: battleMode,
+              language: languageMode,
+              result: "accepted",
+              time: data.time,
+              memory: data.memory,
+            };
+            let resultList = [...resultListResult];
+            resultList.push(result);
+            const modaldata = {
+              title: "정답!",
+              content: (
+                <div>
+                  <p>축하합니다!</p>
+                  <p>모든 테스트케이스를 맞췄습니다!</p>
+                  <p>빠르게 나아가는 {nickname} 님!!</p>
+                  <small>과연 더 효율적인 코드가 나올 수 있을까요??</small>
+                </div>
+              ),
+              okText: "확인",
+              onOk() {},
+            };
+            info(modaldata);
+          } else if (data.submitResult === "fail") {
+            const result = {
+              nick: nickname,
+              mode: battleMode,
+              language: languageMode,
+              result: `${data.accepted} / ${data.testcase}`,
+              time: "없음",
+              memory: "없음",
+            };
+            let resultList = [...resultListResult];
+            resultList.push(result);
+            const modaldata = {
+              title: "오답!",
+              content: (
+                <div>
+                  <p>틀렸습니다!</p>
+                  <p>테스트케이스를 모두 맞추지 못했습니다.</p>
+                  <p>그러나 {othernickname} 님은 긴장하고 있겠군요.</p>
+                  <small>제출을 하면 상대방에게 소식이 전달됩니다.</small>
+                </div>
+              ),
+              okText: "확인",
+              onOk() {},
+            };
+            info(modaldata);
+          }
+        }
       } else if (data.messageType === "otherSubmitResult") {
-        const result = {
-          nick: othernickname,
-          mode: battleMode,
-          language: languageMode,
-          result: `${data.accepted} / ${data.testcase}`,
-          time: data.time,
-          memory: data.memory,
-        };
-        let resultList = [...resultListResult];
-        resultList.push(result);
-        submitOther(data.testcase, data.accepted);
-        setResultListResult(resultList);
-      } else if (data.messageType === "timeout") {
-        const modaldata = {
-          title: "배틀 시간 초과!",
-          content: (
-            <div>
-              <p>배틀 시간이 종료되었습니다.</p>
-              <p>확인을 누르시면 배틀이 종료됩니다.</p>
-            </div>
-          ),
-          okText: "확인",
-          onOk() {
-            socket.send(
-              JSON.stringify({
-                messageType: "finish",
-                userId: userId,
-                otherId: otherId,
-              })
-            );
-            setIsSolved(true);
-          },
-        };
-        info(modaldata);
+        if (data.submitResult === "accept") {
+          const result = {
+            nick: othernickname,
+            mode: battleMode,
+            language: languageMode,
+            result: "accepted",
+            time: data.time,
+            memory: data.memory,
+          };
+          let resultList = [...resultListResult];
+          resultList.push(result);
+          submitOther("accept", "all");
+          setResultListResult(resultList);
+        } else if (data.submitResult === "fail") {
+          const result = {
+            nick: othernickname,
+            mode: battleMode,
+            language: languageMode,
+            result: `${data.accepted} / ${data.testcase}`,
+            time: "없음",
+            memory: "없음",
+          };
+          let resultList = [...resultListResult];
+          resultList.push(result);
+          submitOther(data.testcase, data.accepted);
+          setResultListResult(resultList);
+        }
       } else if (data.messageType === "error") {
         showSocketErrorModal();
       } else if (data.messageType === "surrender") {
@@ -397,7 +386,7 @@ const ContinuousBattlePage = () => {
           if (data.battleResult === "win") {
             console.log(data);
             const modaldata = {
-              title: "정답!",
+              title: "승리!",
               content: (
                 <div>
                   <p>축하합니다!</p>
@@ -428,6 +417,21 @@ const ContinuousBattlePage = () => {
             info(modaldata);
           } else if (data.battleResult === "lose") {
             showOppSubmitModal();
+          } else if (data.battleResult === "draw") {
+            const modaldata = {
+              title: "배틀 시간 초과!",
+              content: (
+                <div>
+                  <p>배틀 시간이 종료되었습니다.</p>
+                  <p>확인을 누르시면 배틀이 종료됩니다.</p>
+                </div>
+              ),
+              okText: "확인",
+              onOk() {
+                setIsSolved(true);
+              },
+            };
+            info(modaldata);
           }
         } else if (battleMode === "optimization") {
           if (data.battleResult === "win") {
@@ -451,6 +455,38 @@ const ContinuousBattlePage = () => {
             info(modaldata);
           } else if (data.battleResult === "lose") {
             showOppSubmitModal();
+          } else if (data.battleResult === "draw") {
+            const modaldata = {
+              title: "비겼습니다.",
+              content: (
+                <div>
+                  <p>두 사람의 효율성이 동일합니다!</p>
+                  <p>이럴수가! 우열을 가릴 수가 없네요!!</p>
+                  <p>확인을 누르시면 배틀이 종료됩니다.</p>
+                </div>
+              ),
+              okText: "확인",
+              onOk() {
+                setIsSolved(true);
+              },
+            };
+            info(modaldata);
+          } else if (data.battleResult === "draw_timeout") {
+            const modaldata = {
+              title: "배틀 시간 초과!",
+              content: (
+                <div>
+                  <p>배틀 시간이 종료되었습니다.</p>
+                  <p>확인을 누르시면 배틀이 종료됩니다.</p>
+                </div>
+              ),
+              okText: "확인",
+              onOk() {
+                setIsSolving(false);
+                setIsSolved(true);
+              },
+            };
+            info(modaldata);
           }
         }
       } else {
@@ -526,6 +562,8 @@ const ContinuousBattlePage = () => {
         messageType: "surrender",
         userId: userId,
         otherId: otherId,
+        mode: battleMode,
+        language: languageMode,
       })
     );
     setIsSurrenderModalOpen(false);
@@ -566,12 +604,21 @@ const ContinuousBattlePage = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
   const submitOther = (testcase, accepted) => {
-    messageApi.open({
-      type: "warning",
-      content: `${othernickname}님이 코드를 제출했습니다. (테스트케이스 ${testcase}개 중 ${accepted}개 정답)`,
-      duration: 3,
-      style: { marginTop: "5.5vh" },
-    });
+    if (testcase === "accept") {
+      messageApi.open({
+        type: "warning",
+        content: `${othernickname}님이 코드를 제출했습니다. (테스트케이스 전부 정답!)`,
+        duration: 3,
+        style: { marginTop: "5.5vh" },
+      });
+    } else {
+      messageApi.open({
+        type: "warning",
+        content: `${othernickname}님이 코드를 제출했습니다. (테스트케이스 ${testcase}개 중 ${accepted}개 정답)`,
+        duration: 3,
+        style: { marginTop: "5.5vh" },
+      });
+    }
   };
 
   const [messageCopyApi, contextCopyHolder] = message.useMessage();
@@ -628,7 +675,14 @@ const ContinuousBattlePage = () => {
 
   const changeBanProblem = (data) => {
     if (data === "timeout") {
-      console.log(data);
+      socket.send(
+        JSON.stringify({
+          messageType: "banTimeout",
+          userId: userId,
+          otherId: otherId,
+          problemNumber: data,
+        })
+      );
     }
     // setProblemNumber(data);
     if (isBanWait === false) {
