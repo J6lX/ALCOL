@@ -140,7 +140,8 @@ public class LogController
                 .probNo(probNum)
                 .battleResult(0)
                 .upDownMmr(loserNowMmr - loserPrevMmr)
-                .nowMmr(loserNowMmr)
+                // 게임에서 졌을 경우 mmr 이 0 점 아래로는 떨어지지 않도록 처리
+                .nowMmr(loserNowMmr < 0 ? 0 : loserNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
 
@@ -229,7 +230,8 @@ public class LogController
                 .probNo(probNum)
                 .battleResult(2)
                 .upDownMmr(userNowMmr - userPrevMmr)
-                .nowMmr(userNowMmr)
+                // 게임에서 졌을 경우 mmr 이 0 점 아래로는 떨어지지 않도록 처리
+                .nowMmr(userNowMmr < 0 ? 0 : userNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
 
@@ -240,7 +242,8 @@ public class LogController
                 .probNo(probNum)
                 .battleResult(2)
                 .upDownMmr(otherNowMmr - otherPrevMmr)
-                .nowMmr(otherNowMmr)
+                // 게임에서 졌을 경우 mmr 이 0 점 아래로는 떨어지지 않도록 처리
+                .nowMmr(otherNowMmr < 0 ? 0 : otherNowMmr)
                 .endTime(LocalDateTime.now())
                 .build();
 
