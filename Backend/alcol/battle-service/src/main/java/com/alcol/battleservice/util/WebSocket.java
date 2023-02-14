@@ -452,6 +452,162 @@ public class WebSocket {
 //                int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
 //            }
 
+            else if (method.equals("surrender"))
+            {
+                String surrenderUserId = obj.get("userId").toString();
+                String surrenderOtherId = obj.get("otherId").toString();
+                String surrenderBattleMode = obj.get("mode").toString();
+                String surrenderLanguage = obj.get("language").toString();
+
+                if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
+                {
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.battleResult="win";
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.battleResult="lose";
+                }
+                else
+                {
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.battleResult="win";
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.battleResult="lose";
+                }
+                int user_mmr=0;
+                int other_mmr=0;
+                float user_odds=0;
+                float other_odds=0;
+                if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
+                {
+//                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.battleLog.add(surrenderUserId);
+                    user_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.prevMmr;
+                    other_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.prevMmr;
+
+                }
+                else if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.userId.equals(surrenderUserId))
+                {
+//                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.battleLog.add(surrenderUserId);
+                    user_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.prevMmr;
+                    other_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.prevMmr;
+                }
+
+                user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                int change_user_mmr = (int) (user_mmr+30*(0-user_odds));
+                int change_other_mmr = (int) (other_mmr+30*(1-other_odds));
+                int result_user_mmr = user_mmr - change_user_mmr;
+                int result_other_mmr = other_mmr - change_other_mmr;
+
+                JSONObject user_submit_result_send = new JSONObject();
+                user_submit_result_send.put("messageType","battleResult");
+                user_submit_result_send.put("battleResult","win");
+                user_submit_result_send.put("changeMmr",result_user_mmr);
+
+                JSONObject other_submit_result_send = new JSONObject();
+                other_submit_result_send.put("messageType","battleResult");
+                other_submit_result_send.put("battleResult","lose");
+                other_submit_result_send.put("changeMmr",result_other_mmr);
+
+                synchronized (session)
+                {
+                    session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                }
+                synchronized (userId2Session.get(surrenderOtherId))
+                {
+                    userId2Session.get(surrenderOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                }
+
+                if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
+                {
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.nowMmr = change_user_mmr;
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.nowMmr = change_other_mmr;
+                }
+                else if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.userId.equals(surrenderUserId))
+                {
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.nowMmr = change_other_mmr;
+                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.nowMmr = change_user_mmr;
+                }
+                /**
+                 * 배틀 정보를 Log Service로 넘기는 부분
+                 */
+
+                Map<String, Object> sendBattleLog = new HashMap<>();
+                sendBattleLog.put("battleMode",surrenderBattleMode);
+                sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).problemNum);
+
+
+                /**
+                 * 레디스에 들어갈 정보
+                 */
+                Map<String,String> sendBattleLogForRedis = new HashMap<>();
+
+
+                /**
+                 * 만약 항복한 유저가 1번 유저라면 ?
+                 */
+                if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
+                {
+                    /**
+                     * 1번유저가 항복했으면 무조건 2번유저가 이기는 로직
+                     */
+
+                    sendBattleLogForRedis.put("user_id_1",surrenderUserId);
+                    sendBattleLogForRedis.put("user_id_2",surrenderOtherId);
+                    sendBattleLogForRedis.put("battle_mode",surrenderBattleMode);
+                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.nowMmr));
+                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.nowMmr));
+                    sendBattleLogForRedis.put("winner","2");
+
+                    sendBattleLog.put("winnerUserId",surrenderOtherId);
+                    sendBattleLog.put("loserUserId",surrenderUserId);
+                    sendBattleLog.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.prevMmr);
+                    sendBattleLog.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.nowMmr);
+                    sendBattleLog.put("winnerSubmitLog",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.battleLog);
+                    sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.prevMmr);
+                    sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.nowMmr);
+                    sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.battleLog);
+
+
+                }
+                /**
+                 * 만약 제출한 유저가 2번 유저라면 ?
+                 */
+                else
+                {
+                    sendBattleLogForRedis.put("user_id_1",surrenderUserId);
+                    sendBattleLogForRedis.put("user_id_2",surrenderOtherId);
+                    sendBattleLogForRedis.put("battle_mode",surrenderBattleMode);
+                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.nowMmr));
+                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.nowMmr));
+                    sendBattleLogForRedis.put("winner","1");
+
+                    sendBattleLog.put("winnerUserId",surrenderUserId);
+                    sendBattleLog.put("loserUserId",surrenderOtherId);
+                    sendBattleLog.put("winnerPrevMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.prevMmr);
+                    sendBattleLog.put("winnerNowMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.nowMmr);
+                    sendBattleLog.put("winnerSubmitLog",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.battleLog);
+                    sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.prevMmr);
+                    sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.nowMmr);
+                    sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.battleLog);
+                }
+                /**
+                 * 항복 정보 log service로 보냄
+                 */
+                String url_log = "http://i8b303.p.ssafy.io:9005/log-service/insertBattleLog";
+                String getBattleLogSaveResult = restTemplate.postForObject(
+                        url_log,
+                        sendBattleLog,
+                        String.class
+                );
+
+                /**
+                 * 항복 정보 rank service로 보냄
+                 */
+                String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                String sendRedisRankUpdate = restTemplate.postForObject(
+                        url_rank,
+                        sendBattleLogForRedis,
+                        String.class
+                );
+
+            }
+
             /**문제를 제출했을 때 들어오는 곳, 채점서버로 요청 보내야 함.*/
             else if (method.equals("submit"))
             {
@@ -655,7 +811,6 @@ public class WebSocket {
                              * 배틀 정보를 Log Service로 넘기는 부분
                              */
 
-                            BattleRoom battleRoomJson = sessionId2Obj.get(userId2SessionId.get(submitUserId));
                             Map<String, Object> sendBattleLog = new HashMap<>();
                             sendBattleLog.put("battleMode",submitBattleMode);
                             sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(submitUserId)).problemNum);
