@@ -885,11 +885,11 @@ public class WebSocket {
                             {
                                 if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleResult.equals("win"))
                                 {
-                                    sendBattleLogForRedis.put("user_id_1",submitUserId);
-                                    sendBattleLogForRedis.put("user_id_2",submitOtherId);
+                                    sendBattleLogForRedis.put("user_id_1",submitOtherId);
+                                    sendBattleLogForRedis.put("user_id_2",submitUserId);
                                     sendBattleLogForRedis.put("battle_mode",submitBattleMode);
-                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
-                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
                                     sendBattleLogForRedis.put("winner","2");
 
                                     sendBattleLog.put("winnerUserId",submitUserId);
@@ -904,11 +904,11 @@ public class WebSocket {
                                 }
                                 else
                                 {
-                                    sendBattleLogForRedis.put("user_id_1",submitUserId);
-                                    sendBattleLogForRedis.put("user_id_2",submitOtherId);
+                                    sendBattleLogForRedis.put("user_id_1",submitOtherId);
+                                    sendBattleLogForRedis.put("user_id_2",submitUserId);
                                     sendBattleLogForRedis.put("battle_mode",submitBattleMode);
-                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
-                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr));
+                                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr));
                                     sendBattleLogForRedis.put("winner","1");
 
                                     sendBattleLog.put("winnerUserId",submitOtherId);
@@ -1260,6 +1260,20 @@ public class WebSocket {
                 /**
                  * rank-service로 전송하는 부분 추가
                  */
+                Map<String,String> sendBattleLogForRedis = new HashMap<>();
+                sendBattleLogForRedis.put("user_id_1",userId);
+                sendBattleLogForRedis.put("user_id_2",otherId);
+                sendBattleLogForRedis.put("battle_mode",battleMode);
+                sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
+                sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
+                sendBattleLogForRedis.put("winner","0");
+
+                String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                String sendRedisRankUpdate = restTemplate.postForObject(
+                        url_rank,
+                        sendBattleLogForRedis,
+                        String.class
+                );
                 
             }
             /**
