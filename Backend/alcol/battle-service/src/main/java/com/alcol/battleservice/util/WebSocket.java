@@ -458,6 +458,7 @@ public class WebSocket {
                 String surrenderOtherId = obj.get("otherId").toString();
                 String surrenderBattleMode = obj.get("mode").toString();
                 String surrenderLanguage = obj.get("language").toString();
+                timerMap.get(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId).cancel();
 
                 if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
                 {
@@ -478,7 +479,6 @@ public class WebSocket {
 //                    sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.battleLog.add(surrenderUserId);
                     user_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.prevMmr;
                     other_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.prevMmr;
-
                 }
                 else if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user2.userId.equals(surrenderUserId))
                 {
@@ -496,12 +496,12 @@ public class WebSocket {
 
                 JSONObject user_submit_result_send = new JSONObject();
                 user_submit_result_send.put("messageType","battleResult");
-                user_submit_result_send.put("battleResult","lose");
+                user_submit_result_send.put("battleResult","surrender");
                 user_submit_result_send.put("changeExp","50");
                 user_submit_result_send.put("changeMmr",result_user_mmr);
 
                 JSONObject other_submit_result_send = new JSONObject();
-                other_submit_result_send.put("messageType","battleResult");
+                other_submit_result_send.put("messageType","otherSurrender");
                 other_submit_result_send.put("battleResult","win");
                 user_submit_result_send.put("changeExp","100");
                 other_submit_result_send.put("changeMmr",result_other_mmr);
@@ -509,10 +509,12 @@ public class WebSocket {
                 synchronized (session)
                 {
                     session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                    handleClose(session);
                 }
                 synchronized (userId2Session.get(surrenderOtherId))
                 {
                     userId2Session.get(surrenderOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                    handleClose(userId2Session.get(surrenderOtherId));
                 }
 
                 if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
@@ -533,12 +535,10 @@ public class WebSocket {
                 sendBattleLog.put("battleMode",surrenderBattleMode);
                 sendBattleLog.put("probNum",sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).problemNum);
 
-
                 /**
                  * 레디스에 들어갈 정보
                  */
                 Map<String,String> sendBattleLogForRedis = new HashMap<>();
-
 
                 /**
                  * 만약 항복한 유저가 1번 유저라면 ?
@@ -793,10 +793,12 @@ public class WebSocket {
                             synchronized (session)
                             {
                                 session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                                handleClose(session);
                             }
                             synchronized (userId2Session.get(submitOtherId))
                             {
                                 userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                                handleClose(userId2Session.get(submitOtherId));
                             }
 
                             /**
@@ -1044,13 +1046,10 @@ public class WebSocket {
     @OnClose
     public void handleClose(Session session)
     {
-        // 포네그리프
         if (session != null)
         {
             String sessionId = session.getId();
             sessionSet.remove(sessionId);
-
-//            User user = sessionId2Obj.get(sessionId);
             String userId = session2UserId.get(session);
             session2UserId.remove(session);
             userId2SessionId.remove(userId);
@@ -1245,6 +1244,7 @@ public class WebSocket {
                 {
                     try {
                         session.getBasicRemote().sendText(user_draw_result_send.toJSONString());
+                        handleClose(session);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -1253,6 +1253,7 @@ public class WebSocket {
                 {
                     try {
                         userId2Session.get(otherId).getBasicRemote().sendText(other_draw_result_send.toJSONString());
+                        handleClose(userId2Session.get(otherId));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -1355,6 +1356,7 @@ public class WebSocket {
                     {
                         try {
                             session.getBasicRemote().sendText(user_win_result_send.toJSONString());
+                            handleClose(session);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -1363,6 +1365,7 @@ public class WebSocket {
                     {
                         try {
                             userId2Session.get(otherId).getBasicRemote().sendText(other_lose_result_send.toJSONString());
+                            handleClose(userId2Session.get(otherId));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -1434,6 +1437,7 @@ public class WebSocket {
                     {
                         try {
                             session.getBasicRemote().sendText(user_lose_result_send.toJSONString());
+                            handleClose(session);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -1442,6 +1446,7 @@ public class WebSocket {
                     {
                         try {
                             userId2Session.get(otherId).getBasicRemote().sendText(other_win_result_send.toJSONString());
+                            handleClose(userId2Session.get(otherId));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -1505,6 +1510,7 @@ public class WebSocket {
                     {
                         try {
                             session.getBasicRemote().sendText(user_draw_result_send.toJSONString());
+                            handleClose(session);
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -1513,6 +1519,7 @@ public class WebSocket {
                     {
                         try {
                             userId2Session.get(otherId).getBasicRemote().sendText(other_draw_result_send.toJSONString());
+                            handleClose(userId2Session.get(otherId));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
