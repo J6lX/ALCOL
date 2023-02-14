@@ -39,7 +39,7 @@ public class BattleResultServiceImpl implements BattleResultService
         winLoseCount = redisTemplate.opsForHash();
         try {
             String key = "winloseCnt:" + winLose.getUserId() + ":" + winLose.getMode();
-            String hashKey = winLose.getWinLoseResult() == 1 ? "win" : "lose";
+            String hashKey = winLose.getWinner() == 1 ? "win" : "lose";
             long hashValue = -1;
 
             // redis에 해당 유저의 승패 관련 데이터가 없었다면
@@ -74,6 +74,11 @@ public class BattleResultServiceImpl implements BattleResultService
         String zKey = mode;
         String zMember = userId;
         int zScore = mmr;
+
+        // mmr은 0미만으로 떨어질 수 없게함
+        if(zScore < 0) {
+            zScore = 0;
+        }
 
         try
         {
@@ -112,21 +117,28 @@ public class BattleResultServiceImpl implements BattleResultService
             return false;
         }
 
+        // 유저 정보 redis update
         try {
-            // 유저 정보 redis update
             userInfo.put(key, "nickname", userData.getNickname());
-            userInfo.put(key, "stored_file_name", userData.getStoredFileName());
-            userInfo.put(key, "level", String.valueOf(userData.getLevel()));
-            userInfo.put(key, "speed_tier", userData.getSpeedTier());
-            userInfo.put(key, "optimization_tier", userData.getOptimizationTier());
+            // stored_file_name인 프로필 사진은 null일 수 있으므로 null일 때는 redis에 저장하지 않도록 함
+            if(userData.getStored_file_name() != null) {
+                userInfo.put(key, "stored_file_name", userData.getStored_file_name());
+            }
+                userInfo.put(key, "level", String.valueOf(userData.getLevel()));
+                userInfo.put(key, "speed_tier", userData.getSpeed_tier());
+                userInfo.put(key, "optimization_tier", userData.getOptimization_tier());
         }
         catch (Exception e)
         {
             log.error("유저 정보를 redis에 저장하는 과정에서 에러 발생!");
+            e.printStackTrace();
             return false;
         }
+        userInfo.put(key, "level", String.valueOf(userData.getLevel()));
+        userInfo.put(key, "speed_tier", userData.getSpeed_tier());
+        userInfo.put(key, "optimization_tier", userData.getOptimization_tier());
 
-        log.info("닉네임이 " + userData.getNickname() + "인 회원에 대한 정보를 redis에 저장하였습니다.");
+        log.info("닉네임이 '" + userData.getNickname() + "'인 회원에 대한 정보를 redis에 저장하였습니다.");
         return true;
     }
 

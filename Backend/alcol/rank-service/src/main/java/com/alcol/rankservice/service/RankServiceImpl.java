@@ -49,10 +49,10 @@ public class RankServiceImpl implements RankService{
 
         return RankDto.UserData.builder()
                 .nickname(nickname)
-                .storedFileName(profilePic)
+                .stored_file_name(profilePic)
                 .level(level)
-                .speedTier(speedTier)
-                .optimizationTier(optimizationTier)
+                .speed_tier(speedTier)
+                .optimization_tier(optimizationTier)
                 .build();
     }
 
@@ -73,15 +73,14 @@ public class RankServiceImpl implements RankService{
             lose = Integer.parseInt(winLoseCount.get(key, "lose"));
             winningRate = win / (win + lose) * 100;
         }
-        catch (NullPointerException nullPointerException)
+        catch (Exception e)
         {
-            log.warn("해당 유저의 승패 정보가 존재하지 않음");
-            return null;
-        }
-        catch (NumberFormatException numberFormatException)
-        {
-            log.warn("해당 유저의 승패 정보가 존재하지 않음");
-            return null;
+            log.warn("해당 유저의 승패 정보가 존재하지 않음 - " + userId);
+            return RankDto.WinLoseCount.builder()
+                    .win(0)
+                    .lose(0)
+                    .winningRate(0)
+                    .build();
         }
 
         return RankDto.WinLoseCount.builder()
@@ -143,11 +142,11 @@ public class RankServiceImpl implements RankService{
             RankDto.WinLoseCount winLose = getWinLoseCount(userId, battleMode);
             // 해당 유저의 정보를 가져온다.
             RankDto.UserData userData = getUserData(userId);
-            String tier = battleMode.equals("speed") ? userData.getSpeedTier() : userData.getOptimizationTier();
+            String tier = battleMode.equals("speed") ? userData.getSpeed_tier() : userData.getOptimization_tier();
 
             RankingList.add(RankDto.Ranking.builder()
                             .nickname(userData.getNickname())
-                            .profile_pic(userData.getStoredFileName())
+                            .profile_pic(userData.getStored_file_name())
                             .level(userData.getLevel())
                             .tier(tier)
                             .mmr(mmr)
@@ -199,12 +198,12 @@ public class RankServiceImpl implements RankService{
 
         // battleMode가 스피드전이라면 스피드전 티어를, 최적화전이라면 최적화전 티어를 보내줘야함
         String tier = "";
-        if(battleMode.equals("speed")) tier = userData.getSpeedTier();
-        else tier = userData.getOptimizationTier();
+        if(battleMode.equals("speed")) tier = userData.getSpeed_tier();
+        else tier = userData.getOptimization_tier();
 
         RankDto.Ranking rank = RankDto.Ranking.builder()
                 .nickname(userData.getNickname())
-                .profile_pic(userData.getStoredFileName())
+                .profile_pic(userData.getStored_file_name())
                 .level(userData.getLevel())
                 .tier(tier)
                 .mmr(rankingAndMMR.getMMR())
@@ -223,7 +222,7 @@ public class RankServiceImpl implements RankService{
         List<RankDto.Top3Ranking> optTop3 = new ArrayList<>();
 
         // 스피드전 top3의 userId 받아오기
-        Set<Object> speedRankUserIds= ranking.reverseRange("speed", 1,3);
+        Set<Object> speedRankUserIds= ranking.reverseRange("speed", 0,2);
         // 비었으면 랭킹 정보가 존재하지 않는다는 의미이다.
         if(speedRankUserIds.isEmpty()){
             log.warn("스피드 모드에 대한 랭킹 정보가 존재하지 않습니다.");
@@ -238,7 +237,7 @@ public class RankServiceImpl implements RankService{
             // userId로 닉네임과 프로필사진 가져오기
             RankDto.UserData userInfo = getUserData(userId);
             // 스피드전 TOP3 리스트에 넣기
-            speedTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStoredFileName()));
+            speedTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStored_file_name()));
         }
 
         // 스피드전 TOP3 맵으로 엮어서 response할 List에 넣기
@@ -260,7 +259,7 @@ public class RankServiceImpl implements RankService{
             // userId로 닉네임과 프로필사진 가져오기
             RankDto.UserData userInfo = getUserData(userId);
             // 최적화전 TOP3 리스트에 넣기
-            optTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStoredFileName()));
+            optTop3.add(new RankDto.Top3Ranking(grade++, userInfo.getNickname(), userInfo.getStored_file_name()));
         }
 
         // 최적화전 TOP3 맵으로 엮어서 response할 List에 넣기

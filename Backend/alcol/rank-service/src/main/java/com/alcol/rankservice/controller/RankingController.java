@@ -32,27 +32,44 @@ public class RankingController
     @PostMapping("/battleResult")
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
     {
-        // 승패 count를 세기 위해 redis에 저장하는 작업
-
-        WinLoseDto winLose = new WinLoseDto(battleResult.getUser_id_1(), battleResult.getBattle_mode(), battleResult.getWinner());
-        // 승패수를 기록하는 과정에서 오류가 발생했을 시
-        if(!battleResultService.recordCnt(winLose))
+        // 우승자 데이터에 따라 분기처리
+        // 0: 무승부, 1: 1번 유저 승리, 2: 2번 유저 승리
+        int user1Result = 0;
+        int user2Result = 0;
+        // 1번 유저 승리
+        if(battleResult.getWinner().equals("1"))
         {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("WIN/LOSE COUNT ERROR");
+            user1Result = 1;
         }
-        winLose = new WinLoseDto(battleResult.getUser_id_2(), battleResult.getBattle_mode(), battleResult.getWinner());
-        if(!battleResultService.recordCnt(winLose))
+        // 2번 유저 승리
+        else
         {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("WIN/LOSE COUNT ERROR");
+            user2Result = 1;
+        }
+        
+        // 결과가 무승부가 아니라면
+        if(!battleResult.getWinner().equals("0")) {
+            // 승패 count를 세기 위해 redis에 저장하는 작업
+            // user1
+            WinLoseDto winLose = new WinLoseDto(battleResult.getUser_id_1(), battleResult.getBattle_mode(), user1Result);
+            // 승패수를 기록하는 과정에서 오류가 발생했을 시
+            if (!battleResultService.recordCnt(winLose)) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("WIN/LOSE COUNT ERROR");
+            }
+            // user2
+            winLose = new WinLoseDto(battleResult.getUser_id_2(), battleResult.getBattle_mode(), user2Result);
+            if (!battleResultService.recordCnt(winLose)) {
+                return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("WIN/LOSE COUNT ERROR");
+            }
         }
 
 
-        // ranking 순위를 바꾸기 위해 mmr 값으로 sort하는 작업
-        if(!battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_1(), battleResult.getUser_id_1()))
+        // ranking 순위를 바꾸기 위해 mmr 값을 업데이트 하면서 sort하는 작업
+        if(!battleResultService.recordRank(battleResult.getBattle_mode() ,Integer.parseInt(battleResult.getMmr_1()), battleResult.getUser_id_1()))
         {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("RANKING UPDATE ERROR");
         }
-        if(!battleResultService.recordRank(battleResult.getBattle_mode() ,battleResult.getMmr_2(), battleResult.getUser_id_2()))
+        if(!battleResultService.recordRank(battleResult.getBattle_mode() ,Integer.parseInt(battleResult.getMmr_2()), battleResult.getUser_id_2()))
         {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("RANKING UPDATE ERROR");
         }
@@ -122,4 +139,5 @@ public class RankingController
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(top3List, CustomStatusCode.SEARCH_TOP3_EXIST));
     }
+
 }
