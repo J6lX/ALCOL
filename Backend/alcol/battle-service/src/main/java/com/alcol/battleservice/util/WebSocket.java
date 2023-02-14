@@ -454,7 +454,7 @@ public class WebSocket {
 
             else if (method.equals("banTimeout"))
             {
-                
+
             }
 
             else if (method.equals("surrender"))
@@ -510,17 +510,6 @@ public class WebSocket {
                 other_submit_result_send.put("battleResult","win");
                 user_submit_result_send.put("changeExp","100");
                 other_submit_result_send.put("changeMmr",result_other_mmr);
-
-                synchronized (session)
-                {
-                    session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
-                    handleClose(session);
-                }
-                synchronized (userId2Session.get(surrenderOtherId))
-                {
-                    userId2Session.get(surrenderOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
-                    handleClose(userId2Session.get(surrenderOtherId));
-                }
 
                 if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
                 {
@@ -612,7 +601,16 @@ public class WebSocket {
                         sendBattleLogForRedis,
                         String.class
                 );
-
+                synchronized (session)
+                {
+                    session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                    handleClose(session);
+                }
+                synchronized (userId2Session.get(surrenderOtherId))
+                {
+                    userId2Session.get(surrenderOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                    handleClose(userId2Session.get(surrenderOtherId));
+                }
             }
 
             /**문제를 제출했을 때 들어오는 곳, 채점서버로 요청 보내야 함.*/
@@ -795,16 +793,7 @@ public class WebSocket {
                              * 나와 상대방에게 게임 끝 메시지를 보내고
                              * 게임에 대한 모든 정보를 log 서버로 전송해야 함.
                              */
-                            synchronized (session)
-                            {
-                                session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
-                                handleClose(session);
-                            }
-                            synchronized (userId2Session.get(submitOtherId))
-                            {
-                                userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
-                                handleClose(userId2Session.get(submitOtherId));
-                            }
+
 
                             /**
                              * mmr을 저장하는 부분
@@ -949,6 +938,16 @@ public class WebSocket {
                             );
                             System.out.println("레디스 서버에 전송 : "+sendRedisRankUpdate);
                             System.out.println(getBattleLogSaveResult);
+                            synchronized (session)
+                            {
+                                session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                                handleClose(session);
+                            }
+                            synchronized (userId2Session.get(submitOtherId))
+                            {
+                                userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                                handleClose(userId2Session.get(submitOtherId));
+                            }
                         }
                         else if(submitBattleMode.equals("optimization"))
                         {
@@ -1415,6 +1414,24 @@ public class WebSocket {
                     other_draw_result_send.put("changeMmr",result_other_mmr);
                 }
 
+
+                /**
+                 * rank-service로 전송하는 부분 추가
+                 */
+                Map<String,String> sendBattleLogForRedis = new HashMap<>();
+                sendBattleLogForRedis.put("user_id_1",userId);
+                sendBattleLogForRedis.put("user_id_2",otherId);
+                sendBattleLogForRedis.put("battle_mode",battleMode);
+                sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
+                sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
+                sendBattleLogForRedis.put("winner","0");
+
+                String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                String sendRedisRankUpdate = restTemplate.postForObject(
+                        url_rank,
+                        sendBattleLogForRedis,
+                        String.class
+                );
                 synchronized (session)
                 {
                     try {
@@ -1433,24 +1450,6 @@ public class WebSocket {
                         throw new RuntimeException(e);
                     }
                 }
-                /**
-                 * rank-service로 전송하는 부분 추가
-                 */
-                Map<String,String> sendBattleLogForRedis = new HashMap<>();
-                sendBattleLogForRedis.put("user_id_1",userId);
-                sendBattleLogForRedis.put("user_id_2",otherId);
-                sendBattleLogForRedis.put("battle_mode",battleMode);
-                sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
-                sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
-                sendBattleLogForRedis.put("winner","0");
-
-                String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
-                String sendRedisRankUpdate = restTemplate.postForObject(
-                        url_rank,
-                        sendBattleLogForRedis,
-                        String.class
-                );
-                
             }
             /**
              * 제출 기록이 있는 경우,
@@ -1681,6 +1680,21 @@ public class WebSocket {
                     other_draw_result_send.put("changeExp","75");
                     other_draw_result_send.put("changeMmr",result_other_mmr);
 
+
+                    Map<String,String> sendBattleLogForRedis = new HashMap<>();
+                    sendBattleLogForRedis.put("user_id_1",userId);
+                    sendBattleLogForRedis.put("user_id_2",otherId);
+                    sendBattleLogForRedis.put("battle_mode",battleMode);
+                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
+                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
+                    sendBattleLogForRedis.put("winner","0");
+
+                    String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                    String sendRedisRankUpdate = restTemplate.postForObject(
+                            url_rank,
+                            sendBattleLogForRedis,
+                            String.class
+                    );
                     synchronized (session)
                     {
                         try {
@@ -1699,21 +1713,6 @@ public class WebSocket {
                             throw new RuntimeException(e);
                         }
                     }
-
-                    Map<String,String> sendBattleLogForRedis = new HashMap<>();
-                    sendBattleLogForRedis.put("user_id_1",userId);
-                    sendBattleLogForRedis.put("user_id_2",otherId);
-                    sendBattleLogForRedis.put("battle_mode",battleMode);
-                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
-                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
-                    sendBattleLogForRedis.put("winner","0");
-
-                    String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
-                    String sendRedisRankUpdate = restTemplate.postForObject(
-                            url_rank,
-                            sendBattleLogForRedis,
-                            String.class
-                    );
                 }
             }
         }
