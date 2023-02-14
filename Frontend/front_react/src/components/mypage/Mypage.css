@@ -6,8 +6,8 @@
 
 /* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
 .block {
-  /* background-color: #1d1e22; */
-  background-color: #0033ff;
+  background-color: #1d1e22;
+  /* background-color: #0033ff; */
   border: 1px solid #5cfdfd;
   margin: 10px;
   border-radius: 15px;
