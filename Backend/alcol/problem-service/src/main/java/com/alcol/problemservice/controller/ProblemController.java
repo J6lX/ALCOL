@@ -18,6 +18,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/problem-service")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ProblemController
 {
     private final ProblemService problemService;
