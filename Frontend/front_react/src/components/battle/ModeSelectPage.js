@@ -107,7 +107,7 @@ function UserInfo({ setMode, setLanguage }) {
       </Col>
       <Col span={17}></Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={urlSpeed} alt="tier" className="mode_icon_tier" />
+        {/* <img src={urlSpeed} alt="tier" className="mode_icon_tier" /> */}
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
         <img src={urlOpt} alt="tier" className="mode_icon_tier" />

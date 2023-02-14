@@ -6,6 +6,7 @@ import video from "../../assets/homepage-main.mp4";
 import rankingStar from "../../assets/ranking_image.png";
 import mainSlogan from "../../assets/main_slogan.png";
 import GuidePage from "./GuidePage";
+import Entrance from "./Entrance";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 import "animate.css";
@@ -203,6 +204,7 @@ const RankingPage = () => {
 const HomePage = () => {
   return (
     <div style={{ zIndex: "-2" }}>
+      <Entrance />
       <MainPage />
       <RankingPage />
       <GuidePage />

@@ -62,11 +62,10 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "left",
-            backgroundColor: "yellow",
+            justifyContent: "right",
             height: "50px",
           }}>
-          <p style={{ color: "black", fontSize: "3vh" }}>{userInfo.user.nick}</p>
+          <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.user.nick}</p>
         </Col>
         <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
           <img src={versus} alt="versus" style={{ width: "60px" }} />
@@ -76,11 +75,10 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "right",
-            backgroundColor: "yellow",
+            justifyContent: "rleft",
             height: "50px",
           }}>
-          <p style={{ color: "black", fontSize: "3vh" }}>{userInfo.other.nick}</p>
+          <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.other.nick}</p>
         </Col>
       </Row>
       <br />
@@ -154,7 +152,12 @@ const SelectedProblemPage = ({
       id="problem_category"
       className="fullmiddle_selected"
       style={{ backgroundColor: "black", height: "100vh" }}>
-      <video src={video} autoPlay muted className="bgvideo backgroundimg" style={{ zIndex: "1" }}></video>
+      <video
+        src={video}
+        autoPlay
+        muted
+        className="bgvideo backgroundimg"
+        style={{ zIndex: "1" }}></video>
       <div className="middlemiddle">
         <Top />
         <br />
