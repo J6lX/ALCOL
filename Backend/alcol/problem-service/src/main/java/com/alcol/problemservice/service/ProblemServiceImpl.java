@@ -284,6 +284,12 @@ public class ProblemServiceImpl implements ProblemService
         return null;
     }
 
+    /**
+     * 문제를 풀어서 맞았을 때 log-service로 보내서 levelExp를 올린다.
+     * levelExp를 올리고 
+     * @param userId
+     * @return boolean
+     */
     public boolean recordLevelExp(String userId)
     {
         String url = "http://i8b303.p.ssafy.io:9005/log-service/insertExp";
