@@ -491,19 +491,19 @@ public class WebSocket {
                 other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                 int change_user_mmr = (int) (user_mmr+30*(0-user_odds));
                 int change_other_mmr = (int) (other_mmr+30*(1-other_odds));
-                int result_user_mmr = user_mmr - change_user_mmr;
-                int result_other_mmr = other_mmr - change_other_mmr;
+                int result_user_mmr = change_user_mmr - user_mmr ;
+                int result_other_mmr = change_other_mmr - other_mmr ;
 
                 JSONObject user_submit_result_send = new JSONObject();
                 user_submit_result_send.put("messageType","battleResult");
-                user_submit_result_send.put("battleResult","win");
-                user_submit_result_send.put("changeExp","100");
+                user_submit_result_send.put("battleResult","lose");
+                user_submit_result_send.put("changeExp","50");
                 user_submit_result_send.put("changeMmr",result_user_mmr);
 
                 JSONObject other_submit_result_send = new JSONObject();
                 other_submit_result_send.put("messageType","battleResult");
-                other_submit_result_send.put("battleResult","lose");
-                user_submit_result_send.put("changeExp","50");
+                other_submit_result_send.put("battleResult","win");
+                user_submit_result_send.put("changeExp","100");
                 other_submit_result_send.put("changeMmr",result_other_mmr);
 
                 synchronized (session)
