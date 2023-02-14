@@ -8,7 +8,7 @@ body {
   position: relative;
   top: 5%;
   border-color: #61dafb;
-  transform: translate(0%, -5%);
+  transform: translate(0%, -3%);
 }
 @media (max-width: 770px) {
   .bodyBlock {
@@ -21,7 +21,7 @@ body {
 @media (min-width: 1050px) {
   .bodyBlock {
     border-color: #61dafb;
-    transform: translate(0%, -5%);
+    transform: translate(0%, -2%);
   }
 }
 
@@ -60,7 +60,7 @@ body {
     position: absolute;
     top: 25%;
     left: 50%;
-    font-size: 30px;
+    font-size: 40px;
     transform: translate(-50%, -50%);
   }
 }

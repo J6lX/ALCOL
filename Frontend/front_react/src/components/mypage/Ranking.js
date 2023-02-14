@@ -17,12 +17,14 @@ const rankingLabel = [
     title: "순위",
     align: "center",
     hidden: true,
+    width: "5%",
   },
   {
     dataIndex: "profile_img",
     title: "Image",
     render: (profile_img) => ProfileImage(profile_img),
-    width: "50px",
+    width: "5%",
+    hidden: true,
   },
   {
     dataIndex: "nickname",
@@ -30,6 +32,7 @@ const rankingLabel = [
     title: "닉네임",
     align: "left",
     hidden: true,
+    width: "20%",
   },
   {
     dataIndex: "level",
@@ -37,6 +40,7 @@ const rankingLabel = [
     title: "LEVEL",
     align: "center",
     hidden: true,
+    width: "15%",
   },
   {
     dataIndex: "mmr",
@@ -44,6 +48,7 @@ const rankingLabel = [
     title: "MMR",
     align: "center",
     hidden: true,
+    width: "15%",
   },
   {
     dataIndex: "tier",
@@ -51,6 +56,7 @@ const rankingLabel = [
     title: "시즌 티어",
     align: "center",
     hidden: true,
+    width: "20%",
   },
   {
     dataIndex: "record",
@@ -152,6 +158,8 @@ function Ranking() {
         if (response.data.customCode === "000") {
           // 로그인한 사용자 데이터(userData) 설정
           const originData = response.data.bodyData;
+          console.log(originData);
+
           const originUserData = {
             grade: originData.grade,
             nickname: originData.nickname,
@@ -257,9 +265,15 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
-
           const rankerData = originData.map((data) => {
             // data.record(전적) 데이터가 없음(null)
+            const winpoint = data.record.win ? Number(data.record.win) : 0;
+            const losepoint = data.record.lose ? Number(data.record.lose) : 0;
+            const winrate =
+              winpoint === 0 && losepoint === 0
+                ? 0
+                : Math.round((Number(winpoint) / (Number(winpoint) + Number(losepoint))) * 10000) /
+                  100;
             return {
               grade: data.grade,
               nickname: data.nickname,
@@ -267,7 +281,7 @@ function Ranking() {
               mmr: data.mmr,
               level: data.level,
               tier: data.tier,
-              // record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
+              record: `${data.record.win}승 ${data.record.lose}패(${winrate}%)`,
             };
           });
           // 랭커 정보를 recoil에 저장

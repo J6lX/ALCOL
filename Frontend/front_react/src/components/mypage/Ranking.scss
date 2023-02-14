@@ -14,7 +14,7 @@ body {
   position: relative;
   top: 5%;
   border-color: $neon-blue;
-  transform: translate(0%, -5%);
+  transform: translate(0%, -3%);
 
   //페이지 크기 별 css 디자인 수정
   // 작은 크기
@@ -28,7 +28,7 @@ body {
   // 큰 크기
   @media (min-width: 1050px) {
     border-color: $neon-blue;
-    transform: translate(0%, -5%);
+    transform: translate(0%, -2%);
   }
 }
 
@@ -74,7 +74,7 @@ body {
     position: absolute;
     top: 25%;
     left: 50%;
-    font-size: 30px;
+    font-size: 40px;
     transform: translate(-50%, -50%);
   }
 
