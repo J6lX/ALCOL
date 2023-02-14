@@ -483,12 +483,12 @@ function Mypage() {
       setLevelColor({ color: "white" });
     } else if (modeName === "efficiency") {
       setEfficiencyColor({ color: "#94d6f8" });
-      setSpeedColor({ color: "white" });
-      setLevelColor({ color: "white" });
+      setSpeedColor({ color: "white", textAlign: "center" });
+      setLevelColor({ color: "white", textAlign: "center" });
     } else if (modeName === "level") {
-      setSpeedColor({ color: "white" });
-      setEfficiencyColor({ color: "white" });
-      setLevelColor({ color: "#94d6f8" });
+      setSpeedColor({ color: "white", textAlign: "center" });
+      setEfficiencyColor({ color: "white", textAlign: "center" });
+      setLevelColor({ color: "#94d6f8", textAlign: "center" });
     }
   }, [modeName]);
 
@@ -562,10 +562,11 @@ function Mypage() {
         <>
           {/* 한 줄에 1개씩 표시 */}
           {seasonInfo.map((seasonData) => (
-            <Col span={24} align="middle" className="seasonGrid">
-              {/* <Row justify="center" align="middle"> */}
+            // <Col span={24} align="middle" className="seasonGrid">
+            <Col span={24} align="middle">
               <Row justify="center" align="middle">
-                <Col span={8} className="text">
+                {/* <Col span={8} className="text"> */}
+                <Col span={8}>
                   <img
                     src={giveBadge(seasonData.tier.slice(0, 1))}
                     alt="badge"
@@ -575,35 +576,50 @@ function Mypage() {
                     }}
                   />
                 </Col>
-                <Col xs={22} xl={14} className="text">
+                <Col xs={22} xl={14} className="text" style={{ marginLeft: "10px" }}>
                   {/* 모드 이름 */}
-                  <Row justify="center">
+                  {/* <Row justify="center">
                     <Col>
-                      <p>{seasonData.modeName}</p>
+                      <p style={{ fontSize: "13px" }} className="mypage_tier_small_font">
+                        {seasonData.modeName}
+                      </p>
                     </Col>
-                  </Row>
+                  </Row> */}
                   {/* 시즌 이름 */}
                   <Row justify="center">
                     <Col>
-                      <p>{seasonData.seasonName}</p>
+                      <div
+                        style={{ fontWeight: "lighter", fontSize: "13px" }}
+                        className="mypage_tier_bold_font">
+                        시즌 {seasonData.season} {seasonData.modeName}
+                      </div>
                     </Col>
                   </Row>
+                  {/* 시즌 이름 */}
+                  {/* <Row justify="center">
+                    <Col>
+                      <p
+                        style={{ fontWeight: "lighter", marginBottom: "-5px", marginTop: "-10px" }}
+                        className="mypage_tier_detail_font">
+                        {" "}
+                        시즌 {seasonData.season}
+                      </p>
+                    </Col>
+                  </Row> */}
                   {/* 티어 이름 */}
                   <Row justify="center">
                     <Col>
-                      <p>{seasonData.tier}</p>
+                      <p className="mypage_record_tier_font">{seasonData.tier}</p>
                     </Col>
                   </Row>
                   {/* 마지막 랭킹 레이블 */}
                   <Row justify="center">
                     <Col>
-                      <p>{seasonData.ranking}위</p>
-                    </Col>
-                  </Row>
-                  {/* 시즌 이름 */}
-                  <Row justify="center">
-                    <Col>
-                      <p>시즌 {seasonData.season}</p>
+                      <p
+                        style={{ fontWeight: "lighter", marginTop: "-5px" }}
+                        className="mypage_tier_small_font">
+                        {seasonData.ranking}위
+                      </p>
                     </Col>
                   </Row>
                 </Col>
@@ -625,6 +641,16 @@ function Mypage() {
         padding: "30px",
         height: "100%",
       }}>
+      <div
+        style={{
+          color: "white",
+          fontFamily: "NanumSquareNeo",
+          fontSize: "30px",
+          marginLeft: "70px",
+          marginBottom: "10px",
+        }}>
+        마이페이지
+      </div>
       {userId ? (
         <div>
           {/* 사용자 프로필 블록 */}
@@ -679,7 +705,7 @@ function Mypage() {
                       <PieChart
                         data={speedData}
                         reveal={speedData[0].value}
-                        lineWidth={16}
+                        lineWidth={8}
                         lengthAngle={300}
                         background="#f3f3f3"
                         radius={45}
@@ -708,19 +734,35 @@ function Mypage() {
                     </Col>
                     {/* 스피드전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
-                      <p>스피드전 요약</p>
-                      <p>{userInfo.speedTier}</p>
-                      <p>MMR {spdMMR}</p>
-                      <p>1000위(상위 20%)</p>
-                      <p>다음 티어까지 {speedData[0].value}% 달성</p>
+                      <p className="mypage_tier_bold_font" style={{ marginBottom: "20px" }}>
+                        스피드전 요약
+                      </p>
+                      <p
+                        className="mypage_tier_small_font"
+                        style={{ fontWeight: "lighter", fontSize: "12px" }}>
+                        MMR {spdMMR}
+                      </p>
+                      <p className="mypage_tier_large_font">{userInfo.speedTier}</p>
+                      {/* <p className="mypage_tier_small_font">1000위(상위 20%)</p> */}
+                      <p className="mypage_tier_detail_font">
+                        다음 티어까지 {speedData[0].value}% 달성
+                      </p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
-                      <p>최적화전 요약</p>
-                      <p>{userInfo.efficiencyTier}</p>
-                      <p>MMR {effMMR}</p>
-                      <p>1000위(상위 20%)</p>
-                      <p>다음 티어까지 {efficiencyData[0].value}% 달성</p>
+                      <p className="mypage_tier_bold_font" style={{ marginBottom: "20px" }}>
+                        최적화전 요약
+                      </p>
+                      <p
+                        className="mypage_tier_small_font"
+                        style={{ fontWeight: "lighter", fontSize: "12px" }}>
+                        MMR {effMMR}
+                      </p>
+                      <p className="mypage_tier_large_font">{userInfo.efficiencyTier}</p>
+                      {/* <p className="mypage_tier_small_font">1000위(상위 20%)</p> */}
+                      <p className="mypage_tier_detail_font">
+                        다음 티어까지 {efficiencyData[0].value}% 달성
+                      </p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col
@@ -736,7 +778,7 @@ function Mypage() {
                       <PieChart
                         data={efficiencyData}
                         reveal={efficiencyData[0].value}
-                        lineWidth={16}
+                        lineWidth={8}
                         lengthAngle={300}
                         background="#f3f3f3"
                         radius={45}
@@ -770,15 +812,18 @@ function Mypage() {
           </Row>
 
           {/* 지난 시즌, 전적 표시 */}
+          {/* <Row justify="center" className="mypage_second_row_wrap_box"> */}
           <Row justify="center" className="mypage_second_row_wrap_box">
             <Col
               xs={16}
               md={6}
               lg={4}
-              align="middle"
+              // align="middle"
               style={{
-                margin: "10px",
+                marginTop: "10px",
+                marginRight: "10px",
               }}>
+              {/* > */}
               <Row>
                 {/* 지난 시즌 기록 보기 */}
                 {/* <Col xs={24} className="miniBlock"> */}
@@ -786,6 +831,7 @@ function Mypage() {
                   <p className="textHighlight">지난 시즌 기록</p>
                   <hr />
                   <Row style={{ padding: "10px" }}>
+                    {/* <Row> */}
                     <SeasonCollection />
                   </Row>
                 </Col>
@@ -793,11 +839,12 @@ function Mypage() {
             </Col>
 
             {/* 전적 정보 표시 블록 */}
-            <Col xs={16} lg={18} className="textHighlight block">
+            {/* <Col xs={16} lg={18} className="textHighlight block"> */}
+            <Col xs={16} lg={18} className="mypage_record_wrap_box">
               {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
               <Row justify="space-around" className="modeFilter">
                 <Col sm={4} lg={4}>
-                  <h4 style={levelColor} onClick={setLevel}>
+                  <h4 style={levelColor} onClick={setLevel} className="mypage_text_center">
                     모두
                   </h4>
                 </Col>
