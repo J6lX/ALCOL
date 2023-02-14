@@ -233,6 +233,7 @@ public class UserServiceImpl implements UserService
             curExp = (int)redisExp.get("levelExp:" + userId);
             curSpeedMmr = (int)Math.round(redisMmr.score("speed", userId));
             curOptimizationMmr = (int)Math.round(redisMmr.score("optimization", userId));
+            log.info("getUserInfo 메소드에서 레디스에서 데이터를 잘 읽어옴");
         }
         catch (NullPointerException e) {
 
