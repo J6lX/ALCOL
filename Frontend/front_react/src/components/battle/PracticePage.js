@@ -4,7 +4,8 @@ import practiceHeader from "../../assets/practice_header.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-// import { useRecoilState s} from "recoil";
+// import { PracticeProblemState } from "../../states/ProblemBank";
+// import { useRecoilState } from "recoil";
 
 // 연습 문제 분류(구분 컬럼)
 const problemLabel = [
@@ -58,11 +59,11 @@ const problemData = {
 
 // 페이지 렌더링
 function Ranking() {
-  // 데이터 상태 관리(임시 코드)
+  // 연습 문제 데이터 상태 관리
   const [refinedData, setRefinedData] = useState([]);
 
-  // // 연습 문제 상태 관리(서버 연결 시 사용)
-  // const [practiceProblem, setPracticeProblem] = useRecoilState();
+  // 사용자가 풀려 하는 연습 문제 상태 관리
+  // const [practiceProblem, setPracticeProblem] = useRecoilState(PracticeProblemState);
 
   // 입력받은 검색어 상태 관리
   const [search, setSearch] = useState("");

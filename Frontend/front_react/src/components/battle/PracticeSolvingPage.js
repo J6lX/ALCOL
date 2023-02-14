@@ -9,6 +9,7 @@ import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./PracticeSolvingPage.css";
 import { Button, Modal } from "antd";
 
+// 배틀 화면 네비게이션 바
 const BattleNav = () => {
   let now = new Date();
   let hours = now.getHours();
@@ -31,6 +32,7 @@ const BattleNav = () => {
   );
 };
 
+// 문제 표시 영역
 const Problem = () => {
   return (
     <div style={{ border: "0.1px solid gray" }}>
@@ -97,6 +99,7 @@ const Problem = () => {
   );
 };
 
+// 코딩 영역(IDE)
 const CodingPlace = () => {
   // let allheight = window.innerHeight
   // let height = allheight * 0.46
@@ -143,6 +146,7 @@ const CodingPlace = () => {
     setIsModalOpen(false);
   };
 
+  // 코딩 영역 페이지 렌더링
   return (
     <div>
       <div style={{ width: "70vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
@@ -205,6 +209,7 @@ const CodingPlace = () => {
   );
 };
 
+// 콘솔 영역(상태창)
 const Console = () => {
   return (
     <div style={{ backgroundColor: "#1D1E22" }}>
@@ -213,6 +218,7 @@ const Console = () => {
   );
 };
 
+// 전체 페이지 렌더링
 const PracticeSolvingPage = () => {
   return (
     <div id="allconsole">

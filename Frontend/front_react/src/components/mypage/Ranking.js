@@ -273,13 +273,13 @@ function Ranking() {
           // 랭커 정보를 recoil에 저장
 
           setRankerList(rankerData);
-        } else if (response.data.customCode === "003") {
-          // 랭킹 정보가 없는 경우
-          alert("등록된 정보가 없습니다.");
         }
       })
       //응답 실패 시
       .catch((error) => {
+        if (error.response.data.customCode === "003") {
+          alert("해당 페이지에는 랭킹 정보가 없습니다.");
+        }
         console.log("응답 실패 : " + error);
       });
   }, [modeName, pageNo, setRankerList]);
