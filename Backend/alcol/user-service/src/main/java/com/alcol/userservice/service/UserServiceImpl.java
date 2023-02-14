@@ -143,9 +143,6 @@ public class UserServiceImpl implements UserService
                 return "PICTURE_UPLOAD_FAILURE";
             }
         }
-        else {
-            userEntity.setStoredFileName("https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png");
-        }
 
         // redis 에 사용자 경험치를 1 으로 저장, mmr 은 1000 으로 저장
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
