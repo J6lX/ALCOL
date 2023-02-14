@@ -497,11 +497,13 @@ public class WebSocket {
                 JSONObject user_submit_result_send = new JSONObject();
                 user_submit_result_send.put("messageType","battleResult");
                 user_submit_result_send.put("battleResult","win");
+                user_submit_result_send.put("changeExp","100");
                 user_submit_result_send.put("changeMmr",result_user_mmr);
 
                 JSONObject other_submit_result_send = new JSONObject();
                 other_submit_result_send.put("messageType","battleResult");
                 other_submit_result_send.put("battleResult","lose");
+                user_submit_result_send.put("changeExp","50");
                 other_submit_result_send.put("changeMmr",result_other_mmr);
 
                 synchronized (session)
@@ -758,6 +760,8 @@ public class WebSocket {
                             other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                             int change_user_mmr = (int) (user_mmr+30*(1-user_odds));
                             int change_other_mmr = (int) (other_mmr+30*(0-other_odds));
+                            int result_user_mmr = change_user_mmr - user_mmr;
+                            int result_other_mmr = change_other_mmr - other_mmr;
 
                             /**-----------------------------------------------------------------------------------------------*/
 
@@ -768,9 +772,10 @@ public class WebSocket {
                             JSONObject user_submit_result_send = new JSONObject();
                             user_submit_result_send.put("messageType","battleResult");
                             user_submit_result_send.put("battleResult","win");
+                            user_submit_result_send.put("changeExp","100");
                             user_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
                             user_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
-                            user_submit_result_send.put("changeMmr",change_user_mmr);
+                            user_submit_result_send.put("changeMmr",result_user_mmr);
 
 
                             JSONObject other_submit_result_send = new JSONObject();
@@ -778,7 +783,8 @@ public class WebSocket {
                             other_submit_result_send.put("battleResult","lose");
 //                            other_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
 //                            other_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
-                            other_submit_result_send.put("changeMmr",change_other_mmr);
+                            other_submit_result_send.put("changeExp","50");
+                            other_submit_result_send.put("changeMmr",result_other_mmr);
                             /**
                              * 스피드 전이니까, 끝나면 MMR, 경험치 계산 후
                              * 나와 상대방에게 게임 끝 메시지를 보내고
@@ -948,6 +954,26 @@ public class WebSocket {
                                 sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.accept_time = Integer.parseInt(userBattleLog.time);
                                 sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.accept_memory = Integer.parseInt(userBattleLog.memory);
                             }
+                            JSONObject user_submit_result_send = new JSONObject();
+                            user_submit_result_send.put("messageType","submitResult");
+                            user_submit_result_send.put("submitResult","accept");
+                            user_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
+                            user_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
+
+                            JSONObject other_submit_result_send = new JSONObject();
+                            other_submit_result_send.put("messageType","submitResult");
+                            other_submit_result_send.put("submitResult","accept");
+                            other_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
+                            other_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
+
+                            synchronized (session)
+                            {
+                                session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                            }
+                            synchronized (userId2Session.get(submitOtherId))
+                            {
+                                userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                            }
                         }
                         break;
 
@@ -972,11 +998,13 @@ public class WebSocket {
                         System.out.println(fromdata_info_data.size()+"개 중 "+(fromdata_info_data.size()-errorCnt)+"개 맞음");
                         JSONObject submit_fail_send = new JSONObject();
                         submit_fail_send.put("messageType","submitResult");
+                        submit_fail_send.put("submitResult","fail");
                         submit_fail_send.put("testcase",fromdata_info_data.size());
                         submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
 
                         JSONObject other_submit_fail_send = new JSONObject();
                         other_submit_fail_send.put("messageType","otherSubmitResult");
+                        other_submit_fail_send.put("otherSubmitResult","fail");
                         other_submit_fail_send.put("testcase",fromdata_info_data.size());
                         other_submit_fail_send.put("accepted",fromdata_info_data.size()-errorCnt);
 
@@ -1140,6 +1168,8 @@ public class WebSocket {
                 float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                 int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
 
+                int result_user_mmr = change_user_mmr-user_mmr;
+                int result_other_mmr = change_other_mmr-other_mmr;
 
                 sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
                 sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
@@ -1173,17 +1203,19 @@ public class WebSocket {
                  */
                 JSONObject user_draw_result_send = new JSONObject();
                 user_draw_result_send.put("messageType","battleResult");
-                user_draw_result_send.put("battleResult","lose");
+                user_draw_result_send.put("battleResult","draw");
                 user_draw_result_send.put("time","0");
                 user_draw_result_send.put("memory","0");
-                user_draw_result_send.put("changeMmr",change_user_mmr);
+                user_draw_result_send.put("changeExp","75");
+                user_draw_result_send.put("changeMmr",result_user_mmr);
 
                 JSONObject other_draw_result_send = new JSONObject();
                 other_draw_result_send.put("messageType","battleResult");
-                other_draw_result_send.put("battleResult","lose");
+                other_draw_result_send.put("battleResult","draw");
                 other_draw_result_send.put("time","0");
                 other_draw_result_send.put("memory","0");
-                other_draw_result_send.put("changeMmr",change_user_mmr);
+                other_draw_result_send.put("changeExp","75");
+                other_draw_result_send.put("changeMmr",result_user_mmr);
 
                 synchronized (session)
                 {
@@ -1227,6 +1259,8 @@ public class WebSocket {
                     float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                     int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
 
+                    int result_user_mmr = change_user_mmr - user_mmr;
+                    int result_other_mmr = change_other_mmr - other_mmr;
 
                     sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
                     sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
@@ -1268,14 +1302,16 @@ public class WebSocket {
                     user_win_result_send.put("battleResult","win");
                     user_win_result_send.put("time",user_time);
                     user_win_result_send.put("memory",user_memory);
-                    user_win_result_send.put("changeMmr",change_user_mmr);
+                    user_win_result_send.put("changeExp","100");
+                    user_win_result_send.put("changeMmr",result_user_mmr);
 
                     JSONObject other_lose_result_send = new JSONObject();
                     other_lose_result_send.put("messageType","battleResult");
                     other_lose_result_send.put("battleResult","lose");
                     other_lose_result_send.put("time",other_time);
                     other_lose_result_send.put("memory",other_memory);
-                    other_lose_result_send.put("changeMmr",change_user_mmr);
+                    other_lose_result_send.put("changeExp","50");
+                    other_lose_result_send.put("changeMmr",result_user_mmr);
 
                     synchronized (session)
                     {
@@ -1303,6 +1339,8 @@ public class WebSocket {
                     float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                     int change_other_mmr = (int) (other_mmr+30*(1-other_odds));
 
+                    int result_user_mmr = change_user_mmr - user_mmr;
+                    int result_other_mmr = change_other_mmr - other_mmr;
 
                     sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
                     sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
@@ -1343,14 +1381,16 @@ public class WebSocket {
                     user_lose_result_send.put("battleResult","lose");
                     user_lose_result_send.put("time",user_time);
                     user_lose_result_send.put("memory",user_memory);
-                    user_lose_result_send.put("changeMmr",change_user_mmr);
+                    user_lose_result_send.put("changeExp","50");
+                    user_lose_result_send.put("changeMmr",result_user_mmr);
 
                     JSONObject other_win_result_send = new JSONObject();
                     other_win_result_send.put("messageType","battleResult");
                     other_win_result_send.put("battleResult","win");
                     other_win_result_send.put("time",other_time);
                     other_win_result_send.put("memory",other_memory);
-                    other_win_result_send.put("changeMmr",change_user_mmr);
+                    other_win_result_send.put("changeExp","100");
+                    other_win_result_send.put("changeMmr",result_user_mmr);
 
                     synchronized (session)
                     {
@@ -1378,6 +1418,8 @@ public class WebSocket {
                     float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                     int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
 
+                    int result_user_mmr = change_user_mmr - user_mmr;
+                    int result_other_mmr = change_other_mmr - other_mmr;
 
                     sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr = change_user_mmr;
                     sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr = change_other_mmr;
@@ -1407,17 +1449,19 @@ public class WebSocket {
                      */
                     JSONObject user_draw_result_send = new JSONObject();
                     user_draw_result_send.put("messageType","battleResult");
-                    user_draw_result_send.put("battleResult","lose");
+                    user_draw_result_send.put("battleResult","draw");
                     user_draw_result_send.put("time",user_time);
                     user_draw_result_send.put("memory",user_memory);
-                    user_draw_result_send.put("changeMmr",change_user_mmr);
+                    user_draw_result_send.put("changeExp","75");
+                    user_draw_result_send.put("changeMmr",result_user_mmr);
 
                     JSONObject other_draw_result_send = new JSONObject();
                     other_draw_result_send.put("messageType","battleResult");
-                    other_draw_result_send.put("battleResult","lose");
+                    other_draw_result_send.put("battleResult","draw");
                     other_draw_result_send.put("time",other_time);
                     other_draw_result_send.put("memory",other_memory);
-                    other_draw_result_send.put("changeMmr",change_user_mmr);
+                    other_draw_result_send.put("changeExp","75");
+                    other_draw_result_send.put("changeMmr",result_other_mmr);
 
                     synchronized (session)
                     {
@@ -1435,6 +1479,21 @@ public class WebSocket {
                             throw new RuntimeException(e);
                         }
                     }
+
+                    Map<String,String> sendBattleLogForRedis = new HashMap<>();
+                    sendBattleLogForRedis.put("user_id_1",userId);
+                    sendBattleLogForRedis.put("user_id_2",otherId);
+                    sendBattleLogForRedis.put("battle_mode",battleMode);
+                    sendBattleLogForRedis.put("mmr_1", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user1.nowMmr));
+                    sendBattleLogForRedis.put("mmr_2", String.valueOf(sessionId2Obj.get(userId2SessionId.get(userId)).user2.nowMmr));
+                    sendBattleLogForRedis.put("winner","0");
+
+                    String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                    String sendRedisRankUpdate = restTemplate.postForObject(
+                            url_rank,
+                            sendBattleLogForRedis,
+                            String.class
+                    );
                 }
             }
         }

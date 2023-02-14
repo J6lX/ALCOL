@@ -31,6 +31,6 @@ public class BattleController {
         hi = redisTemplate.opsForHash();
         ranking = redisTemplate.opsForZSet();
 //        System.out.println(hi.get("winloseCnt:userId1:speed", "win"));
-        System.out.println(ranking.score("speed", "userId1").toString());
+//        System.out.println(ranking.score("speed", "userId1").toString());
     }
 }
