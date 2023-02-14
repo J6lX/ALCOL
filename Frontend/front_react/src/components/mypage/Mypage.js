@@ -563,6 +563,7 @@ function Mypage() {
           {/* 한 줄에 1개씩 표시 */}
           {seasonInfo.map((seasonData) => (
             <Col span={24} align="middle" className="seasonGrid">
+              {/* <Row justify="center" align="middle"> */}
               <Row justify="center" align="middle">
                 <Col span={8} className="text">
                   <img
@@ -769,7 +770,7 @@ function Mypage() {
           </Row>
 
           {/* 지난 시즌, 전적 표시 */}
-          <Row justify="center" className="mypage_record_wrap_box">
+          <Row justify="center" className="mypage_second_row_wrap_box">
             <Col
               xs={16}
               md={6}
@@ -780,7 +781,8 @@ function Mypage() {
               }}>
               <Row>
                 {/* 지난 시즌 기록 보기 */}
-                <Col xs={24} className="miniBlock">
+                {/* <Col xs={24} className="miniBlock"> */}
+                <Col xs={24} className="mypage_record_block">
                   <p className="textHighlight">지난 시즌 기록</p>
                   <hr />
                   <Row style={{ padding: "10px" }}>

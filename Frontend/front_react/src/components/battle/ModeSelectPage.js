@@ -19,10 +19,8 @@ function UserInfo({ setMode, setLanguage }) {
   const [nickname, setNickname] = React.useState("");
   const [speedTier, setSpeedTier] = React.useState("");
   const [optTier, setOptTier] = React.useState("");
-  const [urlSpeed, setUrlSpeed] = React.useState(
-    require("../../assets/ALCOL_tiers/tier_bronze_0.png")
-  );
-  const [urlOpt, setUrlOpt] = React.useState(require("../../assets/ALCOL_tiers/tier_bronze_0.png"));
+  const [urlSpeed, setUrlSpeed] = React.useState("");
+  const [urlOpt, setUrlOpt] = React.useState("");
 
   var userId = useRecoilValue(LoginState);
 
@@ -67,14 +65,10 @@ function UserInfo({ setMode, setLanguage }) {
 
       //레벨 정보만 잘라오기
       var tmpSpeedLV = speedTier.substr(speed.length, 1);
-      var tmpOptLV = speedTier.substr(opt.length, 1);
+      var tmpOptLV = optTier.substr(opt.length, 1);
 
-      const { speedImg } = require("../../assets/ALCOL_tiers/tier_" +
-        speed +
-        "_" +
-        tmpSpeedLV +
-        ".png");
-      setUrlSpeed(speedImg);
+      console.log("../../assets/ALCOL_tiers/tier_" + speed + "_" + tmpSpeedLV + ".png");
+      console.log("../../assets/ALCOL_tiers/tier_" + opt + "_" + tmpOptLV + ".png");
 
       setUrlSpeed(require("../../assets/ALCOL_tiers/tier_" + speed + "_" + tmpSpeedLV + ".png"));
       setUrlOpt(require("../../assets/ALCOL_tiers/tier_" + opt + "_" + tmpOptLV + ".png"));
@@ -82,9 +76,10 @@ function UserInfo({ setMode, setLanguage }) {
   }, [optTier, speedTier]);
 
   useEffect(() => {
-    if (urlSpeed !== "" || urlOpt !== "") {
-      console.log(urlOpt);
+    if (urlSpeed !== "" && urlOpt !== "") {
+      console.log("url을 설정합니다");
       console.log(urlSpeed);
+      console.log(urlOpt);
     }
   }, [urlSpeed, urlOpt]);
 

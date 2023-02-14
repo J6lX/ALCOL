@@ -19,9 +19,9 @@
   /* background-color: #1d1e22; */
   background-color: pink;
   border: 1px solid white;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   text-align: center;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 /* 설정 버튼 */
@@ -156,6 +156,15 @@
   align-items: center;
 }
 
-.mypage_record_wrap_box {
+.mypage_second_row_wrap_box {
   background-color: orange;
+}
+
+.mypage_record_block {
+  /* background-color: #1d1e22; */
+  background-color: pink;
+  border: 1px solid white;
+  /* border-radius: 15px; */
+  text-align: center;
+  /* margin-bottom: 30px; */
 }
