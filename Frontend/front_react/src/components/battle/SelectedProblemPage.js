@@ -40,7 +40,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
   let LV = problemInfo.prob_tier[problemInfo.prob_tier.length - 1];
   console.log(tier, LV);
 
-  const tierAddress = `../../assets/ALCOL_tiers/tier_${tier}_${LV}.png`;
+  const tierAddress = require("../../assets/ALCOL_tiers/tier_" + tier + "_" + LV + ".png");
 
   const makeBadge = (category) => {
     const result = [];

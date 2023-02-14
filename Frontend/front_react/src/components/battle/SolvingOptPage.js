@@ -1,5 +1,6 @@
 import { React, useState } from "react";
 import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import $ from "jquery";
 // import axios from "axios";
 import Logo from "../../assets/alcol_empty_black.png";
 import Dots from "../../assets/dots.png";
@@ -414,6 +415,50 @@ const SolvingPage = ({
   const surrend = () => {
     clickSurrender();
   };
+
+  const info = (data) => {
+    Modal.info(data);
+  };
+
+  $(function () {
+    $("#IDE").on("paste", function (event) {
+      event.preventDefault();
+      const data = {
+        title: "복사나 붙여넣기 불가!",
+        content: (
+          <div>
+            <p>배틀의 공평한 진행을 위해서</p>
+            <p>복사나 붙여넣기는 불가능합니다!</p>
+            <p>코드를 직접 타이핑해주세요.</p>
+          </div>
+        ),
+        okText: "확인",
+        onOk() {},
+      };
+      info(data);
+      return false;
+    });
+  });
+
+  $(function () {
+    $("#IDE").on("copy", function (event) {
+      event.preventDefault();
+      const data = {
+        title: "복사 붙여넣기 불가!",
+        content: (
+          <div>
+            <p>배틀의 공평한 진행을 위해서</p>
+            <p>복사나 붙여넣기는 불가능합니다!</p>
+            <p>코드를 직접 타이핑해주세요.</p>
+          </div>
+        ),
+        okText: "확인",
+        onOk() {},
+      };
+      info(data);
+      return false;
+    });
+  });
 
   return (
     <div id="allconsole" className="animate__animated animate__fadeIn">

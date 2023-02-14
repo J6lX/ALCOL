@@ -1,0 +1,4 @@
+.animate__fadeOut {
+    --animate-delay: 5s;
+    --animate-duration: 2s;
+  }
