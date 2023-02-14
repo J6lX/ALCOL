@@ -144,6 +144,28 @@ const Problem = () => {
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           {problemData.problemOutputContent}
         </p>
+        <br />
+        <hr style={{ height: "1px", background: "gray" }} />
+        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
+          입력 테스트 케이스
+        </p>
+        <hr style={{ color: "gray" }} />
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
+          {problemData.problemInputTC}
+        </p>
+        <br />
+        <hr style={{ height: "1px", background: "gray" }} />
+        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
+          출력 테스트 케이스
+        </p>
+        <hr style={{ color: "gray" }} />
+        <p
+          className="NanumSquare"
+          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
+          {problemData.problemOutputTC}
+        </p>
       </div>
     </div>
   );
@@ -214,7 +236,20 @@ const CodingPlace = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        if (error.response.data.customCode === "103") {
+          alert("컴파일 오류가 발생했습니다.");
+          console.log(error.response.data.description);
+        } else if (error.response.data.customCode === "104") {
+          alert("빈 코드입니다.");
+          console.log(error.response.data.description);
+        } else if (error.response.data.customCode === "102") {
+          alert("제출 결과를 불러올 수 없습니다.");
+          console.log(error.response.data.description);
+        }
+        if (error.response.data.customCode === "101") {
+          alert("제출 아이디를 가져올 수 없습니다.");
+          console.log(error.response.data.description);
+        }
       });
   };
 

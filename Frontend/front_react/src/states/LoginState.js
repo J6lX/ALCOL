@@ -47,7 +47,6 @@ export const CurrentNickname = atom({
 });
 
 // mmr만 저장
-
 export const MMRState = atom({
   key: "MMRState",
   default: "",

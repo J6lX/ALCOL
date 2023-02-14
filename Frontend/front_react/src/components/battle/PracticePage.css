@@ -1,7 +1,7 @@
 body {
   font-family: "NanumSquareNeo";
   height: 100vh;
-  max-width: 100%;
+  width: 100%;
 }
 
 .block {
@@ -24,12 +24,14 @@ body {
   margin: 10px;
 }
 
+/* 큰 제목 '연습 문제 풀기' */
 .title {
   position: absolute;
   left: 50%;
   font-size: 25px;
   transform: translate(-50%, 100px);
 }
+/* 작은 크기일 때 */
 @media (max-width: 770px) {
   .title {
     position: absolute;
@@ -38,6 +40,7 @@ body {
     transform: translate(-50%, 45px);
   }
 }
+/* 큰 크기일 때 */
 @media (min-width: 980px) {
   .title {
     position: absolute;
@@ -50,7 +53,7 @@ body {
 .bodyblock {
   position: relative;
   top: 30%;
-  transform: translate(0%, -30%);
+  transform: translate(0%, -15%);
 }
 
 .modeSelector {
@@ -80,6 +83,7 @@ h1 {
   color: white;
   position: relative;
   transform: translate(0%, -40%);
+  z-index: 111;
 }
 
 h2 {

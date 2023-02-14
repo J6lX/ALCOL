@@ -115,7 +115,6 @@ function LoginPage() {
     setIsModalOpen(false);
   };
   useEffect(() => {
-    console.log("나는 useEffect");
     console.log(result);
   }, [result]);
 
