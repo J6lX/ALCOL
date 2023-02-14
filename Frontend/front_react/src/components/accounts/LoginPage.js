@@ -72,6 +72,7 @@ function LoginPage() {
                 // 저장된 이미지가 없으면(신규 회원인 경우 등) 기본 이미지로 대체
                 profileImg: isNew(response.data.stored_file_name),
                 level: response.data.level,
+                // 매칭 시 mmr이 없는 문제가 생기면 별도로 설정해줘야 함
                 speedTier: response.data.speed_tier,
                 efficiencyTier: response.data.optimization_tier,
               };

@@ -19,25 +19,17 @@ const rankingLabel = [
     hidden: true,
   },
   {
+    dataIndex: "profile_img",
+    title: "Image",
+    render: (profile_img) => ProfileImage(profile_img),
+    width: "50px",
+  },
+  {
     dataIndex: "nickname",
     key: "nickname",
     title: "닉네임",
-    align: "center",
+    align: "left",
     hidden: true,
-  },
-  {
-    dataIndex: "profile_img",
-    title: "Image",
-    render: (profile_img) => (
-      <img
-        src={profile_img}
-        alt="profile"
-        style={{
-          width: "32px",
-          height: "32px",
-        }}
-      />
-    ),
   },
   {
     dataIndex: "level",
@@ -69,6 +61,39 @@ const rankingLabel = [
   },
 ];
 
+// 사진 데이터 관리 함수
+function ProfileImage(urlSrc) {
+  let photo = urlSrc;
+
+  //화면에 프로필 사진 표시
+  if (urlSrc) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        photo = reader.result;
+        reader.readAsDataURL(new Blob(urlSrc));
+      }
+    };
+  } else {
+    photo = `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+
+  console.log("사진 데이터:", photo);
+
+  return (
+    <img
+      src={photo}
+      alt="profile"
+      style={{
+        width: "32px",
+        height: "32px",
+        borderRadius: "100%",
+      }}
+    />
+  );
+}
+
+// 페이지 렌더링 함수
 function Ranking() {
   // URL에 입력된 파라미터 가져오기
   const paramInfo = qs.parse(window.location.search);
@@ -78,7 +103,6 @@ function Ranking() {
   // 탭 선택 여부에 따라 스타일링
   const [speedColor, setSpeedColor] = useState({ color: "white" });
   const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
-  const [levelColor, setLevelColor] = useState({ color: "white" });
 
   // 검색어 입력 관리
   const [search, setSearch] = useState("");
@@ -94,15 +118,12 @@ function Ranking() {
     if (modeName === "speed") {
       setSpeedColor({ color: "#94D6FB" });
       setEfficiencyColor({ color: "white" });
-      setLevelColor({ color: "white" });
     } else if (modeName === "efficiency") {
       setEfficiencyColor({ color: "#94d6f8" });
       setSpeedColor({ color: "white" });
-      setLevelColor({ color: "white" });
     } else if (modeName === "level") {
       setSpeedColor({ color: "white" });
       setEfficiencyColor({ color: "white" });
-      setLevelColor({ color: "#94d6f8" });
     }
   }, [modeName]);
 
@@ -139,7 +160,7 @@ function Ranking() {
           const originUserData = {
             grade: originData.grade,
             nickname: originData.nickname,
-            profile_img: originData.stored_file_name,
+            profile_img: originData.profile_pic,
             mmr: originData.mmr,
             level: originData.level,
             tier: originData.tier,
@@ -180,26 +201,40 @@ function Ranking() {
       // 로그인 한 상태에서 정보를 정상적으로 불러온 경우
     } else {
       return (
-        <Row align="center" style={{ padding: "4px" }}>
+        <Row justify="center" align="middle" style={{ padding: "4px" }}>
           <Col span={3}>
+            <p>순위</p>
             <p>{userData.grade}</p>
           </Col>
           <Col span={1}>
-            <p>{userData.profile_img}</p>
+            <img
+              src={userData.profile_img}
+              alt="profile"
+              style={{
+                width: "40px",
+                height: "40px",
+                borderRadius: "100%",
+              }}
+            />
           </Col>
           <Col span={4}>
+            <p>닉네임</p>
             <p>{userData.nickname}</p>
           </Col>
           <Col span={3}>
+            <p>레벨</p>
             <p>{userData.level}</p>
           </Col>
           <Col span={4}>
+            <p>MMR</p>
             <p>{userData.mmr}</p>
           </Col>
           <Col span={4}>
+            <p>티어</p>
             <p>{userData.tier}</p>
           </Col>
           <Col span={3}>
+            <p>전적</p>
             <p>MyRecord</p>
           </Col>
         </Row>
@@ -222,14 +257,13 @@ function Ranking() {
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
-          console.log("원본 데이터:", originData);
 
           const rankerData = originData.map((data) => {
             // data.record(전적) 데이터가 없음(null)
             return {
               grade: data.grade,
               nickname: data.nickname,
-              profile_img: data.stored_file_name,
+              profile_img: data.profile_pic,
               mmr: data.mmr,
               level: data.level,
               tier: data.tier,
@@ -250,21 +284,24 @@ function Ranking() {
       });
   }, [modeName, pageNo, setRankerList]);
 
+  console.log("랭커 목록:", rankerList);
+
   // 페이지네이션 정보: 페이지네이션 선택 시 해당 페이지 번호에 대응하는 URL로 이동 후 새로운 axios 요청 수행
   const [current, setCurrent] = useState(pageNo);
   const pageMove = (page) => {
     setCurrent(page);
     axios
-      .post(`http://localhost:3000//ranking?mode=${modeName}&page=${page}`)
+      .get(
+        `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${page}`
+      )
       // 응답 성공 시
       .then(function (response) {
-        // console.log(response.data);
+        console.log("페이지네이션 데이터:", response.data);
         // 랭킹 정보가 존재하는 경우
         if (response.data.customCode === "002") {
           // (대충 데이터 저장 후 화면에 표시해준다는 내용)
           const originData = response.data.bodyData;
           const rankerData = originData.map((data) => {
-            console.log(data);
             return {
               grade: data.grade,
               nickname: data.nickname,
@@ -281,13 +318,13 @@ function Ranking() {
           // 랭킹 정보가 없는 경우
           alert("등록된 정보가 없습니다.");
         }
-        window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
       })
       //응답 실패 시
       .catch((error) => {
         alert("마지막 페이지입니다.");
         console.log("응답 실패 : " + error);
       });
+    window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
   };
 
   // 검색 정보: 유저 검색 시
@@ -322,7 +359,6 @@ function Ranking() {
       });
   };
 
-  console.log(rankerList);
   // 페이지 렌더링
   return (
     <div
@@ -372,17 +408,12 @@ function Ranking() {
                 <Col span={24}>
                   {/* 토글 버튼 목록 */}
                   <Row className="select">
-                    <Col span={8}>
-                      <Link to="/ranking?mode=level&page=1" style={levelColor}>
-                        <span className="filterText">레벨</span>
-                      </Link>
-                    </Col>
-                    <Col span={8}>
+                    <Col span={12}>
                       <Link to="/ranking?mode=speed&page=1" style={speedColor}>
                         <span className="filterText">스피드</span>
                       </Link>
                     </Col>
-                    <Col span={8}>
+                    <Col span={12}>
                       <Link to="/ranking?mode=efficiency&page=1" style={efficiencyColor}>
                         <span className="filterText">최적화</span>
                       </Link>
@@ -426,10 +457,6 @@ function Ranking() {
                           // expandable={{
                           //   innerRow,
                           //   defaultExpandedRowKeys: ["0"],
-                          // }}
-                          // pagination={{
-                          //   position: ["bottomCenter"],
-                          //   defaultPageSize: 10,
                           // }}
                         />
                         <Pagination
