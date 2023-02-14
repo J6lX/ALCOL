@@ -452,6 +452,11 @@ public class WebSocket {
 //                int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
 //            }
 
+            else if (method.equals("banTimeout"))
+            {
+                
+            }
+
             else if (method.equals("surrender"))
             {
                 String surrenderUserId = obj.get("userId").toString();
@@ -982,6 +987,176 @@ public class WebSocket {
                         }
                         break;
 
+                    }
+                    /**
+                     * CPU 시간 초과
+                     */
+                    else if(submit_result==1)
+                    {
+                        JSONObject user_submit_result_send = new JSONObject();
+                        user_submit_result_send.put("messageType","error");
+                        user_submit_result_send.put("errorMessage","CPU 시간 초과");
+
+
+                        JSONObject other_submit_result_send = new JSONObject();
+                        other_submit_result_send.put("messageType","otherError");
+                        other_submit_result_send.put("errorMessage","CPU 시간 초과");
+
+                        BattleLog userBattleLog = BattleLog.builder().result("Error").memory("0").time("0").build();
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                        }
+
+                        synchronized (session)
+                        {
+                            session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId))
+                        {
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                        }
+                    }
+                    /**
+                     * REATIME 초과
+                     */
+                    else if(submit_result==2)
+                    {
+                        JSONObject user_submit_result_send = new JSONObject();
+                        user_submit_result_send.put("messageType","error");
+                        user_submit_result_send.put("errorMessage","REALTIME 시간 초과");
+
+
+                        JSONObject other_submit_result_send = new JSONObject();
+                        other_submit_result_send.put("messageType","otherError");
+                        other_submit_result_send.put("errorMessage","REALTIME 시간 초과");
+
+                        BattleLog userBattleLog = BattleLog.builder().result("Error").memory("0").time("0").build();
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                        }
+
+                        synchronized (session)
+                        {
+                            session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId))
+                        {
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                        }
+                    }
+                    /**
+                     * Memory 초과
+                     */
+                    else if(submit_result==3)
+                    {
+                        JSONObject user_submit_result_send = new JSONObject();
+                        user_submit_result_send.put("messageType","error");
+                        user_submit_result_send.put("errorMessage","메모리 초과");
+
+
+                        JSONObject other_submit_result_send = new JSONObject();
+                        other_submit_result_send.put("messageType","otherError");
+                        other_submit_result_send.put("errorMessage","메모리 초과");
+
+                        BattleLog userBattleLog = BattleLog.builder().result("Error").memory("0").time("0").build();
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                        }
+
+                        synchronized (session)
+                        {
+                            session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId))
+                        {
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                        }
+                    }
+                    /**
+                     * RUNTIME 에러
+                     */
+                    else if(submit_result==4)
+                    {
+                        JSONObject user_submit_result_send = new JSONObject();
+                        user_submit_result_send.put("messageType","error");
+                        user_submit_result_send.put("errorMessage","런타임 에러");
+
+
+                        JSONObject other_submit_result_send = new JSONObject();
+                        other_submit_result_send.put("messageType","otherError");
+                        other_submit_result_send.put("errorMessage","런타임 에러");
+
+                        BattleLog userBattleLog = BattleLog.builder().result("Error").memory("0").time("0").build();
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                        }
+
+                        synchronized (session)
+                        {
+                            session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId))
+                        {
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                        }
+                    }
+                    /**
+                     * SYSTEM ERROR
+                     */
+                    else if(submit_result==5)
+                    {
+                        JSONObject user_submit_result_send = new JSONObject();
+                        user_submit_result_send.put("messageType","error");
+                        user_submit_result_send.put("errorMessage","시스템 에러");
+
+
+                        JSONObject other_submit_result_send = new JSONObject();
+                        other_submit_result_send.put("messageType","otherError");
+                        other_submit_result_send.put("errorMessage","시스템 에러");
+
+                        BattleLog userBattleLog = BattleLog.builder().result("Error").memory("0").time("0").build();
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                        }
+
+                        synchronized (session)
+                        {
+                            session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId))
+                        {
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                        }
                     }
                     else
                     {
