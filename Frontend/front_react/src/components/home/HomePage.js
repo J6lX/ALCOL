@@ -90,13 +90,13 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {speed && <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>}
+        {speed[0] && <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>}
 
         <div className="secondthirdLayout">
-          {speed && (
+          {speed[1] && (
             <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
           )}
-          {speed && (
+          {speed[2] && (
             <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
           )}
         </div>
@@ -134,14 +134,14 @@ const EfficiencyRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {efficiency && (
+        {efficiency[0] && (
           <img src={efficiency[0].storedFileName} alt="rank" className="Circle firstUser"></img>
         )}
         <div className="secondthirdLayout">
-          {efficiency && (
+          {efficiency[1] && (
             <img src={efficiency[1].storedFileName} alt="rank" className="Circle secondUser"></img>
           )}
-          {efficiency && (
+          {efficiency[2] && (
             <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
           )}
         </div>
