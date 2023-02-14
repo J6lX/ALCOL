@@ -202,6 +202,18 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     }
   };
 
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const showSubmitModal = () => {
+    setIsSubmitModalOpen(true);
+  };
+  const submitHandleOk = () => {
+    clickSubmit();
+    setIsSubmitModalOpen(false);
+  };
+  const submitHandleCancel = () => {
+    setIsSubmitModalOpen(false);
+  };
+
   const clickSubmit = () => {
     if (code.trim() === "") {
       setSubmitMessage("코드를 입력해주세요.");
@@ -222,7 +234,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             }
           }
         } else {
-          console.log(code[i]);
           codedata += code[i];
         }
       }
@@ -331,7 +342,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             결과창
           </p>
           <div>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSubmit}>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showSubmitModal}>
               제출
             </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
@@ -346,6 +357,17 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
           </div>
         </div>
       </div>
+      <Modal
+        title="제출하시겠습니까?"
+        open={isSubmitModalOpen}
+        onOk={submitHandleOk}
+        okText="제출"
+        onCancel={submitHandleCancel}
+        cancelText="취소">
+        <p>코드를 제출하면 채점이 시작됩니다.</p>
+        <p>채점 결과가 나오기까지 시간이 조금 걸릴 수 있습니다.</p>
+        <small>제출하지 않으려면 취소를 누르세요!</small>
+      </Modal>
       <Modal
         title="제출 결과 확인"
         open={isResultModalOpen}

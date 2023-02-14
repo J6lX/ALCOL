@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 // import axios from "axios";
 import $ from "jquery";
@@ -12,7 +12,7 @@ import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, Modal } from "antd";
 import { userCode } from "../../states/atoms";
-import 'animate.css';
+import "animate.css";
 
 let allheight = window.innerHeight;
 
@@ -36,20 +36,18 @@ const submitMessageState = atom({
   default: "",
 });
 
-
-
-const BattleNav = ({userInfo, mode}) => {
+const BattleNav = ({ userInfo, mode }) => {
   // const mode = useRecoilValue(selectedMode);
-  let battlemode
+  let battlemode;
   if (mode[0] === "speed") {
-    battlemode = "스피드"
+    battlemode = "스피드";
   } else if (mode[0] === "optimization") {
-    battlemode = "최적화"
+    battlemode = "최적화";
   }
 
-  console.log("배틀 모드", mode)
+  console.log("배틀 모드", mode);
 
-  console.log("userInfosolving", userInfo)
+  console.log("userInfosolving", userInfo);
   return (
     <div className="BattleNav">
       <img src={Logo} alt="alcol_logo_black" style={{ height: "5vh", marginLeft: "20px" }} />
@@ -66,7 +64,7 @@ const BattleNav = ({userInfo, mode}) => {
           Vs.
         </p>
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
-        {userInfo.user.nick}
+          {userInfo.user.nick}
         </p>
       </div>
       <div style={{ width: "200px", height: "auto" }}>
@@ -77,7 +75,7 @@ const BattleNav = ({userInfo, mode}) => {
 };
 
 const Problem = (problemInfo) => {
-  const problem = problemInfo.problemInfo
+  const problem = problemInfo.problemInfo;
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
@@ -149,7 +147,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   const setSubmitMessage = useSetRecoilState(submitMessageState);
   // const problem_number = 1;
 
-  console.log("배틀 언어", language)
+  console.log("배틀 언어", language);
 
   const onChange = (newValue) => {
     setCode(newValue);
@@ -186,40 +184,52 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
     }
   };
 
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const showSubmitModal = () => {
+    setIsSubmitModalOpen(true);
+  };
+  const submitHandleOk = () => {
+    clickSubmit();
+    setIsSubmitModalOpen(false);
+  };
+  const submitHandleCancel = () => {
+    setIsSubmitModalOpen(false);
+  };
+
   const clickSubmit = () => {
     if (code.trim() === "") {
       setSubmitMessage("코드를 입력해주세요.");
     } else {
       let codedata = "";
-      for (let i=0; i<code.length; i++) {
+      for (let i = 0; i < code.length; i++) {
         if (code[i] === "\n") {
-          codedata += "\n"
-          console.log("enter", code[i])
-          for (let j=1; j<code.length-i-1; j+=2) {
-            if (code[i+j] === " " && code[i+j+1] === " ") {
-              codedata += "\t"
-              console.log("tab", code[i+j])
+          codedata += "\n";
+          console.log("enter", code[i]);
+          for (let j = 1; j < code.length - i - 1; j += 2) {
+            if (code[i + j] === " " && code[i + j + 1] === " ") {
+              codedata += "\t";
+              console.log("tab", code[i + j]);
             } else {
-              i += j-1
-              break
+              i += j - 1;
+              break;
             }
           }
         } else {
-          console.log(code[i])
-          codedata += code[i]
+          console.log(code[i]);
+          codedata += code[i];
         }
       }
-      setTimeout(()=>{
-        submitcode(codedata, problemNumber);}, 500);
+      setTimeout(() => {
+        submitcode(codedata, problemNumber);
+      }, 500);
     }
   };
 
   const surrend = () => {
-    clickSurrender()
-  }
+    clickSurrender();
+  };
 
-
-  console.log("참인가요?", language[0] === "Java", language)
+  console.log("참인가요?", language[0] === "Java", language);
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
@@ -242,7 +252,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
           value={code}
           width="69vw"
           height={`${solvingHeight}px`}
-          extensions={language[0] === "Java"? [java({ jsx: true })] : [python({ jsx: true })]}
+          extensions={language[0] === "Java" ? [java({ jsx: true })] : [python({ jsx: true })]}
           onChange={onChange}
           theme={darcula}
         />
@@ -287,7 +297,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
             결과창
           </p>
           <div>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={clickSubmit}>
+            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showSubmitModal}>
               제출
             </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
@@ -296,6 +306,17 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
           </div>
         </div>
       </div>
+      <Modal
+        title="제출하시겠습니까?"
+        open={isSubmitModalOpen}
+        onOk={submitHandleOk}
+        okText="제출"
+        onCancel={submitHandleCancel}
+        cancelText="취소">
+        <p>코드를 제출하면 채점이 시작됩니다.</p>
+        <p>채점 결과가 나오기까지 시간이 조금 걸릴 수 있습니다.</p>
+        <small>제출하지 않으려면 취소를 누르세요!</small>
+      </Modal>
     </div>
   );
 };
@@ -321,17 +342,24 @@ const Console = () => {
   );
 };
 
-const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, submit, clickSurrender, codeEmit }) => {
-  
-  const problemNumber = problemInfo.prob_no
+const SolvingPage = ({
+  problemInfo,
+  battleMode,
+  battleLanguage,
+  battleuserinfo,
+  submit,
+  clickSurrender,
+  codeEmit,
+}) => {
+  const problemNumber = problemInfo.prob_no;
 
   const surrend = () => {
-    clickSurrender()
-  }
-  
+    clickSurrender();
+  };
+
   const codeUpdate = (code) => {
-    codeEmit(code)
-  }
+    codeEmit(code);
+  };
 
   const info = (data) => {
     Modal.info(data);
@@ -339,7 +367,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
 
   $(function () {
     $("#IDE").on("paste", function (event) {
-      event.preventDefault()
+      event.preventDefault();
       const data = {
         title: "복사나 붙여넣기 불가!",
         content: (
@@ -359,7 +387,7 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
 
   $(function () {
     $("#IDE").on("copy", function (event) {
-      event.preventDefault()
+      event.preventDefault();
       const data = {
         title: "복사 붙여넣기 불가!",
         content: (
@@ -394,7 +422,13 @@ const SolvingPage = ({ problemInfo, battleMode, battleLanguage, battleuserinfo, 
             </div>
             <div>
               <div style={{ width: "69vw", height: "auto", border: "0.1px solid gray" }}>
-                <CodingPlace problemNumber={problemNumber} language={battleLanguage} submitcode={submit} clickSurrender={surrend} codeEmit={codeUpdate} />
+                <CodingPlace
+                  problemNumber={problemNumber}
+                  language={battleLanguage}
+                  submitcode={submit}
+                  clickSurrender={surrend}
+                  codeEmit={codeUpdate}
+                />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
                 <Console />
