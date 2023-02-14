@@ -62,3 +62,12 @@ table {
   border-collapse: collapse;
   margin: 10px;
 }
+
+.cm-line {
+  -youbkit-touch-callout: none; /* iOS 사파리 */
+  -youbkit-user-select: none; /* 크롬 6.0 이상, 사파리 3.1 이상, 엣지 & 오페라 15 이상 */
+  -moz-user-select: none; /* 파이어폭스 */
+  -ms-user-select: none; /* IE 10+ 및 에지 */
+  user-select: none; /* 접두사가 없는 버전,
+                                현재 Chrome 및 Opera에서 지원 */
+}
