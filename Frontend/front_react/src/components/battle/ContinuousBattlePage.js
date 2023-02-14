@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from "react";
 import axios from "axios";
-import $ from "jquery";
+// import $ from "jquery";
 import ReadyPage from "./ReadyPage";
 import BanPage from "./BanPage";
 import WaitOtherBanPage from "./WaitOtherBanPage";
@@ -46,7 +46,7 @@ const ContinuousBattlePage = () => {
   // const [problemNumber, setProblemNumber] = useState("-1");
   const [problems, setProblems] = useState([]);
   const [problemInfo, setProblemInfo] = useState([]);
-  const [battleResult, setBattleResult] = useState([]);
+  const [battleResult, setBattleResult] = useState("");
   const [resultListResult, setResultListResult] = useRecoilState(resultListResultInfo);
   const [checkConnect, setCheckConnect] = useRecoilState(sendConnect);
   const [checkGetProblem, setCheckGetProblem] = useRecoilState(sendGetProblem);
@@ -228,44 +228,6 @@ const ContinuousBattlePage = () => {
         setTimeout(() => {
           console.log("");
         }, 300);
-      } else if (data.messageType === "exitResultOk") {
-        const modaldata = {
-          title: "배틀 종료 제안 수락!",
-          content: (
-            <div>
-              <p>배틀 종료 제안이 수락되었습니다.</p>
-              <p>확인을 누르시면 배틀이 종료됩니다.</p>
-            </div>
-          ),
-          okText: "확인",
-          onOk() {
-            socket.send(
-              JSON.stringify({
-                messageType: "finish",
-                userId: userId,
-                otherId: otherId,
-              })
-            );
-          },
-        };
-        info(modaldata);
-      } else if (data.messageType === "exitResultNo") {
-        const modaldata = {
-          title: "시간이 더 필요해요...",
-          content: (
-            <div>
-              <p>상대방이 조금 더 시간이 필요한가 봅니다...</p>
-              <p>조금만 기다려주세요!</p>
-              <small>잠시 기다리시면서 코드를 한 번 더 살펴보는 건 어떨까요?</small>
-              <small>더 효율적인 방법이 떠오를지도 몰라요!</small>
-            </div>
-          ),
-          okText: "확인",
-          onOk() {},
-        };
-        info(modaldata);
-      } else if (data.messageType === "exitSuggestion") {
-        showModal();
       } else if (data.messageType === "submitResult") {
         if (battleMode === "speed") {
           const result = {
@@ -347,6 +309,7 @@ const ContinuousBattlePage = () => {
               onOk() {},
             };
             info(modaldata);
+            setResultListResult(resultList);
           }
         }
       } else if (data.messageType === "otherSubmitResult") {
@@ -378,57 +341,70 @@ const ContinuousBattlePage = () => {
           setResultListResult(resultList);
         }
       } else if (data.messageType === "error") {
+        const result = {
+          nick: othernickname,
+          mode: battleMode,
+          language: languageMode,
+          result: "error",
+          error: data.errorMessage,
+        };
+        let resultList = [...resultListResult];
+        resultList.push(result);
+        submitOther(data.testcase, data.accepted);
+        setResultListResult(resultList);
+      } else if (data.messageType === "socketError") {
         showSocketErrorModal();
       } else if (data.messageType === "surrender") {
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
+        setBattleResult(data);
         if (battleMode === "speed") {
-          setBattleResult(data);
           if (data.battleResult === "win") {
             console.log(data);
+            const result = {
+              nick: nickname,
+              mode: battleMode,
+              language: languageMode,
+              result: "accepted",
+              time: data.time,
+              memory: data.memory,
+            };
+            let resultList = [...resultListResult];
+            resultList.push(result);
+            setResultListResult(resultList);
             const modaldata = {
               title: "승리!",
               content: (
                 <div>
                   <p>축하합니다!</p>
                   <p>모든 테스트케이스를 맞췄습니다!</p>
-                  {battleMode === "speed" && <p>승리를 거머쥔 {nickname} 님!!</p>}
-                  {battleMode === "speed" && <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>}
+                  <p>승리를 거머쥔 {nickname} 님!!</p>
                 </div>
               ),
               okText: "확인",
               onOk() {
-                if (battleMode === "speed") {
-                  const result = {
-                    nick: nickname,
-                    mode: battleMode,
-                    language: languageMode,
-                    result: "accepted",
-                    time: data.time,
-                    memory: data.memory,
-                  };
-                  let resultList = [...resultListResult];
-                  resultList.push(result);
-                  setResultListResult(resultList);
-                  setIsSolving(false);
-                  setIsSolved(true);
-                }
+                showFinishModal()
+                setIsSolving(false);
+                setIsSolved(true);
               },
             };
             info(modaldata);
+
           } else if (data.battleResult === "lose") {
             showOppSubmitModal();
+
           } else if (data.battleResult === "draw") {
             const modaldata = {
               title: "배틀 시간 초과!",
               content: (
                 <div>
                   <p>배틀 시간이 종료되었습니다.</p>
-                  <p>확인을 누르시면 배틀이 종료됩니다.</p>
                 </div>
               ),
               okText: "확인",
               onOk() {
+                showFinishModal()
+                setIsSolving(false)
                 setIsSolved(true);
               },
             };
@@ -445,19 +421,21 @@ const ContinuousBattlePage = () => {
                   <p>축하합니다!</p>
                   <p>승리했습니다!</p>
                   <p>승리를 거머쥔 {nickname} 님!!</p>
-                  <small>확인 버튼을 누르시면 배틀을 종료합니다!</small>
                 </div>
               ),
               okText: "확인",
               onOk() {
+                showFinishModal()
                 setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
           } else if (data.battleResult === "lose") {
+            setBattleResult("lose");
             showOppSubmitModal();
           } else if (data.battleResult === "draw") {
+            setBattleResult("win");
             const modaldata = {
               title: "비겼습니다.",
               content: (
@@ -469,21 +447,24 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
+                showFinishModal()
+                setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
           } else if (data.battleResult === "draw_timeout") {
+            setBattleResult("lose");
             const modaldata = {
               title: "배틀 시간 초과!",
               content: (
                 <div>
                   <p>배틀 시간이 종료되었습니다.</p>
-                  <p>확인을 누르시면 배틀이 종료됩니다.</p>
                 </div>
               ),
               okText: "확인",
               onOk() {
+                showFinishModal()
                 setIsSolving(false);
                 setIsSolved(true);
               },
@@ -497,7 +478,7 @@ const ContinuousBattlePage = () => {
       }
     };
 
-    console.log("배틀 결과 보이니", battleResult);
+    // console.log("배틀 결과 보이니", battleResult);
 
     socket.onclose = (message) => {
       console.log("closed!", message);
@@ -510,38 +491,28 @@ const ContinuousBattlePage = () => {
     };
   }
 
-  // 배틀 종료 제안이 왔을 때
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "exitOk",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
-    setIsModalOpen(false);
-    setIsSolved(true);
-  };
-  const handleCancel = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "exitNo",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
-    setIsModalOpen(false);
-  };
-
   const [isOppSubmitModalOpen, setIsOppSubmitModalOpen] = useState(false);
   const showOppSubmitModal = () => {
     setIsOppSubmitModalOpen(true);
   };
   const oppSubmitHandleOk = () => {
+    // socket.send(
+    //   JSON.stringify({
+    //     messageType: "finish",
+    //     userId: userId,
+    //     otherId: otherId,
+    //   })
+    // );
+    setIsOppSubmitModalOpen(false);
+    setIsSolving(false);
+    setIsSolved(true);
+  };
+
+  const [isFinishModalOpen, setIsFinishModalOpen] = useState(false);
+  const showFinishModal = () => {
+    setIsFinishModalOpen(true);
+  };
+  const finishHandleOk = () => {
     socket.send(
       JSON.stringify({
         messageType: "finish",
@@ -549,7 +520,7 @@ const ContinuousBattlePage = () => {
         otherId: otherId,
       })
     );
-    setIsOppSubmitModalOpen(false);
+    setIsFinishModalOpen(false);
     setIsSolving(false);
     setIsSolved(true);
   };
@@ -579,13 +550,13 @@ const ContinuousBattlePage = () => {
     setIsOppSurrenderModalOpen(true);
   };
   const oppSurrenderHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "finish",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
+    // socket.send(
+    //   JSON.stringify({
+    //     messageType: "finish",
+    //     userId: userId,
+    //     otherId: otherId,
+    //   })
+    // );
     setIsOppSurrenderModalOpen(false);
   };
 
@@ -594,13 +565,13 @@ const ContinuousBattlePage = () => {
     setIsSocketErrorModalOpen(true);
   };
   const socketErrorHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "finish",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
+    // socket.send(
+    //   JSON.stringify({
+    //     messageType: "finish",
+    //     userId: userId,
+    //     otherId: otherId,
+    //   })
+    // );
     setIsSocketErrorModalOpen(false);
   };
 
@@ -636,44 +607,6 @@ const ContinuousBattlePage = () => {
   const info = (data) => {
     Modal.info(data);
   };
-
-  $(function () {
-    $("#test").on("paste", function () {
-      const data = {
-        title: "복사나 붙여넣기 불가!",
-        content: (
-          <div>
-            <p>배틀의 공평한 진행을 위해서</p>
-            <p>복사나 붙여넣기는 불가능합니다!</p>
-            <p>코드를 직접 타이핑해주세요.</p>
-          </div>
-        ),
-        okText: "확인",
-        onOk() {},
-      };
-      info(data);
-      return false;
-    });
-  });
-
-  $(function () {
-    $("#test").on("copy", function () {
-      const data = {
-        title: "복사 붙여넣기 불가!",
-        content: (
-          <div>
-            <p>배틀의 공평한 진행을 위해서</p>
-            <p>복사나 붙여넣기는 불가능합니다!</p>
-            <p>코드를 직접 타이핑해주세요.</p>
-          </div>
-        ),
-        okText: "확인",
-        onOk() {},
-      };
-      info(data);
-      return false;
-    });
-  });
 
   const changeBanProblem = (data) => {
     if (data === "timeout" && isSendTimeout === false) {
@@ -813,7 +746,13 @@ const ContinuousBattlePage = () => {
             clickSurrender={clickSurrender}
           />
         )}
-        {isSolved && <ResultPage props={battleResult} showDetailResult={showDetailResult} />}
+        {isSolved && <ResultPage 
+            props={battleResult} 
+            battleuserinfo={{
+              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
+              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+            }} 
+            showDetailResult={showDetailResult} />}
         {isOpenDetail && (
           <ResultListPage
             problemInfo={problemInfo}
@@ -826,18 +765,6 @@ const ContinuousBattlePage = () => {
           />
         )}
       </div>
-      <Modal
-        title="배틀 종료 제안"
-        open={isModalOpen}
-        onOk={handleOk}
-        okText="네"
-        onCancel={handleCancel}
-        cancelText="아니오">
-        <p>{othernickname}님이 배틀을 끝내자고 요청하셨습니다.</p>
-        <p>배틀을 끝내시겠습니까?</p>
-        <small>'네'를 누르면 배틀이 종료됩니다.</small>
-        <small>지금 끝내고 싶지 않으시면 '아니오'를 눌러주세요.</small>
-      </Modal>
       <Modal
         title={`${othernickname}의 네트워크 오류`}
         open={isSocketErrorModalOpen}
@@ -884,8 +811,20 @@ const ContinuousBattlePage = () => {
         title="항복"
         open={isSurrenderModalOpen}
         onOk={surrenderHandleOk}
-        onCancel={surrenderHandleCancel}>
+        okText="네"
+        onCancel={surrenderHandleCancel}
+        cancelText="아니오">
         <p className="NanumSquare">정말로 항복하시겠습니까?</p>
+      </Modal>
+      <Modal
+        title="배틀이 종료되었습니다."
+        open={isFinishModalOpen}
+        onOk={finishHandleOk}
+        okText="확인"
+        onCancel={copyCode}
+        cancelText="코드 복사">
+        <p className="NanumSquare">배틀이 정상적으로 종료되었습니다.</p>
+        <p className="NanumSquare">현재까지 쓴 코드를 복사하고 싶다면 "코드 복사" 버튼을 눌러주세요!</p>
       </Modal>
     </div>
   );

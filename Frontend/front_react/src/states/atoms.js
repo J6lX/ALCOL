@@ -5,6 +5,11 @@ export const userCode = atom({
   default: "",
 });
 
+export const isEntrance = atom({
+  key: "isEntrance",
+  default: "-1",
+});
+
 //---------모드선택
 export const selectedMode = atom({
   key: "selectedMode",

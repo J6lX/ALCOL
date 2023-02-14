@@ -244,16 +244,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     }
   };
 
-  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
-  const showResultModal = () => {
-    setIsResultModalOpen(true);
-  };
-  const handleResultOk = () => {
-    setIsResultModalOpen(false);
-  };
-  const handleResultCancel = () => {
-    setIsResultModalOpen(false);
-  };
 
   const resultList = useRecoilValue(resultListResultInfo);
   console.log("뭐가 들어있냐면", resultList);
@@ -267,10 +257,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     );
   }
   console.log(result);
-
-  const sendExit = () => {
-    sendexit();
-  };
 
   const surrend = () => {
     clickSurrender();
@@ -374,12 +360,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
               항복
             </Button>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showResultModal}>
-              제출 결과 확인
-            </Button>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={sendExit}>
-              배틀 종료 제안
-            </Button>
           </div>
         </div>
       </div>
@@ -393,13 +373,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
         <p>코드를 제출하면 채점이 시작됩니다.</p>
         <p>채점 결과가 나오기까지 시간이 조금 걸릴 수 있습니다.</p>
         <small>제출하지 않으려면 취소를 누르세요!</small>
-      </Modal>
-      <Modal
-        title="제출 결과 확인"
-        open={isResultModalOpen}
-        onOk={handleResultOk}
-        onCancel={handleResultCancel}>
-        {result}
       </Modal>
     </div>
   );

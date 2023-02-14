@@ -140,6 +140,7 @@ function Bottom(userInfo) {
 
 function App({ props, battleuserinfo, changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
+  const [loading, setLoading] = React.useState(false);
   // var playerInfo = useRecoilValue(matchingPlayerInfo);
   // console.log(playerInfo.otherId);
   const propsdata = props[0];
@@ -158,6 +159,7 @@ function App({ props, battleuserinfo, changeBanProblem }) {
     } else {
       console.log("제대로 하세요... 쫌...");
     }
+    setLoading(true);
   };
 
   const timeOut = (data) => {
@@ -182,6 +184,7 @@ function App({ props, battleuserinfo, changeBanProblem }) {
     }
   }, [choose, problem, keys]);
 
+
   return (
     <div className="matching_background">
       <UserInfo userInfo={battleuserinfo} />
@@ -189,6 +192,7 @@ function App({ props, battleuserinfo, changeBanProblem }) {
       <Mid props={propsdata} onClick={onClick} setProblem={setProblem} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Button
+          loading={loading}
           className="NanumSquare"
           style={{ width: "100px", marginTop: "10px" }}
           onClick={selected}>

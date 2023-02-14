@@ -55,12 +55,7 @@ function App() {
     <RecoilRoot>
       <Layout>
         <AppHeader />
-        <hr
-          style={{
-            color: "white",
-            transform: "translate(0, 64px)",
-          }}
-        />
+        
         <Content
           style={{
             backgroundColor: "#16171B",

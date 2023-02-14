@@ -51,6 +51,9 @@ function ProfileImage({ setImage }) {
 
   return (
     <div>
+      <small className="NanumSquare" style={{ position: "absolute", color: "black", top:"35%", left: "14%", zIndex: "10" }} onClick={() => {
+          fileInput.current.click();
+        }}>프로필 사진 등록!</small>
       <Avatar
         src={profileImage}
         style={{ margin: "auto" }}

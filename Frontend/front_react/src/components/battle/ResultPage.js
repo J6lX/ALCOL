@@ -3,10 +3,11 @@ import { useHistory } from "react-router-dom";
 import "./ResultPage.css";
 import img_victory from "../../assets/result_victory.gif";
 import img_defeat from "../../assets/result_defeat.gif";
+import versus from "../../assets/versus.png";
 import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
-function App({props, showDetailResult}) {
+function App({props, userInfo, showDetailResult}) {
   console.log("이게 배틀 종료 데이터", props);
   const data = props;
   const printResult = () => {
@@ -71,12 +72,39 @@ function App({props, showDetailResult}) {
       {printResult()}
       <div className="result_box">
         <div className="result_content">
+          <Row
+            className="middle_selected"
+            style={{ flexDirection: "row", width: "600px", height: "50px" }}>
+            <Col
+              span={9}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "right",
+                height: "50px",
+              }}>
+              <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.user.nick}</p>
+            </Col>
+            <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
+              <img src={versus} alt="versus" style={{ width: "60px" }} />
+            </Col>
+            <Col
+              span={9}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "rleft",
+                height: "50px",
+              }}>
+              <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.other.nick}</p>
+            </Col>
+          </Row>
           <Row>
             <Col className="result_text" span={10}>
-              걸린 시간
+              배틀 결과
             </Col>
             <Col className="result_text" span={10}>
-              아직 안 받음
+              {data.battleResult}
             </Col>
           </Row>
         </div>
@@ -86,7 +114,7 @@ function App({props, showDetailResult}) {
               얻은 경험치
             </Col>
             <Col className="result_text" span={10}>
-              이것도 아직임
+              {data.changeExp}
             </Col>
           </Row>
         </div>
