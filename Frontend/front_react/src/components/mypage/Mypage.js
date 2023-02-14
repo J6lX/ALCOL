@@ -254,11 +254,11 @@ function ProfileImage() {
   };
 
   return (
-    <div>
+    <div className="mypage_useImg_box">
       <img
         src={photo}
         alt="profile_image"
-        className="userImg"
+        className="mypage_userImg"
         onClick={() => {
           fileInput.current.click();
         }}
@@ -628,31 +628,38 @@ function Mypage() {
         <div>
           {/* 사용자 프로필 블록 */}
           <Row
+            className="mypage_first_row_wrap_box"
             justify="center"
-            style={{
-              padding: "5px",
-            }}>
+            // style={{
+            //   padding: "5px",
+            // }}>
+          >
             {/* 개인 정보 표시 블록 */}
             <Col
               xs={16}
               md={6}
               lg={4}
-              className="text block"
+              // className="text block"
+              // className="text mypage_profile_block"
+              className="mypage_text mypage_profile_block"
               style={{
                 display: "flex",
                 justifyContent: "center",
               }}>
-              <Row>
+              {/* > */}
+              <Row type="flex">
                 <Col>
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                   <ProfileImage />
                   <h1>{userInfo.nickname}</h1>
+                  <div style={{ color: "white", marginTop: "-10px" }}>LV. {userInfo.level}</div>
                 </Col>
               </Row>
             </Col>
 
             {/* 티어 정보 및 뱃지 표시 블록*/}
-            <Col xs={16} lg={18} className="block">
+            {/* <Col xs={16} lg={18} className="block"> */}
+            <Col xs={16} lg={18} className="mypage_tier_wrap_box">
               <Row>
                 {/* 티어 정보 표시 블록 */}
                 <Col span={24} justify="center" align="middle">
@@ -664,7 +671,7 @@ function Mypage() {
                       xl={6}
                       justify="center"
                       style={{
-                        margin: "15px",
+                        // margin: "15px",
                         maxHeight: "240px",
                       }}>
                       {/* 스피드전 진척도 그래프 */}
@@ -674,6 +681,7 @@ function Mypage() {
                         lineWidth={16}
                         lengthAngle={300}
                         background="#f3f3f3"
+                        radius={45}
                         rounded
                         animate
                         startAngle={120}
@@ -703,6 +711,7 @@ function Mypage() {
                       <p>{userInfo.speedTier}</p>
                       <p>MMR {spdMMR}</p>
                       <p>1000위(상위 20%)</p>
+                      <p>다음 티어까지 {speedData[0].value}% 달성</p>
                     </Col>
                     {/* 최적화전 데이터 요약 */}
                     <Col xs={24} md={8} lg={8} xl={5} className="text">
@@ -710,6 +719,7 @@ function Mypage() {
                       <p>{userInfo.efficiencyTier}</p>
                       <p>MMR {effMMR}</p>
                       <p>1000위(상위 20%)</p>
+                      <p>다음 티어까지 {efficiencyData[0].value}% 달성</p>
                     </Col>
                     {/* 최적화전 티어 뱃지 */}
                     <Col
@@ -728,6 +738,7 @@ function Mypage() {
                         lineWidth={16}
                         lengthAngle={300}
                         background="#f3f3f3"
+                        radius={45}
                         rounded
                         animate
                         startAngle={120}
@@ -758,7 +769,7 @@ function Mypage() {
           </Row>
 
           {/* 지난 시즌, 전적 표시 */}
-          <Row justify="center">
+          <Row justify="center" className="mypage_record_wrap_box">
             <Col
               xs={16}
               md={6}

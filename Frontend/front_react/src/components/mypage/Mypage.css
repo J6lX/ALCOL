@@ -6,7 +6,8 @@
 
 /* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
 .block {
-  background-color: #1d1e22;
+  /* background-color: #1d1e22; */
+  background-color: #0033ff;
   border: 1px solid #5cfdfd;
   margin: 10px;
   border-radius: 15px;
@@ -15,7 +16,8 @@
 
 /* 친구 목록, 지난 시즌 조회용 블록 CSS */
 .miniBlock {
-  background-color: #1d1e22;
+  /* background-color: #1d1e22; */
+  background-color: pink;
   border: 1px solid white;
   border-radius: 15px;
   text-align: center;
@@ -29,12 +31,13 @@
 }
 
 /* 사용자 프사 */
-.userImg {
-  width: 100px;
-  height: 100px;
+.mypage_userImg {
+  width: 150px;
+  height: 150px;
+  margin-top: 30px;
+  margin-bottom: 10px;
   justify-content: center;
   align-items: center;
-  margin: 15px;
   background: rgba(255, 255, 255, 0.3);
   font-family: "oneMobilePOP";
   border-radius: 100%;
@@ -57,10 +60,11 @@
 }
 
 /* 페이지 기본 텍스트 */
-.text {
+.mypage_text {
   text-decoration-color: white;
   padding: 5px;
   font-size: 15px;
+  text-align: center;
 }
 
 /* 중간 제목(스피드, 효율성) */
@@ -118,4 +122,40 @@
 /* 페이지네이션 가운데 고정 */
 .ant-table-wrapper .ant-table-pagination-right {
   justify-content: center !important;
+}
+
+/* css 추가 */
+
+/* .css-dev-only-do-not-override-ixblex.ant-row {
+  display: flex;
+  flex-flow: row wrap;
+  min-width: 0;
+  align-items: center;
+} */
+
+.mypage_first_row_wrap_box {
+  background-color: yellow;
+}
+
+.mypage_profile_block {
+  background-color: red;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.mypage_tier_wrap_box {
+  background-color: green;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 8px;
+}
+
+.mypage_useImg_box {
+  display: block;
+  margin: auto;
+  align-items: center;
+}
+
+.mypage_record_wrap_box {
+  background-color: orange;
 }

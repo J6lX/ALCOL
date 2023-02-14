@@ -105,7 +105,7 @@ const SpeedRanking = () => {
   );
 };
 
-const EfficiencyRanking = ({ efficiencyRanking }) => {
+const EfficiencyRanking = () => {
   const [efficiency, setEfficiencyRanking] = useState([
     { storedFileName: "" },
     { storedFileName: "" },
@@ -117,7 +117,7 @@ const EfficiencyRanking = ({ efficiencyRanking }) => {
       .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
       .then(function (response) {
         console.log(response.data.bodyData);
-        setEfficiencyRanking(response.data.bodyData.speed);
+        setEfficiencyRanking(response.data.bodyData.optimization);
       })
       .catch((error) => {
         console.log(error);
