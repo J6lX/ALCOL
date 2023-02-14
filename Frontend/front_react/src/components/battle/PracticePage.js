@@ -62,7 +62,7 @@ function Ranking() {
   // 연습 문제 데이터 상태 관리
   const [refinedData, setRefinedData] = useState([]);
 
-  // 연습 문제 상태 관리(서버 연결 시 사용)
+  // 사용자가 풀려 하는 연습 문제 상태 관리
   // const [practiceProblem, setPracticeProblem] = useRecoilState(PracticeProblemState);
 
   // 입력받은 검색어 상태 관리
