@@ -8,6 +8,7 @@ import iconSpeed from "../../assets/speed_mode_icon.png";
 import iconPerformance from "../../assets/performance_mode_icon.png";
 import iconJava from "../../assets/java.png";
 import iconPython from "../../assets/python.png";
+import iconCpp from "../../assets/cpp.png";
 import iconBack from "../../assets/left-arrow.png";
 import iconBackSmall from "../../assets/left-arrow-small.png";
 import "./ModeSelectPage.css";
@@ -221,6 +222,15 @@ function SelectLanguage({ setLanguage, back }) {
           avgTime={"5"}
           setMode={setLanguage}
           setText={"Python3"}
+        />
+        <SelectBox
+          gameMode={"C++"}
+          gameModeIcon={iconCpp}
+          gameInfo1={"C++을 사용해서"}
+          gameInfo2={"문제를 풉니다"}
+          avgTime={"5"}
+          setMode={setLanguage}
+          setText={"Cpp"}
         />
       </div>
     </div>
