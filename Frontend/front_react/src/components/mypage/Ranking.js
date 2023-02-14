@@ -158,6 +158,8 @@ function Ranking() {
         if (response.data.customCode === "000") {
           // 로그인한 사용자 데이터(userData) 설정
           const originData = response.data.bodyData;
+          console.log(originData);
+
           const originUserData = {
             grade: originData.grade,
             nickname: originData.nickname,
