@@ -332,6 +332,8 @@ public class UserServiceImpl implements UserService
             userBattleLogDto.setOtherUserNickname(userEntity.getNickname());
         }
 
+        log.info("UserServiceImpl 메소드의 getBattleLog 메소드 종료");
+
         return list;
     }
 
