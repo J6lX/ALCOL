@@ -207,6 +207,11 @@ const CodingPlace = () => {
       .then((response) => {
         const submitResult = response.data;
         console.log(submitResult);
+
+        // 풀이 성공 시 모달 창 띄우기
+        if (response.data.bodyData.result === "success") {
+          gameVictory();
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -230,12 +235,20 @@ const CodingPlace = () => {
   };
 
   // 승리(정답) 모달 창 관리
+  // 나가기 확인 모달 창 관리
+  const [isGameEnd, setIsGameEnd] = useState(false);
+
   const gameVictory = () => {
-    setIsModalOpen(true);
+    setIsGameEnd(true);
   };
   // 승리(정답) 모달에서 '예' 눌렀을 때
   const leaveOk = () => {
+    setIsGameEnd(false);
     window.location.href = "/practice";
+  };
+  // 승리(정답) 모달에서 '예' 눌렀을 때
+  const leaveCancel = () => {
+    setIsGameEnd(false);
   };
 
   // lang에 할당된 값을 선택 상자를 기준으로 동적으로(파이썬/자바) 변동시키면 된다.
@@ -344,8 +357,8 @@ const CodingPlace = () => {
       <Modal title="나가기" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <p className="NanumSquare">정말로 나가시겠습니까?</p>
       </Modal>
-      <Modal title="게임 종료" open={gameVictory} onOk={leaveOk}>
-        <p className="NanumSquare">정말로 나가시겠습니까?</p>
+      <Modal title="게임 종료" open={isGameEnd} onOk={leaveOk} onCancel={leaveCancel}>
+        <p className="NanumSquare">정답입니다!</p>
       </Modal>
     </div>
   );
