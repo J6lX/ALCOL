@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -180,6 +181,14 @@ public class UserServiceImpl implements UserService
                 return "PICTURE_UPLOAD_FAILURE";
             }
         }
+
+        // redis 저장 파일 경로 업데이트
+        HashOperations<String, String, Object> userInfo = redisTemplate.opsForHash();
+        userInfo.put(
+                "userInfo:" + userEntity.getUserId(),
+                "stored_file_name",
+                userEntity.getStoredFileName()
+        );
 
         userRepository.save(userEntity);
 
