@@ -428,7 +428,7 @@ public class WebSocket {
                      * 아래 시간 쪽에 게임 끝나는 시간 설정
                      * 세션에 Timer 할당
                      */
-                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 20000); //
+                    timer.schedule(new SessionTimerTask(session,userId,otherUserId,battleMode), 30000); //
                     timerMap.put(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId,timer);
                 }
             }
