@@ -39,7 +39,6 @@ public class RankingController
         // 1번 유저 승리
         if(battleResult.getWinner().equals("1"))
         {
-            // 1이면 이긴 것 처리
             user1Result = 1;
         }
         // 2번 유저 승리
@@ -140,4 +139,5 @@ public class RankingController
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(top3List, CustomStatusCode.SEARCH_TOP3_EXIST));
     }
+
 }
