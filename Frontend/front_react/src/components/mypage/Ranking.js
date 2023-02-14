@@ -160,6 +160,14 @@ function Ranking() {
           const originData = response.data.bodyData;
           console.log(originData);
 
+          const winpoint = Number(originData.record.win);
+          const losepoint = Number(originData.record.lose);
+          const winrate =
+            winpoint === 0 && losepoint === 0
+              ? 0
+              : Math.round((Number(winpoint) / (Number(winpoint) + Number(losepoint))) * 10000) /
+                100;
+
           const originUserData = {
             grade: originData.grade,
             nickname: originData.nickname,
@@ -167,6 +175,7 @@ function Ranking() {
             mmr: originData.mmr,
             level: originData.level,
             tier: originData.tier,
+            record: `${winpoint}승 ${losepoint}패(${winrate}%)`,
           };
           setUserData(originUserData);
         } else {
@@ -238,7 +247,7 @@ function Ranking() {
           </Col>
           <Col span={3}>
             <p>전적</p>
-            <p>MyRecord</p>
+            <p>{userData.record}</p>
           </Col>
         </Row>
       );
