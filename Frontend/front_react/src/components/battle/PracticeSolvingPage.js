@@ -181,12 +181,14 @@ const CodingPlace = () => {
   };
 
   // lang에 할당된 값을 선택 상자를 기준으로 동적으로(파이썬/자바) 변동시키면 된다.
-  const lang = "python";
+  const [lang, setLang] = useState("python");
 
   // 선택 상자 변화 반영
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    setLang(value);
   };
+
+  console.log(lang);
 
   // 코딩 영역 페이지 렌더링
   return (
