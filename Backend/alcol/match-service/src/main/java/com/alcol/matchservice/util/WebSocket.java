@@ -108,7 +108,7 @@ public class WebSocket {
                 ranking = redisTemplate.opsForZSet();
                 try
                 {
-                    mmr = ranking.score("speed", id).intValue();
+                    mmr = ranking.score(mode, id).intValue();
                 }
                 catch (Exception e)
                 {
