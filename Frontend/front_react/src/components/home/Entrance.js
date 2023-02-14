@@ -9,8 +9,8 @@ const Entrance = () => {
     entrance.className = "animate__animated animate__fadeOut";
     setTimeout(() => {
       entrance.style.visibility = "hidden";
-    });
-  }, 2000);
+    }, 1000);
+  }, 1000);
   console.log(randomNum);
   return (
     <div
@@ -26,7 +26,7 @@ const Entrance = () => {
       <img
         src={require(`../../assets/entrance${randomNum}.png`)}
         alt="entrance"
-        style={{ height: "100vh" }}
+        style={{ height: "100vw" }}
       />
     </div>
   );

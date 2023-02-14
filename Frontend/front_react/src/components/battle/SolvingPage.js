@@ -247,15 +247,39 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
           height: `${solvingHeight}px`,
           verticalAlign: "top",
         }}>
-        <CodeMirror
-          id="IDE"
-          value={code}
-          width="69vw"
-          height={`${solvingHeight}px`}
-          extensions={language[0] === "Java" ? [java({ jsx: true })] : [python({ jsx: true })]}
-          onChange={onChange}
-          theme={darcula}
-        />
+        {language === "Java" && (
+          <CodeMirror
+            id="IDE"
+            value={code}
+            width="69vw"
+            height={`${solvingHeight}px`}
+            extensions={[java({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
+        {language === "Python3" && (
+          <CodeMirror
+            id="IDE"
+            value={code}
+            width="69vw"
+            height={`${solvingHeight}px`}
+            extensions={[python({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
+        {language === "Cpp" && (
+          <CodeMirror
+            id="IDE"
+            value={code}
+            width="69vw"
+            height={`${solvingHeight}px`}
+            extensions={[java({ jsx: true })]}
+            onChange={onChange}
+            theme={darcula}
+          />
+        )}
       </div>
       <div
         role="button"
