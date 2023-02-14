@@ -853,6 +853,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserPrevMmr", sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr);
                                     sendBattleLog.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
                                     sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog);
+                                    System.out.println("제출한 유저 : 1, 승리 + "+ sendBattleLogForRedis);
                                 }
                                 /**
                                  * 제출한 1번 유저가 졌다면 ?
@@ -874,7 +875,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr);
                                     sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr);
                                     sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog);
-
+                                    System.out.println("제출한 유저 : 2, 패배 + "+ sendBattleLogForRedis);
                                 }
                             }
                             /**
@@ -899,6 +900,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserPrevMmr", sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.prevMmr);
                                     sendBattleLog.put("loserNowMmr", sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.nowMmr);
                                     sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog);
+                                    System.out.println("제출한 유저 : 2, 승리 + "+ sendBattleLogForRedis);
                                 }
                                 else
                                 {
@@ -917,6 +919,7 @@ public class WebSocket {
                                     sendBattleLog.put("loserPrevMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.prevMmr);
                                     sendBattleLog.put("loserNowMmr",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.nowMmr);
                                     sendBattleLog.put("loserSubmitLog",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog);
+                                    System.out.println("제출한 유저 : 2, 패배 + "+ sendBattleLogForRedis);
                                 }
                             }
 //                            sendBattleLog.put("user1",sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1);
