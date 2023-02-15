@@ -82,20 +82,28 @@ public class ProblemServiceImpl implements ProblemService
     {
         ProblemEntity problemEntity = problemRepository.findById(probNo).orElse(null);
 
+        String probDetailDesc = problemEntity.getProbDetailDesc();
+        String probInputDesc = problemEntity.getProbInputDesc();
+        String probOutputDesc = problemEntity.getProbOutputDesc();
         String probTestInput = problemEntity.getProbTestInput();
-        probTestInput = probTestInput.replaceAll("\n", "<br>");
-        log.info("ProbTestInput: " + probTestInput);
+        String probTestOutput = problemEntity.getProbTestOutput();
+
+        probDetailDesc = probDetailDesc.replaceAll("\\\\n", "<br>");
+        probInputDesc = probInputDesc.replaceAll("\\\\n", "<br>");
+        probOutputDesc = probOutputDesc.replaceAll("\\\\n", "<br>");
+        probTestInput = probTestInput.replaceAll("\\\\n", "<br>");
+        probTestOutput = probTestOutput.replaceAll("\\\\n", "<br>");
 
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
                 .prob_name(problemEntity.getProbName())
-                .prob_content(problemEntity.getProbDetailDesc())
-                .prob_input_content(problemEntity.getProbInputDesc())
-                .prob_output_content(problemEntity.getProbOutputDesc())
+                .prob_content(probDetailDesc)
+                .prob_input_content(probInputDesc)
+                .prob_output_content(probOutputDesc)
                 .prob_time_limit(problemEntity.getProbTimeLimit())
                 .prob_memory_limit(problemEntity.getProbMemoryLimit())
                 .prob_input_testcase(probTestInput)
-                .prob_output_testcase(problemEntity.getProbTestOutput())
+                .prob_output_testcase(probTestOutput)
                 .prob_tier(problemEntity.getTier().getTier())
                 .build();
     }
