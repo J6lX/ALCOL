@@ -89,7 +89,7 @@ function giveColor(userTier) {
   if (userTier === "B") {
     return "#ec9e73";
   } else if (userTier === "S") {
-    return "#e5edf8";
+    return "#6f87ae";
   } else if (userTier === "G") {
     return "#ecec63";
   } else if (userTier === "P") {
@@ -377,7 +377,7 @@ function Mypage() {
 
           // 시즌 정보를 시즌 값 기준으로 오름차순 정렬
           refinedLastSeason.sort(function (seasonA, seasonB) {
-            return seasonA.season - seasonB.season;
+            return seasonB.season - seasonA.season;
           });
 
           // 정제한 정보들을 recoil에 반영
