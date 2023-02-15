@@ -468,10 +468,6 @@ function Mypage() {
   const spdMMR = MMRList[0];
   const effMMR = MMRList[1];
 
-  console.log("스피드전:", spdMMR);
-  console.log("최적화전:", effMMR);
-  console.log("스피드전 경계:", speedBorder);
-  console.log("최적화전 경계:", efficiencyBorder);
   // 스피드전 데이터
   const speedData = [
     {

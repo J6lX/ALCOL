@@ -83,7 +83,6 @@ const SpeedRanking = () => {
     axios
       .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
       .then(function (response) {
-        console.log(response.data.bodyData);
         setSpeedRanking(response.data.bodyData.speed);
       })
       .catch((error) => {
@@ -129,7 +128,6 @@ const EfficiencyRanking = () => {
     axios
       .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
       .then(function (response) {
-        console.log(response.data.bodyData);
         setEfficiencyRanking(response.data.bodyData.optimization);
       })
       .catch((error) => {
@@ -224,7 +222,7 @@ const HomePage = () => {
   const setSendBattleStart = useSetRecoilState(sendBattleStart);
   const setIsSubmitSpin = useSetRecoilState(isSubmitSpin);
 
-  setSelectedMode("-1");
+  useEffect(()=>{setSelectedMode("-1");
   setSelectedLanguage("-1");
   setMatchingPlayerInfo({
     userId: "",
@@ -235,7 +233,8 @@ const HomePage = () => {
   setSendConnect("-1");
   setSendGetProblem("-1");
   setSendBattleStart("-1");
-  setIsSubmitSpin(false);
+  setIsSubmitSpin(false);}, 
+  [setSelectedMode, setSelectedLanguage, setMatchingPlayerInfo,setResultListResultInfo, setSendConnect, setSendGetProblem, setSendBattleStart, setIsSubmitSpin])
 
   return (
     <div style={{ zIndex: "-2" }}>

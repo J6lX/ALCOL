@@ -11,7 +11,6 @@ const Entrance = () => {
         entrance.style.visibility = "hidden";
       }, 700);
     }, 700);
-    console.log(randomNum);
     return (
       <div
         id="entrance"

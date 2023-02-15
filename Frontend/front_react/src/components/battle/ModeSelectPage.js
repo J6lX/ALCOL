@@ -69,9 +69,6 @@ function UserInfo({ setMode, setLanguage }) {
       var tmpSpeedLV = speedTier.substr(speed.length, 1);
       var tmpOptLV = optTier.substr(opt.length, 1);
 
-      console.log("../../assets/ALCOL_tiers/tier_" + speed + "_" + tmpSpeedLV + ".png");
-      console.log("../../assets/ALCOL_tiers/tier_" + opt + "_" + tmpOptLV + ".png");
-
       setUrlSpeed(require("../../assets/ALCOL_tiers/tier_" + speed + "_" + tmpSpeedLV + ".png"));
       setUrlOpt(require("../../assets/ALCOL_tiers/tier_" + opt + "_" + tmpOptLV + ".png"));
     }
@@ -79,7 +76,6 @@ function UserInfo({ setMode, setLanguage }) {
 
   useEffect(() => {
     if (urlSpeed !== "" && urlOpt !== "") {
-      console.log("url을 설정합니다");
       console.log(urlSpeed);
       console.log(urlOpt);
     }

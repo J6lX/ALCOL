@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Row, Progress } from "antd";
 import $ from "jquery";
 import "./BanPage.css";
@@ -6,12 +6,10 @@ import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
 
 function Top({ userInfo, timeOut }) {
-  // const [secs, setTime] = React.useState(0);
-  console.log("TopuserInfo", userInfo);
-  let secs = 0;
+  const [secs, setTime] = useState(0);
   const tick = () => {
     if (secs < 30) {
-      secs += 1;
+      setTime(secs+1)
     } else {
       timeOut("timeout");
     }
@@ -21,10 +19,10 @@ function Top({ userInfo, timeOut }) {
     //1초
     const timerId = setInterval(() => {
       tick();
-      console.log(secs);
     }, 999);
     return () => clearInterval(timerId);
   });
+  console.log("틱톡")
 
   return (
     <Row style={{ marginTop: "70px" }}>
@@ -52,7 +50,10 @@ function Top({ userInfo, timeOut }) {
           <div className="ban_title">금지할 문제를 선택해주세요</div>
           <div className="ban_info">선택된 문제는 이번 게임에서 출제되지 않습니다.</div>
           <div style={{ width: "25vw" }}>
-            <Progress style={{ zIndex: "10" }} percent={(20 / 31) * 100} showInfo={true} />
+            <Progress style={{ zIndex: "10" }} percent={(secs / 31) * 100} showInfo={false} strokeColor={{
+                "0%": "#5CFDFD",
+                "100%": "#FEF15D",
+              }} />
           </div>
         </div>
       </Col>
@@ -63,9 +64,7 @@ function Top({ userInfo, timeOut }) {
 
 function Mid({ props, onClick }) {
   const problems = props;
-  console.log("뭐야 이거", props);
   const keys = Object.keys(problems);
-  console.log(keys);
   const printProblems = (number) => {
     if (keys.length !== 0) {
       const result = [];
@@ -135,11 +134,8 @@ function Bottom(userInfo) {
 function App({ props, battleuserinfo, changeBanProblem }) {
   const [choose, setChoose] = React.useState("-1");
   const [loading, setLoading] = React.useState(false);
-  // var playerInfo = useRecoilValue(matchingPlayerInfo);
-  // console.log(playerInfo.otherId);
   const propsdata = props[0];
   const onClick = (event, category) => {
-    console.log("선택한 문제는:" + category);
     setChoose(category);
   };
 
@@ -159,7 +155,6 @@ function App({ props, battleuserinfo, changeBanProblem }) {
   const timeOut = (data) => {
     changeBanProblem(data);
   };
-  // console.log(props);
   const [problem, setProblem] = React.useState();
   useEffect(() => {
     setProblem(propsdata);
@@ -167,13 +162,10 @@ function App({ props, battleuserinfo, changeBanProblem }) {
   const keys = Object.keys(propsdata);
   useEffect(() => {
     if (choose === "1") {
-      console.log("선택한 문제 번호는:" + keys[0]);
       setChoose("1");
     } else if (choose === "2") {
-      console.log("선택한 문제 번호는:" + keys[1]);
       setChoose("2");
     } else if (choose === "3") {
-      console.log("선택한 문제 번호는:" + keys[2]);
       setChoose("3");
     }
   }, [choose, problem, keys]);

@@ -1,26 +1,15 @@
 import React from "react";
 // import { useHistory } from "react-router-dom";
-import { Col, Row } from "antd";
+import { Row } from "antd";
 import "./ReadyPage.css";
 
 function UserInfo() {
+  
   return (
     <Row justify="end" className="battle_user_info_row">
-      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        멋진 티어
-      </Col>
-      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        멋진 티어
-      </Col>
-      <Col
-        span={3}
-        style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
-        className="battle_user_info_contents">
-        멋진 닉네임
-      </Col>
     </Row>
-  );
-}
+    );
+  }
 
 const WaitOtherBanPage = () => {
   return (

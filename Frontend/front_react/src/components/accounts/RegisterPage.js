@@ -97,7 +97,6 @@ function App() {
       .then(function (response) {
         hanleResigerWarning();
         console.log("회원 가입 성공 1 :" + response);
-        console.log(response);
         if (response.data.custom_code === "000") {
           console.log("회원 가입 성공 2 :" + response);
           // alert("회원가입 성공");
@@ -134,7 +133,6 @@ function App() {
   };
 
   useEffect(() => {
-    console.log("나는 useEffect");
     console.log(result);
   }, [result]);
 

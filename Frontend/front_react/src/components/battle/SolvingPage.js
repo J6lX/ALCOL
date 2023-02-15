@@ -8,6 +8,7 @@ import CountDownTimer from "./CountDownTimer";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, Modal } from "antd";
@@ -46,9 +47,6 @@ const BattleNav = ({ userInfo, mode }) => {
     battlemode = "최적화";
   }
 
-  console.log("배틀 모드", mode);
-
-  console.log("userInfosolving", userInfo);
   return (
     <div className="BattleNav">
       <img src={Logo} alt="alcol_logo_black" style={{ height: "5vh", marginLeft: "20px" }} />
@@ -71,6 +69,27 @@ const BattleNav = ({ userInfo, mode }) => {
       <div style={{ width: "200px", height: "auto" }}>
         <CountDownTimer className="timer" />
       </div>
+    </div>
+  );
+};
+
+const ExampleTable = ({ inputData, outputData }) => {
+  return (
+    <div>
+      <table border={1}>
+        <thead>
+          <tr>
+            <th className="NanumSquare" style={{ color: "white" }}>input</th>
+            <th className="NanumSquare" style={{ color: "white" }}>output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="NanumSquare">{inputData}</td>
+            <td className="NanumSquare">{outputData}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -128,6 +147,11 @@ const Problem = ({ problemInfo }) => {
           입출력 예시
         </p>
         <hr style={{ color: "gray" }} />
+        <ExampleTable
+          inputData={problemInfo.prob_input_testcase}
+          outputData={problemInfo.prob_output_testcase}
+        />
+        <hr style={{ color: "gray" }} />
       </div>
     </div>
   );
@@ -142,14 +166,11 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   const [loading, setLoading] = useRecoilState(isSubmitSpin);
   // const problem_number = 1;
 
-  console.log("배틀 언어", language);
 
   const onChange = (newValue) => {
     setLoading(false);
     setCode(newValue);
     codeEmit(newValue);
-    console.log(newValue);
-    // console.log("code ", code);
   };
 
   document.addEventListener("mouseup", (e) => {
@@ -173,9 +194,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
       } else if (solvingHeight > y && solvingHeight > allheight * 0.2) {
         setHeight(solvingHeight - 3);
       }
-      console.log(event);
-      console.log(event.clientY);
-      console.log(y);
     }
   };
 
@@ -200,18 +218,15 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
       for (let i = 0; i < code.length; i++) {
         if (code[i] === "\n") {
           codedata += "\n";
-          console.log("enter", code[i]);
           for (let j = 1; j < code.length - i - 1; j += 2) {
             if (code[i + j] === " " && code[i + j + 1] === " ") {
               codedata += "\t";
-              console.log("tab", code[i + j]);
             } else {
               i += j - 1;
               break;
             }
           }
         } else {
-          console.log(code[i]);
           codedata += code[i];
         }
       }
@@ -225,7 +240,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
     clickSurrender();
   };
 
-  console.log("참인가요?", language[0] === "Java", language);
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
@@ -271,7 +285,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
             value={code}
             width="69vw"
             height={`${solvingHeight}px`}
-            extensions={[java({ jsx: true })]}
+            extensions={[cpp({ jsx: true })]}
             onChange={onChange}
             theme={darcula}
           />
@@ -345,12 +359,39 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   );
 };
 
-const Console = () => {
-  const submitMessage = useRecoilValue(submitMessageState);
+const Console = ({submitMessage}) => {
+  // const submitMessage = useRecoilValue(submitMessageState);
   // const solvingHeight = useRecoilValue(solvingHeightState);
   const consoleHeight = useRecoilValue(consoleHeightState);
   // window.onload();
-
+  // const resultList = useRecoilValue(resultListResultInfo);
+  const makeSubmitMessage = () => {
+    const result = [];
+    for (let i = 0; i < submitMessage.length; i++) {
+      if (submitMessage[i].nick === "me") {
+        if (submitMessage[i].result === "accepted") {
+          result.push(
+          <p key={i} className="NanumSquare" style={{color: "white"}}>
+              &nbsp;&gt;&gt; 제출 결과: 테스트케이스 전부 정답!
+            </p>
+          );
+        } else if (submitMessage[i].result === "error") {
+          result.push(
+            <p key={i} className="NanumSquare" style={{color: "white"}}>
+                &nbsp;&gt;&gt; 제출 결과: Error! {submitMessage[i].error}
+              </p>
+            );
+        } else {
+          result.push(
+            <p key={i} className="NanumSquare" style={{color: "white"}}>
+                &nbsp;&gt;&gt; 제출 결과: 테스트케이스 {submitMessage[i].result}
+              </p>
+            );
+        }
+      }
+    }
+    return result
+  }
   return (
     <div
       className="scrollDesign"
@@ -359,9 +400,7 @@ const Console = () => {
         height: `${consoleHeight}px`,
         overflowY: "scroll",
       }}>
-      <p className="NanumSquare" style={{ color: "white", padding: "15px" }}>
-        &gt;&gt; {submitMessage}
-      </p>
+      {makeSubmitMessage()}
     </div>
   );
 };
@@ -371,6 +410,7 @@ const SolvingPage = ({
   battleMode,
   battleLanguage,
   battleuserinfo,
+  submitMessage,
   submit,
   clickSurrender,
   codeEmit,
@@ -455,7 +495,7 @@ const SolvingPage = ({
                 />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
-                <Console />
+                <Console submitMessage={submitMessage} />
               </div>
             </div>
           </div>

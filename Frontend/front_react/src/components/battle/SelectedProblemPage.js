@@ -9,19 +9,16 @@ import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function Top() {
   return (
-    <div className="middle_selected" style={{ paddingTop: "10%" }}>
-      <div className="ban_title">문제 유형이 선택되었습니다.</div>
+    <div className="middle_selected" style={{ paddingTop: "10%", marginTop: "3%", marginBottom:"3%" }}>
+      <div className="NanumSquare ban_title">문제 유형이 선택되었습니다.</div>
     </div>
   );
 }
 
 function SelectedProblem({ problemInfo, problem_category, userInfo }) {
-  // console.log("userInfo 왜 이러냐", userInfo)
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
-  // let clsName = "../../assets/ALCOL_tiers/tier_" + problem.problem_tier + "_0.png";
   const category = problem_category;
-  // console.log("티어 정보가 어떻게 되어있니", problemInfo)
   let tier;
   if (problemInfo.prob_tier[0] === "B") {
     tier = "bronze";
@@ -37,7 +34,6 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
     tier = "alcol";
   }
   let LV = problemInfo.prob_tier[problemInfo.prob_tier.length - 1];
-  console.log(tier, LV);
 
   const tierAddress = require("../../assets/ALCOL_tiers/tier_" + tier + "_" + LV + ".png");
 
@@ -76,7 +72,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "rleft",
+            justifyContent: "left",
             height: "50px",
           }}>
           <p className="NanumSquare" style={{ color: "white", fontSize: "3vh" }}>
@@ -148,9 +144,7 @@ const SelectedProblemPage = ({
   battleLanguage,
   battleuserinfo,
 }) => {
-  console.log(problems, problemInfo);
   const problem_category = problems[0][problemInfo.prob_no];
-  // console.log("선택된 문제 정보", problemInfo)
   return (
     <div
       id="problem_category"

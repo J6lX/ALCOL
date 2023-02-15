@@ -6,7 +6,6 @@ import "./FindPassword.css";
 function App() {
   const onFinish = (values) => {
     showModal();
-    console.log(values);
   };
 
   function TextInfo({ text }) {
