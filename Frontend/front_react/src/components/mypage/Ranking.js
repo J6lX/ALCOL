@@ -170,7 +170,6 @@ function Ranking() {
         if (response.data.customCode === "000") {
           // 로그인한 사용자 데이터(userData) 설정
           const originData = response.data.bodyData;
-          console.log(originData);
 
           const winpoint = Number(originData.record.win);
           const losepoint = Number(originData.record.lose);
@@ -190,7 +189,6 @@ function Ranking() {
             record: `${winpoint}승 ${losepoint}패(${winrate}%)`,
           };
           setUserData(originUserData);
-          console.log("사용자 정보:", originUserData);
         } else {
           setUserData([]);
         }
@@ -307,7 +305,6 @@ function Ranking() {
             };
           });
           // 랭커 정보를 recoil에 저장
-
           setRankerList(rankerData);
         }
       })

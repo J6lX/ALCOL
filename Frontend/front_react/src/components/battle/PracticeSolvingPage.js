@@ -279,29 +279,47 @@ const CodingPlace = () => {
   // 코딩 영역 페이지 렌더링
   return (
     <div>
-      <div style={{ width: "70vw", height: "7vh", border: "0.1px solid gray", textAlign: "right" }}>
-        {/* <p
-          className="NanumSquare"
-          style={{ color: "white", fontSize: "2vh", height: "100%", padding: "2%" }}>
-          코딩할 언어
-        </p> */}
-        <Select
-          defaultValue="python"
-          onChange={handleChange}
-          options={[
-            {
-              value: "python",
-              label: "Python",
-            },
-            {
-              value: "java",
-              label: "Java",
-            },
-            {
-              value: "cpp",
-              label: "C++",
-            },
-          ]}></Select>
+      <div
+        style={{
+          width: "70vw",
+          height: "7vh",
+          border: "0.1px solid gray",
+          textAlign: "right",
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "center",
+          paddingRight: "2%",
+        }}>
+        <div>
+          <p
+            className="NanumSquare"
+            style={{ color: "white", fontSize: "2vh", height: "100%", paddingRight: "5px" }}>
+            코딩할 언어
+          </p>
+        </div>
+        <div>
+          <Select
+            defaultValue="python"
+            onChange={handleChange}
+            style={{
+              width: 90,
+            }}
+            options={[
+              {
+                value: "python",
+                label: "Python",
+              },
+              {
+                value: "java",
+                label: "Java",
+              },
+              {
+                value: "cpp",
+                label: "C++",
+              },
+            ]}
+          />
+        </div>
       </div>
       <div
         id="console"
@@ -401,7 +419,7 @@ const PracticeSolvingPage = () => {
         <ButtonsLayer />
         <Console />
       </RecoilRoot> */}
-      <div>
+      <div style={{ paddingTop: "12px" }}>
         <BattleNav />
         <div
           style={{

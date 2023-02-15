@@ -603,7 +603,6 @@ function Mypage() {
         <>
           {/* 한 줄에 1개씩 표시 */}
           {seasonInfo.map((seasonData) => (
-            // <Col span={24} align="middle" className="seasonGrid">
             <Col span={24} align="middle">
               <Row justify="center" align="middle">
                 {/* <Col span={8} className="text"> */}
@@ -618,14 +617,6 @@ function Mypage() {
                   />
                 </Col>
                 <Col xs={22} xl={14} className="text" style={{ marginLeft: "10px" }}>
-                  {/* 모드 이름 */}
-                  {/* <Row justify="center">
-                    <Col>
-                      <p style={{ fontSize: "13px" }} className="mypage_tier_small_font">
-                        {seasonData.modeName}
-                      </p>
-                    </Col>
-                  </Row> */}
                   {/* 시즌 이름 */}
                   <Row justify="center">
                     <Col>
