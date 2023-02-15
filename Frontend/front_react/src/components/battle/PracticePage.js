@@ -1,7 +1,7 @@
 import { Button, Row, Col, Input, Table, ConfigProvider, theme, Form } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -159,9 +159,6 @@ function Ranking() {
                   },
                 }}>
                 <Table
-                  style={{
-                    padding: "3px",
-                  }}
                   dataSource={refinedData}
                   columns={problemLabel}
                   pagination={{
@@ -170,9 +167,8 @@ function Ranking() {
                   }}
                   onRow={(record, rowIndex) => {
                     return {
-                      onClick: (event) => (
-                        <Redirect push to={`/solveprac/${record.problem_number}`} />
-                      ),
+                      // 여기 js로 리다이렉트 구현
+                      onClick: (event) => window.history.push(`/solvprac/${record.problem_no}`),
                     };
                   }}
                 />
