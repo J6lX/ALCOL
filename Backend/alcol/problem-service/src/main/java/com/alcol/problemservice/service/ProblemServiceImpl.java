@@ -83,7 +83,7 @@ public class ProblemServiceImpl implements ProblemService
         ProblemEntity problemEntity = problemRepository.findById(probNo).orElse(null);
 
         String probTestInput = problemEntity.getProbTestInput();
-        probTestInput = probTestInput.replaceAll("\n", "<br>");
+        probTestInput = probTestInput.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
         log.info("probTestInput: " + probTestInput);
 
         return ProblemDto.ProbDetail.builder()
