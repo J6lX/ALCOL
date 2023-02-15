@@ -247,11 +247,29 @@ public class WebSocket {
                 sessionId = userId2SessionId.get(userId);
                 System.out.println("세션 아이디 : "+sessionId);
                 System.out.println("세션 아이디 투 오브젝트 : " + sessionId2Obj.toString());
-                System.out.println(sessionId2Obj.get(sessionId).toString());
+//                System.out.println(sessionId2Obj.get(sessionId).toString());
                 System.out.println(sessionId2Obj.get(sessionId).problemList);
                 System.out.println(sessionId2Obj.get(sessionId).problemList.toString());
 
 //                String[] problems_category = new String[sessionId2Obj.get(sessionId).problemList.size()];
+
+                /**
+                 * 랜덤으로 뽑은 문제가 없을 때
+                 * 3문제를 받아와서 먼저 랜덤으로 하나 골라놓음.
+                 */
+                if(sessionId2Obj.get(sessionId).problemNum==0)
+                {
+                    Random random = new Random();
+                    int randomIndex = random.nextInt(sessionId2Obj.get(sessionId).problemList.size());
+                    List<Integer> problemNumberList = new ArrayList<>();
+                    sessionId2Obj.get(sessionId).problemNum = sessionId2Obj.get(sessionId).problemList.get(randomIndex).problemNum;
+
+//                    for(int number : sessionId2Obj.get(sessionId).problemBanCheck.keySet())
+//                    {
+//                    }
+
+//                    sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = selectProblemResult;
+                }
 
                 for(int i=0; i<sessionId2Obj.get(sessionId).problemList.size(); i++)
                 {
@@ -269,52 +287,6 @@ public class WebSocket {
 //                    session.sendMessage(message);
                     session.getBasicRemote().sendText(problems_json.toJSONString());
                 }
-//                sendProblems(session, problems_json);
-
-                /****문제를 보내고 벤픽 시간을 제한해야 함****/
-
-//                JSONObject banResult_json = new JSONObject();
-//                TimerTask task = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        String sessionId="";
-//                        if(sessionId2Obj.containsKey(userId))
-//                        {
-//                            sessionId = userId;
-//                        }
-//                        else
-//                        {
-//                            sessionId = userId2SessionId.get(userId);
-//                        }
-//                        System.out.println("내 아이디 : "+userId);
-//                        System.out.println("문제 요청 부분의 세션 아이디 : "+sessionId);
-//                        List<Integer> randomProblemList = new ArrayList<>();
-//                        for (int key : sessionId2Obj.get(sessionId).problemList.keySet())
-//                        {
-//                            if(sessionId2Obj.get(sessionId).problemList.get(key))
-//                            {
-//                                randomProblemList.add(key);
-//                            }
-//                        }
-//
-//                        /**밴픽 시간이 다 지난 후에 밴픽을 끝내는 메시지와 함께 문제 전송*/
-//                        Random random = new Random();
-//                        int randomIndex = random.nextInt(randomProblemList.size());
-//                        int selectProblemNum = randomProblemList.get(randomIndex);
-//                        sessionId2Obj.get(sessionId).problemNum = selectProblemNum;
-////                        String url = "http://localhost:9005/getProblem/"+selectProblemNum;
-////                        ResponseEntity<List> problem = restTemplate.getForEntity(url,List.class);
-////                        banResult_json.put("messageType","select_sucess");
-////                        banResult_json.put("problemNum",selectProblemNum);
-//                        //문제 이름, 번호같은 디테일 넣어야 함.
-////                        banResult_json.put("problemName",)
-//                    }
-//                };
-//                runCheck = true;
-//                Timer timer = new Timer(true);
-//                long delay = 5000;
-//                timer.schedule(task, delay);
-
             }
             /**사용자가 밴을 할 때 들어오는 곳, 문제를 false로 바꿈*/
             else if (method.equals("ban"))
@@ -329,6 +301,30 @@ public class WebSocket {
 //                    sessionId2Obj.get(sessionId).problemList
                     sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.put(Integer.parseInt(problemNum),false);
                     System.out.println(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(Integer.parseInt(problemNum))+"번 문제 밴됨");
+
+
+                    int randomProblemCount=0;
+                    int selectProblemResult = 0;
+                    List<Integer> noSelectedProblemNumber = new ArrayList<>();
+                    for(int key : sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.keySet())
+                    {
+                        if(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(key)==true)
+                        {
+                            randomProblemCount++;
+                            noSelectedProblemNumber.add(key);
+                        }
+                    }
+                    System.out.println("현재 밴이 안된 문제 갯수 : "+randomProblemCount);
+                    Random random = new Random();
+                    int randomIndex = random.nextInt(noSelectedProblemNumber.size());
+                    selectProblemResult = noSelectedProblemNumber.get(randomIndex);
+                    if(randomProblemCount>1)
+                    {
+                        sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = selectProblemResult;
+                    }
+
+//                    List<Integer> problemNumberList = new ArrayList<>();
+                    sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = sessionId2Obj.get(userId2SessionId.get(userId)).problemList.get(randomIndex).problemNum;
                     if(sessionId2Obj.get(userId2SessionId.get(userId)).getUser1().userId.equals(userId))
                     {
                         sessionId2Obj.get(userId2SessionId.get(userId)).user1.banProblemNum = Integer.parseInt(problemNum);
@@ -345,10 +341,9 @@ public class WebSocket {
                             && sessionId2Obj.get(userId2SessionId.get(userId)).getUser2().banProblemNum!=0)
                     {
                         System.out.println("두 명 다 밴이 끝남");
-                        JSONObject data = new JSONObject();
-                        int randomProblemCount=0;
-                        int selectProblemResult = 0;
-                        List<Integer> noSelectedProblemNumber = new ArrayList<>();
+                        randomProblemCount=0;
+                        selectProblemResult = 0;
+                        noSelectedProblemNumber = new ArrayList<>();
                         for(int key : sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.keySet())
                         {
                             if(sessionId2Obj.get(userId2SessionId.get(userId)).problemBanCheck.get(key)==true)
@@ -360,8 +355,8 @@ public class WebSocket {
                         System.out.println("현재 밴이 안된 문제 갯수 : "+randomProblemCount);
                         if(randomProblemCount>1)
                         {
-                            Random random = new Random();
-                            int randomIndex = random.nextInt(noSelectedProblemNumber.size());
+                            random = new Random();
+                            randomIndex = random.nextInt(noSelectedProblemNumber.size());
                             selectProblemResult = noSelectedProblemNumber.get(randomIndex);
                             sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = selectProblemResult;
                         }
@@ -370,6 +365,7 @@ public class WebSocket {
                             selectProblemResult = noSelectedProblemNumber.get(0);
                             sessionId2Obj.get(userId2SessionId.get(userId)).problemNum = selectProblemResult;
                         }
+                        JSONObject data = new JSONObject();
                         String url = "http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/"+selectProblemResult;
                         ResponseEntity<HashMap> problems = restTemplate.getForEntity(url,HashMap.class);
                         System.out.println(problems.getBody().toString());
@@ -382,10 +378,6 @@ public class WebSocket {
                         System.out.println(" 지금 유저 : " + userId2Session.get(userId));
                         System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
 
-//                        synchronized (session)
-//                        {
-//                            session.getBasicRemote().sendText(data.toJSONString());
-//                        }
                         synchronized (session)
                         {
                             userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
@@ -401,10 +393,6 @@ public class WebSocket {
                             session.getBasicRemote().sendText(data.toJSONString());
                         }
                     }
-                }
-                else
-                {
-
                 }
             }
             /**
@@ -432,29 +420,34 @@ public class WebSocket {
                     timerMap.put(sessionId2Obj.get(userId2SessionId.get(userId)).user1.userId,timer);
                 }
             }
-//            else if (method.equals("battleTimeOut"))
-//            {
-//                String drawUserId = obj.get("userId").toString();
-//                String drawOtherId = obj.get("userId").toString();
-//                int user_mmr = 0;
-//                int other_mmr = 0;
-//                if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.userId.equals(drawUserId))
-//                {
-//                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
-//                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
-//                }
-//                else if(sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.userId.equals(drawUserId))
-//                {
-//                    user_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user2.prevMmr;
-//                    other_mmr = sessionId2Obj.get(userId2SessionId.get(drawUserId)).user1.prevMmr;
-//                }
-//                float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
-//                int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
-//            }
 
             else if (method.equals("banTimeout"))
             {
+                String userId = obj.get("userId").toString();
+                String otherId = obj.get("otherId").toString();
 
+                int selectProblemResult =sessionId2Obj.get(userId2SessionId.get(userId)).problemNum;
+                String url = "http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/"+selectProblemResult;
+
+                ResponseEntity<HashMap> problems = restTemplate.getForEntity(url,HashMap.class);
+                System.out.println(problems.getBody().toString());
+                System.out.println(problems.getBody().get("prob_name"));
+
+                sessionId2Obj.get(userId2SessionId.get(userId)).time_limit = (int) problems.getBody().get("prob_time_limit");
+                sessionId2Obj.get(userId2SessionId.get(userId)).memory_limit = (int) problems.getBody().get("prob_memory_limit");
+
+
+                JSONObject data = new JSONObject();
+                data.put("messageType","select_success");
+                data.put("problem",problems.getBody());
+                userId2Session.get(userId).getBasicRemote().sendText(data.toJSONString());
+                System.out.println(" 지금 유저 : " + userId2Session.get(userId));
+                System.out.println(" 다음 유저 : " + userId2Session.get(otherId));
+
+                synchronized (session)
+                {
+                    userId2Session.get(otherId).getBasicRemote().sendText(data.toJSONString());
+                }
             }
 
             else if (method.equals("surrender"))
@@ -508,7 +501,7 @@ public class WebSocket {
                 JSONObject other_submit_result_send = new JSONObject();
                 other_submit_result_send.put("messageType","otherSurrender");
                 other_submit_result_send.put("battleResult","win");
-                user_submit_result_send.put("changeExp","100");
+                other_submit_result_send.put("changeExp","100");
                 other_submit_result_send.put("changeMmr",result_other_mmr);
 
                 if(sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.userId.equals(surrenderUserId))
@@ -784,8 +777,8 @@ public class WebSocket {
                             JSONObject other_submit_result_send = new JSONObject();
                             other_submit_result_send.put("messageType","battleResult");
                             other_submit_result_send.put("battleResult","lose");
-//                            other_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
-//                            other_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
+                            other_submit_result_send.put("time",fromdata_statistic_info.get("time_cost"));
+                            other_submit_result_send.put("memory",fromdata_statistic_info.get("memory_cost"));
                             other_submit_result_send.put("changeExp","50");
                             other_submit_result_send.put("changeMmr",result_other_mmr);
                             /**
@@ -1467,10 +1460,10 @@ public class WebSocket {
                 {
                     System.out.println("유저 1번이 이겼습니다.");
                     float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
-                    int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
+                    int change_user_mmr = (int) (user_mmr+30*(1-user_odds));
 
                     float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
-                    int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
+                    int change_other_mmr = (int) (other_mmr+30*(0-other_odds));
 
                     int result_user_mmr = change_user_mmr - user_mmr;
                     int result_other_mmr = change_other_mmr - other_mmr;
@@ -1524,7 +1517,7 @@ public class WebSocket {
                     other_lose_result_send.put("time",other_time);
                     other_lose_result_send.put("memory",other_memory);
                     other_lose_result_send.put("changeExp","50");
-                    other_lose_result_send.put("changeMmr",result_user_mmr);
+                    other_lose_result_send.put("changeMmr",result_other_mmr);
 
                     synchronized (session)
                     {
@@ -1605,7 +1598,7 @@ public class WebSocket {
                     other_win_result_send.put("time",other_time);
                     other_win_result_send.put("memory",other_memory);
                     other_win_result_send.put("changeExp","100");
-                    other_win_result_send.put("changeMmr",result_user_mmr);
+                    other_win_result_send.put("changeMmr",result_other_mmr);
 
                     synchronized (session)
                     {
