@@ -82,9 +82,9 @@ public class ProblemServiceImpl implements ProblemService
     {
         ProblemEntity problemEntity = problemRepository.findById(probNo).orElse(null);
 
-        String testInput = problemEntity.getProbTestInput();
-        testInput = testInput.replaceAll("\n", "<br>");
-        log.info("testInput: " + testInput);
+        String probTestInput = problemEntity.getProbTestInput();
+        probTestInput = probTestInput.replaceAll("\n", "<br>");
+        log.info("probTestInput: " + probTestInput);
 
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
@@ -94,7 +94,7 @@ public class ProblemServiceImpl implements ProblemService
                 .prob_output_content(problemEntity.getProbOutputDesc())
                 .prob_time_limit(problemEntity.getProbTimeLimit())
                 .prob_memory_limit(problemEntity.getProbMemoryLimit())
-                .prob_input_testcase(problemEntity.getProbTestInput())
+                .prob_input_testcase(probTestInput)
                 .prob_output_testcase(problemEntity.getProbTestOutput())
                 .prob_tier(problemEntity.getTier().getTier())
                 .build();
