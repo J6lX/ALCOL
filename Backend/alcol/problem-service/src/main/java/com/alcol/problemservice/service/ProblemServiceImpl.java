@@ -82,6 +82,8 @@ public class ProblemServiceImpl implements ProblemService
     {
         ProblemEntity problemEntity = problemRepository.findById(probNo).orElse(null);
 
+        String testInput = problemEntity.getProbTestInput();
+        log.info("testInput: " + testInput);
 
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
