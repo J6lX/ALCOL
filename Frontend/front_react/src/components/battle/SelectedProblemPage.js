@@ -91,7 +91,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
         style={{
           display: "flex", flexDirection: "column", alignItems: "center",
           width: "600px",
-          height: "300px",
+          height: "350px",
           border: "3px solid white",
           boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -119,7 +119,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           </p>
         </div>
         <div className="middle_select">
-          <div className="middle_select" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "1%" }}>
+          <div className="middle_select" style={{ display: "flex", alignItems: "center", marginBottom: "1%" }}>
             <p
               className="NanumSquare"
               style={{ display: "flex", alignItems: "center", color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
@@ -127,7 +127,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
             </p>
             <img src={tierAddress} alt="tier" style={{ width: "40px" }} />
           </div>
-          <div>{makeBadge(category)}</div>
+          <div style={{display: "flex", justifyContent: "center"}}>{makeBadge(category)}</div>
           <Col style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p className="NanumSquare" style={{ color: "white", fontSize: "14px" }}>
               제한시간
