@@ -2,7 +2,6 @@ import { Button, Row, Col, Input, Table, ConfigProvider, theme, Pagination, Form
 import "./Ranking.css";
 import rankingHeader from "../../assets/ranking_header.png";
 import qs from "query-string";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -320,41 +319,18 @@ function Ranking() {
   // 페이지 이동 시(페이지네이션 선택 시)
   const pageMove = (page) => {
     setCurrent(page);
-    axios
-      .get(
-        `http://i8b303.p.ssafy.io:8000/rank-service/rankList?battle_mode=${modeName}&page=${page}`
-      )
-      // 응답 성공 시
-      .then(function (response) {
-        console.log("페이지네이션 데이터:", response.data);
-        // 랭킹 정보가 존재하는 경우
-        if (response.data.customCode === "002") {
-          // (대충 데이터 저장 후 화면에 표시해준다는 내용)
-          const originData = response.data.bodyData;
-          const rankerData = originData.map((data) => {
-            return {
-              grade: data.grade,
-              nickname: data.nickname,
-              profile_img: data.profile_pic,
-              mmr: data.MMR,
-              level: data.level,
-              tier: data.tier,
-              record: `${data.record.win}승 ${data.record.lose}패(${data.record.winningRate}%)`,
-            };
-          });
-
-          return rankerData;
-        } else if (response.data.customCode === "003") {
-          // 랭킹 정보가 없는 경우
-          alert("등록된 정보가 없습니다.");
-        }
-      })
-      //응답 실패 시
-      .catch((error) => {
-        alert("마지막 페이지입니다.");
-        console.log("응답 실패 : " + error);
-      });
     window.location.assign(`/ranking?mode=${modeName}&page=${page}`);
+  };
+
+  // 스피드 랭킹 조회 시도 시
+  const selectSpeed = () => {
+    setCurrent(1);
+    window.location.assign(`/ranking?mode=speed&page=1`);
+  };
+  // 최적화 랭킹 조회 시도 시
+  const selectOptimization = () => {
+    setCurrent(1);
+    window.location.assign(`/ranking?mode=optimization&page=1`);
   };
 
   // 검색 정보: 유저 검색 시
@@ -438,14 +414,17 @@ function Ranking() {
                   {/* 토글 버튼 목록 */}
                   <Row className="select">
                     <Col span={12}>
-                      <Link to="/ranking?mode=speed&page=1" style={speedColor}>
-                        <span className="filterText">스피드</span>
-                      </Link>
+                      <span className="filterText" onClick={selectSpeed} style={speedColor}>
+                        스피드
+                      </span>
                     </Col>
                     <Col span={12}>
-                      <Link to="/ranking?mode=optimization&page=1" style={efficiencyColor}>
-                        <span className="filterText">최적화</span>
-                      </Link>
+                      <span
+                        className="filterText"
+                        onClick={selectOptimization}
+                        style={efficiencyColor}>
+                        최적화
+                      </span>
                     </Col>
                   </Row>
                   <hr></hr>
