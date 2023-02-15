@@ -293,7 +293,7 @@ public class LogServiceImpl implements LogService
 
         Map<String, String> bodyData = new HashMap<>();
         bodyData.put("user_id", userId);
-        String url = "http://localhost:9000/user-service/getUserInfo";
+        String url = "http://i8b303.p.ssafy.io:9000/user-service/getUserInfo";
 
         LogDto.UserInfoDto userData = null;
         // userData 받아오기
