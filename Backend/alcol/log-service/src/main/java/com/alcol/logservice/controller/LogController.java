@@ -80,8 +80,7 @@ public class LogController
      * @return 성공 시 0, 실패 시 1
      */
     @PostMapping("/insertExp")
-    public int insertExp(@RequestBody Map<String, Object> map)
-    {
+    public int insertExp(@RequestBody Map<String, Object> map) throws URISyntaxException {
         log.info("LogController 의 insertExp 메소드 실행");
         String userId = map.get("user_id") + "";
         int addExp = Integer.parseInt(map.get("add_exp") + "");
@@ -95,8 +94,7 @@ public class LogController
      * @return
      */
     @PostMapping("/insertBattleLog")
-    public String insertBattleLog(@RequestBody Map<String, Object> map)
-    {
+    public String insertBattleLog(@RequestBody Map<String, Object> map) throws URISyntaxException {
         log.info("LogController 의 insertBattleLog 메소드 실행");
 
         log.info("insertBattleLog 분기 1");
@@ -196,8 +194,7 @@ public class LogController
      * @return
      */
     @PostMapping("/insertBattleLogByDraw")
-    public String insertBattleLogByDraw(@RequestBody Map<String, Object> map)
-    {
+    public String insertBattleLogByDraw(@RequestBody Map<String, Object> map) throws URISyntaxException {
         log.info("LogController 의 insertBattleLogByDraw 메소드 실행");
 
         log.info("insertBattleLogByDraw 분기 1");

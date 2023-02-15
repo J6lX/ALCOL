@@ -17,5 +17,5 @@ public interface LogService
 
     void insertBattleLog(LogDto.BattleLogDto winnerBattleLogDto, LogDto.BattleLogDto loserBattleLogDto, List<LogDto.BattleProbSubmitLogDto> winnerSubmitLogList, List<LogDto.BattleProbSubmitLogDto> loserSubmitLogList);
 
-    int insertExp(String userId, int addExp);
+    int insertExp(String userId, int addExp) throws URISyntaxException;
 }
