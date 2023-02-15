@@ -107,29 +107,29 @@ function giveColor(userTier) {
 function TierBorder(tiercolor, tiernum) {
   // startingPoint = 시작 지점(티어 색상)
   const startingPoint = () => {
-    // 브론즈면 800
+    // 브론즈면 1100
     if (tiercolor === "B") {
-      return 1000;
+      return 1100;
     }
-    // 실버면 1150
+    // 실버면 1450
     else if (tiercolor === "S") {
-      return 1150;
+      return 1450;
     }
-    // 골드면 1500
+    // 골드면 1800
     else if (tiercolor === "G") {
-      return 1500;
+      return 1800;
     }
-    // 플래면 1850
+    // 플래면 2150
     else if (tiercolor === "P") {
       return 1850;
     }
-    // 다이아면 2200
+    // 다이아면 2500
     else if (tiercolor === "D") {
-      return 2200;
+      return 2500;
     }
-    // ALCOL이면 2750
+    // ALCOL이면 2575
     else if (tiercolor === "A") {
-      return 2750;
+      return 2575;
     }
     // 무배치면 0
     else {
@@ -140,7 +140,7 @@ function TierBorder(tiercolor, tiernum) {
   if (tiercolor === "B" && Number(tiernum) === 5) {
     return 0;
   } else {
-    return startingPoint(tiercolor) + 75 * (5 - tiernum);
+    return startingPoint(tiercolor) - 75 * (tiernum - 1);
   }
 }
 
@@ -468,10 +468,14 @@ function Mypage() {
   const spdMMR = MMRList[0];
   const effMMR = MMRList[1];
 
+  console.log("스피드전:", spdMMR);
+  console.log("최적화전:", effMMR);
+  console.log("스피드전 경계:", speedBorder);
+  console.log("최적화전 경계:", efficiencyBorder);
   // 스피드전 데이터
   const speedData = [
     {
-      value: (spdMMR - speedBorder) * 2,
+      value: Math.floor(((speedBorder - spdMMR) / 3) * 40) / 10,
       color: giveColor(userSPDTier),
       name: "name1",
     },
@@ -480,7 +484,7 @@ function Mypage() {
   // 효율성전 데이터
   const efficiencyData = [
     {
-      value: (effMMR - efficiencyBorder) * 2,
+      value: Math.floor(((efficiencyBorder - effMMR) / 3) * 40) / 10,
       color: giveColor(userEFFTier),
       name: "name1",
     },
