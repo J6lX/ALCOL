@@ -636,17 +636,6 @@ function Mypage() {
                       </div>
                     </Col>
                   </Row>
-                  {/* 시즌 이름 */}
-                  {/* <Row justify="center">
-                    <Col>
-                      <p
-                        style={{ fontWeight: "lighter", marginBottom: "-5px", marginTop: "-10px" }}
-                        className="mypage_tier_detail_font">
-                        {" "}
-                        시즌 {seasonData.season}
-                      </p>
-                    </Col>
-                  </Row> */}
                   {/* 티어 이름 */}
                   <Row justify="center">
                     <Col>
@@ -704,7 +693,7 @@ function Mypage() {
           >
             {/* 개인 정보 표시 블록 */}
             <Col
-              xs={16}
+              sm={16}
               md={6}
               lg={4}
               // className="text block"
@@ -713,6 +702,7 @@ function Mypage() {
               style={{
                 display: "flex",
                 justifyContent: "center",
+                margin: "6px",
               }}>
               {/* > */}
               <Row type="flex" align="middle">
@@ -727,7 +717,13 @@ function Mypage() {
 
             {/* 티어 정보 및 뱃지 표시 블록*/}
             {/* <Col xs={16} lg={18} className="block"> */}
-            <Col xs={16} lg={18} className="mypage_tier_wrap_box">
+            <Col
+              sm={16}
+              lg={18}
+              className="mypage_tier_wrap_box"
+              style={{
+                margin: "6px",
+              }}>
               <Row>
                 {/* 티어 정보 표시 블록 */}
                 <Col span={24} justify="center" align="middle">
@@ -739,7 +735,6 @@ function Mypage() {
                       xl={6}
                       justify="center"
                       style={{
-                        // margin: "15px",
                         maxHeight: "240px",
                       }}>
                       {/* 스피드전 진척도 그래프 */}
@@ -860,13 +855,12 @@ function Mypage() {
           {/* <Row justify="center" className="mypage_second_row_wrap_box"> */}
           <Row justify="center" className="mypage_second_row_wrap_box">
             <Col
-              xs={16}
+              sm={16}
               md={6}
               lg={4}
               // align="middle"
               style={{
-                marginTop: "10px",
-                marginRight: "10px",
+                margin: "6px",
               }}>
               {/* > */}
               <Row>
@@ -885,7 +879,13 @@ function Mypage() {
 
             {/* 전적 정보 표시 블록 */}
             {/* <Col xs={16} lg={18} className="textHighlight block"> */}
-            <Col xs={16} lg={18} className="mypage_record_wrap_box">
+            <Col
+              sm={16}
+              lg={18}
+              className="mypage_record_wrap_box"
+              style={{
+                margin: "6px",
+              }}>
               {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
               <Row justify="space-around" className="modeFilter">
                 <Col sm={4} lg={4}>
