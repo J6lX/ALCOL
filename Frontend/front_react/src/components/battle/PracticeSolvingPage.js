@@ -172,7 +172,6 @@ const CodingPlace = () => {
 
   const onChange = (newValue) => {
     setCode(newValue);
-    console.log("code ", code);
   };
 
   // const upMouse = (event) => {
@@ -302,12 +301,13 @@ const CodingPlace = () => {
             defaultValue="python"
             onChange={handleChange}
             style={{
-              width: 90,
+              width: 100,
+              justifyContent: "start",
             }}
             options={[
               {
                 value: "python",
-                label: "Python",
+                label: "Python3",
               },
               {
                 value: "java",
