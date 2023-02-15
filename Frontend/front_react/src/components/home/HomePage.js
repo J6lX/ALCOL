@@ -90,14 +90,31 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {speed[0] && <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>}
+        {speed[0] && speed[0].storedFileName ? (
+          <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        ) : (
+          <img
+            src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+            alt="rank"
+            className="Circle firstUser"></img>
+        )}
 
         <div className="secondthirdLayout">
-          {speed[1] && (
+          {speed[1] && speed[1].storedFileName ? (
             <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+          ) : (
+            <img
+              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+              alt="rank"
+              className="Circle secondUser"></img>
           )}
-          {speed[2] && (
+          {speed[2] && speed[2].storedFileName ? (
             <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+          ) : (
+            <img
+              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+              alt="rank"
+              className="Circle thirdUser"></img>
           )}
         </div>
       </div>
@@ -134,15 +151,30 @@ const EfficiencyRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {efficiency[0] && (
+        {efficiency[0] && efficiency[0].storedFileName ? (
           <img src={efficiency[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        ) : (
+          <img
+            src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+            alt="rank"
+            className="Circle firstUser"></img>
         )}
         <div className="secondthirdLayout">
-          {efficiency[1] && (
+          {efficiency[1] && efficiency[1].storedFileName ? (
             <img src={efficiency[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+          ) : (
+            <img
+              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+              alt="rank"
+              className="Circle secondUser"></img>
           )}
-          {efficiency[2] && (
+          {efficiency[2] && efficiency[2].storedFileName ? (
             <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+          ) : (
+            <img
+              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+              alt="rank"
+              className="Circle thirdUser"></img>
           )}
         </div>
       </div>
