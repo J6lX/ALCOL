@@ -221,7 +221,7 @@ const ContinuousBattlePage = () => {
                   setIsSolving(true);
                 });
               }
-            }, 1000000);
+            }, 10000);
           }, 1000);
         }, 1000);
       } else if (data.messageType === "closed") {
