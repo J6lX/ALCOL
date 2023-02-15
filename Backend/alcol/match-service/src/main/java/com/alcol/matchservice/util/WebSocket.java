@@ -116,7 +116,7 @@ public class WebSocket {
                     bodyData.add("user_id",id);
                     bodyData.add("mode",mode);
                     System.out.println("this is restTempalte : "+ restTemplate);
-                    String url = "http://localhost:9005/log-service/getLevelAndTier";
+                    String url = "http://i8B303.p.ssafy.io:9005/log-service/getLevelAndTier";
                     ResponseEntity<List> MMRs = restTemplate.postForEntity(
                             url,
                             bodyData,
@@ -159,8 +159,8 @@ public class WebSocket {
                             ((sessionId2Obj.get(i).mode.equals(mode)) &&
                             (sessionId2Obj.get(i).language.equals(language))&&
                             (
-                                    (sessionId2Obj.get(i).mmr - 30 <= mmr) &&
-                                    (mmr <= sessionId2Obj.get(i).mmr + 30 )
+                                    (sessionId2Obj.get(i).mmr - 100 <= mmr) &&
+                                    (mmr <= sessionId2Obj.get(i).mmr + 100 )
                             )
                     ))
                     {
