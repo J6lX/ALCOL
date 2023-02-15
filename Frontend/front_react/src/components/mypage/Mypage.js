@@ -341,7 +341,6 @@ function Mypage() {
             speedTier: originUserInfo.data.speed_tier,
             efficiencyTier: originUserInfo.data.optimization_tier,
           };
-          setUserInfo(originUserData);
 
           // 사용자 전적을 recoil(userBattleRec)에 저장할 수 있게 정제
           // 지나치게 요청을 많이 하는 현상 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
@@ -383,6 +382,7 @@ function Mypage() {
           });
 
           // 정제한 정보들을 recoil에 반영
+          setUserInfo(originUserData);
           setBattleRec(originBattleRec);
           setBackupRec(originBattleRec);
           setSeasonInfo(refinedLastSeason);
