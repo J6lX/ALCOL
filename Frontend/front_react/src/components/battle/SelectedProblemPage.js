@@ -87,8 +87,9 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
       </Row>
       <br />
       <div
-        className="middle_selected"
+        className="middle_select"
         style={{
+          display: "flex", flexDirection: "column", alignItems: "center",
           width: "600px",
           height: "300px",
           border: "3px solid white",
@@ -104,8 +105,8 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           아래의 배틀 정보를 확인하세요.
         </small>
         <div
-          style={{
-            display: "flex",
+          style={{ display: "flex", 
+          alignItems: "center",
             justifyContent: "space-evenly",
             width: "400px",
             marginBottom: "10px",
@@ -117,11 +118,11 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
             배틀 언어: {language}
           </p>
         </div>
-        <div className="middle_selected">
-          <div className="middle_selected" style={{ flexDirection: "row", marginBottom: "1%" }}>
+        <div className="middle_select">
+          <div className="middle_select" style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "1%" }}>
             <p
               className="NanumSquare"
-              style={{ color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
+              style={{ display: "flex", alignItems: "center", color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
               문제 {problemInfo.prob_no}. {problemInfo.prob_name}
             </p>
             <img src={tierAddress} alt="tier" style={{ width: "40px" }} />

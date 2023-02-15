@@ -5,7 +5,7 @@
   scrollbar-width: none; /* 파이어폭스 */
 }
 
-.middle_selected {
+.middle_select {
   display: flex;
   flex-direction: column;
   align-items: center;
