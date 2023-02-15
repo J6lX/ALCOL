@@ -25,7 +25,7 @@ import PracticePage from "./components/battle/PracticePage";
 import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
 import TestPageYH from "./components/TestPageYeonhwa";
-import SolvingTest from "./components/battle/SolvingTest";
+// import SolvingTest from "./components/battle/SolvingTest";
 
 import { Layout } from "antd";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "./states/LoginState";
@@ -110,7 +110,7 @@ function App() {
             <Route path="/modify" exact={true} component={ModifyPage} />
 
             {/* 배틀 문제 푸는 페이지 */}
-            <PrivateRoute path="/solveTest" exact={true} component={SolvingTest} />
+            {/* <PrivateRoute path="/solveTest" exact={true} component={SolvingTest} /> */}
 
             {/* 배틀 문제 푸는 페이지 */}
             <PrivateRoute path="/solve" exact={true} component={SolvingPage} />
