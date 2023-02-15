@@ -4,43 +4,15 @@ import $ from "jquery";
 import "./BanPage.css";
 import img_leftHand from "../../assets/leftHand.png";
 import img_rightHand from "../../assets/rightHand.png";
-import iconTierBronze from "../../assets/ALCOL_tiers/tier_bronze_0.png";
-
-function UserInfo(userInfo) {
-  console.log("userinfo", userInfo);
-  console.log(userInfo.userInfo.user.nick);
-  console.log(userInfo.userInfo.other.nick);
-  return (
-    <Row justify="end" className="battle_user_info_row">
-      <Col
-        span={1}
-        style={{ fontSize: "1vw", lineHeight: "50px" }}
-        className="battle_user_info_contents">
-        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
-      </Col>
-      <Col
-        span={1}
-        style={{ fontSize: "1vw", lineHeight: "50px" }}
-        className="battle_user_info_contents">
-        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
-      </Col>
-      <Col
-        span={3}
-        style={{ fontSize: "1.5vw", paddingLeft: "10px", lineHeight: "50px" }}
-        className="battle_user_info_contents">
-        {userInfo.userInfo.user.nick}
-      </Col>
-    </Row>
-  );
-}
 
 function Top({ userInfo, timeOut }) {
   // const [secs, setTime] = React.useState(0);
   console.log("TopuserInfo", userInfo);
   let secs = 0;
   const tick = () => {
-    if (secs < 30) {
+    if (secs < 30000) {
       secs += 1;
+      console.log(secs);
     } else {
       timeOut("timeout");
     }
@@ -53,9 +25,18 @@ function Top({ userInfo, timeOut }) {
   });
 
   return (
-    <Row>
+    <Row style={{ marginTop: "70px" }}>
       <Col xs={12} sm={10} md={8} xl={6}>
-        <div className="ban_player_info">{userInfo.other.nick}</div>
+        <div
+          className="ban_player_info"
+          style={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
+          <img
+            src={userInfo.user.imageAddress}
+            alt=""
+            style={{ width: "60px", height: "60px", marginRight: "10px", borderRadius: "50%" }}
+          />
+          {userInfo.user.nick}
+        </div>
         <img src={img_leftHand} alt="hand" className="ban_hands_left" />
       </Col>
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "50px" }}>
@@ -63,15 +44,7 @@ function Top({ userInfo, timeOut }) {
           <div className="ban_title">금지할 문제를 선택해주세요</div>
           <div className="ban_info">선택된 문제는 이번 게임에서 출제되지 않습니다.</div>
           <div style={{ width: "25vw" }}>
-            <Progress
-              style={{ zIndex: "10" }}
-              percent={(secs / 31) * 100}
-              showInfo={false}
-              strokeColor={{
-                "0%": "#5CFDFD",
-                "100%": "#FEF15D",
-              }}
-            />
+            <Progress style={{ zIndex: "10" }} percent={(secs / 32) * 100} showInfo={true} />
           </div>
         </div>
       </Col>
@@ -105,20 +78,20 @@ function Mid({ props, onClick }) {
 
   return (
     <Row justify="space-between" style={{ marginTop: "50px" }} className="ban_algo_contents">
-      <Col sm={0} md={0} xl={4}></Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
+      <Col xl={4}></Col>
+      <Col xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "1")}>
         <div className="ban_algo_problem_title">문제 1</div>
         <div className="ban_algo_problem_category">{printProblems(0)}</div>
       </Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "2")}>
+      <Col xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "2")}>
         <div className="ban_algo_problem_title">문제 2</div>
         <div className="ban_algo_problem_category">{printProblems(1)}</div>
       </Col>
-      <Col sm={7} md={7} xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "3")}>
+      <Col xl={4} className="ban_algo_box" onClick={(event) => onClick(event, "3")}>
         <div className="ban_algo_problem_title">문제 3</div>
         <div className="ban_algo_problem_category">{printProblems(2)}</div>
       </Col>
-      <Col sm={0} md={0} xl={4}></Col>
+      <Col xl={4}></Col>
     </Row>
   );
 }
@@ -130,8 +103,15 @@ function Bottom(userInfo) {
       <Col xs={12} sm={14} md={12} xl={12} style={{ marginTop: "100px" }}></Col>
       <Col xs={12} sm={10} md={8} xl={6}>
         <img src={img_rightHand} alt="hand" className="ban_hands_right" />
-        <div style={{ marginTop: "70px" }} className="ban_player_info">
-          {userInfo.userInfo.user.nick}
+        <div
+          style={{ display: "flex", alignItems: "center", marginTop: "70px" }}
+          className="ban_player_info">
+          <img
+            src={userInfo.userInfo.other.imageAddress}
+            alt=""
+            style={{ width: "60px", height: "60px", marginRight: "10px", borderRadius: "50%" }}
+          />
+          {userInfo.userInfo.other.nick}
         </div>
       </Col>
     </Row>
@@ -184,17 +164,15 @@ function App({ props, battleuserinfo, changeBanProblem }) {
     }
   }, [choose, problem, keys]);
 
-
   return (
     <div className="matching_background">
-      <UserInfo userInfo={battleuserinfo} />
       <Top userInfo={battleuserinfo} timeOut={timeOut} />
       <Mid props={propsdata} onClick={onClick} setProblem={setProblem} />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <Button
           loading={loading}
           className="NanumSquare"
-          style={{ width: "100px", marginTop: "10px" }}
+          style={{ width: "100px", marginTop: "60px" }}
           onClick={selected}>
           확정
         </Button>

@@ -58,11 +58,15 @@ const ContinuousBattlePage = () => {
 
   console.log(languageMode);
   const [nickname, setNickname] = useState("a");
+  const [level, setLevel] = useState("a");
   const [speedTier, setSpeedTier] = useState("a");
   const [optTier, setOptTier] = useState("a");
+  const [imageAddress, setImageAddress] = useState("a");
   const [othernickname, setOtherNickname] = useState("b");
+  const [otherLevel, setOtherLevel] = useState("b");
   const [otherspeedTier, setOtherSpeedTier] = useState("b");
   const [otheroptTier, setOtherOptTier] = useState("b");
+  const [otherImageAddress, setOtherImageAddress] = useState("b");
   useEffect(() => {}, [nickname, speedTier, optTier]);
   useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
 
@@ -85,8 +89,10 @@ const ContinuousBattlePage = () => {
       .then(function (response) {
         console.log("내 정보 가져오기 axios 날림");
         setNickname(response.data.nickname);
+        setLevel(response.data.level);
         setSpeedTier(response.data.speed_tier);
         setOptTier(response.data.optimization_tier);
+        setImageAddress(response.data.stored_file_name);
       })
       .catch((error) => {
         let customCode = error.response.data.custom_code;
@@ -109,8 +115,10 @@ const ContinuousBattlePage = () => {
       .then(function (response) {
         console.log("상대 정보 가져오기 axios 날림");
         setOtherNickname(response.data.nickname);
+        setOtherLevel(response.data.level);
         setOtherSpeedTier(response.data.speed_tier);
         setOtherOptTier(response.data.optimization_tier);
+        setOtherImageAddress(response.data.stored_file_name);
       })
       .catch((error) => {
         let customCode = error.response.data.custom_code;
@@ -354,7 +362,8 @@ const ContinuousBattlePage = () => {
         setResultListResult(resultList);
       } else if (data.messageType === "socketError") {
         showSocketErrorModal();
-      } else if (data.messageType === "surrender") {
+      } else if (data.messageType === "otherSurrender") {
+        setBattleResult(data);
         showOppSurrenderModal();
       } else if (data.messageType === "battleResult") {
         setBattleResult(data);
@@ -383,16 +392,14 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
-                showFinishModal()
+                showFinishModal();
                 setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
-
           } else if (data.battleResult === "lose") {
             showOppSubmitModal();
-
           } else if (data.battleResult === "draw") {
             const modaldata = {
               title: "배틀 시간 초과!",
@@ -403,14 +410,15 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
-                showFinishModal()
-                setIsSolving(false)
+                showFinishModal();
+                setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
-          } else if (data.battleResult === "") {
-          } //여기 바꿔
+          } else if (data.battleResult === "surrender") {
+            showFinishModal();
+          }
         } else if (battleMode === "optimization") {
           if (data.battleResult === "win") {
             console.log(data);
@@ -425,17 +433,15 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
-                showFinishModal()
+                showFinishModal();
                 setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
           } else if (data.battleResult === "lose") {
-            setBattleResult("lose");
             showOppSubmitModal();
           } else if (data.battleResult === "draw") {
-            setBattleResult("win");
             const modaldata = {
               title: "비겼습니다.",
               content: (
@@ -447,14 +453,13 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
-                showFinishModal()
+                showFinishModal();
                 setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
           } else if (data.battleResult === "draw_timeout") {
-            setBattleResult("lose");
             const modaldata = {
               title: "배틀 시간 초과!",
               content: (
@@ -464,12 +469,14 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
-                showFinishModal()
+                showFinishModal();
                 setIsSolving(false);
                 setIsSolved(true);
               },
             };
             info(modaldata);
+          } else if (data.battleResult === "surrender") {
+            showFinishModal();
           }
         }
       } else {
@@ -513,13 +520,13 @@ const ContinuousBattlePage = () => {
     setIsFinishModalOpen(true);
   };
   const finishHandleOk = () => {
-    socket.send(
-      JSON.stringify({
-        messageType: "finish",
-        userId: userId,
-        otherId: otherId,
-      })
-    );
+    // socket.send(
+    //   JSON.stringify({
+    //     messageType: "finish",
+    //     userId: userId,
+    //     otherId: otherId,
+    //   })
+    // );
     setIsFinishModalOpen(false);
     setIsSolving(false);
     setIsSolved(true);
@@ -558,6 +565,8 @@ const ContinuousBattlePage = () => {
     //   })
     // );
     setIsOppSurrenderModalOpen(false);
+    setIsSolving(false);
+    setIsSolved(true);
   };
 
   const [isSocketErrorModalOpen, setIsSocketErrorModalOpen] = useState(false);
@@ -699,8 +708,20 @@ const ContinuousBattlePage = () => {
           <BanPage
             props={problems}
             battleuserinfo={{
-              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+              user: {
+                nick: nickname,
+                level: level,
+                speedTier: speedTier,
+                optTier: optTier,
+                imageAddress: imageAddress,
+              },
+              other: {
+                nick: othernickname,
+                level: otherLevel,
+                speedTier: otherspeedTier,
+                optTier: otheroptTier,
+                imageAddress: otherImageAddress,
+              },
             }}
             changeBanProblem={changeBanProblem}
           />
@@ -713,8 +734,20 @@ const ContinuousBattlePage = () => {
             battleMode={battleModeInfo}
             battleLanguage={languageMode}
             battleuserinfo={{
-              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+              user: {
+                nick: nickname,
+                level: level,
+                speedTier: speedTier,
+                optTier: optTier,
+                imageAddress: imageAddress,
+              },
+              other: {
+                nick: othernickname,
+                level: otherLevel,
+                speedTier: otherspeedTier,
+                optTier: otheroptTier,
+                imageAddress: otherImageAddress,
+              },
             }}
           />
         )}
@@ -724,8 +757,20 @@ const ContinuousBattlePage = () => {
             battleMode={battleModeInfo}
             battleLanguage={languageMode}
             battleuserinfo={{
-              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+              user: {
+                nick: nickname,
+                level: level,
+                speedTier: speedTier,
+                optTier: optTier,
+                imageAddress: imageAddress,
+              },
+              other: {
+                nick: othernickname,
+                level: otherLevel,
+                speedTier: otherspeedTier,
+                optTier: otheroptTier,
+                imageAddress: otherImageAddress,
+              },
             }}
             submit={submit}
             clickSurrender={clickSurrender}
@@ -738,29 +783,68 @@ const ContinuousBattlePage = () => {
             battleMode={battleModeInfo}
             battleLanguage={languageMode}
             battleuserinfo={{
-              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+              user: {
+                nick: nickname,
+                level: level,
+                speedTier: speedTier,
+                optTier: optTier,
+                imageAddress: imageAddress,
+              },
+              other: {
+                nick: othernickname,
+                level: otherLevel,
+                speedTier: otherspeedTier,
+                optTier: otheroptTier,
+                imageAddress: otherImageAddress,
+              },
             }}
             submit={submit}
             sendExit={sendExit}
             clickSurrender={clickSurrender}
           />
         )}
-        {isSolved && <ResultPage 
-            props={battleResult} 
+        {isSolved && (
+          <ResultPage
+            props={battleResult}
             battleuserinfo={{
-              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
-            }} 
-            showDetailResult={showDetailResult} />}
+              user: {
+                nick: nickname,
+                level: level,
+                speedTier: speedTier,
+                optTier: optTier,
+                imageAddress: imageAddress,
+              },
+              other: {
+                nick: othernickname,
+                level: otherLevel,
+                speedTier: otherspeedTier,
+                optTier: otheroptTier,
+                imageAddress: otherImageAddress,
+              },
+            }}
+            showDetailResult={showDetailResult}
+          />
+        )}
         {isOpenDetail && (
           <ResultListPage
             problemInfo={problemInfo}
             battleMode={battleModeInfo}
             battleLanguage={languageMode}
             battleuserinfo={{
-              user: { nick: nickname, speedTier: speedTier, optTier: optTier },
-              other: { nick: othernickname, speedTier: otherspeedTier, optTier: otheroptTier },
+              user: {
+                nick: nickname,
+                level: level,
+                speedTier: speedTier,
+                optTier: optTier,
+                imageAddress: imageAddress,
+              },
+              other: {
+                nick: othernickname,
+                level: otherLevel,
+                speedTier: otherspeedTier,
+                optTier: otheroptTier,
+                imageAddress: otherImageAddress,
+              },
             }}
           />
         )}
@@ -824,7 +908,9 @@ const ContinuousBattlePage = () => {
         onCancel={copyCode}
         cancelText="코드 복사">
         <p className="NanumSquare">배틀이 정상적으로 종료되었습니다.</p>
-        <p className="NanumSquare">현재까지 쓴 코드를 복사하고 싶다면 "코드 복사" 버튼을 눌러주세요!</p>
+        <p className="NanumSquare">
+          현재까지 쓴 코드를 복사하고 싶다면 "코드 복사" 버튼을 눌러주세요!
+        </p>
       </Modal>
     </div>
   );

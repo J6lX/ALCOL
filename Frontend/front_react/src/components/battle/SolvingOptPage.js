@@ -244,7 +244,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     }
   };
 
-
   const resultList = useRecoilValue(resultListResultInfo);
   console.log("뭐가 들어있냐면", resultList);
   const result = [];
@@ -302,7 +301,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             theme={darcula}
           />
         )}
-        {language === "Cpp" && (
+        {language === "C++" && (
           <CodeMirror
             id="IDE"
             value={code}

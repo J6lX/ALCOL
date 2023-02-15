@@ -40,6 +40,11 @@ export const sendBattleStart = atom({
   default: "-1",
 });
 
+export const isSubmitSpin = atom({
+  key: "isSubmitSpin",
+  default: false,
+});
+
 //---------배틀 문제 정보
 export const battleProblemInfo = atom({
   key: "battleProblemInfo",

@@ -7,8 +7,10 @@ import versus from "../../assets/versus.png";
 import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
-function App({props, userInfo, showDetailResult}) {
+function App({ props, battleuserinfo, showDetailResult }) {
   console.log("이게 배틀 종료 데이터", props);
+  console.log(battleuserinfo);
+  const userInfo = battleuserinfo;
   const data = props;
   const printResult = () => {
     var img = "";
@@ -50,8 +52,8 @@ function App({props, userInfo, showDetailResult}) {
   };
 
   const showDetail = () => {
-    showDetailResult()
-  }
+    showDetailResult();
+  };
 
   //페이지 이동 관련 함수/변수
   const history = useHistory();
@@ -71,34 +73,45 @@ function App({props, userInfo, showDetailResult}) {
       {/* <img src={img_victory} alt="result" className="result_title" /> */}
       {printResult()}
       <div className="result_box">
+        <Row
+          className="middle_selected"
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "auto",
+            marginBottom: "3%",
+          }}>
+          <Col
+            span={6}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "50px",
+            }}>
+            <p className="NanumSquare" style={{ color: "white", fontSize: "3vh" }}>
+              {userInfo.user.nick}
+            </p>
+          </Col>
+          <Col span={3} style={{ display: "flex", justifyContent: "center" }}>
+            <img src={versus} alt="versus" style={{ width: "60px" }} />
+          </Col>
+          <Col
+            span={6}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "50px",
+            }}>
+            <p className="NanumSquare" style={{ color: "white", fontSize: "3vh" }}>
+              {userInfo.other.nick}
+            </p>
+          </Col>
+        </Row>
         <div className="result_content">
-          <Row
-            className="middle_selected"
-            style={{ flexDirection: "row", width: "600px", height: "50px" }}>
-            <Col
-              span={9}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "right",
-                height: "50px",
-              }}>
-              <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.user.nick}</p>
-            </Col>
-            <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
-              <img src={versus} alt="versus" style={{ width: "60px" }} />
-            </Col>
-            <Col
-              span={9}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "rleft",
-                height: "50px",
-              }}>
-              <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.other.nick}</p>
-            </Col>
-          </Row>
           <Row>
             <Col className="result_text" span={10}>
               배틀 결과

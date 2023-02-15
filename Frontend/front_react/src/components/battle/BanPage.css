@@ -23,7 +23,7 @@
 }
 
 .battle_user_info_contents {
-  background-color: #fef662;
+  background-color: rgb(255, 255, 255, 0.5);
   height: 50px;
   margin-top: 10px;
   margin-right: 10px;
@@ -53,10 +53,19 @@
 }
 
 .ban_algo_box {
-  height: 300px;
+  position: relative;
+  width: 220px;
+  height: 220px;
   background-color: rgba(0, 0, 0, 0.6);
   box-shadow: 0 0 15px #ff7300, 0 0 15px #ff7300 inset;
   border: 2px solid #ffffff;
+}
+
+
+.ban_algo_box:after {
+  display: block;
+  content: "";
+  padding-bottom: 100%;
 }
 
 .active {
@@ -85,6 +94,7 @@
   top: 50%;
   text-align: center;
 }
+
 
 .ban_hands_left {
   position: absolute;

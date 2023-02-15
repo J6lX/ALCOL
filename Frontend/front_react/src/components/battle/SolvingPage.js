@@ -12,6 +12,7 @@ import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, Modal } from "antd";
 import { userCode } from "../../states/atoms";
+// import { useTable } from "react-table";
 import "animate.css";
 
 let allheight = window.innerHeight;
@@ -39,9 +40,9 @@ const submitMessageState = atom({
 const BattleNav = ({ userInfo, mode }) => {
   // const mode = useRecoilValue(selectedMode);
   let battlemode;
-  if (mode[0] === "speed") {
+  if (mode === "speed") {
     battlemode = "스피드";
-  } else if (mode[0] === "optimization") {
+  } else if (mode === "optimization") {
     battlemode = "최적화";
   }
 
@@ -74,15 +75,14 @@ const BattleNav = ({ userInfo, mode }) => {
   );
 };
 
-const Problem = (problemInfo) => {
-  const problem = problemInfo.problemInfo;
+const Problem = ({ problemInfo }) => {
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2.5vh", fontWeight: "bold", padding: "2%" }}>
-          {problem.prob_name}
+          {problemInfo.prob_name}
         </p>
       </div>
       <div
@@ -100,7 +100,7 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_content}
+          {problemInfo.prob_content}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -111,14 +111,8 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_input_content}
+          {problemInfo.prob_input_content}
         </p>
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          ex. {problem.prob_input_testcase}
-        </p>
-        <br />
         <hr style={{ height: "1px", background: "gray" }} />
         <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
           출력
@@ -127,13 +121,13 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_output_content}
+          {problemInfo.prob_output_content}
         </p>
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          ex. {problem.prob_output_testcase}
+        <hr style={{ color: "gray" }} />
+        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
+          입출력 예시
         </p>
+        <hr style={{ color: "gray" }} />
       </div>
     </div>
   );
@@ -145,6 +139,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
   const [code, setCode] = useRecoilState(userCode);
   const setSubmitMessage = useSetRecoilState(submitMessageState);
+  // const [loading, setLoading] = useRecoilState(isSubmitSpin);
   // const problem_number = 1;
 
   console.log("배틀 언어", language);
@@ -189,6 +184,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
     setIsSubmitModalOpen(true);
   };
   const submitHandleOk = () => {
+    // setLoading(true);
     clickSubmit();
     setIsSubmitModalOpen(false);
   };
@@ -269,7 +265,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
             theme={darcula}
           />
         )}
-        {language === "Cpp" && (
+        {language === "C++" && (
           <CodeMirror
             id="IDE"
             value={code}
