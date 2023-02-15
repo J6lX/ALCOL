@@ -196,10 +196,17 @@ function translateModeName(mode) {
 
 // 승/패 판단 함수
 function IsVictory(result) {
+  // 1이면 승리
   if (result === 1) {
     return "승리";
-  } else {
+  }
+  // 0이면 패배
+  else if (result === 0) {
     return "패배";
+  }
+  // 2면 무승부
+  else {
+    return "무승부";
   }
 }
 
