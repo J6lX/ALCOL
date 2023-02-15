@@ -54,7 +54,7 @@ function App() {
     <RecoilRoot>
       <Layout>
         <AppHeader />
-        
+
         <Content
           style={{
             backgroundColor: "#16171B",
@@ -98,6 +98,9 @@ function App() {
 
             {/* 회원정보 수정 페이지 */}
             <Route path="/modify" exact={true} component={ModifyPage} />
+
+            {/* 배틀 문제 푸는 페이지 */}
+            {/* <PrivateRoute path="/solveTest" exact={true} component={SolvingTest} /> */}
 
             {/* 배틀 문제 푸는 페이지 */}
             <PrivateRoute path="/solve" exact={true} component={SolvingPage} />
