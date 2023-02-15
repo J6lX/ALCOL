@@ -146,11 +146,13 @@ function TierBorder(tiercolor, tiernum) {
 
 // 날짜 값(value) 계산 함수
 function GetDateDiffValue(startDate) {
-  return new Date() - new Date(startDate);
+  return new Date.now() - new Date(startDate);
 }
 
 // 날짜 차이 계산 함수
 function CalculateDatediff(datediffValue) {
+  // refinedDatediffvalue = UTC와 KST 시차 반영(백엔드 원본 소스가 UTC 기준)
+  const refinedDatediffValue = datediffValue - 9 * 60 * 60 * 1000;
   // dateDivider = ms 단위를 일 단위로 환산하는 용도
   const dateDivider = 24 * 60 * 60 * 1000;
   // hourDivider = ms 단위를 시간 단위로 환산하는 용도
@@ -159,11 +161,11 @@ function CalculateDatediff(datediffValue) {
   const minuteDivider = 60 * 1000;
 
   // dayValue = ms 단위를 일 단위로 변환한 값(버림)
-  const dayValue = Math.floor(datediffValue / dateDivider);
+  const dayValue = Math.floor(refinedDatediffValue / dateDivider);
   // hourValue = ms 단위를 시간 단위로 변환한 값(버림)
-  const hourValue = Math.floor(datediffValue / hourDivider);
+  const hourValue = Math.floor(refinedDatediffValue / hourDivider);
   // minuteValue = ms 단위를 분 단위로 변환한 값(버림)
-  const minuteValue = Math.floor(datediffValue / minuteDivider);
+  const minuteValue = Math.floor(refinedDatediffValue / minuteDivider);
 
   // dayValue가 1 이상이면 'n일 전'으로 반환
   if (dayValue > 0) {
@@ -201,12 +203,29 @@ function IsVictory(result) {
   }
 }
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
 // 사진 데이터 관리 함수
 function ProfileImage() {
   // 서버에 저장되어있던 사용자의 프로필 사진 가져오기
   const userId = useRecoilValue(LoginState);
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
   const [photo, setPhoto] = useState(userInfo.profileImg);
+
+  // 사진이 없는 경우
+  if (!photo) {
+    setPhoto(`https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`);
+  }
 
   const fileInput = useRef(null);
   const onChange = (e) => {
@@ -259,26 +278,6 @@ function ProfileImage() {
     };
     reader.readAsDataURL(uploadFile);
   };
-
-  //화면에 프로필 사진 표시
-  const reader = new FileReader();
-  if (!fileInput) {
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setPhoto(reader.result);
-        setUserInfo({
-          nickname: userInfo.nickname,
-          profileImg: reader.result,
-          level: userInfo.level,
-          speedTier: userInfo.speedTier,
-          efficiencyTier: userInfo.efficiencyTier,
-        });
-        reader.readAsDataURL(photo);
-      }
-    };
-  }
-
-  console.log("마이페이지 사진:", photo);
 
   return (
     <div className="mypage_useImg_box">
@@ -337,7 +336,7 @@ function Mypage() {
           // 사용자 기본 정보를 recoil(userInfo)에 저장할 수 있게 정제
           const originUserData = {
             nickname: originUserInfo.data.nickname,
-            profileImg: originUserInfo.data.stored_file_name,
+            profileImg: isNew(originUserInfo.data.stored_file_name),
             level: originUserInfo.data.level,
             speedTier: originUserInfo.data.speed_tier,
             efficiencyTier: originUserInfo.data.optimization_tier,
@@ -347,6 +346,7 @@ function Mypage() {
           // 사용자 전적을 recoil(userBattleRec)에 저장할 수 있게 정제
           // 지나치게 요청을 많이 하는 현상 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
           const originBattleRec = originBattleRecord.data.map((record) => {
+            console.log(record);
             return {
               battle_result: IsVictory(record.battle_result),
               battle_mode: translateModeName(record.battle_mode),
