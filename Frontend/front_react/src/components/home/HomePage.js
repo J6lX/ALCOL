@@ -98,24 +98,55 @@ const SpeedRanking = () => {
             alt="rank"
             className="Circle firstUser"></img>
         )}
+        <div
+          style={{
+            marginTop: "90px",
+            fontFamily: "NanumSquareNeo",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}>
+          {speed[0].nickname}
+        </div>
 
         <div className="secondthirdLayout">
-          {speed[1] && speed[1].storedFileName ? (
-            <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
-          ) : (
-            <img
-              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
-              alt="rank"
-              className="Circle secondUser"></img>
-          )}
-          {speed[2] && speed[2].storedFileName ? (
-            <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
-          ) : (
-            <img
-              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
-              alt="rank"
-              className="Circle thirdUser"></img>
-          )}
+          <div>
+            {speed[1] && speed[1].storedFileName ? (
+              <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle secondUser"></img>
+            )}
+            <div
+              style={{
+                color: "#fac557",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {speed[1].nickname}
+            </div>
+          </div>
+          <div>
+            {speed[2] && speed[2].storedFileName ? (
+              <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle thirdUser"></img>
+            )}
+            <div
+              style={{
+                color: "#fac557",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {speed[2].nickname}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -159,23 +190,57 @@ const EfficiencyRanking = () => {
             alt="rank"
             className="Circle firstUser"></img>
         )}
+        <div
+          style={{
+            marginTop: "90px",
+            fontFamily: "NanumSquareNeo",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}>
+          {efficiency[0].nickname}
+        </div>
         <div className="secondthirdLayout">
-          {efficiency[1] && efficiency[1].storedFileName ? (
-            <img src={efficiency[1].storedFileName} alt="rank" className="Circle secondUser"></img>
-          ) : (
-            <img
-              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
-              alt="rank"
-              className="Circle secondUser"></img>
-          )}
-          {efficiency[2] && efficiency[2].storedFileName ? (
-            <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
-          ) : (
-            <img
-              src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
-              alt="rank"
-              className="Circle thirdUser"></img>
-          )}
+          <div>
+            {efficiency[1] && efficiency[1].storedFileName ? (
+              <img
+                src={efficiency[1].storedFileName}
+                alt="rank"
+                className="Circle secondUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle secondUser"></img>
+            )}
+            <div
+              style={{
+                color: "#5cfdfd",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {efficiency[2].nickname}
+            </div>
+          </div>
+          <div>
+            {efficiency[2] && efficiency[2].storedFileName ? (
+              <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle thirdUser"></img>
+            )}
+            <div
+              style={{
+                color: "#5cfdfd",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {efficiency[2].nickname}
+            </div>
+          </div>
         </div>
       </div>
     </div>
