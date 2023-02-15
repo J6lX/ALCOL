@@ -101,7 +101,7 @@ public class RankServiceImpl implements RankService{
         int MMR = -1;
         try
         {
-            grade = ranking.rank(battleMode, userId);
+            grade = ranking.reverseRank(battleMode, userId);
             MMR = ranking.score(battleMode, userId).intValue();
         }
         catch (NullPointerException nullPointerException)

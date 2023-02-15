@@ -32,6 +32,7 @@ public class RankingController
     @PostMapping("/battleResult")
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
     {
+        System.out.println(battleResult);
         // 우승자 데이터에 따라 분기처리
         // 0: 무승부, 1: 1번 유저 승리, 2: 2번 유저 승리
         int user1Result = 0;
