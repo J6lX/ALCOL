@@ -14,16 +14,20 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -33,6 +37,7 @@ public class LogServiceImpl implements LogService
     private final BattleLogRepository battleLogRepository;
     private final PastSeasonLogRepository pastSeasonLogRepository;
     private final RestTemplateUtils restTemplateUtils;
+    private final RestTemplate restTemplate;
     private final RedisTemplate<String, Object> redisTemplate;
 
     public LogServiceImpl(
@@ -40,6 +45,7 @@ public class LogServiceImpl implements LogService
             BattleLogRepository battleLogRepository,
             PastSeasonLogRepository pastSeasonLogRepository,
             RestTemplateUtils restTemplateUtils,
+            RestTemplate restTemplate,
             RedisTemplate<String, Object> redisTemplate
     )
     {
@@ -47,6 +53,7 @@ public class LogServiceImpl implements LogService
         this.battleLogRepository = battleLogRepository;
         this.pastSeasonLogRepository = pastSeasonLogRepository;
         this.restTemplateUtils = restTemplateUtils;
+        this.restTemplate = restTemplate;
         this.redisTemplate = redisTemplate;
     }
 
@@ -266,8 +273,7 @@ public class LogServiceImpl implements LogService
      * @return
      */
     @Override
-    public int insertExp(String userId, int addExp)
-    {
+    public int insertExp(String userId, int addExp) throws URISyntaxException {
         log.info("LogServiceImpl 의 insertExp 메소드 실행");
 
         ExpLogEntity expLogEntity = expLogRepository.findTopByUserIdOrderByExpLogNoDesc(userId);
@@ -280,6 +286,35 @@ public class LogServiceImpl implements LogService
 
         ValueOperations<String, Object> redisExp = redisTemplate.opsForValue();
         redisExp.set("levelExp:" + userId, (curExp + addExp) + "");
+
+        // redis에 있는 userInfo의 level 업데이트
+        HashOperations<String, String, String> userInfo = redisTemplate.opsForHash();
+        String key = "userInfo:" + userId;
+
+        Map<String, String> bodyData = new HashMap<>();
+        bodyData.put("user_id", userId);
+        String url = "http://localhost:9000/user-service/getUserInfo";
+
+        LogDto.UserInfoDto userData = null;
+        // userData 받아오기
+        try {
+            userData = restTemplate.postForObject(
+                    url,
+                    bodyData,
+                    LogDto.UserInfoDto.class
+            );
+        }
+        catch (Exception e)
+        {
+            log.error("redis에 있는 userInfo level을 업데이트하기 위해 getUserInfo()를 실행하는 과정에서 오류 발생");
+        }
+        // level정보를 redis에 있는 userInfo에 업데이트한다.
+        try {
+            userInfo.put(key, "level", String.valueOf(userData.getLevel()));
+        }
+        catch (Exception e){
+            log.error("redis에 있는 userInfo level을 업데이트하는 과정에서 오류 발생");
+        }
 
         if (expLogRepository.save(insertExpLogEntity) != null)
         {

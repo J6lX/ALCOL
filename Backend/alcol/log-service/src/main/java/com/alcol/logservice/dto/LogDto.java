@@ -109,4 +109,17 @@ public class LogDto
         private int optimizationWin;
         private int optimizationLose;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserInfoDto
+    {
+        private String nickname;
+        private int level;
+        private String speed_tier;
+        private String optimization_tier;
+        private String stored_file_name;
+    }
 }
