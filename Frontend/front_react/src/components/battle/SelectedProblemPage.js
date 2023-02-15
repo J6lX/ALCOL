@@ -11,7 +11,6 @@ function Top() {
   return (
     <div className="middle_selected" style={{ paddingTop: "10%" }}>
       <div className="ban_title">문제 유형이 선택되었습니다.</div>
-      <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
     </div>
   );
 }
