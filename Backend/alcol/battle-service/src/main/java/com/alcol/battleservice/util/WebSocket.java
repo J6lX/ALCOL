@@ -1519,6 +1519,13 @@ public class WebSocket {
                     other_lose_result_send.put("changeExp","50");
                     other_lose_result_send.put("changeMmr",result_other_mmr);
 
+                    String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                    String sendRedisRankUpdate = restTemplate.postForObject(
+                            url_rank,
+                            sendBattleLogForRedis,
+                            String.class
+                    );
+
                     synchronized (session)
                     {
                         try {
@@ -1599,6 +1606,13 @@ public class WebSocket {
                     other_win_result_send.put("memory",other_memory);
                     other_win_result_send.put("changeExp","100");
                     other_win_result_send.put("changeMmr",result_other_mmr);
+
+                    String url_rank = "http://i8b303.p.ssafy.io:9003/rank-service/battleResult";
+                    String sendRedisRankUpdate = restTemplate.postForObject(
+                            url_rank,
+                            sendBattleLogForRedis,
+                            String.class
+                    );
 
                     synchronized (session)
                     {
