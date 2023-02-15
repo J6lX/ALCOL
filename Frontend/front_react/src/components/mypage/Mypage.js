@@ -61,6 +61,7 @@ const matchCol = [
     key: "recordDate",
     title: "일시",
     align: "center",
+    render: (record_date) => CalculateDatediff(record_date),
   },
 ];
 
@@ -88,7 +89,7 @@ function giveColor(userTier) {
   if (userTier === "B") {
     return "#ec9e73";
   } else if (userTier === "S") {
-    return "#e5edf8";
+    return "#6f87ae";
   } else if (userTier === "G") {
     return "#ecec63";
   } else if (userTier === "P") {
@@ -106,44 +107,52 @@ function giveColor(userTier) {
 function TierBorder(tiercolor, tiernum) {
   // startingPoint = 시작 지점(티어 색상)
   const startingPoint = () => {
-    // 브론즈면 1000
+    // 브론즈면 1100
     if (tiercolor === "B") {
-      return 1000;
+      return 1100;
     }
-    // 실버면 1250
+    // 실버면 1450
     else if (tiercolor === "S") {
-      return 1250;
+      return 1450;
     }
-    // 골드면 1500
+    // 골드면 1800
     else if (tiercolor === "G") {
-      return 1500;
+      return 1800;
     }
-    // 플래면 1750
+    // 플래면 2150
     else if (tiercolor === "P") {
-      return 1750;
+      return 1850;
     }
-    // 다이아면 2000
+    // 다이아면 2500
     else if (tiercolor === "D") {
-      return 2000;
+      return 2500;
     }
-    // ALCOL이면 2250
+    // ALCOL이면 2575
     else if (tiercolor === "A") {
-      return 2250;
+      return 2575;
     }
     // 무배치면 0
     else {
       return 0;
     }
   };
-  // 최종 티어 경계 = 시작 지점 + 50 * 티어 숫자
-  return startingPoint(tiercolor) + 50 * (5 - tiernum);
+  // 최종 티어 경계 = 시작 지점 + 75 * 티어 숫자(단, 브5는 0)
+  if (tiercolor === "B" && Number(tiernum) === 5) {
+    return 0;
+  } else {
+    return startingPoint(tiercolor) - 75 * (tiernum - 1);
+  }
+}
+
+// 날짜 값(value) 계산 함수
+function GetDateDiffValue(startDate) {
+  return new Date() - new Date(startDate);
 }
 
 // 날짜 차이 계산 함수
-function CalculateDatediff(startDate) {
-  // datediffValue = 날짜 계산 차이 값(단위 : ms)
-  const datediffValue = new Date() - new Date(startDate);
-
+function CalculateDatediff(datediffValue) {
+  // refinedDatediffvalue = UTC와 KST 시차 반영(백엔드 원본 소스가 UTC 기준)
+  const refinedDatediffValue = datediffValue - 9 * 60 * 60 * 1000;
   // dateDivider = ms 단위를 일 단위로 환산하는 용도
   const dateDivider = 24 * 60 * 60 * 1000;
   // hourDivider = ms 단위를 시간 단위로 환산하는 용도
@@ -152,11 +161,11 @@ function CalculateDatediff(startDate) {
   const minuteDivider = 60 * 1000;
 
   // dayValue = ms 단위를 일 단위로 변환한 값(버림)
-  const dayValue = Math.floor(datediffValue / dateDivider);
+  const dayValue = Math.floor(refinedDatediffValue / dateDivider);
   // hourValue = ms 단위를 시간 단위로 변환한 값(버림)
-  const hourValue = Math.floor(datediffValue / hourDivider);
+  const hourValue = Math.floor(refinedDatediffValue / hourDivider);
   // minuteValue = ms 단위를 분 단위로 변환한 값(버림)
-  const minuteValue = Math.floor(datediffValue / minuteDivider);
+  const minuteValue = Math.floor(refinedDatediffValue / minuteDivider);
 
   // dayValue가 1 이상이면 'n일 전'으로 반환
   if (dayValue > 0) {
@@ -194,12 +203,29 @@ function IsVictory(result) {
   }
 }
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
 // 사진 데이터 관리 함수
 function ProfileImage() {
   // 서버에 저장되어있던 사용자의 프로필 사진 가져오기
   const userId = useRecoilValue(LoginState);
   const [userInfo, setUserInfo] = useRecoilState(UserInfoState);
   const [photo, setPhoto] = useState(userInfo.profileImg);
+
+  // 사진이 없는 경우
+  if (!photo) {
+    setPhoto(`https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`);
+  }
 
   const fileInput = useRef(null);
   const onChange = (e) => {
@@ -252,8 +278,6 @@ function ProfileImage() {
     };
     reader.readAsDataURL(uploadFile);
   };
-
-  console.log("마이페이지 사진:", photo);
 
   return (
     <div className="mypage_useImg_box">
@@ -312,12 +336,11 @@ function Mypage() {
           // 사용자 기본 정보를 recoil(userInfo)에 저장할 수 있게 정제
           const originUserData = {
             nickname: originUserInfo.data.nickname,
-            profileImg: originUserInfo.data.stored_file_name,
+            profileImg: isNew(originUserInfo.data.stored_file_name),
             level: originUserInfo.data.level,
             speedTier: originUserInfo.data.speed_tier,
             efficiencyTier: originUserInfo.data.optimization_tier,
           };
-          setUserInfo(originUserData);
 
           // 사용자 전적을 recoil(userBattleRec)에 저장할 수 있게 정제
           // 지나치게 요청을 많이 하는 현상 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
@@ -328,8 +351,14 @@ function Mypage() {
               opponent: record.other_user_nickname,
               prob_name: record.prob_name,
               prob_tier: record.prob_tier,
-              record_date: CalculateDatediff(record.end_time),
+              // 기록일(record_date는 datediffValue로 받기)
+              record_date: GetDateDiffValue(record.end_time),
             };
+          });
+
+          // originBattleRec 배열을 날짜 값 기준으로 오름차순 정렬
+          originBattleRec.sort(function (case1, case2) {
+            return case1.record_date - case2.record_date;
           });
 
           // 사용자의 지난 시즌 정보를 recoil(LastSeasonState)에 저장할 수 있게 정제
@@ -346,7 +375,13 @@ function Mypage() {
             };
           });
 
+          // 시즌 정보를 시즌 값 기준으로 오름차순 정렬
+          refinedLastSeason.sort(function (seasonA, seasonB) {
+            return seasonB.season - seasonA.season;
+          });
+
           // 정제한 정보들을 recoil에 반영
+          setUserInfo(originUserData);
           setBattleRec(originBattleRec);
           setBackupRec(originBattleRec);
           setSeasonInfo(refinedLastSeason);
@@ -433,10 +468,14 @@ function Mypage() {
   const spdMMR = MMRList[0];
   const effMMR = MMRList[1];
 
+  console.log("스피드전:", spdMMR);
+  console.log("최적화전:", effMMR);
+  console.log("스피드전 경계:", speedBorder);
+  console.log("최적화전 경계:", efficiencyBorder);
   // 스피드전 데이터
   const speedData = [
     {
-      value: (spdMMR - speedBorder) * 2,
+      value: Math.floor(((speedBorder - spdMMR) / 3) * 40) / 10,
       color: giveColor(userSPDTier),
       name: "name1",
     },
@@ -445,7 +484,7 @@ function Mypage() {
   // 효율성전 데이터
   const efficiencyData = [
     {
-      value: (effMMR - efficiencyBorder) * 2,
+      value: Math.floor(((efficiencyBorder - effMMR) / 3) * 40) / 10,
       color: giveColor(userEFFTier),
       name: "name1",
     },
@@ -564,7 +603,6 @@ function Mypage() {
         <>
           {/* 한 줄에 1개씩 표시 */}
           {seasonInfo.map((seasonData) => (
-            // <Col span={24} align="middle" className="seasonGrid">
             <Col span={24} align="middle">
               <Row justify="center" align="middle">
                 {/* <Col span={8} className="text"> */}
@@ -579,14 +617,6 @@ function Mypage() {
                   />
                 </Col>
                 <Col xs={22} xl={14} className="text" style={{ marginLeft: "10px" }}>
-                  {/* 모드 이름 */}
-                  {/* <Row justify="center">
-                    <Col>
-                      <p style={{ fontSize: "13px" }} className="mypage_tier_small_font">
-                        {seasonData.modeName}
-                      </p>
-                    </Col>
-                  </Row> */}
                   {/* 시즌 이름 */}
                   <Row justify="center">
                     <Col>
@@ -597,17 +627,6 @@ function Mypage() {
                       </div>
                     </Col>
                   </Row>
-                  {/* 시즌 이름 */}
-                  {/* <Row justify="center">
-                    <Col>
-                      <p
-                        style={{ fontWeight: "lighter", marginBottom: "-5px", marginTop: "-10px" }}
-                        className="mypage_tier_detail_font">
-                        {" "}
-                        시즌 {seasonData.season}
-                      </p>
-                    </Col>
-                  </Row> */}
                   {/* 티어 이름 */}
                   <Row justify="center">
                     <Col>
@@ -665,7 +684,7 @@ function Mypage() {
           >
             {/* 개인 정보 표시 블록 */}
             <Col
-              xs={16}
+              sm={16}
               md={6}
               lg={4}
               // className="text block"
@@ -674,9 +693,10 @@ function Mypage() {
               style={{
                 display: "flex",
                 justifyContent: "center",
+                margin: "6px",
               }}>
               {/* > */}
-              <Row type="flex">
+              <Row type="flex" align="middle">
                 <Col>
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                   <ProfileImage />
@@ -688,7 +708,13 @@ function Mypage() {
 
             {/* 티어 정보 및 뱃지 표시 블록*/}
             {/* <Col xs={16} lg={18} className="block"> */}
-            <Col xs={16} lg={18} className="mypage_tier_wrap_box">
+            <Col
+              sm={16}
+              lg={18}
+              className="mypage_tier_wrap_box"
+              style={{
+                margin: "6px",
+              }}>
               <Row>
                 {/* 티어 정보 표시 블록 */}
                 <Col span={24} justify="center" align="middle">
@@ -700,7 +726,6 @@ function Mypage() {
                       xl={6}
                       justify="center"
                       style={{
-                        // margin: "15px",
                         maxHeight: "240px",
                       }}>
                       {/* 스피드전 진척도 그래프 */}
@@ -715,7 +740,9 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => `${userSPDTier}${userSPDnumber}`}
+                        label={({ dataEntry }) =>
+                          userSPDTier === "A" ? `${userSPDTier}` : `${userSPDTier}${userSPDnumber}`
+                        }
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
@@ -788,7 +815,9 @@ function Mypage() {
                         animate
                         startAngle={120}
                         className="tierGraph"
-                        label={({ dataEntry }) => `${userEFFTier}${userEFFnumber}`}
+                        label={({ dataEntry }) =>
+                          userEFFTier === "A" ? `${userEFFTier}` : `${userEFFTier}${userEFFnumber}`
+                        }
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
@@ -817,13 +846,12 @@ function Mypage() {
           {/* <Row justify="center" className="mypage_second_row_wrap_box"> */}
           <Row justify="center" className="mypage_second_row_wrap_box">
             <Col
-              xs={16}
+              sm={16}
               md={6}
               lg={4}
               // align="middle"
               style={{
-                marginTop: "10px",
-                marginRight: "10px",
+                margin: "6px",
               }}>
               {/* > */}
               <Row>
@@ -842,7 +870,13 @@ function Mypage() {
 
             {/* 전적 정보 표시 블록 */}
             {/* <Col xs={16} lg={18} className="textHighlight block"> */}
-            <Col xs={16} lg={18} className="mypage_record_wrap_box">
+            <Col
+              sm={16}
+              lg={18}
+              className="mypage_record_wrap_box"
+              style={{
+                margin: "6px",
+              }}>
               {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
               <Row justify="space-around" className="modeFilter">
                 <Col sm={4} lg={4}>
@@ -851,12 +885,15 @@ function Mypage() {
                   </h4>
                 </Col>
                 <Col sm={4} lg={4}>
-                  <h4 style={speedColor} onClick={setSpeed}>
+                  <h4 style={speedColor} onClick={setSpeed} className="mypage_text_center">
                     스피드전
                   </h4>
                 </Col>
                 <Col sm={4} lg={4}>
-                  <h4 style={efficiencyColor} onClick={setEfficiency}>
+                  <h4
+                    style={efficiencyColor}
+                    onClick={setEfficiency}
+                    className="mypage_text_center">
                     최적화전
                   </h4>
                 </Col>
