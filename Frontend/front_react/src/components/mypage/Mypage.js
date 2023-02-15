@@ -468,10 +468,6 @@ function Mypage() {
   const spdMMR = MMRList[0];
   const effMMR = MMRList[1];
 
-  console.log("스피드전:", spdMMR);
-  console.log("최적화전:", effMMR);
-  console.log("스피드전 경계:", speedBorder);
-  console.log("최적화전 경계:", efficiencyBorder);
   // 스피드전 데이터
   const speedData = [
     {
@@ -596,14 +592,14 @@ function Mypage() {
 
   // 지난 시즌 요약 표시
   function SeasonCollection() {
-    if (seasonInfo === []) {
-      return <p>시즌 정보가 없습니다.</p>;
+    if (seasonInfo.length === 0) {
+      return <p class="text">시즌 정보가 없습니다.</p>;
     } else {
       return (
         <>
           {/* 한 줄에 1개씩 표시 */}
-          {seasonInfo.map((seasonData) => (
-            <Col span={24} align="middle">
+          {seasonInfo.map((seasonData, index) => (
+            <Col key={index} span={24} align="middle">
               <Row justify="center" align="middle">
                 {/* <Col span={8} className="text"> */}
                 <Col span={8}>
@@ -652,6 +648,15 @@ function Mypage() {
       );
     }
   }
+
+  // // 더 보기 단추 선택적으로 표시
+  // function ShowMore() {
+  //   if (resultCount > refinedData.length) {
+  //     return
+  //   } else {
+  //     return
+  //   }
+  // }
 
   // 페이지 렌더링
   return (
