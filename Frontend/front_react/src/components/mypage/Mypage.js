@@ -260,6 +260,24 @@ function ProfileImage() {
     reader.readAsDataURL(uploadFile);
   };
 
+  //화면에 프로필 사진 표시
+  const reader = new FileReader();
+  if (!fileInput) {
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setPhoto(reader.result);
+        setUserInfo({
+          nickname: userInfo.nickname,
+          profileImg: reader.result,
+          level: userInfo.level,
+          speedTier: userInfo.speedTier,
+          efficiencyTier: userInfo.efficiencyTier,
+        });
+        reader.readAsDataURL(photo);
+      }
+    };
+  }
+
   console.log("마이페이지 사진:", photo);
 
   return (
@@ -694,7 +712,7 @@ function Mypage() {
                 justifyContent: "center",
               }}>
               {/* > */}
-              <Row type="flex">
+              <Row type="flex" align="middle">
                 <Col>
                   {/* 이미지를 정상적으로 불러올 수 없는 경우 대체 이미지가 납작하게 표시되는 현상 발생 중 */}
                   <ProfileImage />
