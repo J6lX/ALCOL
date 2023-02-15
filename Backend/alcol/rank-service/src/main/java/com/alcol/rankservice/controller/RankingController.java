@@ -92,6 +92,10 @@ public class RankingController
     public ResponseEntity<RankDto.ResponseDto<?>> requestMyRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
         // header에 있는 user_id값 가져옴
         String userId = requestHeader.getHeaders("user_id").nextElement();
+        // 로그인한 유저 정보가 없으면 null 처리한다.
+        if(userId == null) {
+            return null;
+        }
         String battleMode = requestMap.get("battle_mode");
 
         // redis의 랭킹 부분에서 해당 유저가 승패 기록이 있는지 확인
