@@ -146,7 +146,7 @@ function TierBorder(tiercolor, tiernum) {
 
 // 날짜 값(value) 계산 함수
 function GetDateDiffValue(startDate) {
-  return new Date.now() - new Date(startDate);
+  return new Date() - new Date(startDate);
 }
 
 // 날짜 차이 계산 함수
@@ -345,7 +345,6 @@ function Mypage() {
           // 사용자 전적을 recoil(userBattleRec)에 저장할 수 있게 정제
           // 지나치게 요청을 많이 하는 현상 발생 - 서버 터뜨리기 싫으면 useEffect()를 활용하자.
           const originBattleRec = originBattleRecord.data.map((record) => {
-            console.log(record);
             return {
               battle_result: IsVictory(record.battle_result),
               battle_mode: translateModeName(record.battle_mode),
@@ -891,12 +890,15 @@ function Mypage() {
                   </h4>
                 </Col>
                 <Col sm={4} lg={4}>
-                  <h4 style={speedColor} onClick={setSpeed}>
+                  <h4 style={speedColor} onClick={setSpeed} className="mypage_text_center">
                     스피드전
                   </h4>
                 </Col>
                 <Col sm={4} lg={4}>
-                  <h4 style={efficiencyColor} onClick={setEfficiency}>
+                  <h4
+                    style={efficiencyColor}
+                    onClick={setEfficiency}
+                    className="mypage_text_center">
                     최적화전
                   </h4>
                 </Col>
