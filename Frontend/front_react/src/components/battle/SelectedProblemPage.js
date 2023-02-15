@@ -65,7 +65,9 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
             justifyContent: "right",
             height: "50px",
           }}>
-          <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.user.nick}</p>
+          <p className="NanumSquare" style={{ color: "white", fontSize: "3vh" }}>
+            {userInfo.user.nick}
+          </p>
         </Col>
         <Col span={6} style={{ display: "flex", justifyContent: "center" }}>
           <img src={versus} alt="versus" style={{ width: "60px" }} />
@@ -78,7 +80,9 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
             justifyContent: "rleft",
             height: "50px",
           }}>
-          <p style={{ color: "white", fontSize: "3vh" }}>{userInfo.other.nick}</p>
+          <p className="NanumSquare" style={{ color: "white", fontSize: "3vh" }}>
+            {userInfo.other.nick}
+          </p>
         </Col>
       </Row>
       <br />

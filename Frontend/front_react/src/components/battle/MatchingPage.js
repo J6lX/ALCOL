@@ -4,58 +4,98 @@ import { Col, Row, Button, Modal } from "antd";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedMode, selectedLanguage, matchingPlayerInfo } from "../../states/atoms";
 import { LoginState } from "../../states/LoginState";
-import iconTierBronze from "../../assets/ALCOL_tiers/tier_bronze_0.png";
+// import iconTierBronze from "../../assets/ALCOL_tiers/tier_bronze_0.png";
 import "./MatchingPage.css";
 import axios from "axios";
 
 function UserInfo() {
   const [nickname, setNickname] = React.useState("a");
   const [speedTier, setSpeedTier] = React.useState("a");
+  const [speedTierAddress, setSpeedTierAddress] = React.useState("a");
   const [optTier, setOptTier] = React.useState("a");
+  const [optTierAddress, setOptTierAddress] = React.useState("a");
+  const [imageAddress, setImageAddress] = React.useState("a");
   var userId = useRecoilValue(LoginState);
   useEffect(() => {}, [nickname, speedTier, optTier]);
+  console.log(imageAddress);
 
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
       user_id: userId,
     })
     .then(function (response) {
+      console.log("이런", response.data);
       setNickname(response.data.nickname);
-      setSpeedTier(response.data.speedTier);
-      setOptTier(response.data.optimizationTier);
+      setSpeedTier(response.data.speed_tier);
+      setOptTier(response.data.optimization_tier);
+      setImageAddress(response.data.stored_file_name);
+      setTimeout(() => {}, 500);
+      let sptier;
+      if (response.data.speed_tier[0] === "B") {
+        sptier = "bronze";
+      } else if (response.data.speed_tier[0] === "S") {
+        sptier = "silver";
+      } else if (response.data.speed_tier[0] === "G") {
+        sptier = "gold";
+      } else if (response.data.speed_tier[0] === "P") {
+        sptier = "platinum";
+      } else if (response.data.speed_tier[0] === "D") {
+        sptier = "diamond";
+      } else if (response.data.speed_tier[0] === "A") {
+        sptier = "alcol";
+      }
+      let spLV = response.data.speed_tier[response.data.speed_tier.length - 1];
+
+      setSpeedTierAddress(require("../../assets/ALCOL_tiers/tier_" + sptier + "_" + spLV + ".png"));
+
+      let optier;
+      if (response.data.optimization_tier[0] === "B") {
+        optier = "bronze";
+      } else if (response.data.optimization_tier[0] === "S") {
+        optier = "silver";
+      } else if (response.data.optimization_tier[0] === "G") {
+        optier = "gold";
+      } else if (response.data.optimization_tier[0] === "P") {
+        optier = "platinum";
+      } else if (response.data.optimization_tier[0] === "D") {
+        optier = "diamond";
+      } else if (response.data.optimization_tier[0] === "A") {
+        optier = "alcol";
+      }
+      let opLV = response.data.optimization_tier[response.data.optimization_tier.length - 1];
+
+      setOptTierAddress(require("../../assets/ALCOL_tiers/tier_" + optier + "_" + opLV + ".png"));
     })
     .catch((error) => {
-      let customCode = error.response.data.custom_code;
-      if (
-        customCode === "100" ||
-        customCode === "101" ||
-        customCode === "102" ||
-        customCode === "103" ||
-        customCode === "104" ||
-        customCode === "105"
-      ) {
-        // 로그인 실패 시 표시하는 내용
-        alert(error.response.data.description);
-      }
+      console.log("error", error);
     });
+  console.log(speedTierAddress);
+  console.log(optTierAddress);
   return (
     <Row justify="end" className="battle_user_info_row">
-      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
-      </Col>
-      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={iconTierBronze} alt="tier" className="icon_tier"></img>
-      </Col>
       <Col
         span={3}
         style={{
+          display: "flex",
+          alignItems: "center",
           fontFamily: "NanumSquareNeo",
           fontSize: "1.5vw",
           paddingLeft: "10px",
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
+        <img
+          src={imageAddress}
+          alt=""
+          style={{ width: "40px", height: "40px", marginRight: "10px", borderRadius: "50%" }}
+        />
         {nickname}
+      </Col>
+      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
+        <img src={speedTierAddress} alt="tier" className="icon_tier"></img>
+      </Col>
+      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
+        <img src={optTierAddress} alt="tier" className="icon_tier"></img>
       </Col>
     </Row>
   );
@@ -194,8 +234,8 @@ function App() {
       <div className="matching_helper">
         <div style={{ color: "white", fontFamily: "NanumSquareNeo" }}>그거 아셨나요?</div>
         <div style={{ color: "white", fontFamily: "NanumSquareNeo", fontWeight: "lighter" }}>
-          배틀에서는 공평성을 위해 코드를 복사 붙여넣기 할 수 없어요... 
-          자신의 코드가 필요하시다면 배틀이 끝나고 나서 자신의 코드를 복사해갈 수 있어요!
+          배틀에서는 공평성을 위해 코드를 복사 붙여넣기 할 수 없어요... 자신의 코드가 필요하시다면
+          배틀이 끝나고 나서 자신의 코드를 복사해갈 수 있어요!
         </div>
       </div>
       <div className="matchingButton" onClick={handleHistoryMatchCancel}>

@@ -19,6 +19,7 @@ function UserInfo({ setMode, setLanguage }) {
   const [nickname, setNickname] = React.useState("");
   const [speedTier, setSpeedTier] = React.useState("");
   const [optTier, setOptTier] = React.useState("");
+  const [imageAddress, setImageAddress] = React.useState("a");
   const [urlSpeed, setUrlSpeed] = React.useState("");
   const [urlOpt, setUrlOpt] = React.useState("");
 
@@ -34,6 +35,7 @@ function UserInfo({ setMode, setLanguage }) {
           setNickname(response.data.nickname);
           setSpeedTier(response.data.speed_tier);
           setOptTier(response.data.optimization_tier);
+          setImageAddress(response.data.stored_file_name);
         })
         .catch((error) => {
           let customCode = error.response.data.custom_code;
@@ -102,22 +104,29 @@ function UserInfo({ setMode, setLanguage }) {
           onClick={handlePageBack}></img>
       </Col>
       <Col span={17}></Col>
-      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={urlSpeed} alt="tier" className="mode_icon_tier" />
-      </Col>
-      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
-        <img src={urlOpt} alt="tier" className="mode_icon_tier" />
-      </Col>
       <Col
         span={3}
         style={{
+          display: "flex",
+          alignItems: "center",
           fontFamily: "NanumSquareNeo",
           fontSize: "1.5vw",
           paddingLeft: "10px",
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
+        <img
+          src={imageAddress}
+          alt=""
+          style={{ width: "40px", height: "40px", marginRight: "10px", borderRadius: "50%" }}
+        />
         {nickname}
+      </Col>
+      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
+        <img src={urlSpeed} alt="tier" className="mode_icon_tier" />
+      </Col>
+      <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
+        <img src={urlOpt} alt="tier" className="mode_icon_tier" />
       </Col>
     </Row>
   );
@@ -225,7 +234,7 @@ function SelectLanguage({ setLanguage, back }) {
           gameInfo2={"문제를 풉니다"}
           avgTime={"5"}
           setMode={setLanguage}
-          setText={"Cpp"}
+          setText={"C++"}
         />
       </div>
     </div>

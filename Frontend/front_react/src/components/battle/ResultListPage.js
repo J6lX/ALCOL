@@ -6,33 +6,33 @@ import { useRecoilValue } from "recoil";
 import icon_vs from "../../assets/vs.png";
 import { resultListPlayerInfo, resultListModeInfo, resultListResultInfo } from "../../states/atoms";
 
-function PlayerInfo({battleuserinfo, battleMode}) {
+function PlayerInfo({ battleuserinfo, battleMode }) {
   //atoms에 저장한 playerInfo를 불러옵니다.
   const playerInfo = useRecoilValue(resultListPlayerInfo);
   console.log(battleuserinfo);
   return (
     <Row justify="space-between">
-      <Col span={6} className="result_user_info">
+      <Col span={6} className="NanumSquare result_user_info">
         {battleuserinfo.user.nick}
       </Col>
-      <Col span={2} className="result_user_info">
+      <Col span={2} className="NanumSquare result_user_info">
         {playerInfo.player1_level}
       </Col>
-      <Col span={2} className="result_user_info">
+      <Col span={2} className="NanumSquare result_user_info">
         {battleMode === "speed" && battleuserinfo.user.speedTier}
         {battleMode === "optimization" && battleuserinfo.user.optTier}
       </Col>
       <Col span={3} className="result_icon_vs">
         <img src={icon_vs} alt="vs"></img>
       </Col>
-      <Col span={2} className="result_enemy_info">
+      <Col span={2} className="NanumSquare result_enemy_info">
         {battleMode === "speed" && battleuserinfo.other.speedTier}
         {battleMode === "optimization" && battleuserinfo.other.optTier}
       </Col>
-      <Col span={2} className="result_enemy_info">
+      <Col span={2} className="NanumSquare result_enemy_info">
         {playerInfo.player2_level}
       </Col>
-      <Col span={6} className="result_enemy_info">
+      <Col span={6} className="NanumSquare result_enemy_info">
         {battleuserinfo.other.nick}
       </Col>
     </Row>
@@ -59,11 +59,11 @@ function GameInfo({ battleuserinfo, problemInfo, battleMode, battleLanguage }) {
     textAlign: "center",
     lineHeight: "10em",
   };
-  let mode = ""
+  let mode = "";
   if (battleMode === "speed") {
-    mode = "스피드"
+    mode = "스피드";
   } else if (battleMode === "optimization") {
-    mode = "최적화"
+    mode = "최적화";
   }
   return (
     <div>
@@ -116,9 +116,9 @@ function ResultPlayerInfo() {
 function ResultInfo({ sendResult }) {
   let result = "";
   if (sendResult.result === "accepted") {
-    result = "성공적인 "
+    result = "성공적인 ";
   } else {
-    result = "아쉬웠던 "
+    result = "아쉬웠던 ";
   }
   return (
     <div style={{ clear: "both" }}>
@@ -132,7 +132,9 @@ function ResultInfo({ sendResult }) {
             <Col span={2}>사진</Col>
             <Col span={22}>
               {sendResult.nick}님의 {result}코드 제출! 코드길이:
-              {sendResult.code_length} 메모리: {sendResult.memory && sendResult.memory / 1024000} MB 실행시간:
+              {sendResult.code_length} 메모리:{" "}
+              {sendResult.memory !== "없음" && sendResult.memory / 1024000}
+              {sendResult.memory === "없음" && sendResult.memory} MB 실행시간:
               {sendResult.time} ms
             </Col>
           </Row>
@@ -204,7 +206,12 @@ function App({ problemInfo, battleMode, battleLanguage, battleuserinfo }) {
           xl={7}
           className="result_list_wrap"
           style={{ overflow: "auto" }}>
-          <GameInfo battleuserinfo={battleuserinfo} problemInfo={problemInfo} battleMode={battleMode} battleLanguage={battleLanguage} />
+          <GameInfo
+            battleuserinfo={battleuserinfo}
+            problemInfo={problemInfo}
+            battleMode={battleMode}
+            battleLanguage={battleLanguage}
+          />
         </Col>
         <Col
           sm={24}
