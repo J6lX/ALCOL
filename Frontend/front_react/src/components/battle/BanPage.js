@@ -10,9 +10,8 @@ function Top({ userInfo, timeOut }) {
   console.log("TopuserInfo", userInfo);
   let secs = 0;
   const tick = () => {
-    if (secs < 30000) {
+    if (secs < 30) {
       secs += 1;
-      console.log(secs);
     } else {
       timeOut("timeout");
     }
@@ -20,7 +19,10 @@ function Top({ userInfo, timeOut }) {
 
   useEffect(() => {
     //1초
-    const timerId = setInterval(() => tick(), 999);
+    const timerId = setInterval(() => {
+      tick();
+      console.log(secs);
+    }, 999);
     return () => clearInterval(timerId);
   });
 
@@ -33,7 +35,13 @@ function Top({ userInfo, timeOut }) {
           <img
             src={userInfo.user.imageAddress}
             alt=""
-            style={{ width: "60px", height: "60px", marginRight: "10px", borderRadius: "50%" }}
+            style={{
+              width: "60px",
+              height: "60px",
+              marginRight: "10px",
+              borderRadius: "50%",
+              border: "2px solid #E51C29",
+            }}
           />
           {userInfo.user.nick}
         </div>
@@ -44,7 +52,7 @@ function Top({ userInfo, timeOut }) {
           <div className="ban_title">금지할 문제를 선택해주세요</div>
           <div className="ban_info">선택된 문제는 이번 게임에서 출제되지 않습니다.</div>
           <div style={{ width: "25vw" }}>
-            <Progress style={{ zIndex: "10" }} percent={(secs / 32) * 100} showInfo={true} />
+            <Progress style={{ zIndex: "10" }} percent={(20 / 31) * 100} showInfo={true} />
           </div>
         </div>
       </Col>
@@ -109,7 +117,13 @@ function Bottom(userInfo) {
           <img
             src={userInfo.userInfo.other.imageAddress}
             alt=""
-            style={{ width: "60px", height: "60px", marginRight: "10px", borderRadius: "50%" }}
+            style={{
+              width: "60px",
+              height: "60px",
+              marginRight: "10px",
+              borderRadius: "50%",
+              border: "2px solid #E51C29",
+            }}
           />
           {userInfo.userInfo.other.nick}
         </div>

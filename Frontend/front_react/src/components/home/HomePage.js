@@ -10,6 +10,17 @@ import Entrance from "./Entrance";
 import { Button, Row, Col } from "antd";
 import "./HomePage.css";
 import "animate.css";
+import {
+  selectedMode,
+  selectedLanguage,
+  matchingPlayerInfo,
+  resultListResultInfo,
+  sendConnect,
+  sendGetProblem,
+  sendBattleStart,
+  isSubmitSpin,
+} from "../../states/atoms";
+import { useSetRecoilState } from "recoil";
 
 const MainPage = () => {
   const changeColor = (event) => {
@@ -90,7 +101,9 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {speed[0] && <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>}
+        {speed[0] && (
+          <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        )}
 
         <div className="secondthirdLayout">
           {speed[1] && (
@@ -202,6 +215,28 @@ const RankingPage = () => {
 };
 
 const HomePage = () => {
+  const setSelectedMode = useSetRecoilState(selectedMode);
+  const setSelectedLanguage = useSetRecoilState(selectedLanguage);
+  const setMatchingPlayerInfo = useSetRecoilState(matchingPlayerInfo);
+  const setResultListResultInfo = useSetRecoilState(resultListResultInfo);
+  const setSendConnect = useSetRecoilState(sendConnect);
+  const setSendGetProblem = useSetRecoilState(sendGetProblem);
+  const setSendBattleStart = useSetRecoilState(sendBattleStart);
+  const setIsSubmitSpin = useSetRecoilState(isSubmitSpin);
+
+  setSelectedMode("-1");
+  setSelectedLanguage("-1");
+  setMatchingPlayerInfo({
+    userId: "",
+    otherId: "",
+    hostCheck: "",
+  });
+  setResultListResultInfo([]);
+  setSendConnect("-1");
+  setSendGetProblem("-1");
+  setSendBattleStart("-1");
+  setIsSubmitSpin(false);
+
   return (
     <div style={{ zIndex: "-2" }}>
       <Entrance />

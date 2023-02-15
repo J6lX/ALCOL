@@ -9,7 +9,7 @@ import SolvingPage from "./SolvingPage";
 import SolvingOptPage from "./SolvingOptPage";
 import ResultPage from "./ResultPage";
 import ResultListPage from "./ResultListPage";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { message, Modal } from "antd";
 import {
   selectedMode,
@@ -19,6 +19,7 @@ import {
   sendConnect,
   sendGetProblem,
   sendBattleStart,
+  isSubmitSpin,
 } from "../../states/atoms";
 
 // let submitResult = "";
@@ -51,6 +52,7 @@ const ContinuousBattlePage = () => {
   const [checkConnect, setCheckConnect] = useRecoilState(sendConnect);
   const [checkGetProblem, setCheckGetProblem] = useRecoilState(sendGetProblem);
   const [checkBattleStart, setCheckBattleStart] = useRecoilState(sendBattleStart);
+  const setIsSubmitSpin = useSetRecoilState(isSubmitSpin);
   // const code = useRecoilValue(userCode);
   const idInfo = useRecoilValue(matchingPlayerInfo);
   const battleModeInfo = useRecoilValue(selectedMode);
@@ -262,7 +264,9 @@ const ContinuousBattlePage = () => {
               </div>
             ),
             okText: "확인",
-            onOk() {},
+            onOk() {
+              setIsSubmitSpin(false);
+            },
           };
           info(modaldata);
           setResultListResult(resultList);
@@ -289,7 +293,9 @@ const ContinuousBattlePage = () => {
                 </div>
               ),
               okText: "확인",
-              onOk() {},
+              onOk() {
+                setIsSubmitSpin(false);
+              },
             };
             info(modaldata);
           } else if (data.submitResult === "fail") {
@@ -314,7 +320,9 @@ const ContinuousBattlePage = () => {
                 </div>
               ),
               okText: "확인",
-              onOk() {},
+              onOk() {
+                setIsSubmitSpin(false);
+              },
             };
             info(modaldata);
             setResultListResult(resultList);
@@ -392,9 +400,8 @@ const ContinuousBattlePage = () => {
               ),
               okText: "확인",
               onOk() {
+                setIsSubmitSpin(false);
                 showFinishModal();
-                setIsSolving(false);
-                setIsSolved(true);
               },
             };
             info(modaldata);
@@ -411,8 +418,6 @@ const ContinuousBattlePage = () => {
               okText: "확인",
               onOk() {
                 showFinishModal();
-                setIsSolving(false);
-                setIsSolved(true);
               },
             };
             info(modaldata);
@@ -434,8 +439,6 @@ const ContinuousBattlePage = () => {
               okText: "확인",
               onOk() {
                 showFinishModal();
-                setIsSolving(false);
-                setIsSolved(true);
               },
             };
             info(modaldata);
@@ -454,8 +457,6 @@ const ContinuousBattlePage = () => {
               okText: "확인",
               onOk() {
                 showFinishModal();
-                setIsSolving(false);
-                setIsSolved(true);
               },
             };
             info(modaldata);
@@ -470,8 +471,6 @@ const ContinuousBattlePage = () => {
               okText: "확인",
               onOk() {
                 showFinishModal();
-                setIsSolving(false);
-                setIsSolved(true);
               },
             };
             info(modaldata);

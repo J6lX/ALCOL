@@ -11,7 +11,7 @@ import { java } from "@codemirror/lang-java";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
 import { Button, Modal } from "antd";
-import { userCode } from "../../states/atoms";
+import { userCode, isSubmitSpin } from "../../states/atoms";
 // import { useTable } from "react-table";
 import "animate.css";
 
@@ -139,12 +139,13 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
   const [code, setCode] = useRecoilState(userCode);
   const setSubmitMessage = useSetRecoilState(submitMessageState);
-  // const [loading, setLoading] = useRecoilState(isSubmitSpin);
+  const [loading, setLoading] = useRecoilState(isSubmitSpin);
   // const problem_number = 1;
 
   console.log("배틀 언어", language);
 
   const onChange = (newValue) => {
+    setLoading(false);
     setCode(newValue);
     codeEmit(newValue);
     console.log(newValue);
@@ -157,7 +158,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
 
   const upMouse = (event) => {
     setIsClick(false);
-    console.log(isClick);
   };
 
   const downMouse = (event) => {
@@ -184,7 +184,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
     setIsSubmitModalOpen(true);
   };
   const submitHandleOk = () => {
-    // setLoading(true);
+    setLoading(true);
     clickSubmit();
     setIsSubmitModalOpen(false);
   };
@@ -317,7 +317,11 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
             결과창
           </p>
           <div>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showSubmitModal}>
+            <Button
+              loading={loading}
+              className="NanumSquare"
+              style={{ margin: "5px" }}
+              onClick={showSubmitModal}>
               제출
             </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
