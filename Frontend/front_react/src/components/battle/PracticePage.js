@@ -112,10 +112,10 @@ function Ranking() {
         <Col span={16}>
           {/* 검색 상자 */}
           <Row justify="end">
-            <Col xs={12} sm={8} justify="end">
+            <Col xs={24} sm={12} md={8} justify="end">
               <Form onFinish={onSearch}>
                 <Row>
-                  <Col xs={12} lg={16}>
+                  <Col xs={0} sm={16}>
                     <Form.Item name="query">
                       <Input
                         onPressEnter={onSearch}
@@ -136,8 +136,9 @@ function Ranking() {
                       marginLeft: "3px",
                       padding: "2px",
                     }}
-                    xs={3}
-                    lg={6}>
+                    xs={0}
+                    sm={3}
+                    lg={7}>
                     <Form.Item>
                       <Button htmlType="submit">검색</Button>
                     </Form.Item>
