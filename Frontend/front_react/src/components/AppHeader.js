@@ -271,7 +271,8 @@ function AppHeader() {
     locationNow.pathname !== "/mode" &&
     locationNow.pathname !== "/solve" &&
     locationNow.pathname !== "/solveprac" &&
-    locationNow.pathname !== "/battle"
+    locationNow.pathname !== "/battle" &&
+    locationNow.pathname !== "/solveprac"
   )
     return <HeaderData />;
 }

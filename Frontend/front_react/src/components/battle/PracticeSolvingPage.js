@@ -54,18 +54,51 @@ function DefineLanguage(language) {
   }
 }
 
+const ExampleTable = ({ inputData, outputData }) => {
+  console.log(inputData, outputData);
+
+  const inputList = inputData.split("$$").map((data) => {
+    return <p className="NanumSquare">{data}</p>;
+  });
+  const outputList = outputData.split("$$").map((data) => {
+    return <p className="NanumSquare">{data}</p>;
+  });
+  return (
+    <div>
+      <table border={1} style={{ margin: "15px" }}>
+        <thead>
+          <tr>
+            <th className="NanumSquare" style={{ color: "white" }}>
+              input
+            </th>
+            <th className="NanumSquare" style={{ color: "white" }}>
+              output
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="NanumSquare">{inputList}</td>
+            <td className="NanumSquare">{outputList}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
 // 문제 표시 영역
 const Problem = () => {
   // 파라미터로 문제 번호 가져오기
   const problemId = useParams().problemno;
   // PracticeProblemState에는 현재 조회(풀이)중인 연습문제 저장
   const [problemData, setProblemData] = useRecoilState(PracticeProblemState);
-
   // 문제 번호로 요청해서 문제 정보를 받기
   useEffect(() => {
     axios
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/${problemId}`)
       .then((response) => {
+        console.log(response);
         // 응답받은 데이터 정제
         const originProblemData = {
           // 문제 번호
@@ -86,6 +119,8 @@ const Problem = () => {
           problemOutputContent: response.data.prob_output_content,
           // 출력 테스트 케이스
           problemOutputTC: response.data.prob_output_testcase,
+          // 메모리 제한
+          problemMemoryLimit: response.data.prob_memory_liimt,
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
@@ -139,7 +174,6 @@ const Problem = () => {
           }}>
           {problemData.problemInputContent}
           <br />
-          ex. {problemData.problemInputTC}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -152,8 +186,19 @@ const Problem = () => {
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
           {problemData.problemOutputContent}
           <br />
-          ex. {problemData.problemOutputTC}
         </p>
+        <hr style={{ color: "gray" }} />
+        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
+          입출력 예시
+        </p>
+        <hr style={{ color: "gray" }} />
+        <br />
+        <ExampleTable
+          inputData={problemData.problemInputTC}
+          outputData={problemData.problemOutputTC}
+        />
+        <br />
+        <hr style={{ color: "gray" }} />
       </div>
     </div>
   );

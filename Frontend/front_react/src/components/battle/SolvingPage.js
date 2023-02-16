@@ -74,19 +74,31 @@ const BattleNav = ({ userInfo, mode }) => {
 };
 
 const ExampleTable = ({ inputData, outputData }) => {
+  console.log(inputData, outputData);
+
+  const inputList = inputData.split("$$").map((data) => {
+    return <p className="NanumSquare">{data}</p>;
+  });
+  const outputList = outputData.split("$$").map((data) => {
+    return <p className="NanumSquare">{data}</p>;
+  });
   return (
     <div>
-      <table border={1}>
+      <table border={1} style={{ margin: "15px" }}>
         <thead>
           <tr>
-            <th className="NanumSquare" style={{ color: "white" }}>input</th>
-            <th className="NanumSquare" style={{ color: "white" }}>output</th>
+            <th className="NanumSquare" style={{ color: "white" }}>
+              input
+            </th>
+            <th className="NanumSquare" style={{ color: "white" }}>
+              output
+            </th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td className="NanumSquare">{inputData}</td>
-            <td className="NanumSquare">{outputData}</td>
+            <td className="NanumSquare">{inputList}</td>
+            <td className="NanumSquare">{outputList}</td>
           </tr>
         </tbody>
       </table>
@@ -166,7 +178,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   const [loading, setLoading] = useRecoilState(isSubmitSpin);
   // const problem_number = 1;
 
-
   const onChange = (newValue) => {
     setLoading(false);
     setCode(newValue);
@@ -239,7 +250,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   const surrend = () => {
     clickSurrender();
   };
-
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
@@ -359,7 +369,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, code
   );
 };
 
-const Console = ({submitMessage}) => {
+const Console = ({ submitMessage }) => {
   // const submitMessage = useRecoilValue(submitMessageState);
   // const solvingHeight = useRecoilValue(solvingHeightState);
   const consoleHeight = useRecoilValue(consoleHeightState);
@@ -371,27 +381,27 @@ const Console = ({submitMessage}) => {
       if (submitMessage[i].nick === "me") {
         if (submitMessage[i].result === "accepted") {
           result.push(
-          <p key={i} className="NanumSquare" style={{color: "white"}}>
+            <p key={i} className="NanumSquare" style={{ color: "white" }}>
               &nbsp;&gt;&gt; 제출 결과: 테스트케이스 전부 정답!
             </p>
           );
         } else if (submitMessage[i].result === "error") {
           result.push(
-            <p key={i} className="NanumSquare" style={{color: "white"}}>
-                &nbsp;&gt;&gt; 제출 결과: Error! {submitMessage[i].error}
-              </p>
-            );
+            <p key={i} className="NanumSquare" style={{ color: "white" }}>
+              &nbsp;&gt;&gt; 제출 결과: Error! {submitMessage[i].error}
+            </p>
+          );
         } else {
           result.push(
-            <p key={i} className="NanumSquare" style={{color: "white"}}>
-                &nbsp;&gt;&gt; 제출 결과: 테스트케이스 {submitMessage[i].result}
-              </p>
-            );
+            <p key={i} className="NanumSquare" style={{ color: "white" }}>
+              &nbsp;&gt;&gt; 제출 결과: 테스트케이스 {submitMessage[i].result}
+            </p>
+          );
         }
       }
     }
-    return result
-  }
+    return result;
+  };
   return (
     <div
       className="scrollDesign"
