@@ -398,14 +398,14 @@ function Mypage() {
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
-  const userSPDTier = userInfo.speedTier.slice(0, 1);
-  const userSPDnumber = userInfo.speedTier.slice(
+  const userSPDTier = userInfo.speedTier.substr(0, 1);
+  const userSPDnumber = userInfo.speedTier.substr(
     userInfo.speedTier.length - 1,
     userInfo.speedTier.length
   );
 
-  const userEFFTier = userInfo.efficiencyTier.slice(0, 1);
-  const userEFFnumber = userInfo.efficiencyTier.slice(
+  const userEFFTier = userInfo.efficiencyTier.substr(0, 1);
+  const userEFFnumber = userInfo.efficiencyTier.substr(
     userInfo.efficiencyTier.length - 1,
     userInfo.efficiencyTier.length
   );
@@ -646,7 +646,7 @@ function Mypage() {
   // 지난 시즌 요약 표시
   function SeasonCollection() {
     if (seasonInfo.length === 0) {
-      return <p class="text">시즌 정보가 없습니다.</p>;
+      return <p className="text">시즌 정보가 없습니다.</p>;
     } else {
       return (
         <>
@@ -657,7 +657,7 @@ function Mypage() {
                 {/* <Col span={8} className="text"> */}
                 <Col span={8}>
                   <img
-                    src={giveBadge(seasonData.tier.slice(0, 1))}
+                    src={giveBadge(seasonData.tier.substr(0, 1))}
                     alt="badge"
                     style={{
                       width: "120%",
