@@ -14,14 +14,8 @@ import platinumBadge from "../../assets/ALCOL_tiers/bigtier_platinum.png";
 import diamondBadge from "../../assets/ALCOL_tiers/bigtier_diamond.png";
 import alcolBadge from "../../assets/ALCOL_tiers/bigtier_alcol.png";
 
-import {
-  LoginState,
-  BackupBattleRec,
-  userBattleRec,
-  UserInfoState,
-  MMRState,
-} from "../../states/LoginState";
-import { LastSeasonState } from "../../states/RankingState";
+import { LoginState, userBattleRec, UserInfoState, MMRState } from "../../states/LoginState";
+import { BackupBattleRec, LastSeasonState, BackupLastSeasonState } from "../../states/RankingState";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 // 매치 기록 정렬 컬럼
@@ -196,10 +190,17 @@ function translateModeName(mode) {
 
 // 승/패 판단 함수
 function IsVictory(result) {
+  // 1이면 승리
   if (result === 1) {
     return "승리";
-  } else {
+  }
+  // 0이면 패배
+  else if (result === 0) {
     return "패배";
+  }
+  // 2면 무승부
+  else {
+    return "무승부";
   }
 }
 
@@ -311,6 +312,7 @@ function Mypage() {
   const [battleRec, setBattleRec] = useRecoilState(userBattleRec);
   const [BackupRec, setBackupRec] = useRecoilState(BackupBattleRec);
   const [seasonInfo, setSeasonInfo] = useRecoilState(LastSeasonState);
+  const [backupSeason, setBackupSeason] = useRecoilState(BackupLastSeasonState);
   const [MMRList, setMMRList] = useRecoilState(MMRState);
 
   // 더 보기 단추
@@ -385,12 +387,13 @@ function Mypage() {
           setBattleRec(originBattleRec);
           setBackupRec(originBattleRec);
           setSeasonInfo(refinedLastSeason);
+          setBackupSeason(refinedLastSeason);
         })
       )
       .catch((error) => {
         console.log(error);
       });
-  }, [setBattleRec, setUserInfo, setBackupRec, userId, setSeasonInfo]);
+  }, [setBattleRec, setUserInfo, setBackupRec, userId, setSeasonInfo, setBackupSeason]);
 
   // 스피드 티어와 효율성 티어를 별도의 변수에 저장
   // 사용자 정보가 없는 경우 공백을 슬라이싱 시도하는 문제 발생
@@ -491,7 +494,29 @@ function Mypage() {
   const [efficiencyColor, setEfficiencyColor] = useState({ color: "white" });
   const [levelColor, setLevelColor] = useState({ color: "white" });
   const [modeName, setModeName] = useState("level");
-  // 필터링
+
+  //  시즌 필터링
+  // 백업 리코일에 저장한 원본 값으로 롤백
+  const seasonAll = () => {
+    setModeName("level");
+    setSeasonInfo(backupSeason);
+  };
+
+  // 테이블에 표시할 데이터를 스피드 모드를 기준으로 필터링
+  const seasonSpeed = () => {
+    setModeName("speed");
+    const filteredData = backupSeason.filter((data) => data.modeName === "스피드");
+    setSeasonInfo(filteredData);
+  };
+
+  // 테이블에 표시할 데이터를 최적화 모드를 기준으로 필터링
+  const seasonOptimizer = () => {
+    setModeName("efficiency");
+    const filteredData = backupSeason.filter((data) => data.modeName === "최적화");
+    setSeasonInfo(filteredData);
+  };
+
+  //  전적 필터링
   // 백업 리코일에 저장한 원본 값으로 롤백
   const setLevel = () => {
     setModeName("level");
@@ -592,14 +617,14 @@ function Mypage() {
 
   // 지난 시즌 요약 표시
   function SeasonCollection() {
-    if (seasonInfo === []) {
-      return <p>시즌 정보가 없습니다.</p>;
+    if (seasonInfo.length === 0) {
+      return <p class="text">시즌 정보가 없습니다.</p>;
     } else {
       return (
         <>
           {/* 한 줄에 1개씩 표시 */}
-          {seasonInfo.map((seasonData) => (
-            <Col span={24} align="middle">
+          {seasonInfo.map((seasonData, index) => (
+            <Col key={index} span={24} align="middle">
               <Row justify="center" align="middle">
                 {/* <Col span={8} className="text"> */}
                 <Col span={8}>
@@ -648,6 +673,15 @@ function Mypage() {
       );
     }
   }
+
+  // // 더 보기 단추 선택적으로 표시
+  // function ShowMore() {
+  //   if (resultCount > refinedData.length) {
+  //     return
+  //   } else {
+  //     return
+  //   }
+  // }
 
   // 페이지 렌더링
   return (
@@ -852,12 +886,29 @@ function Mypage() {
               {/* > */}
               <Row>
                 {/* 지난 시즌 기록 보기 */}
-                {/* <Col xs={24} className="miniBlock"> */}
                 <Col xs={24} className="mypage_record_block">
-                  <p className="textHighlight">지난 시즌 기록</p>
+                  <p className="textHighlight" onClick={seasonAll}>
+                    지난 시즌 기록
+                  </p>
+                  <hr />
+                  {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
+                  <Row justify="space-around" className="modeFilter">
+                    <Col sm={12} lg={6}>
+                      <h4 style={speedColor} onClick={seasonSpeed} className="mypage_text_center">
+                        스피드
+                      </h4>
+                    </Col>
+                    <Col sm={12} lg={6}>
+                      <h4
+                        style={efficiencyColor}
+                        onClick={seasonOptimizer}
+                        className="mypage_text_center">
+                        최적화
+                      </h4>
+                    </Col>
+                  </Row>
                   <hr />
                   <Row style={{ padding: "10px" }}>
-                    {/* <Row> */}
                     <SeasonCollection />
                   </Row>
                 </Col>
