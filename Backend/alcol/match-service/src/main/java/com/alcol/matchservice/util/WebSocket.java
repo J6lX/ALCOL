@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
-@ServerEndpoint(value="/websocket", configurator = ServerEndpointConfigurator.class)
+@ServerEndpoint(value="/match-service", configurator = ServerEndpointConfigurator.class)
 public class WebSocket {
 
     @Autowired
