@@ -66,7 +66,12 @@ public class ProblemController
     @GetMapping("/getProblemDetail/{probNum}")
     public ResponseEntity<ProblemDto.ProbDetail> getProbDetail(@PathVariable("probNum") Long probNum)
     {
-        return ResponseEntity.status(HttpStatus.OK).body(problemService.getProbDetail(probNum));
+        ProblemDto.ProbDetail probDetail = problemService.getProbDetail(probNum);
+
+        log.info("probDetail_input_testcase : " + probDetail.getProb_input_testcase());
+        log.info("probDetail_output_testcase : " + probDetail.getProb_output_testcase());
+
+        return ResponseEntity.status(HttpStatus.OK).body(probDetail);
     }
 
     /**
