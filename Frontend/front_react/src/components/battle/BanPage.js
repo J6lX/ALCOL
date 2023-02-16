@@ -9,11 +9,23 @@ function Top({ userInfo, timeOut }) {
   const [secs, setTime] = useState(0);
   const tick = () => {
     if (secs < 30) {
-      setTime(secs+1)
+      setTime(secs + 1);
     } else {
       timeOut("timeout");
     }
   };
+
+  // 사진이 없는 경우 기본 사진을 반환하는 용도
+  function isNew(picture) {
+    // 기존 사진이 있는 경우
+    if (picture) {
+      return picture;
+    }
+    // 기존 사진이 없는 경우
+    else {
+      return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+    }
+  }
 
   useEffect(() => {
     //1초
@@ -22,7 +34,7 @@ function Top({ userInfo, timeOut }) {
     }, 999);
     return () => clearInterval(timerId);
   });
-  console.log("틱톡")
+  console.log("틱톡");
 
   return (
     <Row style={{ marginTop: "70px" }}>
@@ -31,7 +43,7 @@ function Top({ userInfo, timeOut }) {
           className="ban_player_info"
           style={{ display: "flex", justifyContent: "right", alignItems: "center" }}>
           <img
-            src={userInfo.user.imageAddress}
+            src={isNew(userInfo.user.imageAddress)}
             alt=""
             style={{
               width: "60px",
@@ -50,10 +62,15 @@ function Top({ userInfo, timeOut }) {
           <div className="ban_title">금지할 문제를 선택해주세요</div>
           <div className="ban_info">선택된 문제는 이번 게임에서 출제되지 않습니다.</div>
           <div style={{ width: "25vw" }}>
-            <Progress style={{ zIndex: "10" }} percent={(secs / 31) * 100} showInfo={false} strokeColor={{
+            <Progress
+              style={{ zIndex: "10" }}
+              percent={(secs / 31) * 100}
+              showInfo={false}
+              strokeColor={{
                 "0%": "#5CFDFD",
                 "100%": "#FEF15D",
-              }} />
+              }}
+            />
           </div>
         </div>
       </Col>
@@ -104,6 +121,17 @@ function Mid({ props, onClick }) {
 }
 
 function Bottom(userInfo) {
+  // 사진이 없는 경우 기본 사진을 반환하는 용도
+  function isNew(picture) {
+    // 기존 사진이 있는 경우
+    if (picture) {
+      return picture;
+    }
+    // 기존 사진이 없는 경우
+    else {
+      return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+    }
+  }
   return (
     <Row style={{ marginTop: "10px" }}>
       <Col xs={0} sm={0} md={4} xl={6}></Col>
@@ -114,7 +142,7 @@ function Bottom(userInfo) {
           style={{ display: "flex", alignItems: "center", marginTop: "70px" }}
           className="ban_player_info">
           <img
-            src={userInfo.userInfo.other.imageAddress}
+            src={isNew(userInfo.userInfo.other.imageAddress)}
             alt=""
             style={{
               width: "60px",
