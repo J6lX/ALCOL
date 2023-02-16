@@ -8,6 +8,8 @@ import { LoginState } from "../../states/LoginState";
 import "./MatchingPage.css";
 import axios from "axios";
 
+let socket = null;
+
 function UserInfo() {
   const [nickname, setNickname] = React.useState("a");
   const [speedTier, setSpeedTier] = React.useState("a");
@@ -159,6 +161,7 @@ function App() {
       // socket.send(JSON.stringify("끊어주세요"));
     });
   }
+
   //Modal 선택 관련
   const showModal = () => {
     setIsModalOpen(true);
@@ -169,6 +172,12 @@ function App() {
   const handleCancle = () => {
     //초기화
     // socket.close();
+    socket.send(
+      JSON.stringify({
+        messageType: "matchCancel",
+        userId: userId,
+      })
+    );
     setuserSelectedMode("-1");
     setuserSelectLanguage("-1");
     setPlayerInfo({ userId: "", otherId: "", hostCheck: "" });
@@ -179,7 +188,6 @@ function App() {
   function handleHistoryMatchCancel() {
     showModal();
   }
-
   return (
     <div className="matching_background">
       <UserInfo />

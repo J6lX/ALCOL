@@ -62,7 +62,10 @@ function LoginTag(props) {
             height: "64px",
             textAlign: "center",
           }}>
-          <Link to={`/mypage/${isLoggedIn}`} className="text">
+          <Link
+            to={`/mypage/${isLoggedIn}`}
+            className="NanumSquare text"
+            style={{ marginLeft: "15px" }}>
             {userInfo.nickname}
           </Link>
         </Col>
@@ -71,7 +74,7 @@ function LoginTag(props) {
           style={{
             height: "64px",
           }}>
-          <Link to="/" onClick={logoutRequest} className="textDark">
+          <Link to="/" onClick={logoutRequest} className="NanumSquare textDark">
             Logout
           </Link>
         </Col>
@@ -109,19 +112,19 @@ function getItem(label, key, icon, children, type) {
 const miniItems = [
   getItem("MENU", "sub1", null, [
     getItem(
-      <Link to="/practice" className="textDark">
+      <Link to="/practice" className="NanumSquare textDark">
         Problem
       </Link>,
       "1"
     ),
     getItem(
-      <Link to="/ranking?mode=speed&page=1" className="textDark">
+      <Link to="/ranking?mode=speed&page=1" className="NanumSquare textDark">
         Ranking
       </Link>,
       "2"
     ),
     getItem(
-      <Link to="/mode" className="textDark">
+      <Link to="/mode" className="NanumSquare textDark">
         Battle
       </Link>,
       "3"
@@ -188,13 +191,13 @@ function HeaderData() {
 
           {/* 메뉴(Problem, Ranking, Battle) */}
           <Col xs={4} md={6} lg={11} xl={12} justify="center" align="middle">
-            <Link to="/practice" className="textDark menus">
+            <Link to="/practice" className="NanumSquare textDark menus">
               Problem
             </Link>
-            <Link to="/ranking?mode=speed&page=1" className="textDark menus">
+            <Link to="/ranking?mode=speed&page=1" className="NanumSquare textDark menus">
               Ranking
             </Link>
-            <Link to="/mode" className="textDark menus">
+            <Link to="/mode" className="NanumSquare textDark menus">
               Battle
             </Link>
           </Col>
@@ -244,6 +247,7 @@ function HeaderData() {
                   colorPrimary: "#FAC557",
                 },
               }}
+              className="NanumSquare"
               style={{
                 backgroundColor: "#16171b",
                 color: "white",
