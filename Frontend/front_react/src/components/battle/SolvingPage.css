@@ -6,9 +6,19 @@
   width: 99vw;
   height: 7vh;
   background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  width: 99vw;
+  height: 7vh;
+  background-color: white;
 }
 
 .NanumSquare {
+  font-family: "NanumSquareNeo";
+  font-weight: 400;
+  size: 32px;
   font-family: "NanumSquareNeo";
   font-weight: 400;
   size: 32px;
@@ -18,20 +28,24 @@
   font-family: "PyeongChangPeace";
   font-weight: bold;
   size: 32px;
-}
-
-.scrollDesign {
+  font-family: "PyeongChangPeace";
+  font-weight: bold;
+  size: 32px;
 }
 
 .scrollDesign::-webkit-scrollbar {
+  width: 6px;
   width: 6px;
 }
 
 .scrollDesign::-webkit-scrollbar-track {
   background-color: transparent;
+  background-color: transparent;
 }
 
 .scrollDesign::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: lightgray;
   border-radius: 3px;
   background-color: lightgray;
 }
@@ -39,9 +53,14 @@
 .scrollDesign::-webkit-scrollbar-button {
   width: 0;
   height: 0;
+  width: 0;
+  height: 0;
 }
 
 .MessageToast {
+  position: absolute;
+  top: 10%;
+  left: 60%;
   position: absolute;
   top: 10%;
   left: 60%;
@@ -60,5 +79,4 @@ tr {
 
 table {
   border-collapse: collapse;
-  margin: 10px;
 }

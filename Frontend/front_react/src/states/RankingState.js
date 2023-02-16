@@ -34,3 +34,15 @@ export const LastSeasonState = atom({
   key: "LastSeasonState",
   default: [],
 });
+
+// 백업용 전적 저장
+export const BackupBattleRec = atom({
+  key: "BackupBattleRec",
+  default: [],
+});
+
+// 백업용 시즌 기록 저장
+export const BackupLastSeasonState = atom({
+  key: "BackupLastSeasonState",
+  default: [],
+});

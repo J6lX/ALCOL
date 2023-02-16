@@ -1,7 +1,7 @@
 import { Button, Row, Col, Input, Table, ConfigProvider, theme, Form } from "antd";
 import "./PracticePage.css";
 import practiceHeader from "../../assets/practice_header.png";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -12,7 +12,6 @@ const problemLabel = [
     dataIndex: "problem_number",
     key: "problemNo",
     align: "center",
-    render: (text, number) => <Link to={`/solveprac/${number.problem_number}`}>{text}</Link>,
   },
   {
     title: "문제 이름",
@@ -38,6 +37,7 @@ const problemLabel = [
 
 // 페이지 렌더링
 function Ranking() {
+  const history = useHistory();
   // 연습 문제 데이터 상태 관리
   const [refinedData, setRefinedData] = useState([]);
   const [problemData, setProblemData] = useState([]);
@@ -159,14 +159,17 @@ function Ranking() {
                   },
                 }}>
                 <Table
-                  style={{
-                    padding: "3px",
-                  }}
                   dataSource={refinedData}
                   columns={problemLabel}
                   pagination={{
                     position: ["bottomCenter"],
                     defaultPageSize: 10,
+                  }}
+                  onRow={(record, rowIndex) => {
+                    return {
+                      // 여기 js로 리다이렉트 구현
+                      onClick: (event) => history.push(`/solveprac/${record.problem_number}`),
+                    };
                   }}
                 />
               </ConfigProvider>

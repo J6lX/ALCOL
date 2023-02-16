@@ -52,12 +52,6 @@ export const MMRState = atom({
   default: "",
 });
 
-// 백업용 전적을 리스트로 저장
-export const BackupBattleRec = atom({
-  key: "BackupBattleRec",
-  default: [],
-});
-
 // 다른 유저 정보를 저장(프로필 조회용)
 export const OtherUserInfoState = atom({
   key: "OtherUserInfoState",
