@@ -93,17 +93,17 @@ public class ProblemServiceImpl implements ProblemService
         String probTestInput = problemEntity.getProbTestInput();
         String probTestOutput = problemEntity.getProbTestOutput();
 
-        probDetailDesc = probDetailDesc.replaceAll("\\\\n", "\\$\\$");
-        probInputDesc = probInputDesc.replaceAll("\\\\n", "\\$\\$");
-        probOutputDesc = probOutputDesc.replaceAll("\\\\n", "\\$\\$");
-        probTestInput = probTestInput.replaceAll("\\\\n", "\\$\\$");
-        probTestOutput = probTestOutput.replaceAll("\\\\n", "\\$\\$");
-
-        probDetailDesc = java.util.regex.Matcher.quoteReplacement(probDetailDesc);
-        probInputDesc = java.util.regex.Matcher.quoteReplacement(probInputDesc);
-        probOutputDesc = java.util.regex.Matcher.quoteReplacement(probOutputDesc);
-        probTestInput = java.util.regex.Matcher.quoteReplacement(probTestInput);
-        probTestOutput = java.util.regex.Matcher.quoteReplacement(probTestOutput);
+//        probDetailDesc = probDetailDesc.replaceAll("\\\\n", "\\$\\$");
+//        probInputDesc = probInputDesc.replaceAll("\\\\n", "\\$\\$");
+//        probOutputDesc = probOutputDesc.replaceAll("\\\\n", "\\$\\$");
+//        probTestInput = probTestInput.replaceAll("\\\\n", "\\$\\$");
+//        probTestOutput = probTestOutput.replaceAll("\\\\n", "\\$\\$");
+//
+//        probDetailDesc = java.util.regex.Matcher.quoteReplacement(probDetailDesc);
+//        probInputDesc = java.util.regex.Matcher.quoteReplacement(probInputDesc);
+//        probOutputDesc = java.util.regex.Matcher.quoteReplacement(probOutputDesc);
+//        probTestInput = java.util.regex.Matcher.quoteReplacement(probTestInput);
+//        probTestOutput = java.util.regex.Matcher.quoteReplacement(probTestOutput);
 
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
