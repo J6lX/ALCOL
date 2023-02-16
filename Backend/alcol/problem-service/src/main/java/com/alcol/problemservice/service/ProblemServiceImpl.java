@@ -78,6 +78,11 @@ public class ProblemServiceImpl implements ProblemService
         return list;
     }
 
+    /**
+     * 문제 디테일 정보 반환 (연습문제, 배틀문제)
+     * @param probNo
+     * @return Problem Detail
+     */
     public ProblemDto.ProbDetail getProbDetail(Long probNo)
     {
         ProblemEntity problemEntity = problemRepository.findById(probNo).orElse(null);
@@ -97,6 +102,10 @@ public class ProblemServiceImpl implements ProblemService
                 .build();
     }
 
+    /**
+     * 모든 문제 리스트 반환 (연습문제)
+     * @return Problem List
+     */
     public List<ProblemDto.ProbList> getAllProbList()
     {
         Iterable<ProblemEntity> problemList = problemRepository.findAll();
@@ -119,6 +128,11 @@ public class ProblemServiceImpl implements ProblemService
         return allProbList;
     }
 
+    /**
+     * 배틀에서 세 문제 골라주기
+     * @param mmr
+     * @return Three Problem List
+     */
     public List<ProblemDto.ThreeProb> getThreeProbList(int mmr)
     {
         List<ProblemDto.ThreeProb> threeProbList = new ArrayList<>();
@@ -175,6 +189,12 @@ public class ProblemServiceImpl implements ProblemService
         return threeProbList;
     }
 
+    /**
+     * 제출 아이디 반환
+     * @param problem
+     * @return submission Id
+     */
+
     public String getSubmissionId(ScoreDto.Request problem)
     {
         String submissionId;
@@ -198,6 +218,12 @@ public class ProblemServiceImpl implements ProblemService
 
         return submissionId;
     }
+
+    /**
+     * 받은 제출 아이디로 채점 결과 반환
+     * @param submissionId
+     * @return 채점결과
+     */
 
     public ScoreDto.Response getScoreResult(String submissionId)
     {
@@ -309,6 +335,12 @@ public class ProblemServiceImpl implements ProblemService
         }
     }
 
+    /**
+     * https에 요청할 때 사용할 restTemplate 설정
+     * @throws KeyStoreException
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     */
     private RestTemplate makeRestTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 
         TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;

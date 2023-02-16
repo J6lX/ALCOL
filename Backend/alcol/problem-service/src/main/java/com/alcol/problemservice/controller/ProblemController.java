@@ -57,11 +57,22 @@ public class ProblemController
         return ResponseEntity.status(HttpStatus.OK).body(threeProbs);
     }
 
+    /**
+     * 문제의 디테일한 내용 요청
+     * @param probNum
+     * @return Problem Detail
+     */
+
     @GetMapping("/getProblemDetail/{probNum}")
     public ResponseEntity<ProblemDto.ProbDetail> getProbDetail(@PathVariable("probNum") Long probNum)
     {
         return ResponseEntity.status(HttpStatus.OK).body(problemService.getProbDetail(probNum));
     }
+
+    /**
+     * 연습문제 페이지에 들어갔을 때 문제 리스트 요청
+     * @return Problem List
+     */
 
     @GetMapping("/problemList")
     public ResponseEntity<List<ProblemDto.ProbList>> getAllProbList()
