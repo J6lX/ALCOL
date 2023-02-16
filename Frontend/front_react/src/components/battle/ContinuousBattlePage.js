@@ -23,8 +23,8 @@ import {
 } from "../../states/atoms";
 
 // let submitResult = "";
-const serverAddress = "i8b303.p.ssafy.io:9002";
-const websocketAddress = "ws://" + serverAddress + "/websocket";
+const serverAddress = "i8b303.p.ssafy.io:8000";
+const websocketAddress = "ws://" + serverAddress + "/battle-service";
 let socket = null;
 let code = "";
 
@@ -228,7 +228,7 @@ const ContinuousBattlePage = () => {
             time: data.time,
             memory: data.memory,
           };
-          setResultListResult(resultList => [...resultList, result]);
+          setResultListResult((resultList) => [...resultList, result]);
           const modaldata = {
             title: "오답!",
             content: (
@@ -258,7 +258,7 @@ const ContinuousBattlePage = () => {
               time: data.time,
               memory: data.memory,
             };
-            setResultListResult(resultList => [...resultList, result]);
+            setResultListResult((resultList) => [...resultList, result]);
             const modaldata = {
               title: "정답!",
               content: (
@@ -284,7 +284,7 @@ const ContinuousBattlePage = () => {
               time: "없음",
               memory: "없음",
             };
-            setResultListResult(resultList => [...resultList, result]);
+            setResultListResult((resultList) => [...resultList, result]);
             const modaldata = {
               title: "오답!",
               content: (
@@ -314,7 +314,7 @@ const ContinuousBattlePage = () => {
             memory: data.memory,
           };
           submitOther("accept", "all");
-          setResultListResult(resultList => [...resultList, result]);
+          setResultListResult((resultList) => [...resultList, result]);
         } else if (data.submitResult === "fail") {
           const result = {
             nick: "other",
@@ -325,7 +325,7 @@ const ContinuousBattlePage = () => {
             memory: "없음",
           };
           submitOther(data.testcase, data.accepted);
-          setResultListResult(resultList => [...resultList, result]);
+          setResultListResult((resultList) => [...resultList, result]);
         }
       } else if (data.messageType === "error") {
         const result = {
@@ -335,7 +335,7 @@ const ContinuousBattlePage = () => {
           result: "error",
           error: data.errorMessage,
         };
-        setResultListResult(resultList => [...resultList, result]);
+        setResultListResult((resultList) => [...resultList, result]);
       } else if (data.messageType === "otherError") {
         const result = {
           nick: "other",
@@ -345,7 +345,7 @@ const ContinuousBattlePage = () => {
           error: data.errorMessage,
         };
         submitOther(data.testcase, data.accepted);
-        setResultListResult(resultList => [...resultList, result]);
+        setResultListResult((resultList) => [...resultList, result]);
       } else if (data.messageType === "socketError") {
         showSocketErrorModal();
       } else if (data.messageType === "otherSurrender") {
@@ -363,7 +363,7 @@ const ContinuousBattlePage = () => {
               time: data.time,
               memory: data.memory,
             };
-            setResultListResult(resultList => [...resultList, result]);
+            setResultListResult((resultList) => [...resultList, result]);
             const modaldata = {
               title: "승리!",
               content: (
@@ -457,7 +457,6 @@ const ContinuousBattlePage = () => {
         console.log(data);
       }
     };
-
 
     socket.onclose = (message) => {
       console.log("closed!", message);
@@ -630,7 +629,6 @@ const ContinuousBattlePage = () => {
       })
     );
   };
-
 
   const clickSurrender = () => {
     showSurrenderModal();
@@ -820,7 +818,9 @@ const ContinuousBattlePage = () => {
         closable={false}>
         {contextCopyHolder}
         <p className="NanumSquare">상대방 "{othernickname} 님"의 인터넷 연결이 이상합니다.</p>
-        <p className="NanumSquare">지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
+        <p className="NanumSquare">
+          지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!
+        </p>
         <p className="NanumSquare">확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
       <Modal
@@ -832,11 +832,15 @@ const ContinuousBattlePage = () => {
         cancelText="코드 복사"
         closable={false}>
         {contextCopyHolder}
-        {battleMode === "speed" && <p className="NanumSquare">상대방 "{othernickname} 님"이 먼저 문제를 풀었습니다.</p>}
+        {battleMode === "speed" && (
+          <p className="NanumSquare">상대방 "{othernickname} 님"이 먼저 문제를 풀었습니다.</p>
+        )}
         {battleMode === "optimiztion" && (
           <p className="NanumSquare">상대방 "{othernickname} 님"이 더 효율적으로 풀었습니다.</p>
         )}
-        <p className="NanumSquare">지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
+        <p className="NanumSquare">
+          지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!
+        </p>
         <p className="NanumSquare">확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
       <Modal
@@ -849,7 +853,9 @@ const ContinuousBattlePage = () => {
         closable={false}>
         {contextCopyHolder}
         <p className="NanumSquare">상대방 "{othernickname} 님"이 항복을 선언했습니다.</p>
-        <p className="NanumSquare">지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!</p>
+        <p className="NanumSquare">
+          지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!
+        </p>
         <p className="NanumSquare">확인을 누르시면 배틀이 종료됩니다.</p>
       </Modal>
       <Modal
