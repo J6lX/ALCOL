@@ -80,6 +80,12 @@ spring:
             - RemoveRequestHeader=Cookie
 #            - AccessTokenFilter
 
+        # match-service request
+        - id: match-service
+          uri: ws://i8b303.p.ssafy.io:9111/   # ws://i8b303.p.ssafy.io:9111/match-service/**
+          predicates:
+            - Path=/match-service/**          # http://i8b303.p.ssafy.io:8000/match-service/**
+
 access-token:
   expiration_time: 1000000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
