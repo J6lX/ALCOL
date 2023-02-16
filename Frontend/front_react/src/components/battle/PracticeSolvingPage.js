@@ -277,8 +277,6 @@ const CodingPlace = () => {
           },
         })
         .then((response) => {
-          const submitResult = response.data;
-
           // 풀이 성공 시 모달 창 띄우기
           if (response.data.bodyData.result === "success") {
             gameVictory();
