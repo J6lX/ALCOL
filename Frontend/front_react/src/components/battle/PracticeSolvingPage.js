@@ -55,25 +55,41 @@ function DefineLanguage(language) {
 }
 
 const ExampleTable = ({ inputData, outputData }) => {
-  console.log(inputData, outputData);
+  // console.log(inputData, outputData);
 
-  const inputList = inputData.split("\$\$").map((data) => {
-    return (
-      <p key={data} className="NanumSquare">
-        {data}
-      </p>
-    );
-  });
-  const outputList = outputData.split("\$\$").map((data) => {
-    return (
-      <p key={data} className="NanumSquare">
-        {data}
-      </p>
-    );
-  });
+  // const inputList = inputData.split("\$\$").map((data) => {
+  //   return (
+  //     <p key={data} className="NanumSquare">
+  //       {data}
+  //     </p>
+  //   );
+  // });
+  // const outputList = outputData.split("\$\$").map((data) => {
+  //   return (
+  //     <p key={data} className="NanumSquare">
+  //       {data}
+  //     </p>
+  //   );
+  // });
 
-  console.log(inputList);
-  console.log(outputList);
+  // console.log(inputList);
+  // console.log(outputList);
+
+  const InputTC = () => {
+    const result = [];
+    for (let i = 0; i < inputData.length; i++) {
+      result.push(<div key={i}>{inputData[i]} </div>);
+    }
+    return result;
+  };
+
+  const OutputTC = () => {
+    const result = [];
+    for (let i = 0; i < outputData.length; i++) {
+      result.push(<div key={i}>{outputData[i]} </div>);
+    }
+    return result;
+  };
 
   return (
     <div>
@@ -90,8 +106,8 @@ const ExampleTable = ({ inputData, outputData }) => {
         </thead>
         <tbody>
           <tr>
-            <td className="NanumSquare">{inputData}</td>
-            <td className="NanumSquare">{outputData}</td>
+            <td className="NanumSquare">{InputTC()}</td>
+            <td className="NanumSquare">{OutputTC()}</td>
           </tr>
         </tbody>
       </table>
@@ -122,7 +138,7 @@ const Problem = () => {
           // 입력 데이터에 대한 설명
           problemInputContent: response.data.prob_input_content,
           // 입력 테스트 케이스
-          problemInputTC: response.data.prob_input_testcase,
+          problemInputTC: response.data.prob_input_testcase.split("$$"),
           // 문제 난이도(티어)
           problemTier: response.data.prob_tier,
           // 메모리 제한
@@ -130,7 +146,7 @@ const Problem = () => {
           // 출력 데이터에 대한 설명
           problemOutputContent: response.data.prob_output_content,
           // 출력 테스트 케이스
-          problemOutputTC: response.data.prob_output_testcase,
+          problemOutputTC: response.data.prob_output_testcase.split("$$"),
           // 메모리 제한
         };
         // 정제한 데이터를 recoil에 저장
