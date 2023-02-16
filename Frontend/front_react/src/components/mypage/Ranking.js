@@ -343,7 +343,6 @@ function Ranking() {
       )
       // 응답 성공 시
       .then(function (response) {
-        console.log(response);
         const dataBody = response.data.bodyData;
         const searchResponse = {
           grade: dataBody.grade,

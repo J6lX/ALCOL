@@ -8,8 +8,6 @@ import { Col, Row } from "antd";
 import confetti from "canvas-confetti";
 
 function App({ props, battleuserinfo, showDetailResult }) {
-  console.log("이게 배틀 종료 데이터", props);
-  console.log(battleuserinfo);
   const userInfo = battleuserinfo;
   const data = props;
   const printResult = () => {
@@ -117,7 +115,10 @@ function App({ props, battleuserinfo, showDetailResult }) {
               배틀 결과
             </Col>
             <Col className="result_text" span={10}>
-              {data.battleResult}
+              {data.battleResult === "win" && "승리"}
+              {data.battleResult === "lose" && "패배"}
+              {data.battleResult === "draw" && "무승부"}              
+              {data.battleResult === "draw_timeout" && "시간초과"}              
             </Col>
           </Row>
         </div>

@@ -24,7 +24,6 @@ import Ranking from "./components/mypage/Ranking";
 import PracticePage from "./components/battle/PracticePage";
 import AppHeader from "./components/AppHeader";
 import AppFooter from "./components/AppFooter";
-import TestPageYH from "./components/TestPageYeonhwa";
 
 import { Layout } from "antd";
 import { AccessTokenInfo, LoginState, RefreshTokenInfo } from "./states/LoginState";
@@ -55,7 +54,7 @@ function App() {
     <RecoilRoot>
       <Layout>
         <AppHeader />
-        
+
         <Content
           style={{
             backgroundColor: "#16171B",
@@ -92,9 +91,6 @@ function App() {
             {/* 랭킹 조회 페이지 */}
             <Route path="/ranking" component={Ranking} />
 
-            {/* 랭킹 조회 페이지 */}
-            <Route path="/testpageyh" component={TestPageYH} />
-
             {/* 회원가입 페이지 */}
             <Route exact path="/register">
               {isAuthenticated ? <Redirect to="/" /> : <Route component={RegisterPage} />}
@@ -102,6 +98,9 @@ function App() {
 
             {/* 회원정보 수정 페이지 */}
             <Route path="/modify" exact={true} component={ModifyPage} />
+
+            {/* 배틀 문제 푸는 페이지 */}
+            {/* <PrivateRoute path="/solveTest" exact={true} component={SolvingTest} /> */}
 
             {/* 배틀 문제 푸는 페이지 */}
             <PrivateRoute path="/solve" exact={true} component={SolvingPage} />

@@ -4,7 +4,7 @@ import React from "react";
 // import { useState } from "react";
 
 const CountDownTimer = () => {
-  const [[hours, mins, secs], setTime] = React.useState([2, 0, 0]);
+  const [[hours, mins, secs], setTime] = React.useState([1, 0, 0]);
 
   const tick = () => {
     if (hours === 0 && mins === 0 && secs === 0) {

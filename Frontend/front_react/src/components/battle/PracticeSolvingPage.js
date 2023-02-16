@@ -198,7 +198,6 @@ const CodingPlace = () => {
       language: DefineLanguage(lang),
       code: code,
     };
-    console.log("form:", formData);
     axios
       .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
         headers: {

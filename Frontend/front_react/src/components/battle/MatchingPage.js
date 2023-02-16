@@ -17,14 +17,12 @@ function UserInfo() {
   const [imageAddress, setImageAddress] = React.useState("a");
   var userId = useRecoilValue(LoginState);
   useEffect(() => {}, [nickname, speedTier, optTier]);
-  console.log(imageAddress);
 
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", {
       user_id: userId,
     })
     .then(function (response) {
-      console.log("이런", response.data);
       setNickname(response.data.nickname);
       setSpeedTier(response.data.speed_tier);
       setOptTier(response.data.optimization_tier);
@@ -69,8 +67,6 @@ function UserInfo() {
     .catch((error) => {
       console.log("error", error);
     });
-  console.log(speedTierAddress);
-  console.log(optTierAddress);
   return (
     <Row justify="end" className="battle_user_info_row">
       <Col
@@ -112,28 +108,14 @@ function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const history = useHistory();
 
-  // useEffect(() => {
-  //   if (playerInfo.otherId !== "") {
-  //     console.log("나는 useEffect playerInfo를 바꿔요");
-  //     console.log(playerInfo);
-  //     console.log(playerInfo.otherId);
-  //   }
-  // }, [playerInfo]);
-
-  console.log("<< 매칭페이지 >>");
-  console.log(userSelectedMode);
-  console.log(userSelectLanguage);
-
   var obj;
 
   if (playerInfo.otherId === "") {
     //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
     // useEffect(()=>{const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`)}, [])
     const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`);
-    console.log("소켓 만들어짐?", socket);
 
     socket.addEventListener("open", () => {
-      console.log("---서버와 연결 됨---");
       const mode = userSelectedMode;
       const mmr = "1200";
       const id = userId;
@@ -152,7 +134,6 @@ function App() {
     });
     //message를 받을 때 발생
     socket.addEventListener("message", (message) => {
-      console.log("서버로 부터 메세지를 받았습니다", message.data);
       obj = JSON.parse(message.data);
 
       if (
@@ -169,15 +150,12 @@ function App() {
       setPlayerInfo(obj);
       setTimeout(() => {
         socket.close();
-        console.log("플레이어 정보를 저장했다");
-        console.log(playerInfo);
         history.push("/battle");
       }, 2000);
     }
 
     //서버가 오프라인일때 발생하는 코드
     socket.addEventListener("close", () => {
-      console.log("---서버와 연결 끊김---");
       // socket.send(JSON.stringify("끊어주세요"));
     });
   }

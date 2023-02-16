@@ -9,20 +9,16 @@ import { selectedMode, selectedLanguage } from "../../states/atoms";
 
 function Top() {
   return (
-    <div className="middle_selected" style={{ paddingTop: "10%" }}>
-      <div className="ban_title">문제 유형이 선택되었습니다.</div>
-      <div className="ban_info">곧 입장합니다! 배틀을 준비하세요!</div>
+    <div className="middle_selected" style={{ paddingTop: "10%", marginTop: "3%", marginBottom:"3%" }}>
+      <div className="NanumSquare ban_title">문제 유형이 선택되었습니다.</div>
     </div>
   );
 }
 
 function SelectedProblem({ problemInfo, problem_category, userInfo }) {
-  // console.log("userInfo 왜 이러냐", userInfo)
   const mode = useRecoilValue(selectedMode);
   const language = useRecoilValue(selectedLanguage);
-  // let clsName = "../../assets/ALCOL_tiers/tier_" + problem.problem_tier + "_0.png";
   const category = problem_category;
-  // console.log("티어 정보가 어떻게 되어있니", problemInfo)
   let tier;
   if (problemInfo.prob_tier[0] === "B") {
     tier = "bronze";
@@ -38,7 +34,6 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
     tier = "alcol";
   }
   let LV = problemInfo.prob_tier[problemInfo.prob_tier.length - 1];
-  console.log(tier, LV);
 
   const tierAddress = require("../../assets/ALCOL_tiers/tier_" + tier + "_" + LV + ".png");
 
@@ -77,7 +72,7 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "rleft",
+            justifyContent: "left",
             height: "50px",
           }}>
           <p className="NanumSquare" style={{ color: "white", fontSize: "3vh" }}>
@@ -87,25 +82,26 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
       </Row>
       <br />
       <div
-        className="middle_selected"
+        className="middle_select"
         style={{
+          display: "flex", flexDirection: "column", alignItems: "center",
           width: "600px",
-          height: "300px",
+          height: "320px",
           border: "3px solid white",
           boxShadow: "0px 0px 10px 10px rgba(255, 255, 255 0.6)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}>
         <h1
           className="NanumSquare"
-          style={{ color: "white", fontSize: "24px", fontWeight: "bold" }}>
+          style={{ color: "white", fontSize: "24px", fontWeight: "bold", marginTop: "30px" }}>
           배틀을 시작합니다!!
         </h1>
         <small className="NanumSquare" style={{ color: "white", marginBottom: "3%" }}>
           아래의 배틀 정보를 확인하세요.
         </small>
         <div
-          style={{
-            display: "flex",
+          style={{ display: "flex", 
+          alignItems: "center",
             justifyContent: "space-evenly",
             width: "400px",
             marginBottom: "10px",
@@ -117,16 +113,16 @@ function SelectedProblem({ problemInfo, problem_category, userInfo }) {
             배틀 언어: {language}
           </p>
         </div>
-        <div className="middle_selected">
-          <div className="middle_selected" style={{ flexDirection: "row", marginBottom: "1%" }}>
+        <div className="middle_select">
+          <div className="middle_select" style={{ display: "flex", justifyContent: "center", marginBottom: "1%" }}>
             <p
               className="NanumSquare"
-              style={{ color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
+              style={{ display: "flex", alignItems: "center", color: "white", fontSize: "16px", marginBottom: "1%", marginLeft: "3%" }}>
               문제 {problemInfo.prob_no}. {problemInfo.prob_name}
             </p>
             <img src={tierAddress} alt="tier" style={{ width: "40px" }} />
           </div>
-          <div>{makeBadge(category)}</div>
+          <div style={{display: "flex", justifyContent: "center"}}>{makeBadge(category)}</div>
           <Col style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
             <p className="NanumSquare" style={{ color: "white", fontSize: "14px" }}>
               제한시간
@@ -148,9 +144,7 @@ const SelectedProblemPage = ({
   battleLanguage,
   battleuserinfo,
 }) => {
-  console.log(problems, problemInfo);
   const problem_category = problems[0][problemInfo.prob_no];
-  // console.log("선택된 문제 정보", problemInfo)
   return (
     <div
       id="problem_category"

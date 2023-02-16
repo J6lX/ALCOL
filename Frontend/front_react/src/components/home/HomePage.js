@@ -83,7 +83,6 @@ const SpeedRanking = () => {
     axios
       .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
       .then(function (response) {
-        console.log(response.data.bodyData);
         setSpeedRanking(response.data.bodyData.speed);
       })
       .catch((error) => {
@@ -101,17 +100,63 @@ const SpeedRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {speed[0] && (
+        {speed[0] && speed[0].storedFileName ? (
           <img src={speed[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        ) : (
+          <img
+            src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+            alt="rank"
+            className="Circle firstUser"></img>
         )}
+        <div
+          style={{
+            marginTop: "90px",
+            fontFamily: "NanumSquareNeo",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}>
+          {speed[0].nickname}
+        </div>
 
         <div className="secondthirdLayout">
-          {speed[1] && (
-            <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
-          )}
-          {speed[2] && (
-            <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
-          )}
+          <div>
+            {speed[1] && speed[1].storedFileName ? (
+              <img src={speed[1].storedFileName} alt="rank" className="Circle secondUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle secondUser"></img>
+            )}
+            <div
+              style={{
+                color: "#fac557",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {speed[1].nickname}
+            </div>
+          </div>
+          <div>
+            {speed[2] && speed[2].storedFileName ? (
+              <img src={speed[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle thirdUser"></img>
+            )}
+            <div
+              style={{
+                color: "#fac557",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {speed[2].nickname}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -129,7 +174,6 @@ const EfficiencyRanking = () => {
     axios
       .get("http://i8b303.p.ssafy.io:8000/rank-service/getTop3")
       .then(function (response) {
-        console.log(response.data.bodyData);
         setEfficiencyRanking(response.data.bodyData.optimization);
       })
       .catch((error) => {
@@ -147,16 +191,65 @@ const EfficiencyRanking = () => {
       <br />
       <br />
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {efficiency[0] && (
+        {efficiency[0] && efficiency[0].storedFileName ? (
           <img src={efficiency[0].storedFileName} alt="rank" className="Circle firstUser"></img>
+        ) : (
+          <img
+            src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+            alt="rank"
+            className="Circle firstUser"></img>
         )}
+        <div
+          style={{
+            marginTop: "90px",
+            fontFamily: "NanumSquareNeo",
+            fontWeight: "bold",
+            fontSize: "20px",
+          }}>
+          {efficiency[0].nickname}
+        </div>
         <div className="secondthirdLayout">
-          {efficiency[1] && (
-            <img src={efficiency[1].storedFileName} alt="rank" className="Circle secondUser"></img>
-          )}
-          {efficiency[2] && (
-            <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
-          )}
+          <div>
+            {efficiency[1] && efficiency[1].storedFileName ? (
+              <img
+                src={efficiency[1].storedFileName}
+                alt="rank"
+                className="Circle secondUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle secondUser"></img>
+            )}
+            <div
+              style={{
+                color: "#5cfdfd",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {efficiency[2].nickname}
+            </div>
+          </div>
+          <div>
+            {efficiency[2] && efficiency[2].storedFileName ? (
+              <img src={efficiency[2].storedFileName} alt="rank" className="Circle thirdUser"></img>
+            ) : (
+              <img
+                src="https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png"
+                alt="rank"
+                className="Circle thirdUser"></img>
+            )}
+            <div
+              style={{
+                color: "#5cfdfd",
+                fontFamily: "NanumSquareNeo",
+                fontWeight: "bold",
+                fontSize: "20px",
+              }}>
+              {efficiency[2].nickname}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -224,7 +317,7 @@ const HomePage = () => {
   const setSendBattleStart = useSetRecoilState(sendBattleStart);
   const setIsSubmitSpin = useSetRecoilState(isSubmitSpin);
 
-  setSelectedMode("-1");
+  useEffect(()=>{setSelectedMode("-1");
   setSelectedLanguage("-1");
   setMatchingPlayerInfo({
     userId: "",
@@ -235,7 +328,8 @@ const HomePage = () => {
   setSendConnect("-1");
   setSendGetProblem("-1");
   setSendBattleStart("-1");
-  setIsSubmitSpin(false);
+  setIsSubmitSpin(false);}, 
+  [setSelectedMode, setSelectedLanguage, setMatchingPlayerInfo,setResultListResultInfo, setSendConnect, setSendGetProblem, setSendBattleStart, setIsSubmitSpin])
 
   return (
     <div style={{ zIndex: "-2" }}>

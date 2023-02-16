@@ -8,10 +8,11 @@ import CountDownTimer from "./CountDownTimer";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { java } from "@codemirror/lang-java";
+import { cpp } from "@codemirror/lang-cpp";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import "./SolvingPage.css";
-import { Button, message, Modal } from "antd";
-import { resultListResultInfo } from "../../states/atoms";
+import { Button, Modal } from "antd";
+import { userCode, isSubmitSpin } from "../../states/atoms";
 
 let allheight = window.innerHeight;
 
@@ -35,36 +36,15 @@ const submitMessageState = atom({
   default: "",
 });
 
-const ResultMessage = () => {
-  const [messageApi, contextHolder] = message.useMessage();
-  const success = () => {
-    messageApi.open({
-      type: "warning",
-      content: "맥주 5000cc님이 코드를 제출했습니다. (테스트케이스 50개 중 46개 정답)",
-      duration: 3,
-      style: { marginTop: "5.5vh" },
-    });
-  };
-  return (
-    <>
-      {contextHolder}
-      <Button onClick={success}>제출 소식</Button>
-    </>
-  );
-};
-
 const BattleNav = ({ userInfo, mode }) => {
   // const mode = useRecoilValue(selectedMode);
   let battlemode;
-  if (mode[0] === "speed") {
+  if (mode === "speed") {
     battlemode = "스피드";
-  } else if (mode[0] === "optimization") {
+  } else if (mode === "optimization") {
     battlemode = "최적화";
   }
 
-  console.log("배틀 모드", mode);
-
-  console.log("userInfosolving", userInfo);
   return (
     <div className="BattleNav">
       <img src={Logo} alt="alcol_logo_black" style={{ height: "5vh", marginLeft: "20px" }} />
@@ -83,7 +63,6 @@ const BattleNav = ({ userInfo, mode }) => {
         <p className="NanumSquare" style={{ color: "black", fontSize: "2.5vh" }}>
           {userInfo.user.nick}
         </p>
-        <ResultMessage className="MessageToast" />
       </div>
       <div style={{ width: "200px", height: "auto" }}>
         <CountDownTimer className="timer" />
@@ -92,15 +71,29 @@ const BattleNav = ({ userInfo, mode }) => {
   );
 };
 
-const Problem = (problemInfo) => {
-  const problem = problemInfo.problemInfo;
+const ExampleTable = ({ inputData, outputData }) => {
+  return (
+    <div>
+      <table border={1}>
+        <th className="NanumSquare" style={{ color: "white" }}>input</th>
+        <th className="NanumSquare" style={{ color: "white" }}>output</th>
+        <tr>
+          <td className="NanumSquare">{inputData}</td>
+          <td className="NanumSquare">{outputData}</td>
+        </tr>
+      </table>
+    </div>
+  );
+};
+
+const Problem = ({problemInfo}) => {
   return (
     <div style={{ border: "0.1px solid gray" }}>
       <div style={{ width: "29.6vw", height: "7vh", border: "0.1px solid gray" }}>
         <p
           className="NanumSquare"
           style={{ color: "white", fontSize: "2.5vh", fontWeight: "bold", padding: "2%" }}>
-          {problem.prob_name}
+          {problemInfo.prob_name}
         </p>
       </div>
       <div
@@ -118,7 +111,7 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_content}
+          {problemInfo.prob_content}
         </p>
         <br />
         <hr style={{ height: "1px", background: "gray" }} />
@@ -129,14 +122,8 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_input_content}
+          {problemInfo.prob_input_content}
         </p>
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          ex. {problem.prob_input_testcase}
-        </p>
-        <br />
         <hr style={{ height: "1px", background: "gray" }} />
         <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
           출력
@@ -145,34 +132,38 @@ const Problem = (problemInfo) => {
         <p
           className="NanumSquare"
           style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          {problem.prob_output_content}
+          {problemInfo.prob_output_content}
         </p>
-        <p
-          className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
-          ex. {problem.prob_output_testcase}
+        <hr style={{ color: "gray" }} />
+        <p className="NanumSquare" style={{ color: "white", padding: "5px", fontSize: "2.3vh" }}>
+          입출력 예시
         </p>
+        <hr style={{ color: "gray" }} />
+        <ExampleTable
+          inputData={problemInfo.prob_input_testcase}
+          outputData={problemInfo.prob_output_testcase}
+        />
+        <hr style={{ color: "gray" }} />
       </div>
     </div>
   );
 };
 
-const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurrender }) => {
+const CodingPlace = ({ problemNumber, language, submitcode, clickSurrender, codeEmit }) => {
   const [solvingHeight, setHeight] = useRecoilState(solvingHeightState);
   const [isClick, setIsClick] = useRecoilState(isClickState);
   const setConsoleHeight = useSetRecoilState(consoleHeightState);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useRecoilState(userCode);
   const setSubmitMessage = useSetRecoilState(submitMessageState);
+  const [loading, setLoading] = useRecoilState(isSubmitSpin);
+  // const setSubmitMessage = useSetRecoilState(submitMessageState)
   // const problem_number = 1;
 
-  console.log("배틀 언어", language);
 
   const onChange = (newValue) => {
-    console.log(newValue);
-
+    setLoading(false);
     setCode(newValue);
-    // console.log(newValue);
-    // console.log("code ", code);
+    codeEmit(newValue);
   };
 
   document.addEventListener("mouseup", (e) => {
@@ -181,7 +172,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
 
   const upMouse = (event) => {
     setIsClick(false);
-    console.log(isClick);
   };
 
   const downMouse = (event) => {
@@ -197,9 +187,6 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
       } else if (solvingHeight > y && solvingHeight > allheight * 0.2) {
         setHeight(solvingHeight - 3);
       }
-      console.log(event);
-      console.log(event.clientY);
-      console.log(y);
     }
   };
 
@@ -208,6 +195,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     setIsSubmitModalOpen(true);
   };
   const submitHandleOk = () => {
+    setLoading(true);
     clickSubmit();
     setIsSubmitModalOpen(false);
   };
@@ -224,11 +212,9 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
       for (let i = 0; i < code.length; i++) {
         if (code[i] === "\n") {
           codedata += "\n";
-          console.log("enter", code[i]);
           for (let j = 1; j < code.length - i - 1; j += 2) {
             if (code[i + j] === " " && code[i + j + 1] === " ") {
               codedata += "\t";
-              console.log("tab", code[i + j]);
             } else {
               i += j - 1;
               break;
@@ -244,24 +230,10 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
     }
   };
 
-  const resultList = useRecoilValue(resultListResultInfo);
-  console.log("뭐가 들어있냐면", resultList);
-  const result = [];
-  console.log(result);
-  for (let i = resultList.length - 1; i >= 0; i--) {
-    result.push(
-      <p>
-        {resultList[i].time} || 코드길이:{resultList[i].code_length} 메모리:{resultList[i].memory}
-      </p>
-    );
-  }
-  console.log(result);
-
   const surrend = () => {
     clickSurrender();
   };
 
-  console.log("참인가요?", language[0] === "Java", language);
 
   return (
     <div onMouseUp={upMouse} onMouseMove={moveMouse}>
@@ -307,7 +279,7 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             value={code}
             width="69vw"
             height={`${solvingHeight}px`}
-            extensions={[java({ jsx: true })]}
+            extensions={[cpp({ jsx: true })]}
             onChange={onChange}
             theme={darcula}
           />
@@ -347,13 +319,13 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
             justifyContent: "space-between",
             height: "100%",
           }}>
-          <p
+          <p 
             className="NanumSquare"
             style={{ color: "white", marginLeft: "10px", fontSize: "2.1vh" }}>
             결과창
           </p>
           <div>
-            <Button className="NanumSquare" style={{ margin: "5px" }} onClick={showSubmitModal}>
+            <Button loading={loading} className="NanumSquare" style={{ margin: "5px" }} onClick={showSubmitModal}>
               제출
             </Button>
             <Button className="NanumSquare" style={{ margin: "5px" }} onClick={surrend}>
@@ -377,12 +349,40 @@ const CodingPlace = ({ problemNumber, language, submitcode, sendexit, clickSurre
   );
 };
 
-const Console = () => {
-  const submitMessage = useRecoilValue(submitMessageState);
+const Console = ({submitMessage}) => {
+  // const submitMessage = useRecoilValue(submitMessageState);
   // const solvingHeight = useRecoilValue(solvingHeightState);
   const consoleHeight = useRecoilValue(consoleHeightState);
   // window.onload();
-
+  
+  // const resultList = useRecoilValue(resultListResultInfo);
+  const makeSubmitMessage = () => {
+    const result = [];
+    for (let i = 0; i < submitMessage.length; i++) {
+      if (submitMessage[i].nick === "me") {
+        if (submitMessage[i].result === "accepted") {
+          result.push(
+          <p key={i} className="NanumSquare" style={{color: "white"}}>
+              &nbsp;&gt;&gt; 제출 결과: 테스트케이스 전부 정답!
+            </p>
+          );
+        } else if (submitMessage[i].result === "error") {
+          result.push(
+            <p key={i} className="NanumSquare" style={{color: "white"}}>
+                &nbsp;&gt;&gt; 제출 결과: Error! {submitMessage[i].error}
+              </p>
+            );
+        } else {
+          result.push(
+            <p key={i} className="NanumSquare" style={{color: "white"}}>
+                &nbsp;&gt;&gt; 제출 결과: 테스트케이스 {submitMessage[i].result}
+              </p>
+            );
+        }
+      }
+    }
+    return result
+  }
   return (
     <div
       className="scrollDesign"
@@ -391,9 +391,7 @@ const Console = () => {
         height: `${consoleHeight}px`,
         overflowY: "scroll",
       }}>
-      <p className="NanumSquare" style={{ color: "white", padding: "15px" }}>
-        &gt;&gt; {submitMessage}
-      </p>
+      {makeSubmitMessage()}
     </div>
   );
 };
@@ -403,14 +401,19 @@ const SolvingPage = ({
   battleMode,
   battleLanguage,
   battleuserinfo,
+  submitMessage,
   submit,
-  sendExit,
   clickSurrender,
+  codeEmit,
 }) => {
   const problemNumber = problemInfo.prob_no;
 
   const surrend = () => {
     clickSurrender();
+  };
+
+  const codeUpdate = (code) => {
+    codeEmit(code);
   };
 
   const info = (data) => {
@@ -478,12 +481,12 @@ const SolvingPage = ({
                   problemNumber={problemNumber}
                   language={battleLanguage}
                   submitcode={submit}
-                  sendexit={sendExit}
                   clickSurrender={surrend}
+                  codeEmit={codeUpdate}
                 />
               </div>
               <div style={{ width: "69vw", height: "auto" }}>
-                <Console />
+                <Console submitMessage={submitMessage} />
               </div>
             </div>
           </div>

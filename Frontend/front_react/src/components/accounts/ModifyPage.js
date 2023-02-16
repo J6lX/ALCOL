@@ -54,7 +54,6 @@ function ProfileImage() {
   axios
     .post("http://i8b303.p.ssafy.io:8000/user-service/getUserInfo", { user_id: userId })
     .then(function (response) {
-      console.log(response.data);
       setProfileImage(response.data.storedFileName);
     })
     .catch((error) => {
