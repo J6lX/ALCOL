@@ -169,7 +169,7 @@ function App() {
                   rules={[
                     {
                       required: true,
-                      message: "Please input your password!",
+                      message: "비밀번호를 입력해주세요!",
                     },
                   ]}
                   hasFeedback>
@@ -195,7 +195,7 @@ function App() {
               rules={[
                 {
                   required: true,
-                  message: "Please input your nickName!",
+                  message: "닉네임을 입력해주세요!",
                 },
               ]}>
               <div className="form_input">

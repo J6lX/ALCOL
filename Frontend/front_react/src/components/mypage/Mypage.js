@@ -505,24 +505,28 @@ function Mypage() {
   const [levelColor, setLevelColor] = useState({ color: "white" });
   const [modeName, setModeName] = useState("level");
 
+  const [seasonSpeed, setSeasonSpeed] = useState({ color: "white" });
+  const [seasonOptimizer, setSeasonOptimizer] = useState({ color: "white" });
+  const [seasonName, setSeasonName] = useState("all");
+
   //  시즌 필터링
   // 백업 리코일에 저장한 원본 값으로 롤백
-  const seasonAll = () => {
-    setModeName("level");
+  const selectAll = () => {
+    setSeasonName("all");
     setSeasonInfo(backupSeason);
   };
 
-  // 테이블에 표시할 데이터를 스피드 모드를 기준으로 필터링
-  const seasonSpeed = () => {
-    setModeName("speed");
-    const filteredData = backupSeason.filter((data) => data.modeName === "스피드");
+  // 스피드전 선택
+  const selectSpeed = () => {
+    setSeasonName("speed");
+    const filteredData = backupSeason.filter((data) => data.battle_mode === "스피드");
     setSeasonInfo(filteredData);
   };
 
-  // 테이블에 표시할 데이터를 최적화 모드를 기준으로 필터링
-  const seasonOptimizer = () => {
-    setModeName("efficiency");
-    const filteredData = backupSeason.filter((data) => data.modeName === "최적화");
+  // 최적화전 선택
+  const selectOptimizer = () => {
+    setSeasonName("optimize");
+    const filteredData = backupSeason.filter((data) => data.battle_mode === "최적화");
     setSeasonInfo(filteredData);
   };
 
@@ -547,7 +551,21 @@ function Mypage() {
     setBattleRec(filteredData);
   };
 
-  // 탭 스타일 변경
+  // 탭 스타일 변경(시즌)
+  useEffect(() => {
+    if (seasonName === "all") {
+      setSeasonSpeed({ color: "white" });
+      setSeasonOptimizer({ color: "white" });
+    } else if (seasonName === "optimize") {
+      setSeasonOptimizer({ color: "#94d6f8" });
+      setSeasonSpeed({ color: "white", textAlign: "center" });
+    } else if (seasonName === "speed") {
+      setSeasonOptimizer({ color: "white", textAlign: "center" });
+      setSeasonSpeed({ color: "#94d6f8", textAlign: "center" });
+    }
+  }, [seasonName]);
+
+  // 탭 스타일 변경(전적)
   useEffect(() => {
     if (modeName === "speed") {
       setSpeedColor({ color: "#94D6FB" });
@@ -903,21 +921,21 @@ function Mypage() {
               <Row>
                 {/* 지난 시즌 기록 보기 */}
                 <Col xs={24} className="mypage_record_block">
-                  <p className="textHighlight" onClick={seasonAll}>
+                  <p className="textHighlight" onClick={selectAll}>
                     지난 시즌 기록
                   </p>
                   <hr />
                   {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
                   <Row justify="space-around" className="modeFilter">
                     <Col sm={12} lg={6}>
-                      <h4 style={speedColor} onClick={seasonSpeed} className="mypage_text_center">
+                      <h4 style={seasonSpeed} onClick={selectSpeed} className="mypage_text_center">
                         스피드
                       </h4>
                     </Col>
                     <Col sm={12} lg={6}>
                       <h4
-                        style={efficiencyColor}
-                        onClick={seasonOptimizer}
+                        style={seasonOptimizer}
+                        onClick={selectOptimizer}
                         className="mypage_text_center">
                         최적화
                       </h4>
@@ -934,7 +952,6 @@ function Mypage() {
             </Col>
 
             {/* 전적 정보 표시 블록 */}
-            {/* <Col xs={16} lg={18} className="textHighlight block"> */}
             <Col
               sm={16}
               lg={18}
