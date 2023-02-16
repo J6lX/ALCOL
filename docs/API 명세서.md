@@ -1,5 +1,5 @@
 # 🕹 API 명세서
-## [API](https://blushing-friend-fae.notion.site/API-84eacb82e6614561a3456764761e8fe1)
+## [자세히보기](https://blushing-friend-fae.notion.site/API-84eacb82e6614561a3456764761e8fe1)
 
 </br>
 
