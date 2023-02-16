@@ -99,6 +99,12 @@ public class ProblemServiceImpl implements ProblemService
         probTestInput = probTestInput.replaceAll("\\\\n", "$$");
         probTestOutput = probTestOutput.replaceAll("\\\\n", "$$");
 
+        probDetailDesc = java.util.regex.Matcher.quoteReplacement(probDetailDesc);
+        probInputDesc = java.util.regex.Matcher.quoteReplacement(probInputDesc);
+        probOutputDesc = java.util.regex.Matcher.quoteReplacement(probOutputDesc);
+        probTestInput = java.util.regex.Matcher.quoteReplacement(probTestInput);
+        probTestOutput = java.util.regex.Matcher.quoteReplacement(probTestOutput);
+
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
                 .prob_name(problemEntity.getProbName())
