@@ -88,8 +88,7 @@ function LoginPage() {
         hanleResigerWarning();
         console.log("로그인 실패1 : " + error);
         if (error.response.data.custom_code === "006") {
-          console.log("로그인 실패2 : " + error);
-          setResult("로그인 실패...");
+          setResult(error.response.data.description);
           // 로그인 실패 시 표시하는 내용
           // alert(error.response.data.description);
         }

@@ -417,13 +417,16 @@ function Mypage() {
   const graphData = battleRec.slice(0, 20);
   let wincount = 0;
   let losecount = 0;
+  let drawcount = 0;
 
   // 정제된 정보를 바탕으로 승리 수와 패배 수 집계
   for (const recordCase of graphData) {
     if (recordCase.battle_result === "승리") {
       wincount++;
-    } else {
+    } else if (recordCase.battle_result === "패배") {
       losecount++;
+    } else {
+      drawcount++;
     }
   }
 
@@ -440,6 +443,12 @@ function Mypage() {
       label: "lose",
       value: losecount,
       color: "#FDE14B",
+    },
+    {
+      id: "draw",
+      label: "draw",
+      value: drawcount,
+      color: "grey",
     },
   ];
 
@@ -964,7 +973,7 @@ function Mypage() {
                   padAngle={0.7}
                   cornerRadius={3}
                   activeOuterRadiusOffset={8}
-                  colors={["#5cfdfd", "#FDE14B"]}
+                  colors={["#5cfdfd", "#FDE14B", "grey"]}
                   colorBy="index"
                   borderWidth={1}
                   borderColor={{ theme: "background" }}
@@ -982,6 +991,11 @@ function Mypage() {
                     {
                       match: {
                         id: "lose",
+                      },
+                    },
+                    {
+                      match: {
+                        id: "draw",
                       },
                     },
                   ]}
