@@ -186,12 +186,14 @@ Frontend
 - ### Match Service
     <br/>
 
-
+</br>
 ### ERD
 ---
 ![image](/uploads/edcdf42062a2d60a1b652ca5b9fe17f3/image.png)
 </br>
 
+## ✔ CI/CD
+---
 ### MSA구조에 맞게 프로젝트 단위마다 Docker 컨테이너로 나누어 관리, 젠킨스를 통해 자동 빌드, 배포 중
 ---
 ![iimage](/uploads/c718ce6a72f89c83957f886f2ccbf4b9/iimage.png)
@@ -228,7 +230,7 @@ Frontend
   
 ## ✔ 팀원 역할 분배
 ---
-![image](/uploads/5008aa276676e02629e15fe0595bd536/image.png)
+![스크린샷_2023-02-17_오전_1.59.39](/uploads/981486a506d5be6094c3f20ad5532868/스크린샷_2023-02-17_오전_1.59.39.png)
 
 ## ✔ 프로젝트 산출물
 ---
