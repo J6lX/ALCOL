@@ -57,8 +57,9 @@ function Ranking() {
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/problemList`)
       .then((response) => {
         // // 문제 소스는 .bodyData에 담아서 전송됨
-        const originData = response.data.map((problem) => {
+        const originData = response.data.map((problem, index) => {
           return {
+            key: index,
             problem_number: problem.prob_no,
             problem_name: problem.prob_name,
             problem_type: problem.prob_category.join(", "),

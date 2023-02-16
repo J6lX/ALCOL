@@ -57,20 +57,20 @@ function DefineLanguage(language) {
 const ExampleTable = ({ inputData, outputData }) => {
   console.log(inputData, outputData);
 
-  const inputList = inputData.split("$$").map((data) => {
-    return (
-      <p key={data} className="NanumSquare">
-        {data}
-      </p>
-    );
-  });
-  const outputList = outputData.split("$$").map((data) => {
-    return (
-      <p key={data} className="NanumSquare">
-        {data}
-      </p>
-    );
-  });
+  // const inputList = inputData.split("$$").map((data) => {
+  //   return (
+  //     <p key={data} className="NanumSquare">
+  //       {data}
+  //     </p>
+  //   );
+  // });
+  // const outputList = outputData.split("$$").map((data) => {
+  //   return (
+  //     <p key={data} className="NanumSquare">
+  //       {data}
+  //     </p>
+  //   );
+  // });
   return (
     <div>
       <table border={1} style={{ margin: "15px" }}>
@@ -86,8 +86,8 @@ const ExampleTable = ({ inputData, outputData }) => {
         </thead>
         <tbody>
           <tr>
-            <td className="NanumSquare">{inputList}</td>
-            <td className="NanumSquare">{outputList}</td>
+            <td className="NanumSquare">{inputData}</td>
+            <td className="NanumSquare">{outputData}</td>
           </tr>
         </tbody>
       </table>
