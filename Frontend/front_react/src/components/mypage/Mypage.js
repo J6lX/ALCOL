@@ -675,14 +675,18 @@ function Mypage() {
     }
   }
 
-  // // 더 보기 단추 선택적으로 표시
-  // function ShowMore() {
-  //   if (resultCount > refinedData.length) {
-  //     return
-  //   } else {
-  //     return
-  //   }
-  // }
+  // 더 보기 단추 선택적으로 표시
+  function ShowMore() {
+    if (resultCount > refinedData.length) {
+      return;
+    } else {
+      return (
+        <p className="mypage_showmore" onClick={() => setResultCount(resultCount + 10)}>
+          더 보기
+        </p>
+      );
+    }
+  }
 
   // 페이지 렌더링
   return (
@@ -1001,7 +1005,7 @@ function Mypage() {
                       pagination={false}
                       rowkey="id"
                     />
-                    <p onClick={() => setResultCount(resultCount + 10)}>더 보기</p>
+                    <ShowMore />
                   </ConfigProvider>
                 </Col>
               </Row>

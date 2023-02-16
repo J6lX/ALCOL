@@ -89,6 +89,7 @@ const Problem = () => {
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
+        window.scrollTo(0, 0);
       })
       .catch((error) => {
         console.log(error);
@@ -424,6 +425,8 @@ const PracticeSolvingPage = () => {
         <ButtonsLayer />
         <Console />
       </RecoilRoot> */}
+
+      {/* useEffect(() {window.scrollTo(0, 0)}) */}
       <div style={{ paddingTop: "12px" }}>
         <BattleNav />
         <div
