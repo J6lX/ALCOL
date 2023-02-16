@@ -5,55 +5,12 @@
 
 
 ## 프로젝트 진행 기간
-2022.01.03(화) ~ 2022.02.02(금) - Sub-PJT Ⅲ
+2022.01.03(화) ~ 2022.02.17(금)
 
 SSAFY 8기 2학기 공통프로젝트 - ALCOL
 
 
 ## 🕹Sub-PJT Ⅲ
-
-
-### 서비스별 데이터베이스 분리
-
----
-
-- ### User Service
-    - 사용자(USER_TB)
-    - 사용자 탈퇴(USER_LEFT_TB)
-    - 친구(FRIEND_TB)
-    - 사용자 레벨(USER_LEVEL_TB)
-    - 사용자 티어(USER_TIER_TB)
-    <br/>
-- ### Problem Service
-    - 문제(PROBLEM_TB)
-    - 문제 티어(PROB_TIER_TB)
-    - 문제 유형(PROB_CATEGORY_TB)
-    - 문제 유형 연결 테이블(PROB_CATEGORY_PIVOT_TB)
-    <br/>
-- ### Battle Service
-    - 배틀 모드(BATTLE_MODE_TB)
-    <br/>
-- ### Log Service
-    - 문제 제출 로그(PROB_TRIAL_LOG_TB)
-    - 배틀 전적 로그(BATTLE_LOG_TB)
-    - 배틀 문제 제출 로그(BATTLE_PROB_SUBMIT_LOG_TB)
-    - 과거 시즌 로그(PAST_SEASON_LOG_TB)
-    <br/>
-- ### Rank Service
-    <br/>
-- ### Match Service
-    <br/>
-
-
-### ERD
----
-![Untitled](/uploads/b4f22590820e7d6cf8a0d4f343a8fb8f/Untitled.png)
-</br>
-
-### MSA구조에 맞게 프로젝트 단위마다 Docker 컨테이너로 나누어 관리, 젠킨스를 통해 자동 빌드, 배포 중
----
-![iimage](/uploads/c718ce6a72f89c83957f886f2ccbf4b9/iimage.png)
-</br>
 
 ## ✔ 기획의도
 IT직군 채용 프로세스의 일부로 코딩테스트를 도입하는 기업들이 증가함에 따라 관련 사이트의 수요가 증가하고 있습니다.
@@ -103,28 +60,35 @@ ALCOL은 학습동기 유발을 위해 배틀 구조의 대결을 제공하는 �
 
 **Backend - Spring**
 - IntelliJ IDE
+- OpenJDK 1.8
 - Springboot 2.7.8
 - Spring Data JPA
-- Spring Security
-- Spring Cloud
+- Spring Security 5.7.6
+- Spring Cloud(2021.0.5)
+- Spring NetFlix Eureka 1.10.17
 - Spring Web
-- WebSocket
-- Redis
-- MySQL
+- Redis 7.0.8
+- MySQL 8.0.32
 
 **Frontend**
 - Visual Studio Code IDE
 - React 18.2.0
 - Node.js 18.13.0
+- TypeScript 7.20
+- Ant design 5.1.5
+- recoil 0.7
 
 **CI/CD**
 - AWS EC2
-- Jenkins
+    - Ubuntu 20.04 LTS
+    - Docker 20.10.12
+- Jenkins 2.375.1
 - NGINX
 - SSL
 
-## ✔ MSA 파일 기본구조
+## ✔ 프로젝트 파일 기본구조
 ---
+### Back - MSA 기본구조
 ```
 service
   ├── api
@@ -133,15 +97,110 @@ service
   ├── controller
   ├── dto
   ├── entity
+  ├── error
+  │   └── CustomStatusCode
   ├── repository
   ├── service
-  └── utils
+  └── util
+      └── ApiUtils
 ```
+### Front
+```
+Frontend
+  ├── .prettierrc
+  ├── build
+  ├── default.conf
+  ├── Dockerfile
+  ├── package-lock.json
+  ├── package.json
+  ├── public
+  ├── README.md
+  └── src
+      ├── assets
+      │  ├── fonts
+      │  └── images
+      ├── components
+      │  ├── accounts
+      │  ├── battle
+      │  ├── home
+      │  └── mypage
+      ├── shared
+      └── states
+
+```
+## ✔ 서비스별 데이터베이스 분리
+
+---
+
+- ### User Service
+    - 사용자(USER_TB)
+    - 사용자 탈퇴(USER_LEFT_TB)
+    - 사용자 레벨(USER_LEVEL_TB)
+    - 사용자 티어(USER_TIER_TB)
+    - 레벨 경험치
+        - key
+            - levelExp:userId
+        - value
+            - 1
+    <br/>
+- ### Problem Service
+    - 문제(PROBLEM_TB)
+    - 문제 티어(PROB_TIER_TB)
+    - 문제 유형(PROB_CATEGORY_TB)
+    - 문제 유형 연결 테이블(PROB_CATEGORY_PIVOT_TB)
+    <br/>
+- ### Battle Service
+    - 배틀 모드(BATTLE_MODE_TB)
+    <br/>
+- ### Log Service
+    - 문제 제출 로그(PROB_TRIAL_LOG_TB)
+    - 배틀 전적 로그(BATTLE_LOG_TB)
+    - 배틀 문제 제출 로그(BATTLE_PROB_SUBMIT_LOG_TB)
+    - 과거 시즌 로그(PAST_SEASON_LOG_TB)
+    <br/>
+- ### Rank Service
+    - 승패 횟수(Hash Table)
+        - key
+            - winloseCnt:userId:battleMode
+        - field
+            - win
+            - lose
+    - MMR별 랭킹(Sorted Set)
+        - key
+            - speed
+            - optimization 
+        - member
+            - userid
+        - score
+            - MMR
+    - 랭킹 유저 데이터(Hash Table)
+        - key
+            - userInfo:userId
+            - field
+                - nickname
+                - level
+                - speed_tier
+                - optimization_tier
+                - stored_file_name
+    <br/>
+- ### Match Service
+    <br/>
+
+
+### ERD
+---
+![image](/uploads/edcdf42062a2d60a1b652ca5b9fe17f3/image.png)
+</br>
+
+### MSA구조에 맞게 프로젝트 단위마다 Docker 컨테이너로 나누어 관리, 젠킨스를 통해 자동 빌드, 배포 중
+---
+![iimage](/uploads/c718ce6a72f89c83957f886f2ccbf4b9/iimage.png)
+</br>
 
 
 ## ✔ 협업 툴
 ---
-- Git
+- GitLab
 - Notion
 - JIRA
 - MatterMost
@@ -166,6 +225,10 @@ service
   - 컨벤션 정리
   - 간트차트 관리
   - 기능명세서, API 명세서 등 모두가 공유해야 하는 문서 관리
+  
+## ✔ 팀원 역할 분배
+---
+![image](/uploads/5008aa276676e02629e15fe0595bd536/image.png)
 
 ## ✔ 프로젝트 산출물
 ---
@@ -177,3 +240,10 @@ service
 - [ERD](https://blushing-friend-fae.notion.site/ERD-a3f7f107e10d48f2ad4509eb8eb11819)
 - [회의록](https://blushing-friend-fae.notion.site/TEAM-J6IX-4319b50de1bf4cb58222b889304ccef4)
 - [시스템기술서](https://blushing-friend-fae.notion.site/735840ca0f694c30b366eda4774e31f7)
+
+## ✔ 프로젝트 결과물
+-   [포팅메뉴얼]
+-   [중간발표자료]
+-   [최종발표자료]
+
+## 🕹 ALCOL 서비스 화면
