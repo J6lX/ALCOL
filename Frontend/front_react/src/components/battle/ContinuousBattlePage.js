@@ -1,4 +1,5 @@
 import { React, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 // import $ from "jquery";
 import ReadyPage from "./ReadyPage";
@@ -70,6 +71,8 @@ const ContinuousBattlePage = () => {
   const [otherImageAddress, setOtherImageAddress] = useState("b");
   useEffect(() => {}, [nickname, speedTier, optTier]);
   useEffect(() => {}, [othernickname, otherspeedTier, otheroptTier]);
+
+  const history = useHistory();
 
   const messageType = "connect";
   const userId = idInfo.userId;
@@ -545,14 +548,8 @@ const ContinuousBattlePage = () => {
     setIsSocketErrorModalOpen(true);
   };
   const socketErrorHandleOk = () => {
-    // socket.send(
-    //   JSON.stringify({
-    //     messageType: "finish",
-    //     userId: userId,
-    //     otherId: otherId,
-    //   })
-    // );
     setIsSocketErrorModalOpen(false);
+    history.push("/");
   };
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -818,6 +815,7 @@ const ContinuousBattlePage = () => {
         closable={false}>
         {contextCopyHolder}
         <p className="NanumSquare">상대방 "{othernickname} 님"의 인터넷 연결이 이상합니다.</p>
+        <p className="NanumSquare">배틀이 종료됩니다.</p>
         <p className="NanumSquare">
           지금까지 쓴 코드를 클립보드에 복사하려면 코드 복사 버튼을 누르세요!
         </p>
