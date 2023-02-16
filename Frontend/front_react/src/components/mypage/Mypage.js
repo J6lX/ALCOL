@@ -702,6 +702,9 @@ function Mypage() {
                       style={{
                         // margin: "15px",
                         maxHeight: "240px",
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "30px",
                       }}>
                       {/* 스피드전 진척도 그래프 */}
                       <PieChart
@@ -710,7 +713,7 @@ function Mypage() {
                         lineWidth={8}
                         lengthAngle={300}
                         background="#f3f3f3"
-                        radius={45}
+                        radius={50}
                         rounded
                         animate
                         startAngle={120}
@@ -719,10 +722,12 @@ function Mypage() {
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
+                          fontFamily: "NanumSquareNeo",
                         }}
                         labelPosition={0}
                         style={{
                           zIndex: "8",
+                          // color: "red",
                         }}
                       />
                       <img
@@ -776,6 +781,9 @@ function Mypage() {
                         zindex: "8",
                         margin: "15px",
                         maxHeight: "240px",
+                        display: "flex",
+                        justifyContent: "center",
+                        marginTop: "30px",
                       }}>
                       <PieChart
                         data={efficiencyData}
@@ -783,7 +791,7 @@ function Mypage() {
                         lineWidth={8}
                         lengthAngle={300}
                         background="#f3f3f3"
-                        radius={45}
+                        radius={50}
                         rounded
                         animate
                         startAngle={120}
@@ -792,6 +800,7 @@ function Mypage() {
                         labelStyle={{
                           fontSize: "10px",
                           fill: "black",
+                          fontFamily: "NanumSquareNeo",
                         }}
                         labelPosition={0}
                         style={{
@@ -863,7 +872,7 @@ function Mypage() {
               </Row>
 
               {/* 도넛 그래프 블록(최근 20전) */}
-              <Row justify="center" style={{ height: "270px" }}>
+              <Row style={{ height: "270px" }}>
                 <ResponsivePie
                   data={recentRecord}
                   margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
