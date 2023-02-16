@@ -81,7 +81,7 @@ function Ranking() {
     const searchInput = values.query;
     if (searchInput.trim()) {
       const filteredData = problemData.filter((problem) =>
-        problem.problemName.includes(searchInput)
+        problem.problem_name.includes(searchInput)
       );
       setRefinedData(filteredData);
     } else {
