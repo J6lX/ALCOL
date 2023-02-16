@@ -121,16 +121,17 @@ const Problem = () => {
           problemInputTC: response.data.prob_input_testcase,
           // 문제 난이도(티어)
           problemTier: response.data.prob_tier,
+          // 메모리 제한
+          problemMemoryLimit: response.data.prob_memory_limit,
           // 출력 데이터에 대한 설명
           problemOutputContent: response.data.prob_output_content,
           // 출력 테스트 케이스
           problemOutputTC: response.data.prob_output_testcase,
           // 메모리 제한
-          problemMemoryLimit: response.data.prob_memory_liimt,
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
-        console.log("ㄱ", originProblemData);
+        window.scrollTo(0, 0);
       })
       .catch((error) => {
         console.log(error);
@@ -172,7 +173,12 @@ const Problem = () => {
         <hr style={{ height: "1px", background: "gray" }} />
         <p
           className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
+          style={{
+            color: "white",
+            lineHeight: "2",
+            padding: "5px",
+            fontWeight: "lighter",
+          }}>
           {problemData.problemInputContent}
           <br />
         </p>
@@ -477,6 +483,8 @@ const PracticeSolvingPage = () => {
         <ButtonsLayer />
         <Console />
       </RecoilRoot> */}
+
+      {/* useEffect(() {window.scrollTo(0, 0)}) */}
       <div style={{ paddingTop: "12px" }}>
         <BattleNav />
         <div

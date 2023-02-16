@@ -388,6 +388,7 @@ function Mypage() {
           setBackupRec(originBattleRec);
           setSeasonInfo(refinedLastSeason);
           setBackupSeason(refinedLastSeason);
+          window.scrollTo(0, 0);
         })
       )
       .catch((error) => {
@@ -416,13 +417,16 @@ function Mypage() {
   const graphData = battleRec.slice(0, 20);
   let wincount = 0;
   let losecount = 0;
+  let drawcount = 0;
 
   // 정제된 정보를 바탕으로 승리 수와 패배 수 집계
   for (const recordCase of graphData) {
     if (recordCase.battle_result === "승리") {
       wincount++;
-    } else {
+    } else if (recordCase.battle_result === "패배") {
       losecount++;
+    } else {
+      drawcount++;
     }
   }
 
@@ -439,6 +443,12 @@ function Mypage() {
       label: "lose",
       value: losecount,
       color: "#FDE14B",
+    },
+    {
+      id: "draw",
+      label: "draw",
+      value: drawcount,
+      color: "grey",
     },
   ];
 
@@ -674,14 +684,18 @@ function Mypage() {
     }
   }
 
-  // // 더 보기 단추 선택적으로 표시
-  // function ShowMore() {
-  //   if (resultCount > refinedData.length) {
-  //     return
-  //   } else {
-  //     return
-  //   }
-  // }
+  // 더 보기 단추 선택적으로 표시
+  function ShowMore() {
+    if (resultCount >= refinedData.length) {
+      return;
+    } else {
+      return (
+        <p className="mypage_showmore" onClick={() => setResultCount(resultCount + 10)}>
+          더 보기
+        </p>
+      );
+    }
+  }
 
   // 페이지 렌더링
   return (
@@ -716,7 +730,8 @@ function Mypage() {
             <Col
               sm={16}
               md={6}
-              lg={4}
+              lg={5}
+              xl={4}
               // className="text block"
               // className="text mypage_profile_block"
               className="mypage_text mypage_profile_block"
@@ -878,7 +893,8 @@ function Mypage() {
             <Col
               sm={16}
               md={6}
-              lg={4}
+              lg={5}
+              xl={4}
               // align="middle"
               style={{
                 margin: "6px",
@@ -908,8 +924,10 @@ function Mypage() {
                     </Col>
                   </Row>
                   <hr />
-                  <Row style={{ padding: "10px" }}>
-                    <SeasonCollection />
+                  <Row justify="center" style={{ padding: "10px" }}>
+                    <Col>
+                      <SeasonCollection />
+                    </Col>
                   </Row>
                 </Col>
               </Row>
@@ -955,7 +973,7 @@ function Mypage() {
                   padAngle={0.7}
                   cornerRadius={3}
                   activeOuterRadiusOffset={8}
-                  colors={["#5cfdfd", "#FDE14B"]}
+                  colors={["#5cfdfd", "#FDE14B", "grey"]}
                   colorBy="index"
                   borderWidth={1}
                   borderColor={{ theme: "background" }}
@@ -973,6 +991,11 @@ function Mypage() {
                     {
                       match: {
                         id: "lose",
+                      },
+                    },
+                    {
+                      match: {
+                        id: "draw",
                       },
                     },
                   ]}
@@ -1000,7 +1023,7 @@ function Mypage() {
                       pagination={false}
                       rowkey="id"
                     />
-                    <p onClick={() => setResultCount(resultCount + 10)}>더 보기</p>
+                    <ShowMore />
                   </ConfigProvider>
                 </Col>
               </Row>
