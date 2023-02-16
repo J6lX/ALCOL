@@ -1,7 +1,8 @@
 # 🏛 ALCOL - 알고리즘 대결 사이트
 
 
-## ALCOL 링크 : [http://i8b303.p.ssafy.io]
+## ALCOL 링크 : [ALCOL](http://i8b303.p.ssafy.io)
+## 소개 영상 : [UCC 링크](https://youtu.be/0q725RXhRio)
 
 
 ## 프로젝트 진행 기간
@@ -191,7 +192,6 @@ Frontend
 ### ERD
 ---
 ![image](/uploads/edcdf42062a2d60a1b652ca5b9fe17f3/image.png)
-</br>
 </br>
 
 ## ✔ CI/CD
