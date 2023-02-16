@@ -29,6 +29,11 @@ public class RankingController
     private final BattleResultService battleResultService;
     private final RankService rankService;
 
+    /**
+     * 배틀이 끝났을 때 가져온 데이터를 redis에 저장하는 메소드
+     * @param battleResult
+     * @return String - Success 여부
+     */
     @PostMapping("/battleResult")
     public ResponseEntity<String> battleEnd(@Valid @RequestBody BattleDto.Request battleResult)
     {
@@ -88,6 +93,13 @@ public class RankingController
         return ResponseEntity.status(HttpStatus.OK).body("SUCCESS");
     }
 
+    /**
+     * 로그인된 유저의 랭킹 정보
+     * @param requestHeader
+     * @param requestMap
+     * @return 로그인된 유저의 랭킹 정보
+     */
+
     @PostMapping("/myRank")
     public ResponseEntity<RankDto.ResponseDto<?>> requestMyRank(HttpServletRequest requestHeader, @RequestBody Map<String, String> requestMap){
         // header에 있는 user_id값 가져옴
@@ -111,6 +123,12 @@ public class RankingController
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(myRank, CustomStatusCode.BATTLE_RECORD_EXIST));
     }
 
+    /**
+     * 모드별 랭킹 리스트
+     * @param battle_mode
+     * @param page
+     * @return 모드별 랭킹 리스트
+     */
     @GetMapping("/rankList")
     public ResponseEntity<RankDto.ResponseDto<?>> requestAllRankingList(@RequestParam String battle_mode, int page)
     {
@@ -122,6 +140,12 @@ public class RankingController
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(RankingList, CustomStatusCode.ALL_USER_BATTLE_RANKING_EXIST));
     }
 
+    /**
+     * 유저 검색
+     * @param battle_mode
+     * @param nickname
+     * @return 유저 검색 결과
+     */
     @GetMapping("/searchUser")
     public ResponseEntity<RankDto.ResponseDto<?>> requestSearchUser(@RequestParam String battle_mode, String nickname)
     {
@@ -133,6 +157,10 @@ public class RankingController
         return ResponseEntity.status(HttpStatus.OK).body(ApiUtils.success(searchUser, CustomStatusCode.SEARCH_USER_EXIST));
     }
 
+    /**
+     * 모드별 TOP3 (메인페이지)
+     * @return 모드별 TOP3 정보 리스트
+     */
     @GetMapping("/getTop3")
     public ResponseEntity<RankDto.ResponseDto<?>> requestTop3User()
     {

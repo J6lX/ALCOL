@@ -214,6 +214,9 @@ public class RankServiceImpl implements RankService{
         return rank;
     }
 
+    /**
+     * 모드별 Top3 유저 리스트를 반환하는 메소드
+     * */
     public Map<String, List<RankDto.Top3Ranking>> getTop3UserList()
     {
         ranking = redisTemplate.opsForZSet();
