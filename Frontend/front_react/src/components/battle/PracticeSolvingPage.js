@@ -75,21 +75,21 @@ const ExampleTable = ({ inputData, outputData }) => {
   // console.log(inputList);
   // console.log(outputList);
 
-  const InputTC = () => {
-    const result = [];
-    for (let i = 0; i < inputData.length; i++) {
-      result.push(<div key={i}>{inputData[i]} </div>);
-    }
-    return result;
-  };
+  // const InputTC = () => {
+  //   const result = [];
+  //   for (let i = 0; i < inputData.length; i++) {
+  //     result.push(<div key={i}>{inputData[i]} </div>);
+  //   }
+  //   return result;
+  // };
 
-  const OutputTC = () => {
-    const result = [];
-    for (let i = 0; i < outputData.length; i++) {
-      result.push(<div key={i}>{outputData[i]} </div>);
-    }
-    return result;
-  };
+  // const OutputTC = () => {
+  //   const result = [];
+  //   for (let i = 0; i < outputData.length; i++) {
+  //     result.push(<div key={i}>{outputData[i]} </div>);
+  //   }
+  //   return result;
+  // };
 
   return (
     <div>
@@ -106,8 +106,8 @@ const ExampleTable = ({ inputData, outputData }) => {
         </thead>
         <tbody>
           <tr>
-            <td className="NanumSquare">{InputTC()}</td>
-            <td className="NanumSquare">{OutputTC()}</td>
+            <td className="NanumSquare">{inputData}</td>
+            <td className="NanumSquare">{outputData}</td>
           </tr>
         </tbody>
       </table>
