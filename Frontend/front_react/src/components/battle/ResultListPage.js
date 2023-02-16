@@ -6,6 +6,18 @@ import { useRecoilValue } from "recoil";
 import icon_vs from "../../assets/vs.png";
 import { resultListModeInfo, resultListResultInfo } from "../../states/atoms";
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
 function PlayerInfo({ battleuserinfo, battleMode }) {
   //atoms에 저장한 playerInfo를 불러옵니다.
   // const playerInfo = useRecoilValue(resultListPlayerInfo);
@@ -201,8 +213,8 @@ function ResultInfo({ sendResult, battleuserinfo }) {
         { sendResult.nick === "other" && <Col span={1} className="result_list_result_yellow" style={{ borderRadius: "3px", marginLeft: "20px"}}></Col>}
         <Col span={20} className="result_list_info" style={{ borderRadius: "3px" }}>
           <Row style={{display: "flex"}}>
-          { sendResult.nick === "me" && <Col span={2}><img src={battleuserinfo.user.imageAddress} alt="profile" style={{ borderRadius: "50%", height:"40px", marginLeft: "10px" }} /></Col> }
-            { sendResult.nick === "other" && <Col span={2}><img src={battleuserinfo.other.imageAddress} alt="profile2" style={{ borderRadius: "50%", height:"40px", marginLeft: "10px" }} /></Col> }
+          { sendResult.nick === "me" && <Col span={1}><img src={isNew(battleuserinfo.user.imageAddress)} alt="profile" style={{ borderRadius: "50%", height:"40px", marginLeft: "10px" }} /></Col> }
+            { sendResult.nick === "other" && <Col span={1}><img src={isNew(battleuserinfo.other.imageAddress)} alt="profile2" style={{ borderRadius: "50%", height:"40px", marginLeft: "10px" }} /></Col> }
             { sendResult.result === "accepted" && 
               <Col span={22}>
                 { sendResult.nick === "me" && <p className="NanumSquare">&nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; 메모리:{" "}

@@ -94,7 +94,7 @@ function UserInfo() {
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
-        <div>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>
           <img
             src={imageAddress}
             alt=""
@@ -188,7 +188,7 @@ function App() {
     // socket.close();
     socket.send(
       JSON.stringify({
-        messageType: "matchCancel",
+        method: "matchCancel",
         userId: userId,
       })
     );
