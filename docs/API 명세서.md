@@ -3,4 +3,4 @@
 
 </br>
 
-[API_명세서.pdf](/uploads/d56763628e7b668128d958593b55fde5/API_명세서.pdf)
+![API 명세서](/uploads/d8ec5ad1ae080560cdf2e448a2fd7a7f/screencapture-notion-so-API-84eacb82e6614561a3456764761e8fe1-2023-02-17-02_56_11.png)
