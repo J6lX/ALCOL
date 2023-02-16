@@ -55,8 +55,6 @@ function DefineLanguage(language) {
 }
 
 const ExampleTable = ({ inputData, outputData }) => {
-  console.log(inputData, outputData);
-
   const InputTC = () => {
     const result = [];
     for (let i = 0; i < inputData.length; i++) {
@@ -121,7 +119,6 @@ const Problem = () => {
     axios
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/${problemId}`)
       .then((response) => {
-        console.log(response);
         // 응답받은 데이터 정제
         const originProblemData = {
           // 문제 번호
@@ -146,7 +143,6 @@ const Problem = () => {
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
-        console.log(originProblemData);
         window.scrollTo(0, 0);
       })
       .catch((error) => {
@@ -266,50 +262,54 @@ const CodingPlace = () => {
   // 제출 이벤트
   const clickSubmit = () => {
     // code : 사용자가 IDE에 입력한 코드
-    const formData = {
-      problem_id: problemId,
-      language: DefineLanguage(lang),
-      code: code,
-    };
-    axios
-      .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
-        headers: {
-          access_token: accessToken,
-          refresh_token: refreshToken,
-          user_id: userId,
-        },
-      })
-      .then((response) => {
-        const submitResult = response.data;
-        console.log(submitResult);
+    if (code.trim()) {
+      const formData = {
+        problem_id: problemId,
+        language: DefineLanguage(lang),
+        code: code,
+      };
+      axios
+        .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
+          headers: {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+            user_id: userId,
+          },
+        })
+        .then((response) => {
+          const submitResult = response.data;
 
-        // 풀이 성공 시 모달 창 띄우기
-        if (response.data.bodyData.result === "success") {
-          gameVictory();
-        } else if (response.data.bodyData.result === "fail") {
-          alert(
-            `틀렸습니다... 테스트케이스 ${
-              response.data.bodyData.success_testcase_cnt / response.data.bodyData.all_testcase_cnt
-            }`
-          );
-        }
-      })
-      .catch((error) => {
-        if (error.response.data.customCode === "103") {
-          alert("컴파일 오류가 발생했습니다.");
-          console.log(error.response.data.description);
-        } else if (error.response.data.customCode === "104") {
-          alert("빈 코드입니다.");
-          console.log(error.response.data.description);
-        } else if (error.response.data.customCode === "102") {
-          alert("제출 결과를 불러올 수 없습니다.");
-          console.log(error.response.data.description);
-        }
-        if (error.response.data.customCode === "101") {
-          alert("제출 아이디를 가져올 수 없습니다.");
-          console.log(error.response.data.description);
-        }
-      });
+          // 풀이 성공 시 모달 창 띄우기
+          if (response.data.bodyData.result === "success") {
+            gameVictory();
+          } else if (response.data.bodyData.result === "fail") {
+            alert(
+              `틀렸습니다... 테스트케이스 ${
+                response.data.bodyData.success_testcase_cnt /
+                response.data.bodyData.all_testcase_cnt
+              }`
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.response.data.customCode === "103") {
+            alert("컴파일 오류가 발생했습니다.");
+            console.log(error.response.data.description);
+          } else if (error.response.data.customCode === "104") {
+            alert("빈 코드입니다.");
+            console.log(error.response.data.description);
+          } else if (error.response.data.customCode === "102") {
+            alert("제출 결과를 불러올 수 없습니다.");
+            console.log(error.response.data.description);
+          }
+          if (error.response.data.customCode === "101") {
+            alert("제출 아이디를 가져올 수 없습니다.");
+            console.log(error.response.data.description);
+          }
+        });
+    } else {
+      alert("코드를 입력하세요.");
+    }
   };
 
   // 나가기 확인 모달 창 관리
