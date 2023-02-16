@@ -57,20 +57,24 @@ function DefineLanguage(language) {
 const ExampleTable = ({ inputData, outputData }) => {
   console.log(inputData, outputData);
 
-  // const inputList = inputData.split("$$").map((data) => {
-  //   return (
-  //     <p key={data} className="NanumSquare">
-  //       {data}
-  //     </p>
-  //   );
-  // });
-  // const outputList = outputData.split("$$").map((data) => {
-  //   return (
-  //     <p key={data} className="NanumSquare">
-  //       {data}
-  //     </p>
-  //   );
-  // });
+  const inputList = inputData.split("\$\$").map((data) => {
+    return (
+      <p key={data} className="NanumSquare">
+        {data}
+      </p>
+    );
+  });
+  const outputList = outputData.split("\$\$").map((data) => {
+    return (
+      <p key={data} className="NanumSquare">
+        {data}
+      </p>
+    );
+  });
+
+  console.log(inputList);
+  console.log(outputList);
+
   return (
     <div>
       <table border={1} style={{ margin: "15px" }}>
@@ -273,8 +277,7 @@ const CodingPlace = () => {
           gameVictory();
         } else if (response.data.bodyData.result === "fail") {
           alert(
-            `틀렸습니다... 테스트케이스 ${
-              response.data.bodyData.success_testcase_cnt / response.data.bodyData.all_testcase_cnt
+            `틀렸습니다... 테스트케이스 ${response.data.bodyData.success_testcase_cnt / response.data.bodyData.all_testcase_cnt
             }`
           );
         }
