@@ -120,7 +120,6 @@ const Problem = () => {
           // 출력 테스트 케이스
           problemOutputTC: response.data.prob_output_testcase,
           // 메모리 제한
-          problemMemoryLimit: response.data.prob_memory_liimt,
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
