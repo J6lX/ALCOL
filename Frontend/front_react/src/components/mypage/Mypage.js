@@ -519,14 +519,14 @@ function Mypage() {
   // 스피드전 선택
   const selectSpeed = () => {
     setSeasonName("speed");
-    const filteredData = backupSeason.filter((data) => data.battle_mode === "스피드");
+    const filteredData = backupSeason.filter((data) => data.modeName === "스피드");
     setSeasonInfo(filteredData);
   };
 
   // 최적화전 선택
   const selectOptimizer = () => {
     setSeasonName("optimize");
-    const filteredData = backupSeason.filter((data) => data.battle_mode === "최적화");
+    const filteredData = backupSeason.filter((data) => data.modeName === "최적화");
     setSeasonInfo(filteredData);
   };
 
@@ -920,19 +920,19 @@ function Mypage() {
               {/* > */}
               <Row>
                 {/* 지난 시즌 기록 보기 */}
-                <Col xs={24} className="mypage_record_block">
+                <Col xs={24} className="mypage_record_block" style={{ cursor: "pointer" }}>
                   <p className="textHighlight" onClick={selectAll}>
                     지난 시즌 기록
                   </p>
                   <hr />
                   {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
                   <Row justify="space-around" className="modeFilter">
-                    <Col sm={12} lg={6}>
+                    <Col sm={12} lg={6} style={{ cursor: "pointer" }}>
                       <h4 style={seasonSpeed} onClick={selectSpeed} className="mypage_text_center">
                         스피드
                       </h4>
                     </Col>
-                    <Col sm={12} lg={6}>
+                    <Col sm={12} lg={6} style={{ cursor: "pointer" }}>
                       <h4
                         style={seasonOptimizer}
                         onClick={selectOptimizer}
@@ -961,17 +961,25 @@ function Mypage() {
               }}>
               {/* 필터 블록(모두/스피드전/효율성전 선택 버튼) */}
               <Row justify="space-around" className="modeFilter">
-                <Col sm={4} lg={4}>
-                  <h4 style={levelColor} onClick={setLevel} className="mypage_text_center">
+                <Col sm={4} lg={4} style={{ cursor: "pointer" }}>
+                  <h4
+                    role="button"
+                    style={levelColor}
+                    onClick={setLevel}
+                    className="mypage_text_center">
                     모두
                   </h4>
                 </Col>
-                <Col sm={4} lg={4}>
-                  <h4 style={speedColor} onClick={setSpeed} className="mypage_text_center">
+                <Col sm={4} lg={4} style={{ cursor: "pointer" }}>
+                  <h4
+                    role="button"
+                    style={speedColor}
+                    onClick={setSpeed}
+                    className="mypage_text_center">
                     스피드전
                   </h4>
                 </Col>
-                <Col sm={4} lg={4}>
+                <Col sm={4} lg={4} style={{ cursor: "pointer" }}>
                   <h4
                     style={efficiencyColor}
                     onClick={setEfficiency}

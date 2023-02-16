@@ -166,6 +166,7 @@ function Ranking() {
                     position: ["bottomCenter"],
                     defaultPageSize: 10,
                   }}
+                  style={{ cursor: "pointer" }}
                   onRow={(record, rowIndex) => {
                     return {
                       // 여기 js로 리다이렉트 구현
