@@ -519,14 +519,14 @@ function Mypage() {
   // 스피드전 선택
   const selectSpeed = () => {
     setSeasonName("speed");
-    const filteredData = backupSeason.filter((data) => data.battle_mode === "스피드");
+    const filteredData = backupSeason.filter((data) => data.modeName === "스피드");
     setSeasonInfo(filteredData);
   };
 
   // 최적화전 선택
   const selectOptimizer = () => {
     setSeasonName("optimize");
-    const filteredData = backupSeason.filter((data) => data.battle_mode === "최적화");
+    const filteredData = backupSeason.filter((data) => data.modeName === "최적화");
     setSeasonInfo(filteredData);
   };
 
