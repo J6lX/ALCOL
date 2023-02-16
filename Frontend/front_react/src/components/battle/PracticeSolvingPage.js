@@ -55,21 +55,8 @@ function DefineLanguage(language) {
 }
 
 const ExampleTable = ({ inputData, outputData }) => {
-  const InputTC = () => {
-    const result = [];
-    for (let i = 0; i < inputData.length; i++) {
-      result.push(<div key={i}>{inputData[i]} </div>);
-    }
-    return result;
-  };
+  console.log(inputData, outputData);
 
-  const OutputTC = () => {
-    const result = [];
-    for (let i = 0; i < outputData.length; i++) {
-      result.push(<div key={i}>{outputData[i]} </div>);
-    }
-    return result;
-  };
   // const inputList = inputData.split("$$").map((data) => {
   //   return (
   //     <p key={data} className="NanumSquare">
@@ -99,8 +86,8 @@ const ExampleTable = ({ inputData, outputData }) => {
         </thead>
         <tbody>
           <tr>
-            <td className="NanumSquare">{InputTC()}</td>
-            <td className="NanumSquare">{OutputTC()}</td>
+            <td className="NanumSquare">{inputData}</td>
+            <td className="NanumSquare">{outputData}</td>
           </tr>
         </tbody>
       </table>
@@ -119,6 +106,7 @@ const Problem = () => {
     axios
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/${problemId}`)
       .then((response) => {
+        console.log(response);
         // 응답받은 데이터 정제
         const originProblemData = {
           // 문제 번호
@@ -130,7 +118,7 @@ const Problem = () => {
           // 입력 데이터에 대한 설명
           problemInputContent: response.data.prob_input_content,
           // 입력 테스트 케이스
-          problemInputTC: response.data.prob_input_testcase.split("$$"),
+          problemInputTC: response.data.prob_input_testcase,
           // 문제 난이도(티어)
           problemTier: response.data.prob_tier,
           // 메모리 제한
@@ -138,11 +126,12 @@ const Problem = () => {
           // 출력 데이터에 대한 설명
           problemOutputContent: response.data.prob_output_content,
           // 출력 테스트 케이스
-          problemOutputTC: response.data.prob_output_testcase.split("$$"),
+          problemOutputTC: response.data.prob_output_testcase,
           // 메모리 제한
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
+        console.log(originProblemData);
         window.scrollTo(0, 0);
       })
       .catch((error) => {
@@ -262,52 +251,50 @@ const CodingPlace = () => {
   // 제출 이벤트
   const clickSubmit = () => {
     // code : 사용자가 IDE에 입력한 코드
-    if (code.trim()) {
-      const formData = {
-        problem_id: problemId,
-        language: DefineLanguage(lang),
-        code: code,
-      };
-      axios
-        .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
-          headers: {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            user_id: userId,
-          },
-        })
-        .then((response) => {
-          // 풀이 성공 시 모달 창 띄우기
-          if (response.data.bodyData.result === "success") {
-            gameVictory();
-          } else if (response.data.bodyData.result === "fail") {
-            alert(
-              `틀렸습니다... 테스트케이스 ${
-                response.data.bodyData.success_testcase_cnt /
-                response.data.bodyData.all_testcase_cnt
-              }`
-            );
-          }
-        })
-        .catch((error) => {
-          if (error.response.data.customCode === "103") {
-            alert("컴파일 오류가 발생했습니다.");
-            console.log(error.response.data.description);
-          } else if (error.response.data.customCode === "104") {
-            alert("빈 코드입니다.");
-            console.log(error.response.data.description);
-          } else if (error.response.data.customCode === "102") {
-            alert("제출 결과를 불러올 수 없습니다.");
-            console.log(error.response.data.description);
-          }
-          if (error.response.data.customCode === "101") {
-            alert("제출 아이디를 가져올 수 없습니다.");
-            console.log(error.response.data.description);
-          }
-        });
-    } else {
-      alert("코드를 입력하세요.");
-    }
+    const formData = {
+      problem_id: problemId,
+      language: DefineLanguage(lang),
+      code: code,
+    };
+    axios
+      .post(`http://i8b303.p.ssafy.io:8000/problem-service/practiceSubmit`, formData, {
+        headers: {
+          access_token: accessToken,
+          refresh_token: refreshToken,
+          user_id: userId,
+        },
+      })
+      .then((response) => {
+        const submitResult = response.data;
+        console.log(submitResult);
+
+        // 풀이 성공 시 모달 창 띄우기
+        if (response.data.bodyData.result === "success") {
+          gameVictory();
+        } else if (response.data.bodyData.result === "fail") {
+          alert(
+            `틀렸습니다... 테스트케이스 ${
+              response.data.bodyData.success_testcase_cnt / response.data.bodyData.all_testcase_cnt
+            }`
+          );
+        }
+      })
+      .catch((error) => {
+        if (error.response.data.customCode === "103") {
+          alert("컴파일 오류가 발생했습니다.");
+          console.log(error.response.data.description);
+        } else if (error.response.data.customCode === "104") {
+          alert("빈 코드입니다.");
+          console.log(error.response.data.description);
+        } else if (error.response.data.customCode === "102") {
+          alert("제출 결과를 불러올 수 없습니다.");
+          console.log(error.response.data.description);
+        }
+        if (error.response.data.customCode === "101") {
+          alert("제출 아이디를 가져올 수 없습니다.");
+          console.log(error.response.data.description);
+        }
+      });
   };
 
   // 나가기 확인 모달 창 관리
