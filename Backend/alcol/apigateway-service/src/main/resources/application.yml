@@ -86,6 +86,13 @@ spring:
           predicates:
             - Path=/match-service/**          # http://i8b303.p.ssafy.io:8000/match-service/**
 
+        # battle-service request
+        - id: battle-service
+          uri: ws://i8b303.p.ssafy.io:9002/
+          predicates:
+            - Path=/battle-service/**
+
+
 access-token:
   expiration_time: 1000000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
