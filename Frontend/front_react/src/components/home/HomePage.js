@@ -228,7 +228,7 @@ const EfficiencyRanking = () => {
                 fontWeight: "bold",
                 fontSize: "20px",
               }}>
-              {efficiency[2].nickname}
+              {efficiency[1].nickname}
             </div>
           </div>
           <div>
@@ -317,19 +317,29 @@ const HomePage = () => {
   const setSendBattleStart = useSetRecoilState(sendBattleStart);
   const setIsSubmitSpin = useSetRecoilState(isSubmitSpin);
 
-  useEffect(()=>{setSelectedMode("-1");
-  setSelectedLanguage("-1");
-  setMatchingPlayerInfo({
-    userId: "",
-    otherId: "",
-    hostCheck: "",
-  });
-  setResultListResultInfo([]);
-  setSendConnect("-1");
-  setSendGetProblem("-1");
-  setSendBattleStart("-1");
-  setIsSubmitSpin(false);}, 
-  [setSelectedMode, setSelectedLanguage, setMatchingPlayerInfo,setResultListResultInfo, setSendConnect, setSendGetProblem, setSendBattleStart, setIsSubmitSpin])
+  useEffect(() => {
+    setSelectedMode("-1");
+    setSelectedLanguage("-1");
+    setMatchingPlayerInfo({
+      userId: "",
+      otherId: "",
+      hostCheck: "",
+    });
+    setResultListResultInfo([]);
+    setSendConnect("-1");
+    setSendGetProblem("-1");
+    setSendBattleStart("-1");
+    setIsSubmitSpin(false);
+  }, [
+    setSelectedMode,
+    setSelectedLanguage,
+    setMatchingPlayerInfo,
+    setResultListResultInfo,
+    setSendConnect,
+    setSendGetProblem,
+    setSendBattleStart,
+    setIsSubmitSpin,
+  ]);
 
   return (
     <div style={{ zIndex: "-2" }}>
