@@ -93,12 +93,12 @@ public class ProblemServiceImpl implements ProblemService
         String probTestInput = problemEntity.getProbTestInput();
         String probTestOutput = problemEntity.getProbTestOutput();
 
-        probDetailDesc = probDetailDesc.replaceAll("\\\\n", "</br>");
-        probInputDesc = probInputDesc.replaceAll("\\\\n", "</br>");
-        probOutputDesc = probOutputDesc.replaceAll("\\\\n", "</br>");
-        probTestInput = probTestInput.replaceAll("\\\\n", "</br>");
-        probTestOutput = probTestOutput.replaceAll("\\\\n", "</br>");
-
+//        probDetailDesc = probDetailDesc.replaceAll("\\\\n", "</br>");
+//        probInputDesc = probInputDesc.replaceAll("\\\\n", "</br>");
+//        probOutputDesc = probOutputDesc.replaceAll("\\\\n", "</br>");
+//        probTestInput = probTestInput.replaceAll("\\\\n", "</br>");
+//        probTestOutput = probTestOutput.replaceAll("\\\\n", "</br>");
+//
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
                 .prob_name(problemEntity.getProbName())
