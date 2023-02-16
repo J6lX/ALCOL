@@ -275,7 +275,7 @@ const RankingPage = () => {
           <p className="NanumSquare" style={{ fontSize: "1.5vw", color: "white" }}>
             Today's
           </p>
-          <Link to="/ranking">
+          <Link to="/ranking?mode=speed&page=1">
             <p
               className="NanumSquare"
               style={{ fontSize: "3vw", fontWeight: "bold", color: "white" }}>
