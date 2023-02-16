@@ -58,10 +58,18 @@ const ExampleTable = ({ inputData, outputData }) => {
   console.log(inputData, outputData);
 
   const inputList = inputData.split("$$").map((data) => {
-    return <p className="NanumSquare">{data}</p>;
+    return (
+      <p key={data} className="NanumSquare">
+        {data}
+      </p>
+    );
   });
   const outputList = outputData.split("$$").map((data) => {
-    return <p className="NanumSquare">{data}</p>;
+    return (
+      <p key={data} className="NanumSquare">
+        {data}
+      </p>
+    );
   });
   return (
     <div>
@@ -191,7 +199,6 @@ const Problem = () => {
           outputData={problemData.problemOutputTC}
         />
         <br />
-        <hr style={{ color: "gray" }} />
       </div>
     </div>
   );
