@@ -131,6 +131,7 @@ const Problem = () => {
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
+        console.log(originProblemData);
         window.scrollTo(0, 0);
       })
       .catch((error) => {
