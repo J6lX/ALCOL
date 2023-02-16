@@ -273,7 +273,7 @@ const CodingPlace = () => {
           gameVictory();
         } else if (response.data.bodyData.result === "fail") {
           alert(
-            `테스트케이스 ${
+            `틀렸습니다... 테스트케이스 ${
               response.data.bodyData.success_testcase_cnt / response.data.bodyData.all_testcase_cnt
             }`
           );
