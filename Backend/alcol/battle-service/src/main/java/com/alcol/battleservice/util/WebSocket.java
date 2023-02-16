@@ -38,7 +38,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
-@ServerEndpoint(value="/websocket", configurator = ServerEndpointConfigurator.class)
+@ServerEndpoint(value="/battle-service", configurator = ServerEndpointConfigurator.class)
 public class WebSocket {
 
     @Autowired
@@ -485,8 +485,8 @@ public class WebSocket {
                     other_mmr = sessionId2Obj.get(userId2SessionId.get(surrenderUserId)).user1.prevMmr;
                 }
 
-                user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
-                other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                 int change_user_mmr = (int) (user_mmr+30*(0-user_odds));
                 int change_other_mmr = (int) (other_mmr+30*(1-other_odds));
                 int result_user_mmr = change_user_mmr - user_mmr ;
@@ -752,8 +752,8 @@ public class WebSocket {
                              */
                             /**-----------------------------------------------------------------------------------------------*/
 
-                            user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
-                            other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                            user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                            other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                             int change_user_mmr = (int) (user_mmr+30*(1-user_odds));
                             int change_other_mmr = (int) (other_mmr+30*(0-other_odds));
                             int result_user_mmr = change_user_mmr - user_mmr;
@@ -1331,10 +1331,10 @@ public class WebSocket {
             if((user_time==-1 && user_memory==-1) && (other_time==-1 && other_memory==-1))
             {
                 System.out.println("두명 다 제출기록이 없습니다. 무승부 입니다.");
-                float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                 int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
 
-                float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                 int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
 
                 int result_user_mmr = change_user_mmr-user_mmr;
@@ -1459,10 +1459,10 @@ public class WebSocket {
                 if(user_score>other_score)
                 {
                     System.out.println("유저 1번이 이겼습니다.");
-                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                     int change_user_mmr = (int) (user_mmr+30*(1-user_odds));
 
-                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                     int change_other_mmr = (int) (other_mmr+30*(0-other_odds));
 
                     int result_user_mmr = change_user_mmr - user_mmr;
@@ -1548,10 +1548,10 @@ public class WebSocket {
                 else if(user_score<other_score)
                 {
                     System.out.println("유저 2번이 이겼습니다.");
-                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                     int change_user_mmr = (int) (user_mmr+30*(0-user_odds));
 
-                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                     int change_other_mmr = (int) (other_mmr+30*(1-other_odds));
 
                     int result_user_mmr = change_user_mmr - user_mmr;
@@ -1636,10 +1636,10 @@ public class WebSocket {
                 else
                 {
                     System.out.println("최적화전 비겼습니다.");
-                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
+                    float user_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
                     int change_user_mmr = (int) (user_mmr+30*(0.5-user_odds));
 
-                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (other_mmr - user_mmr) / 400)));
+                    float other_odds = 1.0f * 1.0f / (1 + 1.0f * (float)(Math.pow(10, 1.0f * (user_mmr - other_mmr) / 400)));
                     int change_other_mmr = (int) (other_mmr+30*(0.5-other_odds));
 
                     int result_user_mmr = change_user_mmr - user_mmr;
