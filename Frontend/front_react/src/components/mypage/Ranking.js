@@ -305,6 +305,7 @@ function Ranking() {
           });
           // 랭커 정보를 recoil에 저장
           setRankerList(rankerData);
+          window.scrollTo(0, 0);
         }
       })
       //응답 실패 시
@@ -427,20 +428,25 @@ function Ranking() {
                     </Col>
                   </Row>
                   <hr></hr>
-
+                  <Row justify="center">
+                    <Col>
+                      <h2
+                        style={{
+                          paddingTop: "5px",
+                        }}>
+                        랭킹 정보
+                      </h2>
+                    </Col>
+                  </Row>
                   {/* 내 랭킹 표시 */}
-                  <Row align="center" style={{ paddingTop: "40px" }}>
+                  <Row align="center" style={{ padding: "10px", paddingBottom: "25px" }}>
                     <Col justify="center" align="center" className="profileBox">
                       <UserDisplay />
                     </Col>
                   </Row>
 
                   {/* 랭커 순위 표시 */}
-                  <Row justify="center">
-                    <Col>
-                      <h2>랭킹 정보</h2>
-                    </Col>
-                  </Row>
+
                   <Row justify="center">
                     <Col justify="center" span={24}>
                       {/* 랭커 정보 표시 */}

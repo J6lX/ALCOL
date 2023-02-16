@@ -80,12 +80,12 @@ const Problem = () => {
           problemInputTC: response.data.prob_input_testcase,
           // 문제 난이도(티어)
           problemTier: response.data.prob_tier,
+          // 메모리 제한
+          problemMemoryLimit: response.data.prob_memory_limit,
           // 출력 데이터에 대한 설명
           problemOutputContent: response.data.prob_output_content,
           // 출력 테스트 케이스
-          problemOutputTC: response.data.problem_output_testcase,
-          // 메모리 제한
-          problemMemoryLimit: response.data.problem_memory_liimt,
+          problemOutputTC: response.data.prob_output_testcase,
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
@@ -130,7 +130,13 @@ const Problem = () => {
         <hr style={{ height: "1px", background: "gray" }} />
         <p
           className="NanumSquare"
-          style={{ color: "white", lineHeight: "2", padding: "5px", fontWeight: "lighter" }}>
+          style={{
+            color: "white",
+            lineHeight: "2",
+            padding: "5px",
+            fontWeight: "lighter",
+            whiteSpace: "preLine",
+          }}>
           {problemData.problemInputContent}
           <br />
           ex. {problemData.problemInputTC}

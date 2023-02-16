@@ -388,6 +388,7 @@ function Mypage() {
           setBackupRec(originBattleRec);
           setSeasonInfo(refinedLastSeason);
           setBackupSeason(refinedLastSeason);
+          window.scrollTo(0, 0);
         })
       )
       .catch((error) => {
