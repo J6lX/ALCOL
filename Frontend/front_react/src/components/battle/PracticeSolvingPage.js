@@ -136,7 +136,6 @@ const Problem = () => {
             lineHeight: "2",
             padding: "5px",
             fontWeight: "lighter",
-            whiteSpace: "preLine",
           }}>
           {problemData.problemInputContent}
           <br />

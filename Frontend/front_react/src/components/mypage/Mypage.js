@@ -677,7 +677,7 @@ function Mypage() {
 
   // 더 보기 단추 선택적으로 표시
   function ShowMore() {
-    if (resultCount > refinedData.length) {
+    if (resultCount >= refinedData.length) {
       return;
     } else {
       return (
@@ -721,7 +721,8 @@ function Mypage() {
             <Col
               sm={16}
               md={6}
-              lg={4}
+              lg={5}
+              xl={4}
               // className="text block"
               // className="text mypage_profile_block"
               className="mypage_text mypage_profile_block"
@@ -883,7 +884,8 @@ function Mypage() {
             <Col
               sm={16}
               md={6}
-              lg={4}
+              lg={5}
+              xl={4}
               // align="middle"
               style={{
                 margin: "6px",
@@ -913,8 +915,10 @@ function Mypage() {
                     </Col>
                   </Row>
                   <hr />
-                  <Row style={{ padding: "10px" }}>
-                    <SeasonCollection />
+                  <Row justify="center" style={{ padding: "10px" }}>
+                    <Col>
+                      <SeasonCollection />
+                    </Col>
                   </Row>
                 </Col>
               </Row>
