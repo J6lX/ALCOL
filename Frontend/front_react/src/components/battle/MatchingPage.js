@@ -115,7 +115,7 @@ function App() {
   if (playerInfo.otherId === "") {
     //프론트에서 소켓을 받기 위해 backend로 연결할때 필요한 코드
     // useEffect(()=>{const socket = new WebSocket(`ws://i8b303.p.ssafy.io:9111/websocket`)}, [])
-    const socket = new WebSocket(`ws://i8b303.p.ssafy.io:8000/match-service`);
+    socket = new WebSocket(`ws://i8b303.p.ssafy.io:8000/match-service`);
 
     socket.addEventListener("open", () => {
       const mode = userSelectedMode;

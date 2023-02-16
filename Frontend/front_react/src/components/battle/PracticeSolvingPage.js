@@ -116,7 +116,6 @@ const Problem = () => {
   const [problemData, setProblemData] = useRecoilState(PracticeProblemState);
   // 문제 번호로 요청해서 문제 정보를 받기
   useEffect(() => {
-    console.log("문제 요청 시작");
     axios
       .get(`http://i8b303.p.ssafy.io:8000/problem-service/getProblemDetail/${problemId}`)
       .then((response) => {
@@ -144,7 +143,6 @@ const Problem = () => {
         };
         // 정제한 데이터를 recoil에 저장
         setProblemData(originProblemData);
-        console.log("받은 데이터:", originProblemData);
         window.scrollTo(0, 0);
       })
       .catch((error) => {
