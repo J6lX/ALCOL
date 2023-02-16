@@ -5,6 +5,7 @@ body {
 
 .App {
   text-align: center;
+  font-family: "NanumSquareNeo";
 }
 
 /* 로고 CSS */
@@ -29,23 +30,27 @@ body {
 
 /* 로그인 버튼 */
 .loginButton {
+  font-family: "NanumSquareNeo";
   color: #e51c29;
   background-color: #fff0dc;
 }
 
 /* 회원가입 버튼 */
 .signUpButton {
+  font-family: "NanumSquareNeo";
   color: #a0a0a0;
   background-color: #17181c;
   border-color: #17181c;
 }
 
 .J6IX {
+  font-family: "NanumSquareNeo";
   color: #fef15d;
 }
 
 /* 밝은 흰색 텍스트 */
 .text {
+  font-family: "NanumSquareNeo";
   color: white;
   margin: 3px;
   align-items: center;
@@ -53,17 +58,20 @@ body {
 
 /* 노랑 텍스트 */
 .textHighlight {
+  font-family: "NanumSquareNeo";
   color: #fde14b;
 }
 
 /*  어두운 회색 텍스트 */
 .textDark {
+  font-family: "NanumSquareNeo";
   color: #a0a0a0;
   margin: 3px;
 }
 
 /* 푸터 테마 */
 .footer {
+  font-family: "NanumSquareNeo";
   padding: 20px;
   text-align: center;
   background-color: #17181c;
