@@ -1,3 +1,7 @@
+body {
+  font-family: "NanumSquareNeo";
+}
+
 /*  페이지 크기 조절 */
 .pageBody {
   height: 60vh;
@@ -6,8 +10,8 @@
 
 /* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
 .block {
+  font-family: "NanumSquareNeo";
   background-color: #1d1e22;
-  /* background-color: #0033ff; */
   border: 1px solid #5cfdfd;
   margin: 10px;
   border-radius: 15px;
@@ -16,16 +20,15 @@
 
 /* 친구 목록, 지난 시즌 조회용 블록 CSS */
 .miniBlock {
-  /* background-color: #1d1e22; */
+  font-family: "NanumSquareNeo";
   background-color: pink;
   border: 1px solid white;
-  /* border-radius: 15px; */
   text-align: center;
-  /* margin-bottom: 30px; */
 }
 
 /* 설정 버튼 */
 .settingIcon {
+  font-family: "NanumSquareNeo";
   width: 22px;
   height: 22px;
 }
@@ -43,24 +46,16 @@
   border-radius: 100%;
 }
 
-/* 스트릭 박스 */
-.streakBox {
-  justify-content: center;
-  margin: 5px;
-  width: 80%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 15px;
-}
-
 /* 모드 선택란(모두/스피드전/효율성전) */
 .modeFilter {
+  font-family: "NanumSquareNeo";
   color: white;
   margin: 10px;
 }
 
 /* 페이지 기본 텍스트 */
 .mypage_text {
+  font-family: "NanumSquareNeo";
   text-decoration-color: white;
   padding: 5px;
   font-size: 15px;
@@ -69,12 +64,14 @@
 
 /* 중간 제목(스피드, 효율성) */
 .miniTitle {
+  font-family: "NanumSquareNeo";
   color: white;
   font-size: 20px;
 }
 
 /* 최근 20전 승률 그래프 */
 .winrateCircle {
+  font-family: "NanumSquareNeo";
   width: 128px;
   height: 128px;
 }
@@ -129,7 +126,6 @@
 /* css 추가 */
 
 .mypage_profile_block {
-  /* background-color: red; */
   border: 1px solid #e5e5e7;
   border-radius: 8px;
   margin-right: 10px;
@@ -200,10 +196,12 @@
 }
 
 .mypage_text_center {
+  font-family: "NanumSquareNeo";
   text-align: center;
 }
 
 .mypage_showmore {
+  font-family: "NanumSquareNeo";
   display: flex;
   justify-content: center;
   color: white;

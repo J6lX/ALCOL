@@ -83,7 +83,7 @@ function LoginTag(props) {
     // 로그인 정보가 없는 경우 로그인 및 회원가입 버튼 표시
   } else {
     return (
-      <Row align="center" justify="end" style={{ height: "64px" }}>
+      <Row align="center" justify="end" style={{ height: "64px", fontFamily: "NanumSquareNeo" }}>
         <Col>
           <Link to="/login">
             <Button className="loginButton">LOGIN</Button>

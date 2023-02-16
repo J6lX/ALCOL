@@ -136,7 +136,7 @@ function LoginPage() {
       <span className="overlay">
         <div className="gradientsquare">
           <div className="loginbackground">
-            <h1 className="whiteletter" style={{ paddingTop: "3vw" }}>
+            <h1 className="whiteletter" style={{ paddingTop: "3vw", fontFamily: "NanumSquareNeo" }}>
               로그인
             </h1>
             <Form
@@ -170,7 +170,10 @@ function LoginPage() {
                   placeholder="비밀번호"
                 />
               </Form.Item>
-              <a className="login-form-forgot" style={{ color: "lightgray" }} href="/">
+              <a
+                className="login-form-forgot"
+                style={{ color: "lightgray", fontFamily: "NanumSquareNeo" }}
+                href="/">
                 비밀번호를 잊으셨나요?
               </a>
               {/* <Form.Item>
@@ -183,12 +186,12 @@ function LoginPage() {
                 <Button
                   htmlType="submit"
                   className="login-form-button"
-                  style={{ height: "40px", margin: "5px" }}>
+                  style={{ height: "40px", margin: "5px", fontFamily: "NanumSquareNeo" }}>
                   <b>로그인</b>
                 </Button>
               </Form.Item>
               <Form.Item>
-                <a style={{ color: "lightgray" }} href="/register">
+                <a style={{ color: "lightgray", fontFamily: "NanumSquareNeo" }} href="/register">
                   회원가입
                 </a>
               </Form.Item>
