@@ -10,6 +10,18 @@ import axios from "axios";
 
 let socket = null;
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
 function UserInfo() {
   const [nickname, setNickname] = React.useState("a");
   const [speedTier, setSpeedTier] = React.useState("a");
@@ -28,7 +40,7 @@ function UserInfo() {
       setNickname(response.data.nickname);
       setSpeedTier(response.data.speed_tier);
       setOptTier(response.data.optimization_tier);
-      setImageAddress(response.data.stored_file_name);
+      setImageAddress(isNew(response.data.stored_file_name));
       setTimeout(() => {}, 500);
       let sptier;
       if (response.data.speed_tier[0] === "B") {
@@ -82,11 +94,13 @@ function UserInfo() {
           lineHeight: "50px",
         }}
         className="battle_user_info_contents">
-        <img
-          src={imageAddress}
-          alt=""
-          style={{ width: "40px", height: "40px", marginRight: "10px", borderRadius: "50%" }}
-        />
+        <div>
+          <img
+            src={imageAddress}
+            alt=""
+            style={{ width: "40px", height: "40px", marginRight: "10px", borderRadius: "50%" }}
+          />
+        </div>
         {nickname}
       </Col>
       <Col span={1} style={{ lineHeight: "50px" }} className="battle_user_info_contents">
