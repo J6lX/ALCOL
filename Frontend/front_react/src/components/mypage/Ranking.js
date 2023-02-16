@@ -467,10 +467,6 @@ function Ranking() {
                           columns={rankingLabel}
                           showHeader={false}
                           pagination={false}
-                          // expandable={{
-                          //   innerRow,
-                          //   defaultExpandedRowKeys: ["0"],
-                          // }}
                         />
                         <Pagination
                           defaultCurrent={current}

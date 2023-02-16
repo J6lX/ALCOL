@@ -6,6 +6,7 @@ body {
 
 .block {
   border-color: white;
+  border-radius: 5px;
 }
 
 .textDefault {
@@ -37,7 +38,7 @@ body {
     position: absolute;
     left: 50%;
     font-size: 15px;
-    transform: translate(-50%, 45px);
+    transform: translate(-50%, 70px);
   }
 }
 /* 큰 크기일 때 */
@@ -53,7 +54,13 @@ body {
 .bodyblock {
   position: relative;
   top: 30%;
-  transform: translate(0%, -15%);
+  transform: translate(0%, -10%);
+}
+/* 작은 크기일 때 */
+@media (max-width: 770px) {
+  .bodyblock {
+    transform: translate(0%, -2%);
+  }
 }
 
 .modeSelector {
