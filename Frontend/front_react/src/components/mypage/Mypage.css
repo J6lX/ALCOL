@@ -162,6 +162,7 @@
   margin-top: 10px;
   border: 1px solid #e5e5e7;
   border-radius: 8px;
+  padding-bottom: 10px;
 }
 
 .mypage_tier_bold_font {
@@ -200,4 +201,10 @@
 
 .mypage_text_center {
   text-align: center;
+}
+
+.mypage_showmore {
+  display: flex;
+  justify-content: center;
+  color: white;
 }

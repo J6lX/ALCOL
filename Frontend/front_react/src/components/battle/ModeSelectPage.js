@@ -15,6 +15,18 @@ import "./ModeSelectPage.css";
 import axios from "axios";
 import Cursor from "./Cursor";
 
+// 사진이 없는 경우 기본 사진을 반환하는 용도
+function isNew(picture) {
+  // 기존 사진이 있는 경우
+  if (picture) {
+    return picture;
+  }
+  // 기존 사진이 없는 경우
+  else {
+    return `https://kimjusung-bucket.s3.ap-northeast-2.amazonaws.com/loofy.png`;
+  }
+}
+
 function UserInfo({ setMode, setLanguage }) {
   const [nickname, setNickname] = React.useState("");
   const [speedTier, setSpeedTier] = React.useState("");
@@ -35,7 +47,7 @@ function UserInfo({ setMode, setLanguage }) {
           setNickname(response.data.nickname);
           setSpeedTier(response.data.speed_tier);
           setOptTier(response.data.optimization_tier);
-          setImageAddress(response.data.stored_file_name);
+          setImageAddress(isNew(response.data.stored_file_name));
         })
         .catch((error) => {
           let customCode = error.response.data.custom_code;
