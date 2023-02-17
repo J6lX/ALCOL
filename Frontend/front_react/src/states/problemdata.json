@@ -1,0 +1,148 @@
+{
+	"problems": [
+		{
+			"problem_no" : 1001,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1002,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "silver"
+		},
+		{
+			"problem_no" : 1003,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "bronze"
+		},
+		{
+			"problem_no" : 1004,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "diamond"
+		},
+		{
+			"problem_no" : 1005,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "alcol"
+		},
+		{
+			"problem_no" : 1006,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "platinum"
+		},
+		{
+			"problem_no" : 1007,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1008,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "platinum"
+		},
+		{
+			"problem_no" : 1009,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1010,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1011,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "platinum"
+		},
+		{
+			"problem_no" : 1012,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1013,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1014,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1015,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1016,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1017,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "silver"
+		},
+		{
+			"problem_no" : 1018,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1019,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1020,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "bronze"
+		},
+		{
+			"problem_no" : 1021,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1022,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		},
+		{
+			"problem_no" : 1023,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "diamond"
+		},
+		{
+			"problem_no" : 1024,
+			"problem_title": "집에 가는 길",
+			"problem_category" : ["bfs", "수학", "dfs"],
+			"problem_tier": "gold"
+		}
+	]
+}

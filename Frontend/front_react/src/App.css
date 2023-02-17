@@ -1,0 +1,122 @@
+* {
+  /* 기본 폰트 설정 */
+  /* font-family: "Noto Sans KR", sans-serif; */
+  /* Unordered List <ul>이나, Ordered List <ol>의 하위에 속한 List <li>에 기호나, 숫자를 표시 되지 않게 하는 CSS 스타일 */
+  list-style: none;
+  /* 글씨에 밑줄, 윗줄, 중간줄을 넣을때 사용하는 속성 */
+  text-decoration: none;
+  /* 표의 테두리와 셀의 테두리 사이의 간격을 어떻게 처리할지 정하는 속성 collapse : 표의 테두리와 셀 사이의 간격을 없애고, 겹치는 부분을 한 줄로 나타냄 */
+  border-collapse: collapse;
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  background-color: #16171b;
+  font-family: "NanumSquareNeo";
+  overflow-x: hidden;
+}
+
+/* 아래의 모든 코드는 영역::코드로 사용 */
+.body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.body::-webkit-scrollbar-thumb {
+  height: 5px;
+  background: #000000;
+
+  border-radius: 10px;
+}
+
+.body::-webkit-scrollbar-track {
+  background: rgba(58, 58, 58, 0.4);
+}
+
+.App {
+  text-align: center;
+}
+
+/* 로고 CSS */
+.logo {
+  width: 120px;
+  height: 34px;
+  margin: 16px 24px 16px 0;
+}
+
+/* 메뉴 항목 버튼 */
+.menus {
+  margin: 20px;
+  padding: 5px;
+}
+
+/* 로그인 버튼 */
+.loginButton {
+  color: #e51c29;
+  background-color: #fff0dc;
+  margin: 5px;
+}
+
+/* 회원가입 버튼 */
+.signUpButton {
+  color: #a0a0a0;
+  background-color: #17181c;
+  border-color: #17181c;
+  margin: 5px;
+}
+
+.J6IX {
+  color: #fef15d;
+}
+
+/* 밝은 흰색 텍스트 */
+.text {
+  color: white;
+  margin: 3px;
+}
+
+/* 노랑 텍스트 */
+.textHighlight {
+  color: #fde14b;
+}
+
+/*  어두운 회색 텍스트 */
+.textDark {
+  color: #a0a0a0;
+  margin: 3px;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* 선택된 필터 색상 변경 */
+.ant-menu-item-selected {
+  background-color: #5cfdfd !important;
+  color: #16171b !important;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 7px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #ababab;
+}
+::-webkit-scrollbar-track {
+  background-color: #323232;
+}

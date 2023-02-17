@@ -1,0 +1,188 @@
+.matching_background {
+  height: 100vh;
+  background: url(/src/assets/battle_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  overflow-y: scroll;
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+
+  overflow: hidden;
+}
+
+.matching_background::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+.battle_user_info_row {
+  position: relative;
+  display: flex;
+}
+
+.battle_user_info_contents {
+  background-color: rgb(255, 255, 255, 0.5);
+  height: 50px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.icon_tier {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  height: 85%;
+}
+
+.ban_title {
+  color: white;
+  text-align: center;
+  font-size: 25px;
+}
+
+.ban_info {
+  color: white;
+  text-align: center;
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.ban_algo_box {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 15px #ff7300, 0 0 15px #ff7300 inset;
+  border: 2px solid #ffffff;
+}
+
+
+.ban_algo_box:after {
+  display: block;
+  content: "";
+  padding-bottom: 100%;
+}
+
+.active {
+  box-shadow: 0 0 5px black;
+  border: 2px solid black;
+}
+
+.ban_algo_box:hover {
+  background-color: rgba(161, 161, 161, 0.6);
+}
+
+.ban_player_info {
+  width: 100%;
+  height: 80px;
+  background-color: #ea5723;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  text-align: right;
+  padding-right: 10px;
+  line-height: 70px;
+}
+
+.ban_algo_contents {
+  left: 50%;
+  top: 50%;
+  text-align: center;
+}
+
+
+.ban_hands_left {
+  position: absolute;
+  width: 430px;
+  /* margin-top: -200px; */
+  z-index: 10;
+  animation: ban_hands_left_Ani 2s;
+  animation-fill-mode: forwards; /* 애니메이션이 끝나면 그대로 멈춤 */
+  animation-iteration-count: infinite; /* 반복을 정해줌 infinite:무한번 */
+  animation-direction: alternate; /* 왔다갔다 하게해줌 */
+  animation-delay: 1s; /* 지연시간 */
+  filter: drop-shadow(10px 6px 6px #0c0000); /*그림자*/
+}
+
+@keyframes ban_hands_left_Ani {
+  /*애니메이션 정의:시작점이 기준 */
+  0% {
+    margin-top: -190px;
+  } /* 시작 */
+  100% {
+    margin-top: -160px;
+  } /*종료 */
+}
+
+.ban_hands_right {
+  position: absolute;
+  z-index: 10;
+  animation: ban_hands_right_Ani 2s;
+  animation-fill-mode: forwards; /* 애니메이션이 끝나면 그대로 멈춤 */
+  animation-iteration-count: infinite; /* 반복을 정해줌 infinite:무한번 */
+  animation-direction: alternate; /* 왔다갔다 하게해줌 */
+  animation-delay: 1.5s; /* 지연시간 */
+  filter: drop-shadow(10px 6px 6px #0c0000); /*그림자*/
+}
+
+@keyframes ban_hands_right_Ani {
+  /*애니메이션 정의:시작점이 기준 */
+  0% {
+    margin-top: -370px;
+  } /* 시작 */
+  100% {
+    margin-top: -330px;
+  } /*종료 */
+}
+
+.banButton {
+  width: 150px;
+  height: 30px;
+  margin: auto;
+  margin-top: -50px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 30px;
+  background-color: #fef662;
+  color: rgb(0, 0, 0);
+  z-index: 15;
+}
+
+.ban_algo_problem_title {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1vw;
+  color: white;
+  margin-top: 50px;
+}
+
+.ban_algo_problem_category {
+  text-align: center;
+  font-size: 1vw;
+  color: white;
+  margin-top: 50px;
+}
+
+@media screen and (max-width: 1200px) {
+  .ban_hands_left {
+    display: none;
+  }
+  .ban_hands_right {
+    display: none;
+  }
+  .ban_title {
+    display: none;
+  }
+  .ban_info {
+    display: none;
+  }
+  .banButton {
+    margin-top: 30px;
+  }
+}

@@ -1,0 +1,109 @@
+body {
+  background-color: #16171b;
+  font-family: "NanumSquareNeo";
+}
+
+.App {
+  text-align: center;
+  font-family: "NanumSquareNeo";
+}
+
+.NanumSquare {
+  font-family: "NanumSquareNeo";
+  font-weight: 400;
+  size: 32px;
+}
+
+/* 로고 CSS */
+.logo {
+  width: 120px;
+  height: 30px;
+  margin: 1%;
+}
+
+/* 메뉴 항목 버튼 */
+.menus {
+  margin: 20px;
+  padding: 5px;
+}
+
+/* collapse 스타일 */
+
+.miniMenus {
+  border: none;
+  color: #16171b;
+}
+
+/* 로그인 버튼 */
+.loginButton {
+  font-family: "NanumSquareNeo";
+  color: #e51c29;
+  background-color: #fff0dc;
+}
+
+/* 회원가입 버튼 */
+.signUpButton {
+  font-family: "NanumSquareNeo";
+  color: #a0a0a0;
+  background-color: #17181c;
+  border-color: #17181c;
+}
+
+.J6IX {
+  font-family: "NanumSquareNeo";
+  color: #fef15d;
+}
+
+/* 밝은 흰색 텍스트 */
+.text {
+  font-family: "NanumSquareNeo";
+  color: white;
+  margin: 3px;
+  align-items: center;
+}
+
+/* 노랑 텍스트 */
+.textHighlight {
+  font-family: "NanumSquareNeo";
+  color: #fde14b;
+}
+
+/*  어두운 회색 텍스트 */
+.textDark {
+  font-family: "NanumSquareNeo";
+  color: #a0a0a0;
+  margin: 3px;
+}
+
+/* 푸터 테마 */
+.footer {
+  font-family: "NanumSquareNeo";
+  padding: 20px;
+  text-align: center;
+  background-color: #17181c;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* 선택된 필터 색상 변경 */
+.ant-menu-item-selected {
+  background-color: #5cfdfd !important;
+  color: #16171b !important;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

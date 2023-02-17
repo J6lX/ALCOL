@@ -1,0 +1,145 @@
+body {
+  font-family: "NanumSquareNeo";
+  height: 100vh;
+  max-width: 100%;
+}
+
+.bodyBlock {
+  position: relative;
+  top: 5%;
+  border-color: #61dafb;
+  transform: translate(0%, -70px);
+}
+@media (max-width: 770px) {
+  .bodyBlock {
+    top: 20%;
+    border-color: #61dafb;
+    margin-top: 4%;
+  }
+}
+@media (min-width: 1050px) {
+  .bodyBlock {
+    border-color: #61dafb;
+  }
+}
+
+.textDefault {
+  color: white;
+}
+
+.textDark {
+  color: #a0a0a0;
+}
+
+.filterText {
+  font-size: 24px;
+}
+
+.headerImg {
+  position: relative;
+  width: 100%;
+}
+
+.select {
+  margin: 10px;
+}
+
+.rankTitle {
+  z-index: 1;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  font-size: 50px;
+  transform: translate(-50%, -50%);
+}
+@media (max-width: 780px) {
+  .rankTitle {
+    z-index: 1;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    font-size: 40px;
+    transform: translate(-50%, -50%);
+  }
+}
+@media (min-width: 1050px) {
+  .rankTitle {
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    font-size: 70px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.rankerBlock {
+  border: solid 0.5px white;
+  background-color: #1d1e22;
+  border-radius: 15px;
+  margin: 5px;
+  padding: 4px;
+  text-align: center;
+}
+
+.modeSelector {
+  position: relative;
+  top: 50%;
+  transform: translate(0%, -50%);
+}
+
+.border {
+  color: white;
+}
+
+.profileBox {
+  width: 90%;
+  height: 100%;
+  text-align: center;
+  background: white;
+  border-radius: 15px;
+}
+
+h1 {
+  color: white;
+  position: relative;
+  transform: translate(0%, -40%);
+}
+
+h2 {
+  color: white;
+  margin: 10px;
+  font-size: 40px;
+}
+@media (max-width: 720px) {
+  h2 {
+    color: white;
+    margin: 10px;
+    font-size: 30px;
+  }
+}
+@media (min-width: 980px) {
+  h2 {
+    color: white;
+    margin: 10px;
+    font-size: 50px;
+  }
+}
+
+h3 {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+hr {
+  border: 0;
+  width: 110%;
+  height: 0.5px;
+  background: #61dafb;
+}
+
+p {
+  font-family: "NanumNeoSquare";
+  margin: 5px;
+}/*# sourceMappingURL=Ranking.css.map */

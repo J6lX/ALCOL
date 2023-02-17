@@ -1,0 +1,58 @@
+.result_background {
+  height: 100vh;
+  background: url(/src/assets/result_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  overflow-y: scroll;
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.result_title {
+  margin: auto;
+  margin-bottom: 1%;
+  margin-top: 6vh;
+  width: 30vw;
+  height: auto;
+  display: block;
+}
+
+.result_box {
+  width: 60vw;
+  height: 50vh;
+  margin: auto;
+  padding-top: 3%;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 0 15px white, 0 0 15px white inset;
+  border: 2px solid #ffffff;
+}
+
+.result_content {
+  width: 50vw;
+  height: 7vh;
+  left: 610px;
+  top: 412px;
+
+  margin: auto;
+  margin-bottom: 10px;
+
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.result_text {
+  margin-left: 2vw;
+  line-height: 7vh;
+  color: white;
+  font-size: 20px;
+  font-weight: lighter;
+  font-family: "NanumSquareNeo";
+}
+
+.result_button {
+  background-color: rgba(255, 255, 255, 0.6);
+  height: 50px;
+  font-family: "NanumSquareNeo";
+}

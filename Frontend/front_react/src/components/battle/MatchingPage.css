@@ -1,0 +1,106 @@
+.matching_background {
+  height: 100vh;
+  background: url(/src/assets/battle_background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  overflow-y: scroll;
+
+  -ms-overflow-style: none; /* 인터넷 익스플로러 */
+  scrollbar-width: none; /* 파이어폭스 */
+}
+
+.matching_background::-webkit-scrollbar {
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
+}
+
+.battle_user_info_row {
+  position: relative;
+  display: flex;
+}
+
+.battle_user_info_contents {
+  background-color: rgb(255, 255, 255, 0.5);
+  border-radius: 3px;
+  height: 50px;
+  margin-top: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.icon_tier {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 75%;
+}
+
+html,
+body {
+  width: 100%;
+  background: rgb(255, 255, 255, 0);
+}
+
+.hourglass {
+  display: block;
+  background: rgb(255, 255, 255, 0);
+  margin: 3em auto;
+  width: 1em;
+  height: 2em;
+  animation: hourglass 1s linear infinite;
+}
+
+.outer {
+  fill: rgba(255, 255, 255);
+}
+
+.middle {
+  fill: rgb(255, 255, 255, 0);
+}
+
+@keyframes hourglass {
+  0% {
+    transform: rotate(0deg);
+    box-shadow: inset rgba(255, 255, 255, 0) 0 -0em 0 0, inset rgb(255, 255, 255, 0) 0 -2em 0 0,
+      inset rgba(255, 255, 255, 0) 0 -4em 0 0;
+  }
+  80% {
+    transform: rotate(0deg);
+    box-shadow: inset rgba(255, 255, 255, 0) 0 -2em 0 0, inset rgb(255, 255, 255, 0) 0 -2em 0 0,
+      inset rgba(255, 255, 255, 0) 0 -2em 0 0;
+  }
+  100% {
+    transform: rotate(180deg);
+    box-shadow: inset rgba(255, 255, 255, 0) 0 -2em 0 0, inset rgb(255, 255, 255, 0) 0 -2em 0 0,
+      inset rgba(255, 255, 255, 0) 0 -2em 0 0;
+  }
+}
+
+.matching_helper {
+  text-align: center;
+  background-color: rgb(0, 0, 0, 0.6);
+  padding: 10px 30px 10px 30px;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.matchingButton {
+  /* position: fixed; */
+  width: 150px;
+  height: 30px;
+  margin: auto;
+  margin-top: 30vh;
+  text-align: center;
+  font-family: "NanumSquareNeo";
+  font-size: 15px;
+  line-height: 30px;
+  background-color: #fef662;
+  color: rgb(0, 0, 0);
+}
+
+.matchingButton:hover {
+  filter: drop-shadow(0 0 15px #f7bd63) contrast(3);
+}

@@ -1,0 +1,166 @@
+$text-default: white;
+$text-dark: #a0a0a0;
+$neon-blue: #61dafb;
+$highlight: #fde14b;
+
+body {
+  font-family: "NanumSquareNeo";
+  height: 100vh;
+  max-width: 100%;
+}
+
+// 블록 위치 설정
+.bodyBlock {
+  position: relative;
+  top: 5%;
+  border-color: $neon-blue;
+  transform: translate(0%, -70px);
+
+  //페이지 크기 별 css 디자인 수정
+  // 작은 크기
+  @media (max-width: 770px) {
+    top: 20%;
+    border-color: $neon-blue;
+    margin-top: 4%;
+  }
+
+  // 큰 크기
+  @media (min-width: 1050px) {
+    border-color: $neon-blue;
+  }
+}
+
+// 기본 텍스트(흰색)
+.textDefault {
+  color: $text-default;
+}
+
+// 다크 모드 텍스트(회색)
+.textDark {
+  color: $text-dark;
+}
+
+// 필터 토글 글씨 크기 조절
+.filterText {
+  font-size: 24px;
+}
+
+// 헤더 이미지
+.headerImg {
+  position: relative;
+  width: 100%;
+}
+
+// 토글 버튼
+.select {
+  margin: 10px;
+}
+
+// 이미지 안에 들어갈 제목
+.rankTitle {
+  z-index: 1;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  font-size: 50px;
+  transform: translate(-50%, -50%);
+
+  //페이지 크기 별 css 디자인 수정
+  // 작은 크기
+  @media (max-width: 780px) {
+    z-index: 1;
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    font-size: 40px;
+    transform: translate(-50%, -50%);
+  }
+
+  // 큰 크기
+  @media (min-width: 1050px) {
+    z-index: 1;
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    font-size: 70px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// 검색 페이지 + 모드 선택 + 랭킹 표시 body
+.rankerBlock {
+  border: solid 0.5px white;
+  background-color: #1d1e22;
+  border-radius: 15px;
+  margin: 5px;
+  padding: 4px;
+  text-align: center;
+}
+
+// 모드 선택 및 랭킹 표시 블록
+.modeSelector {
+  position: relative;
+  top: 50%;
+  transform: translate(0%, -50%);
+}
+
+.border {
+  color: $text-default;
+}
+
+// 유저 랭킹 정보 표시 창
+.profileBox {
+  width: 90%;
+  height: 100%;
+  text-align: center;
+  background: white;
+  border-radius: 15px;
+}
+
+// 큰 제목
+h1 {
+  color: $text-default;
+  position: relative;
+  transform: translate(0%, -40%);
+}
+
+// 중간 제목[랭킹 정보]
+h2 {
+  color: $text-default;
+  margin: 10px;
+  font-size: 40px;
+
+  //페이지 크기 별 css 디자인 수정
+  // 작은 크기
+  @media (max-width: 720px) {
+    color: $text-default;
+    margin: 10px;
+    font-size: 30px;
+  }
+
+  // 큰 크기
+  @media (min-width: 980px) {
+    color: $text-default;
+    margin: 10px;
+    font-size: 50px;
+  }
+}
+
+// 작은 제목(모드 선택 버튼)
+h3 {
+  color: $text-default;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+hr {
+  border: 0;
+  width: 110%;
+  height: 0.5px;
+  background: $neon-blue;
+}
+
+p {
+  font-family: "NanumNeoSquare";
+  margin: 5px;
+}

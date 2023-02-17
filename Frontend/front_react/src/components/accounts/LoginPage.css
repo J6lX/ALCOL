@@ -1,0 +1,63 @@
+body {
+  font-family: "NanumSquareNeo";
+}
+
+.gradientsquare {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right bottom, rgb(92, 253, 253), rgb(250, 197, 87));
+  width: 610px;
+  height: 390px;
+  border-radius: 13px;
+}
+
+.whiteletter {
+  color: white;
+}
+
+.loginbackground {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #16171b;
+  width: 98%;
+  height: 96%;
+  border: 4px solid transparents;
+  border-radius: 10px;
+}
+
+.inputwidth {
+  font-family: "NanumSquareNeo";
+  width: 60%;
+  margin: auto;
+  margin-bottom: 12px;
+}
+
+.middle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.fullmiddle_login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #16171b;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

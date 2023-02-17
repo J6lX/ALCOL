@@ -1,0 +1,45 @@
+.BattleNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  width: 100vw;
+  height: 7vh;
+  background-color: white;
+}
+
+.NanumSquare {
+  font-family: "NanumSquareNeo";
+  font-weight: 400;
+  size: 32px;
+}
+
+.PyeongChangPeace {
+  font-family: "PyeongChangPeace";
+  font-weight: bold;
+  size: 32px;
+}
+
+.scrollDesign::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollDesign::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollDesign::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: lightgray;
+}
+
+.scrollDesign::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+}
+
+.MessageToast {
+  position: absolute;
+  top: 10%;
+  left: 60%;
+}

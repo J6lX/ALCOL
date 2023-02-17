@@ -1,0 +1,208 @@
+body {
+  font-family: "NanumSquareNeo";
+}
+
+/*  페이지 크기 조절 */
+.pageBody {
+  height: 60vh;
+  margin-top: 60px;
+}
+
+/* 각 블록(프로필, 스트릭/티어, 친구목록, 전적기록) CSS */
+.block {
+  font-family: "NanumSquareNeo";
+  background-color: #1d1e22;
+  border: 1px solid #5cfdfd;
+  margin: 10px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+/* 친구 목록, 지난 시즌 조회용 블록 CSS */
+.miniBlock {
+  font-family: "NanumSquareNeo";
+  background-color: pink;
+  border: 1px solid white;
+  text-align: center;
+}
+
+/* 설정 버튼 */
+.settingIcon {
+  font-family: "NanumSquareNeo";
+  width: 22px;
+  height: 22px;
+}
+
+/* 사용자 프사 */
+.mypage_userImg {
+  width: 150px;
+  height: 150px;
+  margin-top: 30px;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.3);
+  font-family: "oneMobilePOP";
+  border-radius: 100%;
+}
+
+/* 모드 선택란(모두/스피드전/효율성전) */
+.modeFilter {
+  font-family: "NanumSquareNeo";
+  color: white;
+  margin: 10px;
+}
+
+/* 페이지 기본 텍스트 */
+.mypage_text {
+  font-family: "NanumSquareNeo";
+  text-decoration-color: white;
+  padding: 5px;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* 중간 제목(스피드, 효율성) */
+.miniTitle {
+  font-family: "NanumSquareNeo";
+  color: white;
+  font-size: 20px;
+}
+
+/* 최근 20전 승률 그래프 */
+.winrateCircle {
+  font-family: "NanumSquareNeo";
+  width: 128px;
+  height: 128px;
+}
+
+/* 강조용 텍스트 */
+.textHighlight {
+  font-family: "NanumSquareNeo";
+  font-weight: bold;
+  color: #fde14b;
+  padding: 5px;
+}
+
+/* 티어 표시 그래프 */
+.tierGraph {
+  position: relative;
+  z-index: 11;
+  margin: 5px;
+  width: 90%;
+  height: 90%;
+  white-space: pre-wrap;
+}
+
+/* 티어 뱃지(스피드, 효율성) */
+.tierBadge {
+  position: relative;
+  width: 60%;
+  height: 60%;
+  transform: translate(0px, -130%);
+}
+
+/* 뱃지 안에 들어갈 숫자(세부 티어 */
+.tierNo {
+  z-index: 10;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 20px;
+  transform: translate(-50%, -50%);
+}
+
+/* 페이지네이션 커스텀 */
+.ant-pagination .ant-pagination-item-active {
+  border: none;
+  background-color: #1d1e22;
+}
+
+/* 페이지네이션 가운데 고정 */
+.ant-table-wrapper .ant-table-pagination-right {
+  justify-content: center !important;
+}
+
+/* css 추가 */
+
+.mypage_profile_block {
+  border: 1px solid #e5e5e7;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.mypage_tier_wrap_box {
+  /* background-color: green; */
+  border: 1px solid #e5e5e7;
+  border-radius: 8px;
+}
+
+.mypage_useImg_box {
+  display: block;
+  margin: auto;
+  align-items: center;
+}
+
+.mypage_record_block {
+  background-color: #1d1e22;
+  /* background-color: pink; */
+  text-align: center;
+
+  border: 1px solid #e5e5e7;
+  border-radius: 8px;
+  margin-right: 10px;
+}
+
+.mypage_record_wrap_box {
+  /* background-color: green; */
+  margin-top: 10px;
+  border: 1px solid #e5e5e7;
+  border-radius: 8px;
+  padding-bottom: 10px;
+}
+
+.mypage_tier_bold_font {
+  font-family: "NanumSquareNeo";
+  color: #e5e5e7;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.mypage_tier_large_font {
+  font-family: "NanumSquareNeo";
+  /* color: #e5e5e7; */
+  font-weight: lighter;
+  font-size: 36px;
+}
+
+.mypage_tier_small_font {
+  font-family: "NanumSquareNeo";
+  color: #e5e5e7;
+  /* font-weight: */
+  font-size: 15px;
+}
+
+.mypage_tier_detail_font {
+  font-family: "NanumSquareNeo";
+  color: #b7b6b9;
+  font-weight: lighter;
+  font-size: 14px;
+}
+
+.mypage_record_tier_font {
+  font-family: "NanumSquareNeo";
+  /* font-weight: bolder; */
+  font-size: 20px;
+}
+
+.mypage_text_center {
+  font-family: "NanumSquareNeo";
+  text-align: center;
+}
+
+.mypage_showmore {
+  font-family: "NanumSquareNeo";
+  display: flex;
+  justify-content: center;
+  color: white;
+}

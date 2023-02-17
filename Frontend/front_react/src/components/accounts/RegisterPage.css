@@ -1,0 +1,63 @@
+.contents_background {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: url(/src/assets/background_login.png);
+  background-size: cover;
+  padding-top: 3%;
+}
+
+.contents_gradient {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 555px;
+  height: 395px;
+  margin: auto;
+  background: linear-gradient(to right bottom, #00a3ff, #fac557);
+  border-radius: 13px;
+}
+
+.contents_box {
+  width: 550px;
+  height: 390px;
+  padding: 20px 100px 20px 100px;
+  background-color: #1d1e22;
+  border-radius: 13px;
+}
+
+.form_input {
+  background-color: #27292e;
+  border-radius: 13px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #47474a;
+}
+
+.box1 {
+  width: 200px;
+  height: 100px;
+  background-color: #444444;
+  margin: 10px;
+}
+
+.form_register {
+  background-color: #27292e;
+}
+
+.form_register input {
+  color: white;
+}
+
+.button_register {
+  border-radius: 3px;
+  background-color: white;
+  color: black;
+}
+
+.button_center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
