@@ -53,6 +53,7 @@ const ContinuousBattlePage = () => {
   const [checkConnect, setCheckConnect] = useRecoilState(sendConnect);
   const [checkGetProblem, setCheckGetProblem] = useRecoilState(sendGetProblem);
   const [checkBattleStart, setCheckBattleStart] = useRecoilState(sendBattleStart);
+  const [checkSubmit, setCheckSubmit] = useState(false);
   const setIsSubmitSpin = useSetRecoilState(isSubmitSpin);
   // const code = useRecoilValue(userCode);
   const idInfo = useRecoilValue(matchingPlayerInfo);
@@ -222,6 +223,7 @@ const ContinuousBattlePage = () => {
           console.log("");
         }, 300);
       } else if (data.messageType === "submitResult") {
+        setCheckSubmit(false);
         if (battleMode === "speed") {
           const result = {
             nick: "me",
@@ -614,17 +616,20 @@ const ContinuousBattlePage = () => {
   };
 
   const submit = (codedata, problemNumber) => {
-    socket.send(
-      JSON.stringify({
-        messageType: "submit",
-        userId: userId,
-        otherId: otherId,
-        mode: battleModeInfo,
-        language: languageMode,
-        problemNumber: problemNumber,
-        code: codedata,
-      })
-    );
+    if (checkSubmit === false) {
+      setCheckSubmit(true);
+      socket.send(
+        JSON.stringify({
+          messageType: "submit",
+          userId: userId,
+          otherId: otherId,
+          mode: battleModeInfo,
+          language: languageMode,
+          problemNumber: problemNumber,
+          code: codedata,
+        })
+      );
+    }
   };
 
   const clickSurrender = () => {

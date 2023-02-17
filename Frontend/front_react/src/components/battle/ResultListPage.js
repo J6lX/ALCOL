@@ -4,7 +4,7 @@ import { Col, Row, Divider } from "antd";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import icon_vs from "../../assets/vs.png";
-import { resultListModeInfo, resultListResultInfo } from "../../states/atoms";
+import { resultListResultInfo } from "../../states/atoms";
 
 // 사진이 없는 경우 기본 사진을 반환하는 용도
 function isNew(picture) {
@@ -73,7 +73,11 @@ function PlayerInfo({ battleuserinfo, battleMode }) {
   }
   let otherspLV = battleuserinfo.other.speedTier[battleuserinfo.other.speedTier.length - 1];
 
-  const otherSpeedTierAddress = require("../../assets/ALCOL_tiers/tier_" + othersptier + "_" + otherspLV + ".png");
+  const otherSpeedTierAddress = require("../../assets/ALCOL_tiers/tier_" +
+    othersptier +
+    "_" +
+    otherspLV +
+    ".png");
 
   let otheroptier;
   if (battleuserinfo.other.optTier[0] === "B") {
@@ -91,8 +95,11 @@ function PlayerInfo({ battleuserinfo, battleMode }) {
   }
   let otheropLV = battleuserinfo.other.optTier[battleuserinfo.other.optTier.length - 1];
 
-  const otherOptTierAddress = require("../../assets/ALCOL_tiers/tier_" + otheroptier + "_" + otheropLV + ".png");
-
+  const otherOptTierAddress = require("../../assets/ALCOL_tiers/tier_" +
+    otheroptier +
+    "_" +
+    otheropLV +
+    ".png");
 
   return (
     <Row justify="space-between">
@@ -103,13 +110,21 @@ function PlayerInfo({ battleuserinfo, battleMode }) {
         {battleuserinfo.user.level}
       </Col>
       <Col span={2} className="NanumSquare result_user_info">
-        {battleMode === "speed" && <img src={speedTierAddress} alt="tier_image1" style={{ width: "35px" }}/> }
-        {battleMode === "optimization" && <img src={optTierAddress} alt="tier_image2" style={{ width: "35px" }} />}
+        {battleMode === "speed" && (
+          <img src={speedTierAddress} alt="tier_image1" style={{ width: "35px" }} />
+        )}
+        {battleMode === "optimization" && (
+          <img src={optTierAddress} alt="tier_image2" style={{ width: "35px" }} />
+        )}
       </Col>
-        <img src={icon_vs} alt="vs" style={{ zIndex: "5"}}></img>
+      <img src={icon_vs} alt="vs" style={{ zIndex: "5" }}></img>
       <Col span={2} className="NanumSquare result_enemy_info">
-        {battleMode === "speed" && <img src={otherSpeedTierAddress} alt="tier_image3" style={{ width: "35px" }} /> }
-        {battleMode === "optimization" && <img src={otherOptTierAddress} alt="tier_image4" style={{ width: "35px" }} />}
+        {battleMode === "speed" && (
+          <img src={otherSpeedTierAddress} alt="tier_image3" style={{ width: "35px" }} />
+        )}
+        {battleMode === "optimization" && (
+          <img src={otherOptTierAddress} alt="tier_image4" style={{ width: "35px" }} />
+        )}
       </Col>
       <Col span={2} className="NanumSquare result_enemy_info">
         {battleuserinfo.other.level}
@@ -123,7 +138,7 @@ function PlayerInfo({ battleuserinfo, battleMode }) {
 
 function GameInfo({ battleuserinfo, problemInfo, battleMode, battleLanguage }) {
   //atoms에 저장한 battleModeInfo를 불러옵니다.
-  const ModeInfo = useRecoilValue(resultListModeInfo);
+  // const ModeInfo = useRecoilValue(resultListModeInfo);
   const resultList = useRecoilValue(resultListResultInfo);
   const gameInfoTitle = {
     padding: "10px 0",
@@ -154,28 +169,44 @@ function GameInfo({ battleuserinfo, problemInfo, battleMode, battleLanguage }) {
       <Divider style={{ backgroundColor: "white" }} />
       <Row gutter={[8, 8]} style={{ marginLeft: "10px", marginRight: "10px" }}>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoTitle}>문제 난이도</div>
+          <div className="NanumSquare" style={gameInfoTitle}>
+            문제 난이도
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoTitle}>사용 언어</div>
+          <div className="NanumSquare" style={gameInfoTitle}>
+            사용 언어
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoTitle}>평균 시도</div>
+          <div className="NanumSquare" style={gameInfoTitle}>
+            평균 시도
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoTitle}>걸린 시간</div>
+          <div className="NanumSquare" style={gameInfoTitle}>
+            걸린 시간
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoList}>{problemInfo.prob_tier}</div>
+          <div className="NanumSquare" style={gameInfoList}>
+            {problemInfo.prob_tier}
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoList}>{battleLanguage}</div>
+          <div className="NanumSquare" style={gameInfoList}>
+            {battleLanguage}
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoList}>{resultList.length/2}</div>
+          <div className="NanumSquare" style={gameInfoList}>
+            {resultList.length / 2}
+          </div>
         </Col>
         <Col className="gutter-row" span={6}>
-          <div className="NanumSquare" style={gameInfoList}>{ModeInfo.spend_time}</div>
+          <div className="NanumSquare" style={gameInfoList}>
+            02:13
+          </div>
         </Col>
       </Row>
     </div>
@@ -204,41 +235,108 @@ function ResultInfo({ sendResult, battleuserinfo }) {
   } else {
     result = "아쉬웠던 ";
   }
+  const memory = sendResult.memory / 1024000;
   // const userImageAddress = battleuserinfo.user.imageAddress
   // const otherImageAddress = battleuserinfo.other.imageAddress
   return (
     <div style={{ clear: "both" }}>
       <Row justify="space-between">
-        { sendResult.nick === "me" && <Col span={1} className="result_list_result" style={{ borderRadius: "3px", marginLeft: "20px"}}></Col>}
-        { sendResult.nick === "other" && <Col span={1} className="result_list_result_yellow" style={{ borderRadius: "3px", marginLeft: "20px"}}></Col>}
+        {sendResult.nick === "me" && (
+          <Col
+            span={1}
+            className="result_list_result"
+            style={{ borderRadius: "3px", marginLeft: "20px" }}></Col>
+        )}
+        {sendResult.nick === "other" && (
+          <Col
+            span={1}
+            className="result_list_result_yellow"
+            style={{ borderRadius: "3px", marginLeft: "20px" }}></Col>
+        )}
         <Col span={20} className="result_list_info" style={{ borderRadius: "3px" }}>
-          <Row style={{display: "flex"}}>
-          { sendResult.nick === "me" && <Col span={1}><img src={isNew(battleuserinfo.user.imageAddress)} alt="profile" style={{ borderRadius: "50%", height:"40px", marginLeft: "10px" }} /></Col> }
-            { sendResult.nick === "other" && <Col span={1}><img src={isNew(battleuserinfo.other.imageAddress)} alt="profile2" style={{ borderRadius: "50%", height:"40px", marginLeft: "10px" }} /></Col> }
-            { sendResult.result === "accepted" && 
-              <Col span={22}>
-                { sendResult.nick === "me" && <p className="NanumSquare">&nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; 메모리:{" "}
-                {sendResult.memory / 1024000}
-                {sendResult.memory} MB 실행시간:
-                {sendResult.time} ms</p>}
-                { sendResult.nick === "other" && <p className="NanumSquare">&nbsp;&nbsp;&nbsp;{battleuserinfo.other.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; 메모리:{" "}
-                {sendResult.memory / 1024000}
-                {sendResult.memory} MB 실행시간:
-                {sendResult.time} ms</p>}
+          <Row style={{ display: "flex" }}>
+            {sendResult.nick === "me" && (
+              <Col span={1}>
+                <img
+                  src={isNew(battleuserinfo.user.imageAddress)}
+                  alt="profile"
+                  style={{
+                    borderRadius: "50%",
+                    width: "40px",
+                    height: "40px",
+                    marginLeft: "20px",
+                    marginRight: "20px",
+                  }}
+                />
               </Col>
-            }
-            { sendResult.result === "error" && 
-              <Col span={22}>
-                { sendResult.nick === "me" && <p className="NanumSquare">&nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; {sendResult.error}</p>}
-                { sendResult.nick === "other" && <p className="NanumSquare">&nbsp;&nbsp;&nbsp;{battleuserinfo.other.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; {sendResult.error}</p>}
+            )}
+            {sendResult.nick === "other" && (
+              <Col span={1}>
+                <img
+                  src={isNew(battleuserinfo.other.imageAddress)}
+                  alt="profile2"
+                  style={{
+                    borderRadius: "50%",
+                    width: "40px",
+                    height: "40px",
+                    marginLeft: "20px",
+                    marginRight: "20px",
+                  }}
+                />
               </Col>
-            }
-            { sendResult.result !== "error" && sendResult.result !== "accepted" && 
-              <Col span={22}>
-                { sendResult.nick === "me" && <p className="NanumSquare" style={{height:"30px"}}>&nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; 테스트케이스: {sendResult.result}</p>}
-                { sendResult.nick === "other" && <p className="NanumSquare" style={{height:"30px"}}>&nbsp;&nbsp;&nbsp;{battleuserinfo.other.nick}님의 {result}코드 제출! &nbsp;&nbsp;&nbsp; 테스트케이스: {sendResult.result}</p>}
+            )}
+            {sendResult.result === "accepted" && (
+              <Col span={18}>
+                {sendResult.nick === "me" && (
+                  <p className="NanumSquare" style={{ marginLeft: "20px" }}>
+                    &nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출!
+                    &nbsp;&nbsp;&nbsp; 메모리: {Math.round(memory * 100) / 100}
+                    {sendResult.memory} MB 실행시간:
+                    {sendResult.time} ms
+                  </p>
+                )}
+                {sendResult.nick === "other" && (
+                  <p className="NanumSquare" style={{ marginLeft: "20px" }}>
+                    &nbsp;&nbsp;&nbsp;{battleuserinfo.other.nick}님의 {result}코드 제출!
+                    &nbsp;&nbsp;&nbsp; 메모리: {Math.round(memory * 100) / 100}
+                    {sendResult.memory} MB 실행시간:
+                    {sendResult.time} ms
+                  </p>
+                )}
               </Col>
-            }
+            )}
+            {sendResult.result === "error" && (
+              <Col span={22}>
+                {sendResult.nick === "me" && (
+                  <p className="NanumSquare">
+                    &nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출!
+                    &nbsp;&nbsp;&nbsp; {sendResult.error}
+                  </p>
+                )}
+                {sendResult.nick === "other" && (
+                  <p className="NanumSquare">
+                    &nbsp;&nbsp;&nbsp;{battleuserinfo.other.nick}님의 {result}코드 제출!
+                    &nbsp;&nbsp;&nbsp; {sendResult.error}
+                  </p>
+                )}
+              </Col>
+            )}
+            {sendResult.result !== "error" && sendResult.result !== "accepted" && (
+              <Col span={22}>
+                {sendResult.nick === "me" && (
+                  <p className="NanumSquare" style={{ height: "30px" }}>
+                    &nbsp;&nbsp;&nbsp;{battleuserinfo.user.nick}님의 {result}코드 제출!
+                    &nbsp;&nbsp;&nbsp; 테스트케이스: {sendResult.result}
+                  </p>
+                )}
+                {sendResult.nick === "other" && (
+                  <p className="NanumSquare" style={{ height: "30px" }}>
+                    &nbsp;&nbsp;&nbsp;{battleuserinfo.other.nick}님의 {result}코드 제출!
+                    &nbsp;&nbsp;&nbsp; 테스트케이스: {sendResult.result}
+                  </p>
+                )}
+              </Col>
+            )}
           </Row>
         </Col>
         <Col span={1}></Col>
@@ -247,13 +345,15 @@ function ResultInfo({ sendResult, battleuserinfo }) {
   );
 }
 
-function ResultList({battleuserinfo}) {
+function ResultList({ battleuserinfo }) {
   //atoms에 저장한 battleResultList를 불러옵니다.
   const resultList = useRecoilValue(resultListResultInfo);
   const printResults = () => {
     const result = [];
     for (let i = 0; i < resultList.length; i++) {
-      result.push(<ResultInfo key={i} sendResult={resultList[i]} battleuserinfo={battleuserinfo} />);
+      result.push(
+        <ResultInfo key={i} sendResult={resultList[i]} battleuserinfo={battleuserinfo} />
+      );
     }
     return result;
   };
@@ -275,10 +375,14 @@ function ResultButton() {
     <Row justify="space-between" style={{ marginTop: "30px" }}>
       <Col span={8}></Col>
       <Col span={3} className="result_button" onClick={hanleHistoryMatchAgain}>
-        <p className="NanumSquare" style={{margin:"auto"}}>다시하기</p>
+        <p className="NanumSquare" style={{ margin: "auto" }}>
+          다시하기
+        </p>
       </Col>
       <Col span={3} className="result_button" onClick={hanleHistoryMain}>
-      <p className="NanumSquare" style={{margin:"auto"}}>그만하기</p>
+        <p className="NanumSquare" style={{ margin: "auto" }}>
+          그만하기
+        </p>
       </Col>
       <Col span={8}></Col>
     </Row>
@@ -323,7 +427,7 @@ function App({ problemInfo, battleMode, battleLanguage, battleuserinfo }) {
           className="result_list_wrap"
           style={{ overflow: "auto" }}>
           <ResultPlayerInfo />
-          <ResultList battleuserinfo={battleuserinfo}/>
+          <ResultList battleuserinfo={battleuserinfo} />
         </Col>
         <Col sm={0} md={0} lg={0} xl={2}></Col>
       </Row>

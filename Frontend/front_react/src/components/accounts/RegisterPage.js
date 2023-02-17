@@ -205,7 +205,7 @@ function App() {
             </Form.Item>
             {/* <BtnRegister /> */}
             <Form.Item className="button_center">
-              <Button htmlType="submit" className="button_register">
+              <Button disabled htmlType="submit" className="button_register">
                 회원가입
               </Button>
             </Form.Item>
