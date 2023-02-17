@@ -1,5 +1,8 @@
 # 🏛 ALCOL - 알고리즘 대결 사이트
 
+![로고](/uploads/f67275ddbfe191bba02d51b3634b0821/로고.PNG)
+
+</br>
 
 ## 🕹 ALCOL 링크 : [ALCOL](http://i8b303.p.ssafy.io)
 ## 🕹 소개 영상 : [UCC 링크](https://youtu.be/0q725RXhRio)
