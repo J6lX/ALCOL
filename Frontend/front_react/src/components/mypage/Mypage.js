@@ -115,7 +115,7 @@ function TierBorder(tiercolor, tiernum) {
     }
     // 플래면 2150
     else if (tiercolor === "P") {
-      return 1850;
+      return 2150;
     }
     // 다이아면 2500
     else if (tiercolor === "D") {
@@ -171,7 +171,7 @@ function CalculateDatediff(datediffValue) {
   }
   // 1시간 이내인 경우 분 단위로 계산
   else if (minuteValue > 5) {
-    return `${hourValue}분 전`;
+    return `${minuteValue}분 전`;
   }
   // 5분 이내인 경우 '방금'으로 처리
   else {
