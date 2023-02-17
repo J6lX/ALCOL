@@ -615,7 +615,7 @@ public class WebSocket {
                 String submitCode = obj.get("code").toString();
                 String submitBattleMode = obj.get("mode").toString();
                 String submitLanguage = obj.get("language").toString();
-                String url = "https://i8b303.p.ssafy.io:443/api/submission";
+                String url = "https://i8b303.p.ssafy.io:1443/api/submission";
                 HttpHeaders header = new HttpHeaders();
 
                 /**문제 채점 항목에 대한 번호를 받아오는 곳*/
@@ -641,7 +641,7 @@ public class WebSocket {
                  * */
                 Map<String,String> getSubmiTokenJson = (Map<String, String>) getSubmitToken.get("data");
                 String submissionId = getSubmiTokenJson.get("submission_id");
-                url = "https://i8b303.p.ssafy.io:443/api/submission?id="+submissionId;
+                url = "https://i8b303.p.ssafy.io:1443/api/submission?id="+submissionId;
                 while(true)
                 {
                     ResponseEntity<JSONObject> getSubmitResult = restTemplateForHttps.exchange(
