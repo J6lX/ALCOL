@@ -413,12 +413,12 @@ function Ranking() {
                 <Col span={24}>
                   {/* 토글 버튼 목록 */}
                   <Row className="select">
-                    <Col span={12}>
+                    <Col span={12} style={{ cursor: "pointer" }}>
                       <span className="filterText" onClick={selectSpeed} style={speedColor}>
                         스피드
                       </span>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} style={{ cursor: "pointer" }}>
                       <span
                         className="filterText"
                         onClick={selectOptimization}
