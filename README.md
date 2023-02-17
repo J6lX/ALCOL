@@ -252,135 +252,23 @@ Frontend
 
 ## ✔ 프로젝트 산출물
 ---
-- [기능명세서](https://blushing-friend-fae.notion.site/9b486ee135fd4411a3b36f5a5b6a5894)
-- [시퀀스다이어그램](https://www.figma.com/file/vyjwu7DsXiuFn20tJ9e07v/User-Flow?t=OJhV1EWLoFnaFHIp-0)
-- [와이어프레임](https://www.figma.com/file/VHlwCDfrbRYxbhY3gxLO5r/UI?t=TQoZZjmzCwyifvzN-6)
-- [컨벤션](https://blushing-friend-fae.notion.site/e3b2e67c015b44bbabbde02d8a32ef0a)
-- [API](https://blushing-friend-fae.notion.site/API-84eacb82e6614561a3456764761e8fe1)
+- [주제선정](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/%EC%A3%BC%EC%A0%9C%EC%84%A0%EC%A0%95%20%EB%B8%8C%EB%A0%88%EC%9D%B8%EC%8A%A4%ED%86%A0%EB%B0%8D.md)
+- [기능명세서](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/%EA%B8%B0%EB%8A%A5%20%EB%AA%85%EC%84%B8%EC%84%9C.md)
+- [시퀀스다이어그램](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/%EC%8B%9C%ED%80%80%EC%8A%A4%20%EB%8B%A4%EC%9D%B4%EC%96%B4%EA%B7%B8%EB%9E%A8.md)
+- [UI/UX](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/UIUX%20%EB%94%94%EC%9E%90%EC%9D%B8.md)
+- [컨벤션](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/%EC%BB%A8%EB%B2%A4%EC%85%98.md)
+- [API](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/API%20%EB%AA%85%EC%84%B8%EC%84%9C.md)
 - [ERD](https://blushing-friend-fae.notion.site/ERD-a3f7f107e10d48f2ad4509eb8eb11819)
-- [회의록](https://blushing-friend-fae.notion.site/TEAM-J6IX-4319b50de1bf4cb58222b889304ccef4)
-- [시스템기술서](https://blushing-friend-fae.notion.site/735840ca0f694c30b366eda4774e31f7)
+- [회의록](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/%ED%9A%8C%EC%9D%98%EB%A1%9D.md)
+- [시스템 구조도](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/docs/%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EA%B5%AC%EC%A1%B0%EB%8F%84.md)
 
 </br>
 
 ## ✔ 프로젝트 결과물
--   [포팅메뉴얼]
--   [중간발표자료]
--   [최종발표자료]
+-   [포팅메뉴얼](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/exec/ALCOL_%ED%8F%AC%ED%8C%85_%EB%A7%A4%EB%89%B4%EC%96%BC.pdf)
+-   [중간발표자료](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/ppt/ALCOL_%EC%A4%91%EA%B0%84%EB%B0%9C%ED%91%9C.pptx)
+-   [최종발표자료](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B303/-/blob/master/ppt/ALCOL_%EC%B5%9C%EC%A2%85%EB%B0%9C%ED%91%9C.pptx)
 
 </br>
 
 ## 🕹 ALCOL 서비스 화면
-### 메인 화면
-
-- 회원가입, 로그인, 배틀 시작 기능을 활용할 수 있습니다.
-- 서비스 사용 방법을 확인할 수 있습니다.
-
-![Untitled](images/Untitled.png)
-
-### 메인 화면 랭킹
-
-- 배틀 모드 별 랭킹을 확인할 수 있습니다.
-
-![Untitled](images/Untitled%201.png)
-
-### 회원가입
-
-- 회원 가입을 진행할 수 있습니다.
-- 회원가입 시 사진을 업로드 할 수 있습니다.
-
-![Untitled](images/Untitled%202.png)
-
-### 로그인
-
-- 로그인을 진행할 수 있습니다.
-
-![Untitled](images/Untitled%203.png)
-
-### 연습 문제 목록
-
-- 연습 문제 목록을 확인할 수 있습니다.
-- 문제 번호, 문제 이름, 문제 유형, 문제 난이도를 확인할 수 있습니다.
-
-![Untitled](images/Untitled%204.png)
-
-### 연습 문제 상세
-
-- 연습 문제 제출 화면입니다.
-- 문제 상세 설명, 입력 설명, 출력 설명이 있고 입출력 예시를 확인할 수 있습니다.
-- 제출 언어를 설정할 수 있고, 제출 시 정답 여부를 확인할 수 있습니다.
-
-![Untitled](images/Untitled%205.png)
-
-### 배틀 모드 선택
-
-- 배틀 진행 시 모드를 선택할 수 있습니다.
-- 모드는 스피드전, 최적화전 중 하나를 고를 수 있습니다.
-
-![Untitled](images/Untitled%206.png)
-
-### 배틀 언어 선택
-
-- 배틀 시 사용할 언어를 선택할 수 있습니다.
-- 언어는 자바, 파이썬, C++ 를 지원합니다.
-
-![Untitled](images/Untitled%207.png)
-
-### 매칭 화면
-
-- 배틀 모드, 언어, mmr 에 맞는 상대방을 매칭합니다.
-- 매칭을 중간에 취소할 수도 있습니다.
-
-![Untitled](images/Untitled%208.png)
-
-### 밴 문제 선택
-
-- 밴 할 문제를 선택할 수 있습니다.
-- 선택하지 않을 경우 문제가 랜덤하게 선택됩니다.
-
-![Untitled](images/Untitled%209.png)
-
-### 배틀 이동 화면
-
-- 배틀 화면으로 이동합니다.
-- 10 초의 타이머가 지난 후 배틀 화면으로 이동합니다.
-
-![Untitled](images/Untitled%2010.png)
-
-### 배틀 문제 제출 화면
-
-- 배틀 문제 제출 화면입니다.
-- 문제를 제출하면 정답 여부를 확인할 수 있습니다.
-- 문제를 제출 여부를 상대방이 확인할 수 있습니다.
-
-![Untitled](images/Untitled%2011.png)
-
-### 배틀 결과 화면
-
-- 배틀 결과 화면입니다.
-- 승리, 패배, 무승부 시 해당하는 메시지가 화면에 나타납니다.
-
-![Untitled](images/Untitled%2012.png)
-
-![Untitled](images/Untitled%2013.png)
-
-![Untitled](images/Untitled%2014.png)
-
-### 마이페이지
-
-- 사용자의 정보를 확인할 수 있는 마이페이지 입니다.
-- 사용자의 프로필 이미지, 닉네임, 레벨이 표시됩니다.
-- 모드별 티어와 mmr 정보, 티어 진척도를 확인할 수 있습니다.
-- 현재 시즌 배틀 전적을 모드별로 확인할 수 있습니다.
-- 지난 시즌 배틀 기록을 확인할 수 있습니다.
-
-![Untitled](images/Untitled%2015.png)
-
-![Untitled](images/Untitled%2016.png)
-
-### 랭킹
-
-- 배틀 랭킹을 모드별로 확인할 수 있습니다.
-- 자신의 현재 랭킹은 최상단에 위치하게 됩니다.
-
-![Untitled](images/Untitled%2017.png)
