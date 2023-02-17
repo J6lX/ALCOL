@@ -1,0 +1,25 @@
+server:
+  port: 9002
+
+spring:
+  application:
+    name: battle-service    # eureka 서버에 등록된 Application 이름으로 사용됨
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+      path: /h2-console
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+  redis:
+    host: i8b303.p.ssafy.io
+    port: 6000
+    password: ehgud
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://i8b303.p.ssafy.io:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
