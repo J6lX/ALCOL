@@ -306,7 +306,7 @@ Frontend
 - 연습 문제 목록을 확인할 수 있습니다.
 - 문제 번호, 문제 이름, 문제 유형, 문제 난이도를 확인할 수 있습니다.
 
-![Untitled](images/Untitled%204.png)
+![연습문제](/uploads/d9080c9d6c4434a56638cf30a126209b/연습문제_풀이_Trim.gif)
 
 ### 연습 문제 상세
 
@@ -314,7 +314,10 @@ Frontend
 - 문제 상세 설명, 입력 설명, 출력 설명이 있고 입출력 예시를 확인할 수 있습니다.
 - 제출 언어를 설정할 수 있고, 제출 시 정답 여부를 확인할 수 있습니다.
 
-![Untitled](images/Untitled%205.png)
+![ALCOL_-_Chrome_2023-02-17_15-57-11_Trim](/uploads/e60ee6f04ebf1e2c48cad46e3aabd619/ALCOL_-_Chrome_2023-02-17_15-57-11_Trim.gif)
+
+## Battle
+![KakaoTalk_20230217_132744243_Trim](/uploads/fe9d78a713da07241b98b3357f16cb8c/KakaoTalk_20230217_132744243_Trim.gif)
 
 ### 배틀 모드 선택
 
