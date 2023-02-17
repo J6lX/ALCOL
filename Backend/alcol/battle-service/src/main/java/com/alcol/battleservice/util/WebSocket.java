@@ -709,6 +709,7 @@ public class WebSocket {
                         {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                         }
+                        break;
                     }
                     else if(submit_result==0)
                     {
@@ -1044,6 +1045,7 @@ public class WebSocket {
                         {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                         }
+                        break;
                     }
                     /**
                      * REATIME 초과
@@ -1078,6 +1080,7 @@ public class WebSocket {
                         {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                         }
+                        break;
                     }
                     /**
                      * Memory 초과
@@ -1112,6 +1115,7 @@ public class WebSocket {
                         {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                         }
+                        break;
                     }
                     /**
                      * RUNTIME 에러
@@ -1146,6 +1150,7 @@ public class WebSocket {
                         {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                         }
+                        break;
                     }
                     /**
                      * SYSTEM ERROR
@@ -1180,6 +1185,7 @@ public class WebSocket {
                         {
                             userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
                         }
+                        break;
                     }
                     else
                     {
