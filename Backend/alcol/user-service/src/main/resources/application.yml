@@ -10,24 +10,49 @@ spring:
     username: root
     password: ehgud
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
+  redis:
+    host: i8b303.p.ssafy.io
+    port: 6000
+    password: ehgud
+
+logging:
+  level:
+    com:
+      alcol:
+        userservice:
+          util:
+            FileHandler: ERROR
+
+cloud:
+  aws:
+    s3:
+      bucket: kimjusung-bucket
+    credentials:
+      access-key: AKIA3RRQEFMVYL2FLUGC
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://127.0.0.1:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
+      defaultZone: http://i8b303.p.ssafy.io:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
 
 access-token:
-  expiration_time: 30000 # milliseconds
+  expiration_time: 1000000 # milliseconds
   secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
 
 refresh-token:
-  expiration_time: 1200000 # milliseconds
+  expiration_time: 3000000 # milliseconds
   secret: poipoipoipoipoipoipoipoiqweqweqweqwepoipoipoiqweqwepoiqwpeoiqpwoeipqowiepqoiwepoiqwpeiqpweipqwieoqweiqwpeiowi
