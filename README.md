@@ -280,7 +280,7 @@ Frontend
 - 회원가입, 로그인, 배틀 시작 기능을 활용할 수 있습니다.
 - 서비스 사용 방법을 확인할 수 있습니다.
 
-![ALCOL_-_Chrome_2023-02-17_12-44-54_Trim__2_](/uploads/01de8a718057cbec571c4096382d7a5d/ALCOL_-_Chrome_2023-02-17_12-44-54_Trim__2_.gif)
+![ALCOL_-_Chrome_2023-02-17_12-54-18_Trim](/uploads/df7a69e7b54a5352aec7f4271b2f14bf/ALCOL_-_Chrome_2023-02-17_12-54-18_Trim.gif)
 
 ### 메인 화면 랭킹
 
