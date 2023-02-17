@@ -1,0 +1,102 @@
+server:
+  port: 8000
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://i8b303.p.ssafy.io:8761/eureka
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      routes:
+
+        # login
+        - id: user-service
+          uri: http://i8b303.p.ssafy.io:9000/
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}  # remove '/user-service'
+
+        # logout
+        - id: user-service
+          uri: http://localhost:9000/
+          predicates:
+            - Path=/user-service/logout
+            - Method=POST
+          filters:
+            - RewritePath=/user-service/(?<segment>.*), /$\{segment}
+
+        # signUp
+        - id: user-service
+          uri: http://i8b303.p.ssafy.io:9000/
+          predicates:
+            - Path=/user-service/
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+
+        # refresh
+        - id: user-service
+          uri: http://i8b303.p.ssafy.io:9000/
+          predicates:
+            - Path=/user-service/refresh
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RefreshTokenFilter
+
+        # other user-service requests
+        - id: user-service
+          uri: http://i8b303.p.ssafy.io:9000/
+          predicates:
+            - Path=/user-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - AccessTokenFilter
+
+        # rank-service request
+        - id: rank-service
+          uri: http://i8b303.p.ssafy.io:9003/
+          predicates:
+            - Path=/rank-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - AccessTokenFilter
+
+        # problem-service request
+        - id: problem-service
+          uri: http://i8b303.p.ssafy.io:9001/
+          predicates:
+            - Path=/problem-service/**
+          filters:
+            - RemoveRequestHeader=Cookie
+#            - AccessTokenFilter
+
+        # match-service request
+        - id: match-service
+          uri: ws://i8b303.p.ssafy.io:9111/   # ws://i8b303.p.ssafy.io:9111/match-service/**
+          predicates:
+            - Path=/match-service/**          # http://i8b303.p.ssafy.io:8000/match-service/**
+
+        # battle-service request
+        - id: battle-service
+          uri: ws://i8b303.p.ssafy.io:9002/
+          predicates:
+            - Path=/battle-service/**
+
+
+access-token:
+  expiration_time: 1000000 # milliseconds
+  secret: qweasdzcxqweasdzxcqweasdzxcqweasdzxcasdqweasdzcxasdqweasdaczxdasdqwcxcasdqwdcxcasdqwescxczdsqewscsacsadsadw
+
+refresh-token:
+  expiration_time: 3000000 # milliseconds
+  secret: poipoipoipoipoipoipoipoiqweqweqweqwepoipoipoiqweqwepoiqwpeoiqpwoeipqowiepqoiwepoiqwpeiqpweipqwieoqweiqwpeiowi
