@@ -349,7 +349,7 @@ const ContinuousBattlePage = () => {
           result: "error",
           error: data.errorMessage,
         };
-        submitOther(data.testcase, data.accepted);
+        submitOther("submit", "error");
         setResultListResult((resultList) => [...resultList, result]);
       } else if (data.messageType === "socketError") {
         showSocketErrorModal();
@@ -560,6 +560,13 @@ const ContinuousBattlePage = () => {
       messageApi.open({
         type: "warning",
         content: `${othernickname}님이 코드를 제출했습니다. (테스트케이스 전부 정답!)`,
+        duration: 3,
+        style: { marginTop: "5.5vh" },
+      });
+    } else if (accepted === "error") {
+      messageApi.open({
+        type: "warning",
+        content: `${othernickname}님이 코드를 제출했습니다. 그러나 제출 코드 에러...`,
         duration: 3,
         style: { marginTop: "5.5vh" },
       });
