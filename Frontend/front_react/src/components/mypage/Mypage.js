@@ -920,8 +920,8 @@ function Mypage() {
               {/* > */}
               <Row>
                 {/* 지난 시즌 기록 보기 */}
-                <Col xs={24} className="mypage_record_block" style={{ cursor: "pointer" }}>
-                  <p className="textHighlight" onClick={selectAll}>
+                <Col xs={24} className="mypage_record_block">
+                  <p className="textHighlight" onClick={selectAll} style={{ cursor: "pointer" }}>
                     지난 시즌 기록
                   </p>
                   <hr />
