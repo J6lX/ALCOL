@@ -93,18 +93,6 @@ public class ProblemServiceImpl implements ProblemService
         String probTestInput = problemEntity.getProbTestInput();
         String probTestOutput = problemEntity.getProbTestOutput();
 
-//        probDetailDesc = probDetailDesc.replaceAll("\\\\n", "\\$\\$");
-//        probInputDesc = probInputDesc.replaceAll("\\\\n", "\\$\\$");
-//        probOutputDesc = probOutputDesc.replaceAll("\\\\n", "\\$\\$");
-//        probTestInput = probTestInput.replaceAll("\\\\n", "\\$\\$");
-//        probTestOutput = probTestOutput.replaceAll("\\\\n", "\\$\\$");
-//
-//        probDetailDesc = java.util.regex.Matcher.quoteReplacement(probDetailDesc);
-//        probInputDesc = java.util.regex.Matcher.quoteReplacement(probInputDesc);
-//        probOutputDesc = java.util.regex.Matcher.quoteReplacement(probOutputDesc);
-//        probTestInput = java.util.regex.Matcher.quoteReplacement(probTestInput);
-//        probTestOutput = java.util.regex.Matcher.quoteReplacement(probTestOutput);
-
         return ProblemDto.ProbDetail.builder()
                 .prob_no(problemEntity.getProbNo())
                 .prob_name(problemEntity.getProbName())
@@ -219,7 +207,7 @@ public class ProblemServiceImpl implements ProblemService
         // 채점 서버에 채점을 요청해 submisson_id를 받아옴
         try
         {
-            String url = "https://i8b303.p.ssafy.io:443/api/submission";
+            String url = "https://i8b303.p.ssafy.io:1443/api/submission";
             HttpHeaders header = new HttpHeaders();
             header.add("Cookie", "sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
             HttpEntity<ScoreDto.Request> requestHttpEntity = new HttpEntity<>(problem, header);
@@ -249,7 +237,7 @@ public class ProblemServiceImpl implements ProblemService
             // submission id로 채점 결과를 가져온다.
             ResponseEntity<JSONObject> response;
             try {
-                String url = "https://i8b303.p.ssafy.io:443/api/submission?id=" + submissionId;
+                String url = "https://i8b303.p.ssafy.io:1443/api/submission?id=" + submissionId;
                 HttpHeaders header = new HttpHeaders();
                 header.add("Cookie", "sessionid=lkftsz50s6aejyb4pdkz56kqksgl47nb");
                 HttpEntity request = new HttpEntity(header);
