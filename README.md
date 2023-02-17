@@ -316,8 +316,10 @@ Frontend
 
 ![ALCOL_-_Chrome_2023-02-17_15-57-11_Trim](/uploads/e60ee6f04ebf1e2c48cad46e3aabd619/ALCOL_-_Chrome_2023-02-17_15-57-11_Trim.gif)
 
-## Battle
+## Battle Flow
 ![KakaoTalk_20230217_132744243_Trim](/uploads/fe9d78a713da07241b98b3357f16cb8c/KakaoTalk_20230217_132744243_Trim.gif)
+![문제밴](/uploads/5a1091a3b9fe9a3b71dc02463ab4805a/ALCOL_-_Chrome_2023-02-17_16-06-07_Trim.gif)
+![배틀시작](/uploads/423de26bb2ef3eba4eb5391631986308/ALCOL_-_Chrome_2023-02-17_16-06-07_Trim__2_.gif)
 
 ### 배틀 모드 선택
 
