@@ -679,6 +679,37 @@ public class WebSocket {
 //                        submit_error_send.put("messageType","error");
 //                        submit_error_send.put("errorMessage","");
 //                    }
+                    else if(submit_result==-2)
+                    {
+                        JSONObject user_submit_result_send = new JSONObject();
+                        user_submit_result_send.put("messageType","error");
+                        user_submit_result_send.put("errorMessage","컴파일 에러");
+
+
+                        JSONObject other_submit_result_send = new JSONObject();
+                        other_submit_result_send.put("messageType","otherError");
+                        other_submit_result_send.put("errorMessage","컴파일 에러");
+
+                        BattleLog userBattleLog = BattleLog.builder().result("Error").memory("0").time("0").build();
+
+                        if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user1.battleLog.add(userBattleLog);
+                        }
+                        else if(sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.userId.equals(submitUserId))
+                        {
+                            sessionId2Obj.get(userId2SessionId.get(submitUserId)).user2.battleLog.add(userBattleLog);
+                        }
+
+                        synchronized (session)
+                        {
+                            session.getBasicRemote().sendText(user_submit_result_send.toJSONString());
+                        }
+                        synchronized (userId2Session.get(submitOtherId))
+                        {
+                            userId2Session.get(submitOtherId).getBasicRemote().sendText(other_submit_result_send.toJSONString());
+                        }
+                    }
                     else if(submit_result==0)
                     {
                         //statistic_info 안에는 속도, 메모리에 관련된 내용이 들어 있음
