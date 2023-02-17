@@ -1,0 +1,25 @@
+server:
+  port: 9001
+
+spring:
+  application:
+    name: problem-service    # eureka 서버에 등록된 Application 이름으로 사용됨
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://i8b303.p.ssafy.io:3306/alcol?serverTimezone=Asia/Seoul
+    username: root
+    password: ehgud
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://i8b303.p.ssafy.io:8761/eureka   # 이 위치에 user-service 를 등록하겠다.
