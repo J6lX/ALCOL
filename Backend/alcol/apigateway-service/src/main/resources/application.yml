@@ -27,7 +27,7 @@ spring:
 
         # logout
         - id: user-service
-          uri: http://localhost:9000/
+          uri: http://{ip 주소}:9000/
           predicates:
             - Path=/user-service/logout
             - Method=POST

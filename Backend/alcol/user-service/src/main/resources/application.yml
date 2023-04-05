@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://{ip 주소}/alcol?serverTimezone=Asia/Seoul
     username: root
-    password: ehgud
+    password: {redis password}
   jpa:
     show-sql: false
     hibernate:
@@ -19,7 +19,7 @@ spring:
   redis:
     host: {ip 주소}
     port: 6000
-    password: ehgud
+    password: {redis password}
 
 logging:
   level:
