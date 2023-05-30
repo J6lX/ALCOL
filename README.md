@@ -187,7 +187,15 @@ Frontend
       - userid
     - score
       - MMR
-  - 랭킹 유저 데이터(Hash Table) - key - userInfo:userId - field - nickname - level - speed_tier - optimization_tier - stored_file_name
+  - 랭킹 유저 데이터(Hash Table) 
+    - key 
+      - userInfo:userId
+    - field 
+      - nickname 
+      - level 
+      - speed_tier 
+      - optimization_tier 
+      - stored_file_name
     <br/>
 - ### Match Service
     <br/>
